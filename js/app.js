@@ -4,7 +4,7 @@ var app= angular.module('myApp', ['ngRoute','ngResource','ngScrollTo']);
 app.config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'loginCtrl'});
   $routeProvider.when('/dashboard', {templateUrl: 'partials/dashboard.html', controller: 'dashboardCtrl'});
-  $routeProvider.otherwise({redirectTo: '/login'});
+  $routeProvider.otherwise({redirectTo: '/dashboard'});
 }]);
 
 

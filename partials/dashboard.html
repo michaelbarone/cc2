@@ -1,12 +1,21 @@
 <div class="wrap dashboard">
 	<div id="header">
-		<div class="right"><p>{{txt}}  {{username}}   {{userid}} <a href="" ng-click="logout()">Logout</a> </p></div>
+		<div id="user-menu" class="right">
+			<img src="img/options.png" />
+			<ul>
+				<li><a class="title">{{username}}</a></li>
+				<li><a>Preferences</a></li>
+				<li><a>Settings</a></li>
+				<li>&nbsp;</li>
+				<li><a href="" ng-click="logout()">Logout</a></li>
+			</ul>
+		</div>
 
-		<div id="link-menu" ng-if="links[0].length != '0'">
+		<div id="link-menu">
 			<nav>
 				<ul class="sortable">
 					<li id="{{linkgroup}}-group" class="sortable clear" ng-repeat="(linkgroup, linkgrouparray) in links[0]" ng-click="userdata.linkGroupSelected=linkgroup;linkReOrder(linkgroup,$index)">
-						<a class="main panel persistent title" test="{{$index}}" ng-show="links[1].length>0">{{linkgroup}}</a>
+						<a class="main panel persistent title" ng-hide="$last && $index=='0'">{{linkgroup}}</a>
 						<a id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" ng-click="loadLink(thislink['navname']+'L');userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
 							<img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px">
 						</a>

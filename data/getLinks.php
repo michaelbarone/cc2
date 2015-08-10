@@ -1,7 +1,5 @@
 <?php 
 	require 'startsession.php';
-	$userid=1;
-
 	if(isset($_SESSION['userid'])) {
 		$userid=$_SESSION['userid'];
 	} else {
