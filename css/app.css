@@ -1,0 +1,262 @@
+/* app css stylesheet */
+
+
+/***************
+**  General 
+***************/
+* {
+   user-select: none !important;
+   -o-user-select:none !important;
+   -moz-user-select: none !important;
+   -khtml-user-select: none !important;
+   -webkit-user-select: none !important;
+   -webkit-touch-callout: none !important;  	
+}
+
+body {
+    font-size: 12px;
+    line-height: 140%;
+}
+
+
+h2 {
+  font-size:1.8em;
+  font-weight:normal;
+  margin: 0 0 .25em 0;
+  text-shadow: #000 0px 1px 0px;
+}
+
+h3 { margin: 0 0 .5em 0; }
+
+p {  margin: .5em 0 1.5em 0;font-size: 1em;line-height: 140%; }
+
+ul, li { 
+	margin: 0;
+	padding:0;
+	list-style-type:none;
+}
+a {
+	text-decoration: none;
+	outline: 0;
+}
+
+a img {border:0;}
+
+.hidden { display:none !important; }
+
+.right { float:right; }
+.left { float:left; }
+.clear { clear:both; }
+.clearr { clear:right; }
+.clearl { clear:left; }
+
+.txtright { text-align: right; margin: 0 3px 0 -3px; }
+.txtleft { text-align: left; margin: 0 -3px 0 3px; }
+
+.w75 {	width:75%; }
+.w50 {	width:50%; }
+.w25 {	width:25%; }
+
+.transformable {
+    -webkit-transition: height 150ms linear;
+    -moz-transition: height 150ms linear;
+    -o-transition: height 150ms linear;
+    -ms-transition: height 150ms linear;
+    transition: height 150ms linear;
+}
+
+.orange { color:#FF9522 !important;text-decoration:none; }
+
+.windowContainer {
+	position:absolute;
+	width: 100%;
+    height: 100%;
+    top: 0;
+	left:0;
+    overflow: hidden;
+	background: #222528 url("../img/background.png") repeat scroll 0% 0%;
+}
+
+
+/*****************
+***  Login Page
+*****************/
+
+#loginTiles {
+    overflow: hidden;
+    margin: 0px auto;
+    width: 90%;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+#loginTiles .userpick > table { width:100%; }
+#loginTiles .userpick > table > tbody > tr > td { padding:0; }
+
+#loginTiles .loginTile > div { background-color:rgba(0, 0, 0, 0.65);height:40px;width:100%;z-index:2;position:absolute;overflow:hidden; }
+#loginTiles h2.container { height:auto; }
+#loginTiles .image
+{
+    position:absolute;
+    left:0;
+    top:0;
+	width:100%;
+	height:100%;
+}
+#loginTiles .text
+{
+    z-index:100;
+    position:absolute;    
+    color:#eee;
+    font-size:24px;
+    font-weight:bold;
+    width:100%;
+	left:0px;
+	padding:10px 0;
+	bottom:0;
+}
+#loginTiles .loginTile:hover .text { color:rgb(0, 153, 255); }
+
+
+.loginTile {
+	display: inline-block;
+	height: 250px;
+	width: 200px;
+	max-width: 80%;
+	margin: 5px;
+	position: relative;
+	cursor:pointer;
+}
+
+.lockedLogin {	height:40px; }
+.lockedLogin.open { height:100% !important; }
+
+/*  not sure if used  */
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+
+.menu:before {
+  content: "[";
+}
+
+.menu:after {
+  content: "]";
+}
+
+.menu > li {
+  display: inline;
+}
+
+.menu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+
+.menu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
+/*  end not sure if used  */
+
+/************
+*** Header
+************/
+
+#header {
+	margin: 0 auto;
+	position:absolute;
+	width:100%;
+	height:50px;
+	top:0;
+	z-index:10;
+}
+
+#link-menu {
+	position:absolute;
+	display: block;
+	font-size:1em;
+	z-index:11;
+}
+
+#link-menu .sortable:not(:first-child) {	display:none; }
+
+#link-menu:hover li { display:block !Important; }
+
+#link-menu li,#link-menu2 li { display: inline;float: left;margin:0;height:50px; }
+
+#link-menu a,#link-menu2 li a {
+  float: left;
+  font-size: 22px;
+  padding:5px 15px 0;
+  text-shadow: rgba(0,0,0,.5) 0px 1px 0px;
+  line-height:150%;
+}
+
+#link-menu a:not(.title) {
+	cursor:pointer;
+}
+
+#link-menu img { margin:0;width:30px;height:30px }
+
+#link-menu .title { width:105px; } 
+
+.link { opacity:.5; }
+
+.link:hover { opacity:.7; }
+
+.link.loaded,.link.loaded:hover { opacity:1 !important; }
+
+.sortable { width:100%; }
+
+
+
+/****************
+*** Dashboard
+****************/
+
+#dashboardWrapper {
+	width: 100%;
+	position: absolute;
+	top: 50px;
+	left: 0px;
+	bottom: 0px;
+	overflow: hidden;
+}
+
+#dashboardMask {
+	height: 100%;
+	width: 100%;
+}
+
+.dashboardPage {
+	width:100%;
+	height:100%;
+	float:left;
+}
+
+.dashboardPage > .content {
+	width: 100%;
+	height: 100%;
+	margin: 0px auto;
+	position: relative;
+}
+
+.dashboardPage > .content > iframe {
+	background-color:rgba(20,20,20,.75);
+	position: absolute;
+	top: 0%;
+	border: 0px none #D0D0D0;
+}
+
+.wrap{ max-width:100%; width: 1100px; margin: 0 auto; padding-top:20px;overflow: auto;max-height: 100%; }
+.wrap.dashboard{ width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:hidden; }
+
+@media all and (max-width: 350px) {
+	.w50 { width:100%;}
+	.txtright { text-align:center;margin:0; }
+	.txtleft { text-align:center;margin:0; }
+}

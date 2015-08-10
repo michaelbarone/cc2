@@ -1,0 +1,36 @@
+<div class="wrap dashboard">
+	<div id="header">
+		<div class="right"><p>{{txt}}  {{username}}   {{userid}} <a href="" ng-click="logout()">Logout</a> </p></div>
+
+		<div id="link-menu" ng-if="links[0].length != '0'">
+			<nav>
+				<ul class="sortable">
+					<li id="{{linkgroup}}-group" class="sortable clear" ng-repeat="(linkgroup, linkgrouparray) in links[0]" ng-click="userdata.linkGroupSelected=linkgroup;linkReOrder(linkgroup,$index)">
+						<a class="main panel persistent title" test="{{$index}}" ng-show="links[1].length>0">{{linkgroup}}</a>
+						<a id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" ng-click="loadLink(thislink['navname']+'L');userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
+							<img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px">
+						</a>
+					</li>	
+				</ul>
+			</nav>
+		</div>
+	</div>
+	<div id="dashboardWrapper" scrolling="auto">
+		<div id="dashboardMask">
+			<span id="addonlinkspages">
+				<div id="XBMCCONTROL1" class="dashboardPage">
+					<div class="content">
+						<iframe id="XBMCCONTROL1f" data-src="http://192.168.3.223:8080" data-src="http://192.168.3.223:8080" scrolling="no" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
+					</div>
+				</div>
+			</span>
+			<span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
+				<div class="dashboardPage" ng-repeat="thislink in linkgrouparray">
+					<div class="content">
+						<iframe id="{{thislink['navname']}}" src="" data="{{thislink['navip'] | trustUrl }}" scrolling="auto" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
+					</div>
+				</div>
+			</span>
+		</div>
+	</div>
+</div>
