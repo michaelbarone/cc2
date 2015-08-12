@@ -226,7 +226,7 @@ a img {border:0;}
 
 .link.loaded,.link.loaded:hover { opacity:1 !important; }
 
-#user-menu {
+#user-menu,#room-menu {
 	position: absolute;
 	right: 0;
 	top: 40px;
@@ -240,25 +240,28 @@ a img {border:0;}
 	margin-top: -50px;
 }
 
+#room-menu > a {
+	position: absolute;
+	margin-top: -50px;
+	right:30px;
+	padding:15px !important;
+	white-space: nowrap;
+}
+
 #user-menu ul {
 	position:relative;
 }
 
-#user-menu li {
+#user-menu li,#room-menu li {
 	display:none;
 	margin:0;
 	text-align:right;
 	padding:10px 0;
 }
 
-#user-menu:hover li { display:block !Important; }
+#user-menu:hover li,#room-menu:hover li { display:block !Important; }
 
-#user-menu a { padding:0 15px; }
-
-#room-menu {
-	position:absolute;
-	right:50px;
-}
+#user-menu a,#room-menu a { padding:0 15px; }
 
 /****************
 *** Dashboard

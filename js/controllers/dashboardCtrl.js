@@ -5,14 +5,24 @@ app.controller('dashboardCtrl', ['$scope','loginService','$http', function ($sco
 	$scope.username=sessionStorage.getItem('username');
 	$scope.userid=sessionStorage.getItem('userid');
 	$scope.links = [];
+	$scope.rooms = [];
 	$scope.userdata = [];
 	$scope.userdata.linkGroupSelected = '';
+	$scope.userdata.currentRoom = 'noRoom';
 	
     $http.get('data/getLinks.php')
 		.success(function(data) {
 			$scope.links = data;
 		});
 
+    $http.get('data/getRooms.php')
+		.success(function(data) {
+			$scope.rooms = data;
+			//$scope.rooms = JSON.stringify(data);
+			//alert(JSON.stringify(data));
+		});		
+		
+		
 	$scope.loadLink = function(name,element) {
 		document.getElementById(name).attributes['class'].value += ' loaded';
 	};

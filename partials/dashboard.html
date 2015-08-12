@@ -12,8 +12,12 @@
 		</div>
 
 		<div id="room-menu">
-			<span>some text</span>
-		
+			<a class="title">{{userdata.currentRoom}}</a>
+			<ul test="{{rooms}}">
+				<li ng-repeat="(room,roomArray) in rooms[0]">
+					<a ng-click="userdata.currentRoom=roomArray.name">{{roomArray.name}}</a>
+				</li>
+			</ul>
 		</div>
 		
 		<div id="link-menu">
