@@ -10,10 +10,11 @@
 		$username = $user['username'];
 		$userid = $user['userid'];
 		try {
-			$sql = "SELECT password,passwordv FROM users WHERE username = '$username' AND userid = '$userid' LIMIT 1";
+			$sql = "SELECT password,passwordv,homeRoom FROM users WHERE username = '$username' AND userid = '$userid' LIMIT 1";
 			foreach ($configdb->query($sql) as $row) {
 				$password=$row['password'];
 				$passwordv=$row['passwordv'];
+				$homeRoom=$row['homeRoom'];
 			}
 		} catch(PDOException $e)
 			{
@@ -42,11 +43,14 @@
 		} elseif($user['passwordset']=='0' && !isset($user['pass'])) {
 			//no password set
 			$check=true;
+		} else {
+			$check=false;
 		}
-		if($check){	
+		if($check){
 			$_SESSION['uid']=uniqid('cc_');
 			$_SESSION['username']=$user['username'];
 			$_SESSION['userid']=$user['userid'];
+			$_SESSION['homeRoom']=$homeRoom;
 			require_once "../lib/php//mobile_device_detect.php";
 			if(mobile_device_detect(true,false,true,true,true,true,true,false,false) ) {
 				$_SESSION['mobile']='1';

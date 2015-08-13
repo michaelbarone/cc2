@@ -2,11 +2,11 @@
 
 app.controller('dashboardCtrl', ['$scope','loginService','$http', function ($scope,loginService,$http,$sce){
 	$scope.txt='Dashboard';
-	$scope.username=sessionStorage.getItem('username');
-	$scope.userid=sessionStorage.getItem('userid');
+	$scope.userdata = [];
+	$scope.userdata.username=sessionStorage.getItem('username');
+	$scope.userdata.userid=sessionStorage.getItem('userid');
 	$scope.links = [];
 	$scope.rooms = [];
-	$scope.userdata = [];
 	$scope.userdata.linkGroupSelected = '';
 	$scope.userdata.currentRoom = 'noRoom';
 	
@@ -18,10 +18,20 @@ app.controller('dashboardCtrl', ['$scope','loginService','$http', function ($sco
     $http.get('data/getRooms.php')
 		.success(function(data) {
 			$scope.rooms = data;
-			//$scope.rooms = JSON.stringify(data);
-			//alert(JSON.stringify(data));
-		});		
+		});
 		
+	// check set currentRoom, check for cookies? then for homeRoom
+	if(sessionStorage.getItem('currentRoom') && sessionStorage.getItem('currentRoom') != '') {
+		$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
+	} else {
+		$scope.userdata.currentRoom=sessionStorage.getItem('homeRoom');
+	}
+	
+	$scope.changeRoom = function(room) {
+		$scope.userdata.currentRoom=room;
+		sessionStorage.setItem('currentRoom',room);
+	};	
+	
 		
 	$scope.loadLink = function(name,element) {
 		document.getElementById(name).attributes['class'].value += ' loaded';

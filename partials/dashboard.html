@@ -1,9 +1,9 @@
 <div class="wrap dashboard">
 	<div id="header">
-		<div id="user-menu" class="right">
+		<div id="user-menu" class="right" slide-toggle="#user-menu-ul">
 			<img src="img/options.png" />
-			<ul>
-				<li><a class="title">{{username}}</a></li>
+			<ul id="user-menu-ul" class="slideable">
+				<li><a class="title">{{userdata.username}}</a></li>
 				<li><a>Preferences</a></li>
 				<li><a>Settings</a></li>
 				<li>&nbsp;</li>
@@ -11,11 +11,11 @@
 			</ul>
 		</div>
 
-		<div id="room-menu">
-			<a class="title">{{userdata.currentRoom}}</a>
-			<ul test="{{rooms}}">
-				<li ng-repeat="(room,roomArray) in rooms[0]">
-					<a ng-click="userdata.currentRoom=roomArray.name">{{roomArray.name}}</a>
+		<div id="room-menu" slide-toggle="#room-menu-ul">
+			<a class="title">{{rooms[0][userdata.currentRoom]['name']}}</a>
+			<ul id="room-menu-ul" class="slideable">
+				<li ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
+					<a ng-click="changeRoom(room)">{{roomArray.name}}</a>
 				</li>
 			</ul>
 		</div>

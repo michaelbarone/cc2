@@ -248,16 +248,15 @@ a img {border:0;}
 	white-space: nowrap;
 }
 
-#user-menu ul {
-	position:relative;
-}
-
 #user-menu li,#room-menu li {
 	display:none;
 	margin:0;
-	text-align:right;
 	padding:10px 0;
 }
+
+#user-menu li { text-align:right; }
+
+#room-menu li { margin-left:10px; }
 
 #user-menu:hover li,#room-menu:hover li { display:block !Important; }
 

@@ -8,10 +8,12 @@ app.factory('loginService',function($http, $location, sessionService){
 					var uid=msg.data['uid'];
 					var username=msg.data['username'];
 					var userid=msg.data['userid'];
+					var homeRoom=msg.data['homeRoom'];
 					if(uid){
 						sessionService.set('uid',uid);
 						sessionService.set('username',username);
 						sessionService.set('userid',userid);
+						sessionService.set('homeRoom',homeRoom);
 						$location.path('/dashboard');
 					} else {
 						scope.loginMsg='incorrect information';
@@ -30,8 +32,7 @@ app.factory('loginService',function($http, $location, sessionService){
 			sessionStorage.removeItem('uid');
 			sessionStorage.removeItem('username');
 			sessionStorage.removeItem('userid');
-			//sessionService.destroy('username');
-			//sessionService.destroy('userid');
+			sessionStorage.removeItem('homeRoom');
 			$location.path('/login');
 		},
 		islogged:function(){
