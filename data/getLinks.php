@@ -2,6 +2,7 @@
 	require 'startsession.php';
 	if(isset($_SESSION['userid'])) {
 		$userid=$_SESSION['userid'];
+		$mobile=$_SESSION['mobile'];
 	} else {
 		echo "failed";
 		$log->LogWarn("No user session data from " . basename(__FILE__));
@@ -24,6 +25,7 @@
 				foreach ($thistemp as $xx) {
 					$sql = "SELECT * FROM navigation WHERE navid = $xx LIMIT 1";
 					foreach ($configdb->query($sql) as $row) {
+						if($mobile==='1' && $row['mobile']==='0') { continue; }
 						$i++;
 						foreach($row as $key => $value) {
 							$linkArray["$navgroupname"]["$i"]["$key"]=$value;

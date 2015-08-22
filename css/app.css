@@ -198,9 +198,25 @@ a img {border:0;}
 
 #link-menu li {
 	display:inline;
-	float: left;
 	margin:0;
+	float: left;
 	height:50px;
+}
+
+#link-menu ul.mobile li {
+	margin:5px;
+	padding:5px;
+	height:50px;
+	float:none;
+	display:none;
+}
+
+#link-menu ul.mobile:hover li {
+	display:block;
+}
+
+#link-menu ul.mobile > img {
+	height:45px;
 }
 
 #link-menu a {

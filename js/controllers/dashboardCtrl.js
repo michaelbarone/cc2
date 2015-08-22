@@ -1,15 +1,16 @@
 'use strict';
 
-app.controller('dashboardCtrl', ['$scope','loginService','$http', function ($scope,loginService,$http,$sce){
+app.controller('dashboardCtrl', ['$scope','loginService','$http','inform', function ($scope, loginService, $http, inform){
 	$scope.txt='Dashboard';
 	$scope.userdata = [];
 	$scope.userdata.username=sessionStorage.getItem('username');
 	$scope.userdata.userid=sessionStorage.getItem('userid');
+	$scope.userdata.mobile=sessionStorage.getItem('mobile');	
 	$scope.links = [];
 	$scope.rooms = [];
 	$scope.userdata.linkGroupSelected = '';
 	$scope.userdata.currentRoom = 'noRoom';
-	
+
     $http.get('data/getLinks.php')
 		.success(function(data) {
 			$scope.links = data;
@@ -41,11 +42,43 @@ app.controller('dashboardCtrl', ['$scope','loginService','$http', function ($sco
 		var theLi = document.getElementById(linkgroup + '-group');
 		$(theLi).parent().prepend(theLi);
     };	
+
+
+	$scope.testmessage = function() {
+
+		inform.add('test');
 	
+		inform.add('Default', {
+		  ttl: 120000, type: 'default'
+		});
+
+		inform.add('Primary', {
+		  ttl: 120000, type: 'primary'
+		});
+		
+		inform.add('Info', {
+		  ttl: 120000, type: 'info'
+		});
+
+		inform.add('Success', {
+		  ttl: 120000, type: 'success'
+		});
+		
+		inform.add('Warning', {
+		  ttl: 120000, type: 'warning'
+		});
+		
+		inform.add('Danger', {
+		  ttl: 120000, type: 'danger'
+		});
+
+
+		
+	};
 		
 	$scope.logout=function(){
 		loginService.logout();
-	}
+	};
 }])
 
 app.filter('trustUrl', function ($sce) {

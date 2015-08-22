@@ -1,10 +1,17 @@
 'use strict';
-// Declare app level module which depends on filters, and services
-var app= angular.module('myApp', ['ngRoute','ngResource','ngScrollTo']);
-app.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'loginCtrl'});
-  $routeProvider.when('/dashboard', {templateUrl: 'partials/dashboard.html', controller: 'dashboardCtrl'});
-  $routeProvider.otherwise({redirectTo: '/dashboard'});
+
+var app= angular.module('ControlCenter', ['ngRoute','ngResource','ngScrollTo','inform','ngAnimate']);
+app.config(['$routeProvider','informProvider', function($routeProvider,informProvider) {
+	$routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'loginCtrl'});
+	$routeProvider.when('/dashboard', {templateUrl: 'partials/dashboard.html', controller: 'dashboardCtrl'});
+	//$routeProvider.otherwise({redirectTo: '/dashboard'});
+	var informDefaults = {
+		/* default time to live for each notification */
+		ttl: 4000,
+		/* default type of notification */
+		type: 'info'
+	};
+	informProvider.defaults(informDefaults);  
 }]);
 
 

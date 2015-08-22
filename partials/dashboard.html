@@ -1,17 +1,18 @@
 <div class="wrap dashboard">
 	<div id="header">
-		<div id="user-menu" class="right" slide-toggle="#user-menu-ul">
+		<div id="user-menu" class="right">
 			<img src="img/options.png" />
 			<ul id="user-menu-ul" class="slideable">
 				<li><a class="title">{{userdata.username}}</a></li>
 				<li><a>Preferences</a></li>
 				<li><a>Settings</a></li>
+				<li><a href="" ng-click="testmessage()">testmessage</a></li>
 				<li>&nbsp;</li>
 				<li><a href="" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
 
-		<div id="room-menu" slide-toggle="#room-menu-ul">
+		<div id="room-menu">
 			<a class="title">{{rooms[0][userdata.currentRoom]['name']}}</a>
 			<ul id="room-menu-ul" class="slideable">
 				<li ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
@@ -22,7 +23,7 @@
 		
 		<div id="link-menu">
 			<nav>
-				<ul class="sortable">
+				<ul class="sortable" ng-if="userdata.mobile==='0'">
 					<li id="{{linkgroup}}-group" class="sortable clear" ng-repeat="(linkgroup, linkgrouparray) in links[0]" ng-click="userdata.linkGroupSelected=linkgroup;linkReOrder(linkgroup,$index)">
 						<a class="main panel persistent title" ng-hide="$last && $index=='0'">{{linkgroup}}</a>
 						<a id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" ng-click="loadLink(thislink['navname']+'L');userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
@@ -30,6 +31,34 @@
 						</a>
 					</li>	
 				</ul>
+				
+				
+				<ul class="mobile" ng-if="userdata.mobile==='1'">
+					<img height="50px" src="img/3dots.png" />
+					<span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
+						<li id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" ng-click="loadLink(thislink['navname']+'L');userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
+							<img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px">
+						</li>
+					</span>
+				</ul>
+
+				<!--
+				
+				<div id="user-menu" class="right">
+					<img src="img/options.png" />
+					<ul id="user-menu-ul" class="slideable">
+						<li><a class="title">{{userdata.username}}</a></li>
+						<li><a>Preferences</a></li>
+						<li><a>Settings</a></li>
+						<li><a href="" ng-click="testmessage()">testmessage</a></li>
+						<li>&nbsp;</li>
+						<li><a href="" ng-click="logout()">Logout</a></li>
+					</ul>
+				</div>				
+				
+				-->
+
+				
 			</nav>
 		</div>
 	</div>
