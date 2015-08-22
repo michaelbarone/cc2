@@ -25,7 +25,7 @@
   width: auto;
 }
 
-@media screen and (min-width: 480px) {
+@media all and (min-width: 480px) {
   .inform-fixed {
     left: auto;
     width: 440px;
@@ -39,10 +39,17 @@
   }
 }
 
+@media all and (max-width: 480px) {  
+  .inform-fixed-bottom {
+    left:20px;
+  }
+}
+
 .inform-message {
   overflow: hidden;
   padding:10px;
   margin:5px;
+  font-size:12pt;
 }
 
 .inform-message .close {
@@ -54,6 +61,7 @@
 
 .inform-message .close:hover {
     background-color: rgba(255,255,255,.7);
+	cursor:pointer;
 }
 
 .inform-shadow .inform-message {
@@ -131,6 +139,7 @@
 .inform-message-wrap {
   min-width:150px;
 }
+
 .inform-animate .inform-message-wrap.ng-enter {
   -webkit-animation: 0.5s inform-message-slide-in;
           animation: 0.5s inform-message-slide-in;

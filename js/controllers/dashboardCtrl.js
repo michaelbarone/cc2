@@ -52,7 +52,7 @@ app.controller('dashboardCtrl', ['$scope','loginService','$http','inform', funct
 		  ttl: 120000, type: 'default'
 		});
 
-		inform.add('Primary', {
+		inform.add('Primary with long text string to se asdhafsdifjaskjdf a skdjf laskdjflkajsdf alksdj flkasjdf', {
 		  ttl: 120000, type: 'primary'
 		});
 		

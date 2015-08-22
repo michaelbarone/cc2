@@ -23,12 +23,15 @@
 				$navgroupname=$row['navgroupname'];
 				$i=0;
 				foreach ($thistemp as $xx) {
-					$sql = "SELECT * FROM navigation WHERE navid = $xx LIMIT 1";
+					$sql = "SELECT navname,navip,mobile FROM navigation WHERE navid = $xx LIMIT 1";
 					foreach ($configdb->query($sql) as $row) {
 						if($mobile==='1' && $row['mobile']==='0') { continue; }
 						$i++;
-						foreach($row as $key => $value) {
-							$linkArray["$navgroupname"]["$i"]["$key"]=$value;
+						$linkArray["$navgroupname"]["$i"]['navname']=$row['navname'];
+						if($mobile==='1' && $row['mobile']!='1') {
+							$linkArray["$navgroupname"]["$i"]['navip']=$row['mobile'];
+						} else {
+							$linkArray["$navgroupname"]["$i"]['navip']=$row['navip'];
 						}
 					}
 				}
