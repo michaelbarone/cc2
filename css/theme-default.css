@@ -52,6 +52,12 @@ a:visited { color:#eee; }
     box-shadow: inset -10px 0px 10px -10px #000000;
 }
 
+#link-menu .mobile li {
+    -moz-box-shadow: inset -10px 0px 10px -10px #000000;
+    -webkit-box-shadow: inset -10px 0px 10px -10px #000000;
+    box-shadow: inset -10px 0px 10px -10px #000000;
+}
+
 #user-menu ul,#room-menu ul {
     -moz-box-shadow: inset 10px 0px 10px -10px #000000;
     -webkit-box-shadow: inset 10px 0px 10px -10px #000000;

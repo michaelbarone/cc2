@@ -9,6 +9,7 @@ app.controller('dashboardCtrl', ['$scope','loginService','$http','inform', funct
 	$scope.links = [];
 	$scope.rooms = [];
 	$scope.userdata.linkGroupSelected = '';
+	$scope.userdata.linkSelected = '';
 	$scope.userdata.currentRoom = 'noRoom';
 
     $http.get('data/getLinks.php')
@@ -35,45 +36,36 @@ app.controller('dashboardCtrl', ['$scope','loginService','$http','inform', funct
 	
 		
 	$scope.loadLink = function(name,element) {
+		$scope.userdata.linkSelected = name;
 		document.getElementById(name).attributes['class'].value += ' loaded';
 	};
 
     $scope.linkReOrder = function(linkgroup,index) {
 		var theLi = document.getElementById(linkgroup + '-group');
 		$(theLi).parent().prepend(theLi);
-    };	
+    };
 
 
 	$scope.testmessage = function() {
-
 		inform.add('test');
-	
 		inform.add('Default', {
 		  ttl: 120000, type: 'default'
 		});
-
 		inform.add('Primary with long text string to se asdhafsdifjaskjdf a skdjf laskdjflkajsdf alksdj flkasjdf', {
 		  ttl: 120000, type: 'primary'
 		});
-		
 		inform.add('Info', {
 		  ttl: 120000, type: 'info'
 		});
-
 		inform.add('Success', {
 		  ttl: 120000, type: 'success'
 		});
-		
 		inform.add('Warning', {
 		  ttl: 120000, type: 'warning'
 		});
-		
 		inform.add('Danger', {
 		  ttl: 120000, type: 'danger'
 		});
-
-
-		
 	};
 		
 	$scope.logout=function(){
