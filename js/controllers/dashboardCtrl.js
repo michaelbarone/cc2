@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('dashboardCtrl', ['$scope','loginService','$http','inform', function ($scope, loginService, $http, inform){
+app.controller('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform', function ($scope, $timeout, loginService, $http, inform){
 	$scope.txt='Dashboard';
 	$scope.userdata = [];
 	$scope.userdata.username=sessionStorage.getItem('username');
@@ -11,24 +11,12 @@ app.controller('dashboardCtrl', ['$scope','loginService','$http','inform', funct
 	$scope.userdata.linkGroupSelected = '';
 	$scope.userdata.linkSelected = '';
 	$scope.userdata.currentRoom = 'noRoom';
-
-    $http.get('data/getLinks.php')
-		.success(function(data) {
-			$scope.links = data;
-		});
-
-    $http.get('data/getRooms.php')
-		.success(function(data) {
-			$scope.rooms = data;
-		});
-		
-	// check set currentRoom, check for cookies? then for homeRoom
 	if(sessionStorage.getItem('currentRoom') && sessionStorage.getItem('currentRoom') != '') {
 		$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
 	} else {
 		$scope.userdata.currentRoom=sessionStorage.getItem('homeRoom');
 	}
-	
+
 	$scope.changeRoom = function(room) {
 		$scope.userdata.currentRoom=room;
 		sessionStorage.setItem('currentRoom',room);
@@ -36,7 +24,6 @@ app.controller('dashboardCtrl', ['$scope','loginService','$http','inform', funct
 	
 		
 	$scope.loadLink = function(name,element) {
-		$scope.userdata.linkSelected = name;
 		document.getElementById(name).attributes['class'].value += ' loaded';
 	};
 
@@ -45,8 +32,11 @@ app.controller('dashboardCtrl', ['$scope','loginService','$http','inform', funct
 		$(theLi).parent().prepend(theLi);
     };
 
+	$scope.logout=function(){
+		loginService.logout();
+	};
 
-	$scope.testmessage = function() {
+	$scope.testmessage = function($scope) {
 		inform.add('test');
 		inform.add('Default', {
 		  ttl: 120000, type: 'default'
@@ -67,10 +57,37 @@ app.controller('dashboardCtrl', ['$scope','loginService','$http','inform', funct
 		  ttl: 120000, type: 'danger'
 		});
 	};
+	
+    $http.get('data/getLinks.php')
+		.success(function(data) {
+			$scope.links = data;
+		});
+
+    $http.get('data/getRooms.php')
+		.success(function(data) {
+			$scope.rooms = data;
+		});
+
 		
-	$scope.logout=function(){
-		loginService.logout();
-	};
+	$scope.updateAddons = function(){
+		$http.get('data/getRoomAddonInfo.php')
+		  .success(function(data) {
+			$scope.room_addons=data;
+			$timeout(function() {
+			  $scope.updateAddons();
+			 // $scope.intervalCron();
+			}, 5000)		
+		});
+	  };		
+		
+		/*
+ $scope.intervalCron = function(){
+    $timeout(function() {
+      $scope.updateAddons();
+      $scope.intervalCron();
+    }, 5000)
+  };*/
+  $scope.updateAddons();		
 }])
 
 app.filter('trustUrl', function ($sce) {

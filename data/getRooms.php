@@ -9,23 +9,24 @@
 	}
 	try {
 		$roomArray = array();
-		$roomGroups = '';
+		$roomIds = '';
 		foreach ($configdb->query("SELECT roomGroupAccess,roomAccess FROM users WHERE userid = $userid LIMIT 1") as $row) {
 			if($row['roomGroupAccess'] != '') {
 				$thisRoomGroup = $row['roomGroupAccess'];
 				foreach ($configdb->query("SELECT roomAccess FROM roomgroups WHERE roomGroupId = $thisRoomGroup LIMIT 1") as $row2) {
-					$roomGroups=$row2['roomAccess'];
+					$roomIds=$row2['roomAccess'] . ",";
 				}
 			}
-			$roomGroups.=$row['roomAccess'];
+			$roomIds.=$row['roomAccess'];
 		}
-		$roomGroups = explode(',', $roomGroups);
-		foreach($roomGroups as $x) {
+		$roomIds = explode(',', $roomIds);
+		$_SESSION['roomAccess']=$roomIds;
+		foreach($roomIds as $x) {
 			if(!isset($x) || $x == '' || is_array($x)) { continue; }
-			$sql = "SELECT * FROM rooms WHERE roomId = $x LIMIT 1";
+			$sql = "SELECT roomName FROM rooms WHERE roomId = $x LIMIT 1";
 			foreach ($configdb->query($sql) as $row) {
 				$roomArray[$x]['name']=$row['roomName'];
-			}			
+			}
 		}
 		$result = $roomArray;
 		
