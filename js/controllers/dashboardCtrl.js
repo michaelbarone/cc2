@@ -1,7 +1,6 @@
 'use strict';
 
 app.controller('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform', function ($scope, $timeout, loginService, $http, inform){
-	$scope.txt='Dashboard';
 	$scope.userdata = [];
 	$scope.userdata.username=sessionStorage.getItem('username');
 	$scope.userdata.userid=sessionStorage.getItem('userid');
@@ -21,7 +20,13 @@ app.controller('dashboardCtrl', ['$scope','$timeout','loginService','$http','inf
 		$scope.userdata.currentRoom=room;
 		sessionStorage.setItem('currentRoom',room);
 	};	
-	
+
+	$scope.wakeAddon = function(mac) {
+		if(mac === '' || mac === null){
+		} else {
+			$http.post('data/wakeAddon.php?m='+mac);
+		}
+	};	
 		
 	$scope.loadLink = function(name,element) {
 		document.getElementById(name).attributes['class'].value += ' loaded';
@@ -71,23 +76,14 @@ app.controller('dashboardCtrl', ['$scope','$timeout','loginService','$http','inf
 		
 	$scope.updateAddons = function(){
 		$http.get('data/getRoomAddonInfo.php')
-		  .success(function(data) {
-			$scope.room_addons=data;
-			$timeout(function() {
-			  $scope.updateAddons();
-			 // $scope.intervalCron();
-			}, 5000)		
-		});
-	  };		
-		
-		/*
- $scope.intervalCron = function(){
-    $timeout(function() {
-      $scope.updateAddons();
-      $scope.intervalCron();
-    }, 5000)
-  };*/
-  $scope.updateAddons();		
+			.success(function(data) {
+				$scope.room_addons=data;
+				$timeout(function() {
+					$scope.updateAddons();
+				}, 5000)		
+			});
+	};		
+	$scope.updateAddons();		
 }])
 
 app.filter('trustUrl', function ($sce) {

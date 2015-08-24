@@ -11,15 +11,23 @@
 				<li><a href="" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
-
 		<div id="room-menu">
 			<a class="title">{{rooms[0][userdata.currentRoom]['name']}}</a>
 			<ul id="room-menu-ul" class="slideable">
-				<li ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
-					<a ng-click="changeRoom(room)">{{roomArray.name}}</a>
-				</li>
+				<table>
+					<tr ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
+						<td ng-click="changeRoom(room)">{{roomArray.name}}</td>
+						<td>
+							<span ng-repeat="addon in room_addons[0][room]">{{addon.addon}} 
+								<img ng-if="!addon.alive" ng-click="wakeAddon(addon.mac)" class="status pointer" src="img/led-red.png"/>
+								<img ng-if="addon.alive" class="status" src="img/led-green.png"/>
+							</span>
+						</td>
+					</tr>
+				</table>
 			</ul>
-		</div>
+		</div>		
+		
 		
 		<div id="link-menu">
 			<nav>

@@ -67,6 +67,10 @@ a img {border:0;}
 
 .orange { color:#FF9522 !important;text-decoration:none; }
 
+img.status { height:20px; }
+
+.pointer { cursor:pointer;}
+
 .windowContainer {
 	position:absolute;
 	width: 100%;
@@ -175,8 +179,9 @@ a img {border:0;}
 	z-index:10;
 }
 
-#header a {
+#header a,#header table * {
 	font-size:22px;
+	vertical-align:middle;
 }
 
 #header a:not(.title) {
@@ -265,7 +270,7 @@ a img {border:0;}
 	white-space: nowrap;
 }
 
-#user-menu li,#room-menu li {
+#user-menu li,#room-menu table {
 	display:none;
 	margin:0;
 	padding:10px 0;
@@ -273,9 +278,34 @@ a img {border:0;}
 
 #user-menu li { text-align:right; }
 
-#room-menu li { margin-left:10px; }
+#room-menu table {
+	direction: rtl;
+	border-spacing:5px;
+}
+#room-menu table tr {
+	padding:5px 2.5px;
+}
+#room-menu table tr td {
+	padding:8px;
+}
+#room-menu table.result_table caption, #room-menu table.result_table th, #room-menu table.result_table td {
+	direction: ltr; 
+}
 
-#user-menu:hover li,#room-menu:hover li { display:block !Important; }
+
+/*
+#room-menu li {
+    height: 20px;
+    width: 95%;
+}
+
+#room-menu li a { text-align:right;min-width:100px; }
+
+#room-menu li * { float:right; }
+
+*/
+
+#user-menu:hover li,#room-menu:hover table { display:block !Important; }
 
 #user-menu a,#room-menu a { padding:0 15px; }
 

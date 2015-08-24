@@ -16,7 +16,9 @@
 			$sql = "SELECT * FROM rooms_addons WHERE roomid = $x AND enabled ='1'";
 			foreach ($configdb->query($sql) as $row) {
 				$i++;
-				$addonArray[$x][$i]['addonid']=$row['addonid'];
+				$addonparts = explode('.',$row['addonid']);
+				$addonArray[$x][$i]['addontype']=$addonparts[0];
+				$addonArray[$x][$i]['addon']=$addonparts[1];
 				$addonArray[$x][$i]['ip']=$row['ip'];
 				$addonArray[$x][$i]['mac']=$row['mac'];
 				$addonArray[$x][$i]['alive']=$row['device_alive'];
