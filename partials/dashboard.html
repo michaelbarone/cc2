@@ -19,8 +19,8 @@
 						<td ng-click="changeRoom(room)">{{roomArray.name}}</td>
 						<td>
 							<span ng-repeat="addon in room_addons[0][room]">{{addon.addon}} 
-								<img ng-if="!addon.alive" ng-click="wakeAddon(addon.mac)" class="status pointer" src="img/led-red.png"/>
-								<img ng-if="addon.alive" class="status" src="img/led-green.png"/>
+								<img ng-if="addon.alive==='0'" ng-click="wakeAddon(addon.mac)" class="status pointer" src="img/led-red.png"/>
+								<img ng-if="addon.alive==='1'" class="status" src="img/led-green.png"/>
 							</span>
 						</td>
 					</tr>

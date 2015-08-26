@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform', function ($scope, $timeout, loginService, $http, inform){
+app.controller('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform','Idle', function ($scope, $timeout, loginService, $http, inform, Idle){
 	$scope.userdata = [];
 	$scope.userdata.username=sessionStorage.getItem('username');
 	$scope.userdata.userid=sessionStorage.getItem('userid');
@@ -73,17 +73,52 @@ app.controller('dashboardCtrl', ['$scope','$timeout','loginService','$http','inf
 			$scope.rooms = data;
 		});
 
-		
 	$scope.updateAddons = function(){
-		$http.get('data/getRoomAddonInfo.php')
-			.success(function(data) {
-				$scope.room_addons=data;
-				$timeout(function() {
-					$scope.updateAddons();
-				}, 5000)		
-			});
+		if( Idle.idling() === true ) {
+			$timeout(function() {
+				$scope.updateAddons();
+			}, 5000)
+		} else {
+			$http.get('data/getRoomAddonInfo.php')
+				.success(function(data) {
+					$scope.room_addons=data;
+					$timeout(function() {
+						$scope.updateAddons();
+					}, 5000)		
+				});
+		}
 	};		
-	$scope.updateAddons();		
+	$scope.updateAddons();
+	
+	var cronKeeper = 0;
+	$scope.runCron = function(){
+		if( Idle.idling() === true ) {
+			$timeout(function() {
+				$scope.runCron();
+			}, 5000)
+		} else {
+			$http.get('data/cron.php')
+				.success(function(data) {
+					//$scope.room_addons=data;
+					if(data == "takeover") {
+						cronKeeper = "1";
+					}
+					if(data == "release") {
+						cronKeeper = "0";
+					}
+					if (cronKeeper == '1') {
+						$timeout(function() {
+							$scope.runCron();
+						}, 5000)
+					} else {
+						$timeout(function() {
+							$scope.runCron();
+						}, 60000)
+					}
+				});
+		}
+	};		
+	$scope.runCron();		
 }])
 
 app.filter('trustUrl', function ($sce) {
