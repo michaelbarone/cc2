@@ -35,6 +35,11 @@ ul, li {
 	padding:0;
 	list-style-type:none;
 }
+
+th,td {
+    white-space: nowrap;
+}
+
 a {
 	text-decoration: none;
 	outline: 0;
@@ -68,6 +73,8 @@ a img {border:0;}
 .orange { color:#FF9522 !important;text-decoration:none; }
 
 img.status { height:20px; }
+
+img.infoType { height:30px; }
 
 .pointer { cursor:pointer;}
 
@@ -230,10 +237,13 @@ img.status { height:20px; }
 }
 
 #link-menu img {
-	margin:10px;
-	padding:10px;
 	width:30px;
 	height:30px;
+}
+
+#link-menu .mobile img {
+	margin:10px;
+	padding:10px;
 }
 
 #link-menu .title {
@@ -268,6 +278,14 @@ img.status { height:20px; }
 	right:30px;
 	padding:15px !important;
 	white-space: nowrap;
+}
+
+#room-menu td {
+	min-height:56px;
+}
+
+#room-menu .addonTitle {
+	text-align:left;
 }
 
 #user-menu li,#room-menu table {

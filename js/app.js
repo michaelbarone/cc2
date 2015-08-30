@@ -1,11 +1,14 @@
 'use strict';
 
 var app= angular.module('ControlCenter', ['ngRoute','ngResource','ngIdle','ngScrollTo','inform','ngAnimate']);
-app.config(['$routeProvider','informProvider','KeepaliveProvider', 'IdleProvider', function($routeProvider,informProvider,KeepaliveProvider, IdleProvider) {
+app.config(['$routeProvider','$controllerProvider','informProvider','KeepaliveProvider', 'IdleProvider','ngScrollToOptionsProvider', function($routeProvider,$controllerProvider,informProvider,KeepaliveProvider, IdleProvider, ngScrollToOptionsProvider) {
 	// routes
+	app.settingsController = $controllerProvider.register;
+	app.dashboardController = $controllerProvider.register;
 	$routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'loginCtrl'});
-	$routeProvider.when('/dashboard', {templateUrl: 'partials/dashboard.html', controller: 'dashboardCtrl'});
-	//$routeProvider.otherwise({redirectTo: '/dashboard'});
+	$routeProvider.when('/dashboard', {templateUrl: 'partials/dashboard.html'});
+	$routeProvider.when('/settings', {templateUrl: 'partials/settings.html'});
+	$routeProvider.otherwise({redirectTo: '/dashboard'});
 	
 	// notifications
 	var informDefaults = {
@@ -17,15 +20,25 @@ app.config(['$routeProvider','informProvider','KeepaliveProvider', 'IdleProvider
 	informProvider.defaults(informDefaults);
 	
 	// ngidle settings
-	IdleProvider.idle(20);
-	IdleProvider.timeout(60);
+	IdleProvider.idle(360);
+	IdleProvider.timeout(400);
 	KeepaliveProvider.interval(10);
+	
+    ngScrollToOptionsProvider.extend({
+        handler: function(el) {
+			var myEl = document.getElementById(el.id);
+			if(myEl.attributes['src'].value===""){
+				myEl.attributes['src'].value = myEl.attributes['data'].value;
+			}
+            el.scrollIntoView();
+        }
+    });	
 }]);
 
 
 
 app.run(function($rootScope, $location, loginService, Idle){
-	var routespermission=['/dashboard'];  //route that require login
+	var routespermission=['/dashboard','/settings'];  //route that require login
 	$rootScope.$on('$routeChangeStart', function(){
 		if( routespermission.indexOf($location.path()) !=-1)
 		{
@@ -37,6 +50,12 @@ app.run(function($rootScope, $location, loginService, Idle){
 	});
 	
 	Idle.watch();  // start idle check
+});
+
+app.filter('trustUrl', function ($sce) {
+	return function(url) {
+		return $sce.trustAsResourceUrl(url);
+	};
 });
 
 /*

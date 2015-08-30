@@ -10,6 +10,7 @@ app.factory('loginService',function($http, $location, sessionService, inform){
 					var userid=msg.data['userid'];
 					var homeRoom=msg.data['homeRoom'];
 					var mobile=msg.data['mobile'];
+					var settingsAccess=msg.data['settingsAccess'];
 					if(uid){
 						inform.clear();
 						inform.add('Welcome, ' + username);						
@@ -18,6 +19,7 @@ app.factory('loginService',function($http, $location, sessionService, inform){
 						sessionService.set('userid',userid);
 						sessionService.set('homeRoom',homeRoom);
 						sessionService.set('mobile',mobile);
+						sessionService.set('settingsAccess',settingsAccess);
 						$location.path('/dashboard');
 					} else {
 						inform.add('Incorrect Information', {

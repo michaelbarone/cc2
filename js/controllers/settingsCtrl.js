@@ -1,6 +1,14 @@
 'use strict';
 
-app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform','Idle', function ($scope, $timeout, loginService, $http, inform, Idle){
+app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Idle', function ($scope, $timeout, $http, inform, Idle){
+
+
+
+
+}])
+
+
+/*
 	$scope.userdata = [];
 	$scope.userdata.username=sessionStorage.getItem('username');
 	$scope.userdata.userid=sessionStorage.getItem('userid');
@@ -130,4 +138,23 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		}
 	};		
 	$scope.runCron();		
-}])
+
+
+app.filter('trustUrl', function ($sce) {
+	return function(url) {
+		return $sce.trustAsResourceUrl(url);
+	};
+});
+
+app.config(function(ngScrollToOptionsProvider) {
+    ngScrollToOptionsProvider.extend({
+        handler: function(el) {
+			var myEl = document.getElementById(el.id);
+			if(myEl.attributes['src'].value===""){
+				myEl.attributes['src'].value = myEl.attributes['data'].value;
+			}
+            el.scrollIntoView();
+        }
+    });
+});
+*/

@@ -12,6 +12,9 @@
 		$addonArray = array();
 		foreach($roomIds as $x) {
 			if(!isset($x) || $x == '' || is_array($x)) { continue; }
+			$allAddonsAlive="1";
+			$addonArray[$x]['0']['allAddonsAlive']=$allAddonsAlive;
+			$addonArray[$x]['0']['allAddonsMacs']='';
 			$i=0;
 			$sql = "SELECT * FROM rooms_addons WHERE roomid = $x AND enabled ='1'";
 			foreach ($configdb->query($sql) as $row) {
@@ -22,6 +25,15 @@
 				$addonArray[$x][$i]['ip']=$row['ip'];
 				$addonArray[$x][$i]['mac']=$row['mac'];
 				$addonArray[$x][$i]['alive']=$row['device_alive'];
+				$addonArray[$x][$i]['info']=$row['info'];
+				$addonArray[$x][$i]['infoType']=$row['infoType'];
+				if($row['device_alive']==="0") {
+					$allAddonsAlive="0";
+					$addonArray[$x]['0']['allAddonsAlive']=$allAddonsAlive;
+					if($row['mac']!==''||$row['mac']!=='null') {
+						$addonArray[$x]['0']['allAddonsMacs']=$row['mac'] . "," . $addonArray[$x]['0']['allAddonsMacs'];
+					}
+				}
 				$timenow = time();
 				if(($row['lastCheck']+4) < $timenow) {
 					$addonid = $row['addonid'];
