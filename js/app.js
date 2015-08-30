@@ -21,7 +21,7 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 	
 	// ngidle settings
 	IdleProvider.idle(360);
-	IdleProvider.timeout(400);
+	IdleProvider.timeout(0);
 	KeepaliveProvider.interval(10);
 	
     ngScrollToOptionsProvider.extend({

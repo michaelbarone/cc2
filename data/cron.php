@@ -20,8 +20,10 @@ try {
 		$log->LogError("$e->getMessage()" . basename(__FILE__));
 	}
 
+$echoTakeover=0;
 if($lastcron < ($time - 30)) {
 	echo "takeover";
+	$echoTakeover=1;
 	$log->LogInfo("Cron taken over by user " . $_SESSION['username']);
 } else if(($lastcron + 4) > $time) {
 	echo "release";
@@ -116,4 +118,7 @@ try {
 	$log->LogError("$e->getMessage()" . basename(__FILE__));
 	}
 
+if($echoTakeover===0) {
+	echo "completed";
+}
 ?>

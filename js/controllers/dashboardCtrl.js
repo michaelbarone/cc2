@@ -1,12 +1,12 @@
 'use strict';
 
 app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform','Idle', function ($scope, $timeout, loginService, $http, inform, Idle){
+	$scope.links = [];
+	$scope.rooms = [];
 	$scope.userdata = [];
 	$scope.userdata.username=sessionStorage.getItem('username');
 	$scope.userdata.userid=sessionStorage.getItem('userid');
 	$scope.userdata.mobile=sessionStorage.getItem('mobile');	
-	$scope.links = [];
-	$scope.rooms = [];
 	$scope.userdata.linkGroupSelected = '';
 	$scope.userdata.linkSelected = '';
 	$scope.userdata.currentRoom = 'noRoom';
@@ -17,17 +17,16 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		$scope.userdata.currentRoom=sessionStorage.getItem('homeRoom');
 	}
 
+    $http.get('data/getRooms.php')
+		.success(function(data) {
+			$scope.rooms = data;
+		});
+
     $http.get('data/getLinks.php')
 		.success(function(data) {
 			$scope.links = data;
 		});
 
-    $http.get('data/getRooms.php')
-		.success(function(data) {
-			$scope.rooms = data;
-		});	
-	
-	
 	$scope.changeRoom = function(room) {
 		$scope.userdata.currentRoom=room;
 		sessionStorage.setItem('currentRoom',room);
@@ -48,7 +47,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 			}
 		}
 	};
-		
+
 	$scope.loadLink = function(name,element) {
 		document.getElementById(name).attributes['class'].value += ' loaded';
 	};
@@ -61,6 +60,63 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	$scope.logout=function(){
 		loginService.logout();
 	};
+
+	$scope.updateAddons = function(){
+		if( Idle.idling() === true ) {
+			$timeout(function() {
+				$scope.updateAddons();
+			}, 5000)
+		} else {
+			$http.get('data/getRoomAddonInfo.php')
+				.success(function(data) {
+					if(data == "failed") {
+						return;
+					}
+					$scope.room_addons=data;
+					$timeout(function() {
+						$scope.updateAddons();
+					}, 5000)		
+				});
+		}
+	};
+	$timeout(function() {
+		$scope.updateAddons();
+	}, 1000);
+
+	var cronKeeper = 0;
+	$scope.runCron = function(){
+		if( Idle.idling() === true ) {
+			$timeout(function() {
+				$scope.runCron();
+			}, 5000)
+		} else {
+			$http.get('data/cron.php')
+				.success(function(data) {
+					if(data == "failed") {
+						return;
+					}
+					//$scope.room_addons=data;
+					if(data == "takeover") {
+						cronKeeper = "1";
+					}
+					if(data == "release") {
+						cronKeeper = "0";
+					}
+					if (cronKeeper == '1') {
+						$timeout(function() {
+							$scope.runCron();
+						}, 5000)
+					} else {
+						$timeout(function() {
+							$scope.runCron();
+						}, 60000)
+					}
+				});
+		}
+	};		
+	$scope.runCron();
+
+
 
 	$scope.testmessage = function($scope) {
 		inform.add('test');
@@ -83,51 +139,4 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		  ttl: 120000, type: 'danger'
 		});
 	};
-	
-	$scope.updateAddons = function(){
-		if( Idle.idling() === true ) {
-			$timeout(function() {
-				$scope.updateAddons();
-			}, 5000)
-		} else {
-			$http.get('data/getRoomAddonInfo.php')
-				.success(function(data) {
-					$scope.room_addons=data;
-					$timeout(function() {
-						$scope.updateAddons();
-					}, 5000)		
-				});
-		}
-	};		
-	$scope.updateAddons();
-	
-	var cronKeeper = 0;
-	$scope.runCron = function(){
-		if( Idle.idling() === true ) {
-			$timeout(function() {
-				$scope.runCron();
-			}, 5000)
-		} else {
-			$http.get('data/cron.php')
-				.success(function(data) {
-					//$scope.room_addons=data;
-					if(data == "takeover") {
-						cronKeeper = "1";
-					}
-					if(data == "release") {
-						cronKeeper = "0";
-					}
-					if (cronKeeper == '1') {
-						$timeout(function() {
-							$scope.runCron();
-						}, 5000)
-					} else {
-						$timeout(function() {
-							$scope.runCron();
-						}, 60000)
-					}
-				});
-		}
-	};		
-	$scope.runCron();		
 }])
