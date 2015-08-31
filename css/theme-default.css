@@ -13,6 +13,9 @@ a:hover,#header table td:first-of-type:hover { color:#0099ff !important;cursor:p
 
 a:visited { color:#eee; }
 
+.windowContainer {
+	background: #222528 url("../img/background.png") repeat scroll 0% 0%;
+}
 
 #header {
 	background: #222528 url("../img/background.png") repeat scroll 0% 0%;

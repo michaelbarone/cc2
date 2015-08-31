@@ -16,7 +16,7 @@
 			$addonArray[$x]['0']['allAddonsAlive']=$allAddonsAlive;
 			$addonArray[$x]['0']['allAddonsMacs']='';
 			$i=0;
-			$sql = "SELECT * FROM rooms_addons WHERE roomid = $x AND enabled ='1'";
+			$sql = "SELECT * FROM rooms_addons,rooms_addons_info WHERE rooms_addons.rooms_addonsid = rooms_addons_info.rooms_addonsid AND rooms_addons.roomid = $x AND rooms_addons.enabled = '1'";
 			foreach ($configdb->query($sql) as $row) {
 				$i++;
 				$addonparts = explode('.',$row['addonid']);

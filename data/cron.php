@@ -41,6 +41,9 @@ try {
 		if(($row['lastCheck']+60) < $time) { continue; }
 		// create array of addons that can run custom info call
 		$addons[$row['rooms_addonsid']]['rooms_addonsid']=$row['rooms_addonsid'];
+		$addonparts = explode(".",$row['addonid']);
+		$addons[$row['rooms_addonsid']]['addontype']=$addonparts[0];
+		$addons[$row['rooms_addonsid']]['addonname']=$addonparts[1];	
 		$addons[$row['rooms_addonsid']]['addonid']=$row['addonid'];
 		$addons[$row['rooms_addonsid']]['ip']=$row['ip'];
 		//  set below   $addons[$row['rooms_addonsid']]['device_alive']=$row['device_alive'];
@@ -98,11 +101,27 @@ foreach($addons as $addon) {
 	if($addon['device_alive']===0){ continue; }
 	$rooms_addonsid=$addon['rooms_addonsid'];
 	$addonid=$addon['addonid'];
-	$addonip=$addon['ip'];
-	/* if file exists "/addons/$addon['addonid'].php" {
-			include "/addons/$addon['addonid'].php"
-	}*/
-
+	$addonName=$addon['addonname'];
+	$ip=$addon['ip'];
+	if(file_exists("../addons/$addonid/$addonid.php")) {
+			if(!isset(${$addonName})) {
+				include "../addons/$addonid/$addonid.php";
+				${$addonName} = new $addonName();
+			}
+			echo ${$addonName}->setIp($ip);
+			//echo ${$addonName}->Ping();
+			print_r(${$addonName}->GetPlayingItemInfo());
+			
+			// need some validation below before setting variables, otherwise blank out incase device is unreachable, reset last known info.
+			$nowPlayingInfo = ${$addonName}->GetPlayingItemInfo();
+			$title = $nowPlayingInfo['title'];
+			$type = $nowPlayingInfo['type'];
+			$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType) VALUES ('$rooms_addonsid','$title','$type')");
+			
+			
+			echo "<br><br>";
+	}
+	
 }
 
 
