@@ -1,6 +1,7 @@
 'use strict';
 
 app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform','Idle', function ($scope, $timeout, loginService, $http, inform, Idle){
+	var unix = Math.round(+new Date()/1000);
 	$scope.links = [];
 	$scope.rooms = [];
 	$scope.userdata = [];
@@ -10,6 +11,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	$scope.userdata.linkGroupSelected = '';
 	$scope.userdata.linkSelected = '';
 	$scope.userdata.currentRoom = 'noRoom';
+	$scope.userdata.lastRoomChange=unix;
 	$scope.userdata.settingsAccess=sessionStorage.getItem('settingsAccess');
 	if(sessionStorage.getItem('currentRoom') && sessionStorage.getItem('currentRoom') != '') {
 		$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
@@ -28,8 +30,11 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		});
 
 	$scope.changeRoom = function(room) {
+		var unix = Math.round(+new Date()/1000);
 		$scope.userdata.currentRoom=room;
+		$scope.userdata.lastRoomChange=unix;
 		sessionStorage.setItem('currentRoom',room);
+		sessionStorage.setItem('lastRoomChange',unix);
 	};	
 
 	$scope.wakeAddon = function(mac) {

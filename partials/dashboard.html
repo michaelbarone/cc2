@@ -8,6 +8,7 @@
 				<li><a>Preferences</a></li>
 				<li ng-if="userdata.settingsAccess"><a href="./#/settings">Settings</a></li>
 				<li><a href="" ng-click="testmessage()">testmessage</a></li>
+				<li><a href=""  ng-click="chatOpen = chatOpen ? false : true">Chat</a></li>
 				<li>&nbsp;</li>
 				<li><a href="" ng-click="logout()">Logout</a></li>
 			</ul>
@@ -31,8 +32,6 @@
 				</table>
 			</ul>
 		</div>		
-		
-		
 		<div id="link-menu">
 			<nav>
 				<ul class="sortable" ng-if="userdata.mobile==='0'">
@@ -72,4 +71,5 @@
 			</span>
 		</div>
 	</div>
+	<div id="chatContainer" ng-class="{'open' : chatOpen == true}" class="transformable-horizontal" chat></div>
 </div>

@@ -5,6 +5,7 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 	// routes
 	app.settingsController = $controllerProvider.register;
 	app.dashboardController = $controllerProvider.register;
+	app.chatController = $controllerProvider.register;	
 	$routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'loginCtrl'});
 	$routeProvider.when('/dashboard', {templateUrl: 'partials/dashboard.html'});
 	$routeProvider.when('/settings', {templateUrl: 'partials/settings.html'});
@@ -56,6 +57,20 @@ app.filter('trustUrl', function ($sce) {
 	return function(url) {
 		return $sce.trustAsResourceUrl(url);
 	};
+});
+
+app.directive('chat', function () {
+	return {
+		restrict: 'EAC', //E = element, A = attribute, C = class, M = comment         
+		//scope: {
+			//@ reads the attribute value, = provides two-way binding, & works with functions
+		//	title: '@'
+		//},
+		//template: '<div>{{ myVal }}</div>',
+		templateUrl: 'partials/chat.html',
+		//controller: chatCtrl   //Embed a custom controller in the directive
+		link: function ($scope) { } //DOM manipulation
+	}
 });
 
 /*

@@ -1,0 +1,31 @@
+<script src="./js/controllers/chatCtrl.js"></script>
+<div id="chatWrapper" ng-controller="chatCtrl">
+	<a href="" ng-click="closeChat()">Close Chat</a>
+	<div class="right11">
+
+		<p>this is the chat area</p>
+		<br />
+
+		<p>{{userdata.currentRoom}}</p>
+		<br />
+		<h5>Room Chat</h5>
+		<li><a ng-click="chatWithRoom(userdata.currentRoom,userdata.lastRoomChange)">{{rooms[0][userdata.currentRoom].name}}</a></li>
+
+		<hr />
+		
+		<!-- online users list  
+			<li ng-repeat="">
+				<a ng-click="chatWithUser(user.userid)">{{user.name}}</a>
+			</li>
+		-->
+		
+		
+		<!--  offline users list -->
+
+		<p ng-click="chatWithRoom(userdata.currentRoom)">{{userdata.lastRoomChange}}</p>
+	</div>
+
+	<div id="chatBox" class="transformable-horizontal" ng-class="{'open' : chatBoxOpen===true}">
+
+	</div>
+</div>
