@@ -3,7 +3,7 @@
 	<div id="header">
 		<div id="user-menu" class="right">
 			<img src="img/options.png" />
-			<ul id="user-menu-ul" class="slideable">
+			<ul id="user-menu-ul">
 				<li><a class="title">{{userdata.username}}</a></li>
 				<li><a>Preferences</a></li>
 				<li ng-if="userdata.settingsAccess"><a href="./#/settings">Settings</a></li>
@@ -15,7 +15,7 @@
 		</div>
 		<div id="room-menu">
 			<a class="title">{{rooms[0][userdata.currentRoom]['name']}}</a>
-			<ul id="room-menu-ul" class="slideable">
+			<ul id="room-menu-ul">
 				<table>
 					<tr ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
 						<td ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name}}</td>

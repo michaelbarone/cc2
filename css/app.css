@@ -384,7 +384,7 @@ img.infoType { height:30px; }
 	right: 0;
 	height: 100%;
 	width: 0px;
-	background-color: white;
+	background-color: rgb(20,20,20);
 	top: 0;
 	z-index: 1000;
 }
@@ -409,6 +409,49 @@ img.infoType { height:30px; }
 
 #chatBox.open {
 	width:250px;
+}
+
+#chatBox * {
+	display:none;
+}
+
+#chatBox.open * {
+	display:block;
+}
+
+#chatBox > button {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+#chatBox .messageContainer {
+	width:100%;
+	position:absolute;
+	left:0;
+	overflow:auto;
+}
+
+#chatBox .message-form {
+	width:100%;
+	position:absolute;
+	bottom:0;
+	left:0;
+}
+
+#chatBox .message-form textarea {
+	width:97%;
+	margin: 0 0 5px;
+    height: 50px;
+}
+
+#chatBox .message-form textarea.big {
+    height: 150px;
+}
+
+#chatBox .message-form button {
+	float:right;
+	margin:4px;
 }
 
 

@@ -31,22 +31,19 @@ try {
 	$log->LogFatal("Fatal: User could not open DB: $e->getMessage().  from " . basename(__FILE__));
 }
 
-try {
-	if(!isset($_SESSION)){
-		ini_set('display_errors', 'On');
-		ini_set('display_startup_errors', 'On');
-		ini_set('html_errors', 'On');
-		ini_set('log_errors', 'On');
-		ini_set('error_log', "$PRIVATE_DATA/logs/PHP_errors.log");
-		ini_set('session.gc_maxlifetime', 604800);     //  604800    >>  24 hours = 86400 sec
-		ini_set('session.gc_probability', 1);
-		ini_set('session.gc_divisor', 100	);
-		ini_set('session.save_path', $PRIVATE_DATA . "/sessions");
-		ini_set('session.cookie_lifetime', 604800);
-		session_start();
-	}
-} catch(PDOException $e)
-	{
-		$log->LogFatal("Fatal: Could NOT not start session: $e->getMessage().  from " . basename(__FILE__));
-	}
+
+if(!isset($_SESSION)){
+	//disable top 3 for production
+	ini_set('display_errors', 'On');
+	ini_set('display_startup_errors', 'On');
+	ini_set('html_errors', 'On');
+	ini_set('log_errors', 'On');
+	ini_set('error_log', "$PRIVATE_DATA/logs/PHP_errors.log");
+	ini_set('session.gc_maxlifetime', 604800);     //  604800    >>  24 hours = 86400 sec
+	ini_set('session.gc_probability', 1);
+	ini_set('session.gc_divisor', 100	);
+	ini_set('session.save_path', $PRIVATE_DATA . "/sessions");
+	ini_set('session.cookie_lifetime', 604800);
+	session_start();
+}
 ?>

@@ -47,6 +47,8 @@ a:visited { color:#eee; }
 
 #room-menu tr.selected td:first-of-type { color:#0099ff !important; }
 
+#chatContactListContainer li.selected { color:#0099ff !important;border-left:3px solid #0099ff !important; }
+
 #link-menu, #user-menu, #room-menu {
 	-moz-box-shadow: inset 0 -10px 10px -10px #000000;
     -webkit-box-shadow: inset 0 -10px 10px -10px #000000;

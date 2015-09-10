@@ -9,8 +9,9 @@
 			} else {
 				$passwordset="1";
 			}
-			$usersArray[] = array(
-				'userid' => $row['userid'], 
+			$userid = $row['userid'];
+			$usersArray[$userid] = array(
+				'userid' => $userid, 
 				'username' => $row['username'],
 				'passwordset' => "$passwordset",
 				'passwordreset' => $row['passwordreset'],

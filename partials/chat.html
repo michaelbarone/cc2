@@ -1,24 +1,30 @@
 <script src="./js/controllers/chatCtrl.js"></script>
 <div id="chatWrapper" ng-controller="chatCtrl">
-	<a href="" ng-click="closeChat()">Close Chat</a>
-	<div class="right11">
-
-		<p>this is the chat area</p>
+	<button class="closeChatBox btn btn-warning" ng-click="closeChat()">Close Chat</button>
+	<div id="chatContactListContainer">
+		<!-- >
+		admin announcements
+		all warns/errors in logs
+		
+		<hr />		
+		</!-->
 		<br />
+		<h5>System Announcements</h5>
+		<li ng-class="{'selected': chattingWith==rooms[0][userdata.currentRoom].name}"><a ng-click="chatWithRoom(userdata.currentRoom,userdata.lastRoomChange)">{{rooms[0][userdata.currentRoom].name}}</a></li>
 
-		<p>{{userdata.currentRoom}}</p>
+		<hr />	
 		<br />
 		<h5>Room Chat</h5>
-		<li><a ng-click="chatWithRoom(userdata.currentRoom,userdata.lastRoomChange)">{{rooms[0][userdata.currentRoom].name}}</a></li>
+		<li ng-class="{'selected': chattingWith==rooms[0][userdata.currentRoom].name}"><a ng-click="chatWithRoom(userdata.currentRoom,userdata.lastRoomChange)">{{rooms[0][userdata.currentRoom].name}}</a></li>
 
 		<hr />
-		
-		<!-- online users list  
-			<li ng-repeat="">
-				<a ng-click="chatWithUser(user.userid)">{{user.name}}</a>
+		<br />
+		<h5>Users</h5>
+		<ul>
+			<li ng-repeat="user in users" ng-class="{'selected': chattingWith==user.username}">
+				<a ng-click="chatWithUser(user.userid)">{{user.username}}</a>
 			</li>
-		-->
-		
+		</ul>
 		
 		<!--  offline users list -->
 
@@ -26,6 +32,12 @@
 	</div>
 
 	<div id="chatBox" class="transformable-horizontal" ng-class="{'open' : chatBoxOpen===true}">
-
+		<button class="closeChatBox btn btn-warning" ng-click="closeChatBox()">Close Conversation ></button>
+		
+		<span class="message-form">
+			<textarea ng-model="newMessage" placeholder="Send message to {{chattingWith}}" ng-class="{'big' : tallerMessageArea}" class="transformable-vertical" autofocus />
+			<button ng-click="sendNewMessage(newMessage)" class="btn btn-primary">Send</button>
+			<button ng-click="tallerMessageArea = !tallerMessageArea" class="btn btn-info">More</button>
+		</span>
 	</div>
 </div>
