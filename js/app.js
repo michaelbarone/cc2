@@ -1,7 +1,7 @@
 'use strict';
 
 var app= angular.module('ControlCenter', ['ngRoute','ngResource','ngIdle','ngScrollTo','inform','ngAnimate']);
-app.config(['$routeProvider','$controllerProvider','informProvider','KeepaliveProvider', 'IdleProvider','ngScrollToOptionsProvider', function($routeProvider,$controllerProvider,informProvider,KeepaliveProvider, IdleProvider, ngScrollToOptionsProvider) {
+app.config(['$routeProvider','$controllerProvider','informProvider','KeepaliveProvider', 'IdleProvider', function($routeProvider,$controllerProvider,informProvider,KeepaliveProvider, IdleProvider) {
 	// routes
 	app.settingsController = $controllerProvider.register;
 	app.dashboardController = $controllerProvider.register;
@@ -24,16 +24,6 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 	IdleProvider.idle(360);
 	IdleProvider.timeout(0);
 	KeepaliveProvider.interval(10);
-	
-    ngScrollToOptionsProvider.extend({
-        handler: function(el) {
-			var myEl = document.getElementById(el.id);
-			if(myEl.attributes['src'].value===""){
-				myEl.attributes['src'].value = myEl.attributes['data'].value;
-			}
-            el.scrollIntoView();
-        }
-    });	
 }]);
 
 
@@ -72,6 +62,69 @@ app.directive('chat', function () {
 		link: function ($scope) { } //DOM manipulation
 	}
 });
+
+app.directive('onLongPress', function($timeout) {
+	return {
+		restrict: 'A',
+		link: function($scope, $elm, $attrs) {
+			$elm.bind('touchstart', function(evt) {
+				// Locally scoped variable that will keep track of the long press
+				$scope.longPress = true;
+
+				// We'll set a timeout for 600 ms for a long press
+				$timeout(function() {
+					if ($scope.longPress) {
+						evt.preventDefault();
+						// If the touchend event hasn't fired,
+						// apply the function given in on the element's on-long-press attribute
+						$scope.$apply(function() {
+							$scope.$eval($attrs.onLongPress)
+						});
+					}
+				}, 600);
+			});
+
+			$elm.bind('touchend', function(evt) {
+				// Prevent the onLongPress event from firing
+				$scope.longPress = false;
+				// If there is an on-touch-end function attached to this element, apply it
+				if ($attrs.onTouchEnd) {
+					$scope.$apply(function() {
+						$scope.$eval($attrs.onTouchEnd)
+					});
+				}
+			});			
+			
+			$elm.bind('mousedown', function(evt) {
+				// Locally scoped variable that will keep track of the long press
+				$scope.longPress = true;
+
+				// We'll set a timeout for 600 ms for a long press
+				$timeout(function() {
+					if ($scope.longPress) {
+						evt.preventDefault();
+						// If the touchend event hasn't fired,
+						// apply the function given in on the element's on-long-press attribute
+						$scope.$apply(function() {
+							$scope.$eval($attrs.onLongPress)
+						});
+					}
+				}, 600);
+			});			
+			
+			$elm.bind('mouseup', function(evt) {
+				// Prevent the onLongPress event from firing
+				$scope.longPress = false;
+				// If there is an on-touch-end function attached to this element, apply it
+				if ($attrs.onTouchEnd) {
+					$scope.$apply(function() {
+						$scope.$eval($attrs.onTouchEnd)
+					});
+				}
+			});
+		}
+	};
+})
 
 /*
 app.directive('resize', function ($window) {

@@ -147,9 +147,9 @@ img.infoType { height:30px; }
 }
 
 .lockedLogin {	height:40px; }
-.lockedLogin.open { height:100% !important; }
+.lockedLogin.open { height:100% !important; cursor:default; }
 
-/*  not sure if used  */
+/*  not sure if used
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;
@@ -178,7 +178,7 @@ img.infoType { height:30px; }
   content: "";
   padding: 0;
 }
-/*  end not sure if used  */
+  end not sure if used  */
 
 /************
 *** Header

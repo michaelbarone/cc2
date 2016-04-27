@@ -37,7 +37,7 @@
 				<ul class="sortable" ng-if="userdata.mobile==='0'">
 					<li id="{{linkgroup}}-group" class="sortable clear" ng-repeat="(linkgroup, linkgrouparray) in links[0]" ng-click="userdata.linkGroupSelected=linkgroup;linkReOrder(linkgroup,$index)">
 						<a class="main panel persistent title" ng-hide="$last && $index=='0'">{{linkgroup}}</a>
-						<a id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" ng-click="loadLink(thislink['navname']+'L');userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
+						<a id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']+'L');" ng-click="loadLink(thislink['navname']+'L');userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
 							<img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px">
 						</a>
 					</li>	
@@ -45,7 +45,7 @@
 				<ul class="mobile" ng-if="userdata.mobile==='1'">
 					<img height="50px" src="img/3dots.png" />
 					<span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
-						<li id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" ng-click="loadLink(thislink['navname']+'L');userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
+						<li id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']+'L');" ng-click="loadLink(thislink['navname']+'L');userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
 							<img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px">
 						</li>
 					</span>
@@ -55,13 +55,32 @@
 	</div>
 	<div id="dashboardWrapper" scrolling="auto">
 		<div id="dashboardMask">
-			<span id="addonlinkspages">
+			<!--
 				<div id="XBMCCONTROL1" class="dashboardPage">
 					<div class="content">
-						<iframe id="XBMCCONTROL1f" data-src="http://192.168.3.223:8080" data-src="http://192.168.3.223:8080" scrolling="no" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
+						<iframe id="XBMCCONTROL1f" data-src="http://192.168.3.223:8080" scrolling="no" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
+					</div>
+				</div>
+			</span>-->
+			<span ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
+				<div id="room{{room}}" class="dashboardPage">
+					
+					<div class="content">
+					<div ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name}}</div>
+					<!-- wakeAllAddons turns into powerOnAllRoomAddons(roomid) -> will then wake/poweron/switchtoinput that is specified per addon type or individually?
+					-->
+					<img ng-if="room_addons[0][room][0].allAddonsAlive==='0'" ng-click="wakeAllAddons(room_addons[0][room][0].allAddonsMacs)" class="status pointer" src="img/led-red.png"/>
+					<img ng-if="room_addons[0][room][0].allAddonsAlive==='1'" class="status" src="img/led-green.png"/>
+					<span ng-repeat="addon in room_addons[0][room]">
+						<a ng-if="addon.info">{{addon.info}}</a><img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
+					</span>
 					</div>
 				</div>
 			</span>
+			
+			
+			
+			
 			<span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
 				<div class="dashboardPage" ng-repeat="thislink in linkgrouparray">
 					<div class="content">

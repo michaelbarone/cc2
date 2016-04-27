@@ -41,7 +41,7 @@ a:visited { color:#eee; }
 
 #link-menu li a.selected {  border-bottom:2px solid #0099ff !important; }
 
-#link-menu li.selected img {  border-left:3px solid #0099ff !important;}
+#link-menu li.selected img {  border-right:3px solid #0099ff !important;}
 
 #room-menu tr.selected td:first-of-type {  border-left:3px solid #0099ff !important;}
 

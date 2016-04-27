@@ -2,7 +2,7 @@
 	require 'startsession.php';
 	try {
 		$usersArray = array();
-		foreach ($configdb->query("SELECT * FROM users") as $row) {
+		foreach ($configdb->query("SELECT userid,username,password,passwordreset,avatar FROM users") as $row) {
 			$passwordset="0";
 			if($row['password']=="" || !isset($row['password'])) {
 				$passwordset="0";

@@ -86,7 +86,7 @@ app.chatController('chatCtrl', ['$scope','$timeout','$http','inform','Idle', fun
 				$scope.getNewMessages();
 			}, 2000);
 		} else {
-			$http.get('data/chatGetMessages.php')
+			$http.get('data/chatGetMessages.php?cw=' + $scope.chattingWith)
 				.success(function(data) {
 					if(data == "failed") {
 						return;

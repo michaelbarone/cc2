@@ -35,6 +35,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		$scope.userdata.lastRoomChange=unix;
 		sessionStorage.setItem('currentRoom',room);
 		sessionStorage.setItem('lastRoomChange',unix);
+		document.getElementById("room"+room).scrollIntoView();
 	};	
 
 	$scope.wakeAddon = function(mac) {
@@ -53,8 +54,39 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		}
 	};
 
+
+	$scope.loadLinkLongPress = function(name,element) {
+		var elementid = name;
+		elementid = elementid.substring(0, elementid.length - 1);
+		if(document.getElementById(name).classList.contains('loaded')) {
+			document.getElementById(name).classList.remove('loaded');
+			document.getElementById(elementid).attributes['src'].value = '';
+			document.getElementById(name).attributes['class'].value += ' longpress';
+		}
+	};
+	
+	
 	$scope.loadLink = function(name,element) {
-		document.getElementById(name).attributes['class'].value += ' loaded';
+		var elementid = name;
+		elementid = elementid.substring(0, elementid.length - 1);
+		
+		if(document.getElementById(name).classList.contains('longpress')) {
+			document.getElementById(name).classList.remove('longpress');
+		}else if(document.getElementById(name).classList.contains('selected')) {
+			document.getElementById(elementid).attributes['src'].value = document.getElementById(elementid).attributes['data'].value;
+			if(!document.getElementById(name).classList.contains('loaded')) {
+				document.getElementById(name).attributes['class'].value += ' loaded';
+			}
+		} else {
+			if(document.getElementById(name).classList.contains('loaded')) {
+				document.getElementById(elementid).scrollIntoView();
+			} else {
+				document.getElementById(name).attributes['class'].value += ' loaded';
+				document.getElementById(elementid).attributes['src'].value = document.getElementById(elementid).attributes['data'].value;
+				document.getElementById(elementid).scrollIntoView();
+			}
+		}
+	
 	};
 
     $scope.linkReOrder = function(linkgroup,index) {
@@ -66,6 +98,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		loginService.logout();
 	};
 
+	var updateAddonsFirst=1;
 	$scope.updateAddons = function(){
 		if( Idle.idling() === true ) {
 			$timeout(function() {
@@ -78,6 +111,11 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 						return;
 					}
 					$scope.room_addons=data;
+					if(updateAddonsFirst===1){
+						var thisRoom = $scope.userdata.currentRoom;
+						document.getElementById("room"+thisRoom).scrollIntoView();						
+						updateAddonsFirst=0;
+					}
 					$timeout(function() {
 						$scope.updateAddons();
 					}, 5000)		
@@ -86,7 +124,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	};
 	$timeout(function() {
 		$scope.updateAddons();
-	}, 1000);
+	}, 500);
 
 	var cronKeeper = 0;
 	$scope.runCron = function(){
@@ -119,7 +157,10 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 				});
 		}
 	};		
-	$scope.runCron();
+	$timeout(function() {
+		$scope.runCron();
+	}, 1500);
+
 
 
 
@@ -144,4 +185,12 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		  ttl: 120000, type: 'danger'
 		});
 	};
+	
+	var init = function () {
+		//var thisRoom = userdata.currentRoom;
+		//document.getElementById("room3").scrollIntoView();
+	};
+	init();	
+
+	
 }])
