@@ -27,7 +27,7 @@
 				$addonArray[$x][$i]['alive']=$row['device_alive'];
 				$addonArray[$x][$i]['info']=$row['info'];
 				$addonArray[$x][$i]['infoType']=$row['infoType'];
-				if($row['device_alive']==="0") {
+				if($row['device_alive']==="0"&&$row['roomRequiresAlive']==="1") {
 					$allAddonsAlive="0";
 					$addonArray[$x]['0']['allAddonsAlive']=$allAddonsAlive;
 					if($row['mac']!==''||$row['mac']!=='null') {

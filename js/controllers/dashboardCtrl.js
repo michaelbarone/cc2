@@ -139,7 +139,8 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 					$scope.room_addons=data;
 					if(updateAddonsFirst===1){
 						var thisRoom = $scope.userdata.currentRoom;
-						document.getElementById("room"+thisRoom).scrollIntoView();						
+						document.getElementById("room"+thisRoom).scrollIntoView();
+						// add active class to "room"+thisRoom+"L"
 						updateAddonsFirst=0;
 					}
 					$timeout(function() {
