@@ -29,14 +29,13 @@ if($lastcron < ($time - 30)) {
 	echo "release";
 	exit;
 }
-
 //////   Cron items
 
 
 //  check addon alive status for all enabled users' addons that have been checked recently
 try {
 	$addons=array();
-	$sql = "SELECT * FROM rooms_addons WHERE enabled ='1'";
+	$sql = "SELECT addons.*,details.globalDisable,details.controlWindow FROM rooms_addons as addons LEFT JOIN rooms_addons_details as details ON addons.addonid = details.addonid WHERE addons.enabled ='1' AND details.globalDisable='0'";
 	foreach ($configdb->query($sql) as $row) {
 		if(($row['lastCheck']+60) < $time) { continue; }
 		// create array of addons that can run custom info call
@@ -96,27 +95,26 @@ try {
 
 
 ////// call addon custom info php
-
 foreach($addons as $addon) {
 	if($addon['device_alive']===0){ continue; }
 	$rooms_addonsid=$addon['rooms_addonsid'];
 	$addonid=$addon['addonid'];
 	$addonName=$addon['addonname'];
 	$ip=$addon['ip'];
-	if(file_exists("../addons/$addonid/$addonid.php")) {
+	if(file_exists("../addons/$addonid/$addonid.php") && $ip !='') {
 			if(!isset(${$addonName})) {
 				include "../addons/$addonid/$addonid.php";
 				${$addonName} = new $addonName();
 			}
-			echo ${$addonName}->setIp($ip);
-			//echo ${$addonName}->Ping();
-			print_r(${$addonName}->GetPlayingItemInfo());
+			${$addonName}->setIp($ip);
+			echo ${$addonName}->Ping();
+			//print_r(${$addonName}->GetPlayingItemInfo());
 			
 			// need some validation below before setting variables, otherwise blank out incase device is unreachable, reset last known info.
-			$nowPlayingInfo = ${$addonName}->GetPlayingItemInfo();
-			$title = $nowPlayingInfo['title'];
-			$type = $nowPlayingInfo['type'];
-			$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType) VALUES ('$rooms_addonsid','$title','$type')");
+			//$nowPlayingInfo = ${$addonName}->GetPlayingItemInfo();
+			//$title = $nowPlayingInfo['title'];
+			//$type = $nowPlayingInfo['type'];
+			//$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType) VALUES ('$rooms_addonsid','$title','$type')");
 			
 			
 			echo "<br><br>";

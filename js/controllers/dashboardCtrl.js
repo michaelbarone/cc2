@@ -19,6 +19,9 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		$scope.userdata.currentRoom=sessionStorage.getItem('homeRoom');
 	}
 
+/**
+ *  Load Initial Data
+ */	
     $http.get('data/getRooms.php')
 		.success(function(data) {
 			$scope.rooms = data;
@@ -28,6 +31,14 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		.success(function(data) {
 			$scope.links = data;
 		});
+/***/
+	
+
+	
+	
+/**
+ *  Top Right Addon Menu
+ */ 	
 
 	$scope.changeRoom = function(room) {
 		var unix = Math.round(+new Date()/1000);
@@ -36,8 +47,9 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		sessionStorage.setItem('currentRoom',room);
 		sessionStorage.setItem('lastRoomChange',unix);
 		document.getElementById("room"+room).scrollIntoView();
-	};	
+	};
 
+ 
 	$scope.wakeAddon = function(mac) {
 		if(mac === '' || mac === null){
 		} else {
@@ -53,8 +65,14 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 			}
 		}
 	};
+	
+/***/
 
-
+	
+/**
+ *  Top Left Menu
+ */ 
+	
 	$scope.loadLinkLongPress = function(name,element) {
 		var elementid = name;
 		elementid = elementid.substring(0, elementid.length - 1);
@@ -64,7 +82,6 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 			document.getElementById(name).attributes['class'].value += ' longpress';
 		}
 	};
-	
 	
 	$scope.loadLink = function(name,element) {
 		var elementid = name;
@@ -94,6 +111,15 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		$(theLi).parent().prepend(theLi);
     };
 
+/***/
+	
+	
+	
+/**
+ *  Logout service
+ *  update and cron loops
+ */ 	
+	
 	$scope.logout=function(){
 		loginService.logout();
 	};
@@ -161,7 +187,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		$scope.runCron();
 	}, 1500);
 
-
+/***/
 
 
 	$scope.testmessage = function($scope) {
@@ -185,12 +211,4 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		  ttl: 120000, type: 'danger'
 		});
 	};
-	
-	var init = function () {
-		//var thisRoom = userdata.currentRoom;
-		//document.getElementById("room3").scrollIntoView();
-	};
-	init();	
-
-	
 }])

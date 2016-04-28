@@ -24,6 +24,13 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 	IdleProvider.idle(360);
 	IdleProvider.timeout(0);
 	KeepaliveProvider.interval(10);
+	
+	window.oncontextmenu = function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		return false;
+	};
+	
 }]);
 
 
