@@ -18,6 +18,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	} else {
 		$scope.userdata.currentRoom=sessionStorage.getItem('homeRoom');
 	}
+	$scope.userdata.linkSelected="room"+$scope.userdata.currentRoom;
 
 /**
  *  Load Initial Data
@@ -37,7 +38,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	
 	
 /**
- *  Top Right Addon Menu
+ *  Top Menu
  */ 	
 
 	$scope.changeRoom = function(room) {
@@ -46,6 +47,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		$scope.userdata.lastRoomChange=unix;
 		sessionStorage.setItem('currentRoom',room);
 		sessionStorage.setItem('lastRoomChange',unix);
+		$scope.userdata.linkSelected="room"+room;
 		document.getElementById("room"+room).scrollIntoView();
 	};
 
@@ -66,44 +68,51 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		}
 	};
 	
-/***/
-
-	
-/**
- *  Top Left Menu
- */ 
 	
 	$scope.loadLinkLongPress = function(name,element) {
 		var elementid = name;
-		elementid = elementid.substring(0, elementid.length - 1);
-		if(document.getElementById(name).classList.contains('loaded')) {
-			document.getElementById(name).classList.remove('loaded');
-			document.getElementById(elementid).attributes['src'].value = '';
-			document.getElementById(name).attributes['class'].value += ' longpress';
+		if (elementid.substring(0, 4) == "room") {
+			document.getElementById(name+'L').attributes['class'].value += ' longpress';
+		} else {		
+			elementid = elementid.substring(0, elementid.length - 1);
+			if(document.getElementById(name).classList.contains('loaded')) {
+				document.getElementById(name).classList.remove('loaded');
+				document.getElementById(elementid).attributes['src'].value = '';
+				document.getElementById(name).attributes['class'].value += ' longpress';
+			}
 		}
 	};
 	
 	$scope.loadLink = function(name,element) {
 		var elementid = name;
-		elementid = elementid.substring(0, elementid.length - 1);
-		
-		if(document.getElementById(name).classList.contains('longpress')) {
-			document.getElementById(name).classList.remove('longpress');
-		}else if(document.getElementById(name).classList.contains('selected')) {
-			document.getElementById(elementid).attributes['src'].value = document.getElementById(elementid).attributes['data'].value;
-			if(!document.getElementById(name).classList.contains('loaded')) {
-				document.getElementById(name).attributes['class'].value += ' loaded';
-			}
-		} else {
-			if(document.getElementById(name).classList.contains('loaded')) {
-				document.getElementById(elementid).scrollIntoView();
+		if (elementid.substring(0, 4) == "room") {
+			if(document.getElementById(name+'L').classList.contains('longpress')) {
+				document.getElementById(name+'L').classList.remove('longpress');
 			} else {
-				document.getElementById(name).attributes['class'].value += ' loaded';
-				document.getElementById(elementid).attributes['src'].value = document.getElementById(elementid).attributes['data'].value;
 				document.getElementById(elementid).scrollIntoView();
+			
+			
+			}		
+		} else {	
+			elementid = elementid.substring(0, elementid.length - 1);
+			
+			if(document.getElementById(name).classList.contains('longpress')) {
+				document.getElementById(name).classList.remove('longpress');
+			}else if(document.getElementById(name).classList.contains('selected')) {
+				document.getElementById(elementid).attributes['src'].value = document.getElementById(elementid).attributes['data'].value;
+				if(!document.getElementById(name).classList.contains('loaded')) {
+					document.getElementById(name).attributes['class'].value += ' loaded';
+				}
+			} else {
+				if(document.getElementById(name).classList.contains('loaded')) {
+					document.getElementById(elementid).scrollIntoView();
+				} else {
+					document.getElementById(name).attributes['class'].value += ' loaded';
+					document.getElementById(elementid).attributes['src'].value = document.getElementById(elementid).attributes['data'].value;
+					document.getElementById(elementid).scrollIntoView();
+				}
 			}
 		}
-	
 	};
 
     $scope.linkReOrder = function(linkgroup,index) {

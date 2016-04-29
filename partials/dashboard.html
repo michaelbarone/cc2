@@ -16,10 +16,26 @@
 		<div id="room-menu">
 			<!-- addon buttons -->
 			<!-- panel icon "dashboard" addon overview -->
-			<a class="left" id="{{'room' + userdata.currentRoom + 'L'}}" scroll-to="{{'room' + userdata.currentRoom}}" class="main link persistent">
+			<!--<a class="left" id="{{'room' + userdata.currentRoom + 'L'}}" scroll-to="{{'room' + userdata.currentRoom}}" class="main link persistent">
 				<img scr="../img/control-panel.png"></img>
-			</a>
-			<a class="left title">{{rooms[0][userdata.currentRoom]['name']}}</a>
+			</a>-->			
+			<ul id="room-menu-items">
+				<li>
+					<a id="{{'room' + userdata.currentRoom + 'L'}}" 
+						class="loaded"
+						scroll-to="{{'room' + userdata.currentRoom}}" 
+						class="main link persistent" 
+						on-long-press="loadLinkLongPress('room' + userdata.currentRoom);" 
+						ng-click="loadLink('room' + userdata.currentRoom);userdata.linkSelected='room' + userdata.currentRoom;" 
+						ng-class="{'selected': userdata.linkSelected=='room' + userdata.currentRoom}"
+						>
+						<img src="img/control-panel.png"  height="30px" width="30px" />
+					</a>
+				</li>
+				<li>
+					<a class="title">{{rooms[0][userdata.currentRoom]['name']}}</a>
+				</li>
+			</ul>
 			<ul id="room-menu-ul">
 				<table>
 					<tr ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
@@ -36,7 +52,7 @@
 					</tr>
 				</table>
 			</ul>
-		</div>		
+		</div>
 		<div id="link-menu">
 			<nav>
 				<ul class="sortable" ng-if="userdata.mobile==='0'">
