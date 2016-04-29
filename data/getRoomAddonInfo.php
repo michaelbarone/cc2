@@ -16,7 +16,7 @@
 			$addonArray[$x]['0']['allAddonsAlive']=$allAddonsAlive;
 			$addonArray[$x]['0']['allAddonsMacs']='';
 			$i=0;
-			$sql = "SELECT * FROM rooms_addons,rooms_addons_info WHERE rooms_addons.rooms_addonsid = rooms_addons_info.rooms_addonsid AND rooms_addons.roomid = $x AND rooms_addons.enabled = '1'";
+			$sql = "SELECT * FROM rooms_addons,rooms_addons_info,rooms_addons_details WHERE rooms_addons.rooms_addonsid = rooms_addons_info.rooms_addonsid AND rooms_addons_details.addonid = rooms_addons.addonid AND rooms_addons.roomid = $x AND rooms_addons.enabled = '1'AND rooms_addons_details.globalDisable='0'";
 			foreach ($configdb->query($sql) as $row) {
 				$i++;
 				$addonparts = explode('.',$row['addonid']);
@@ -27,6 +27,8 @@
 				$addonArray[$x][$i]['alive']=$row['device_alive'];
 				$addonArray[$x][$i]['info']=$row['info'];
 				$addonArray[$x][$i]['infoType']=$row['infoType'];
+				$addonArray[$x][$i]['controlWindow']=$row['controlWindow'];
+				$addonArray[$x][$i]['addonTitle']=$row['addonTitle'];
 				if($row['device_alive']==="0"&&$row['roomRequiresAlive']==="1") {
 					$allAddonsAlive="0";
 					$addonArray[$x]['0']['allAddonsAlive']=$allAddonsAlive;

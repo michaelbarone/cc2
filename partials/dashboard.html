@@ -14,12 +14,19 @@
 			</ul>
 		</div>
 		<div id="room-menu">
-			<!-- addon buttons -->
-			<!-- panel icon "dashboard" addon overview -->
-			<!--<a class="left" id="{{'room' + userdata.currentRoom + 'L'}}" scroll-to="{{'room' + userdata.currentRoom}}" class="main link persistent">
-				<img scr="../img/control-panel.png"></img>
-			</a>-->			
 			<ul id="room-menu-items">
+				<!-- addon buttons -->
+				<li ng-repeat="addon in room_addons_current[0][userdata.currentRoom]" ng-if="$index > 0 && addon.controlWindow == '1'">
+					<a id="{{addon.addon + $index + 'L'}}" 
+						scroll-to="{{addon.addon + $index}}" 
+						class="main link persistent" 
+						on-long-press="loadLinkLongPress(addon.addon + $index);" 
+						ng-click="loadLink(addon.addon + $index);userdata.linkSelected=addon.addon + $index;" 
+						ng-class="{'selected': userdata.linkSelected==addon.addon + $index}"
+						>
+						<img ng-src="addons/{{addon.addontype + '.' + addon.addon}}/icon.png"  height="30px" width="30px" />
+					</a>		
+				</li>
 				<li>
 					<a id="{{'room' + userdata.currentRoom + 'L'}}" 
 						class="loaded"
@@ -58,7 +65,7 @@
 				<ul class="sortable" ng-if="userdata.mobile==='0'">
 					<li id="{{linkgroup}}-group" class="sortable clear" ng-repeat="(linkgroup, linkgrouparray) in links[0]" ng-click="userdata.linkGroupSelected=linkgroup;linkReOrder(linkgroup,$index)">
 						<a class="main panel persistent title" ng-hide="$last && $index=='0'">{{linkgroup}}</a>
-						<a id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']+'L');" ng-click="loadLink(thislink['navname']+'L');userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
+						<a id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
 							<img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px">
 						</a>
 					</li>	
@@ -66,7 +73,7 @@
 				<ul class="mobile" ng-if="userdata.mobile==='1'">
 					<img height="50px" src="img/3dots.png" />
 					<span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
-						<li id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']+'L');" ng-click="loadLink(thislink['navname']+'L');userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
+						<li id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
 							<img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px">
 						</li>
 					</span>
@@ -76,13 +83,6 @@
 	</div>
 	<div id="dashboardWrapper" scrolling="auto">
 		<div id="dashboardMask">
-			<!--
-				<div id="XBMCCONTROL1" class="dashboardPage">
-					<div class="content">
-						<iframe id="XBMCCONTROL1f" data-src="http://192.168.3.223:8080" scrolling="no" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
-					</div>
-				</div>
-			</span>-->
 			<span ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
 				<div id="room{{room}}" class="dashboardPage RoomPage">
 					
@@ -95,6 +95,7 @@
 						</span>
 						<span class="col-2" ng-repeat="addon in room_addons[0][room]" ng-if="$index > 0">
 							<div>
+								<p ng-if="addon.addonTitle !=''">{{addon.addonTitle}}</p>
 								<img ng-if="addon.alive==='0'" ng-click="wakeAddon(addon.mac)" class="status pointer" src="img/led-red.png"/>
 								<img ng-if="addon.alive==='1'" class="status" src="img/led-green.png"/>						
 								{{addon.addontype}}: {{addon.addon}}
@@ -106,10 +107,6 @@
 					</div>
 				</div>
 			</span>
-			
-			
-			
-			
 			<span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
 				<div class="dashboardPage" ng-repeat="thislink in linkgrouparray">
 					<div class="content">
@@ -117,6 +114,13 @@
 					</div>
 				</div>
 			</span>
+			<span ng-repeat="addon in room_addons_current[0][userdata.currentRoom]" ng-if="$index > 0">
+				<div class="dashboardPage">
+					<div class="content">
+						<iframe id="{{addon.addon+$index}}" src="" data="{{'http://192.168.3.250:7000' | trustUrl}}" scrolling="no" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
+					</div>
+				</div>
+			</span>			
 		</div>
 	</div>
 	<div id="chatContainer" ng-class="{'open' : chatOpen == true}" class="transformable-horizontal" chat></div>

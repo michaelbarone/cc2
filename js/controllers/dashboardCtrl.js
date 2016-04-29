@@ -42,6 +42,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
  */ 	
 
 	$scope.changeRoom = function(room) {
+		$scope.room_addons_current = $scope.room_addons;
 		var unix = Math.round(+new Date()/1000);
 		$scope.userdata.currentRoom=room;
 		$scope.userdata.lastRoomChange=unix;
@@ -70,46 +71,39 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	
 	
 	$scope.loadLinkLongPress = function(name,element) {
-		var elementid = name;
-		if (elementid.substring(0, 4) == "room") {
+		if (name.substring(0, 4) == "room") {
 			document.getElementById(name+'L').attributes['class'].value += ' longpress';
 		} else {		
-			elementid = elementid.substring(0, elementid.length - 1);
-			if(document.getElementById(name).classList.contains('loaded')) {
-				document.getElementById(name).classList.remove('loaded');
-				document.getElementById(elementid).attributes['src'].value = '';
-				document.getElementById(name).attributes['class'].value += ' longpress';
+			if(document.getElementById(name+'L').classList.contains('loaded')) {
+				document.getElementById(name+'L').classList.remove('loaded');
+				document.getElementById(name).attributes['src'].value = '';
+				document.getElementById(name+'L').attributes['class'].value += ' longpress';
 			}
 		}
 	};
 	
 	$scope.loadLink = function(name,element) {
-		var elementid = name;
-		if (elementid.substring(0, 4) == "room") {
+		if (name.substring(0, 4) == "room") {
 			if(document.getElementById(name+'L').classList.contains('longpress')) {
 				document.getElementById(name+'L').classList.remove('longpress');
 			} else {
-				document.getElementById(elementid).scrollIntoView();
-			
-			
+				document.getElementById(name).scrollIntoView();
 			}		
 		} else {	
-			elementid = elementid.substring(0, elementid.length - 1);
-			
-			if(document.getElementById(name).classList.contains('longpress')) {
-				document.getElementById(name).classList.remove('longpress');
-			}else if(document.getElementById(name).classList.contains('selected')) {
-				document.getElementById(elementid).attributes['src'].value = document.getElementById(elementid).attributes['data'].value;
-				if(!document.getElementById(name).classList.contains('loaded')) {
-					document.getElementById(name).attributes['class'].value += ' loaded';
+			if(document.getElementById(name+'L').classList.contains('longpress')) {
+				document.getElementById(name+'L').classList.remove('longpress');
+			}else if(document.getElementById(name+'L').classList.contains('selected')) {
+				document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
+				if(!document.getElementById(name+'L').classList.contains('loaded')) {
+					document.getElementById(name+'L').attributes['class'].value += ' loaded';
 				}
 			} else {
-				if(document.getElementById(name).classList.contains('loaded')) {
-					document.getElementById(elementid).scrollIntoView();
+				if(document.getElementById(name+'L').classList.contains('loaded')) {
+					document.getElementById(name).scrollIntoView();
 				} else {
-					document.getElementById(name).attributes['class'].value += ' loaded';
-					document.getElementById(elementid).attributes['src'].value = document.getElementById(elementid).attributes['data'].value;
-					document.getElementById(elementid).scrollIntoView();
+					document.getElementById(name+'L').attributes['class'].value += ' loaded';
+					document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
+					document.getElementById(name).scrollIntoView();
 				}
 			}
 		}
@@ -148,7 +142,8 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 					$scope.room_addons=data;
 					if(updateAddonsFirst===1){
 						var thisRoom = $scope.userdata.currentRoom;
-						document.getElementById("room"+thisRoom).scrollIntoView();
+						$scope.changeRoom(thisRoom);
+						//document.getElementById("room"+thisRoom).scrollIntoView();
 						// add active class to "room"+thisRoom+"L"
 						updateAddonsFirst=0;
 					}

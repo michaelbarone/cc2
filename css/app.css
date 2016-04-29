@@ -357,20 +357,9 @@ img.infoType { height:30px; }
 	direction: ltr; 
 }
 
+#user-menu:hover li { display:block !Important; }
+#room-menu:hover table { display:block !Important; }
 
-/*
-#room-menu li {
-    height: 20px;
-    width: 95%;
-}
-
-#room-menu li a { text-align:right;min-width:100px; }
-
-#room-menu li * { float:right; }
-
-*/
-
-#user-menu:hover li,#room-menu:hover table { display:block !Important; }
 
 #user-menu a,#room-menu a { padding:0 15px; }
 
