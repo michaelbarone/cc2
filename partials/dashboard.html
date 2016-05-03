@@ -114,10 +114,10 @@
 					</div>
 				</div>
 			</span>
-			<span ng-repeat="addon in room_addons_current[0][userdata.currentRoom]" ng-if="$index > 0">
+			<span ng-repeat="addon in room_addons_current[0][userdata.currentRoom]" ng-if="$index > 0 && room_addons_current[0][userdata.currentRoom][$index]['controlWindow'] == '1'">
 				<div class="dashboardPage">
 					<div class="content">
-						<iframe id="{{addon.addon+$index}}" src="" data="{{'http://192.168.3.250:7000' | trustUrl}}" scrolling="no" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
+						<iframe id="{{addon.addon+$index}}" src="" data="{{room_addons_current[0][userdata.currentRoom][$index]['ip'] | trustUrl}}" scrolling="no" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
 					</div>
 				</div>
 			</span>			

@@ -1,8 +1,35 @@
 <script src="./js/controllers/settingsCtrl.js"></script>
 <div ng-controller="settingsCtrl">
+	<div id="header">
+		<a class="main link persistent loaded" 
+			href="./#/dashboard"
+			style="position:absolute;right:45px;top:10px;">
+			<img src="img/control-panel.png"  height="30px" width="30px" />
+		</a>
+		<div id="user-menu" class="right">
+			<img src="img/options.png" />
+			<ul id="user-menu-ul">
+				<li><a class="title">{{userdata.username}}</a></li>
+				<li><a>Preferences</a></li>
+				<li><a class="orange" href="./#/dashboard">Dashboard</a></li>
+				<li><a href="" ng-click="testmessage()">testmessage</a></li>
+				<li><a href=""  ng-click="chatOpen = chatOpen ? false : true">Chat</a></li>
+				<li>&nbsp;</li>
+				<li><a href="" ng-click="logout()">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+	<div id="dashboardWrapper">
+        <ul>
+            <li ng-repeat="tab in tabs" 
+                ng-class="{active:isActiveTab(tab.url)}" 
+                ng-click="onClickTab(tab)">{{tab.title}}</li>
+        </ul>
+        <div id="mainView">
+            <div ng-include="currentTab"></div>
+        </div>
+	</div>
 
 
-
-
-
+	<div id="chatContainer" ng-class="{'open' : chatOpen == true}" class="transformable-horizontal" chat></div>
 </div>
