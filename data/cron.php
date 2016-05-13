@@ -35,7 +35,10 @@ if($lastcron < ($time - 30)) {
 //  check addon alive status for all enabled users' addons that have been checked recently
 try {
 	$addons=array();
-	$sql = "SELECT addons.*,details.globalDisable,details.controlWindow FROM rooms_addons as addons LEFT JOIN rooms_addons_details as details ON addons.addonid = details.addonid WHERE addons.enabled ='1' AND details.globalDisable='0'";
+	$sql = "SELECT addons.*,details.globalDisable,details.controlWindow,info.* FROM rooms_addons as addons 
+			LEFT JOIN rooms_addons_details as details ON addons.addonid = details.addonid 
+			LEFT JOIN rooms_addons_info as info ON addons.rooms_addonsid = info.rooms_addonsid
+			WHERE addons.enabled ='1' AND details.globalDisable='0';";
 	foreach ($configdb->query($sql) as $row) {
 		if(($row['lastCheck']+60) < $time) { continue; }
 		// create array of addons that can run custom info call
@@ -45,12 +48,17 @@ try {
 		$addons[$row['rooms_addonsid']]['addonname']=$addonparts[1];	
 		$addons[$row['rooms_addonsid']]['addonid']=$row['addonid'];
 		$addons[$row['rooms_addonsid']]['ip']=$row['ip'];
+		$addons[$row['rooms_addonsid']]['info']=$row['info'];
 		//  set below   $addons[$row['rooms_addonsid']]['device_alive']=$row['device_alive'];
 		
 		
 		$rooms_addonsid = $row['rooms_addonsid'];
 		$statusorig = $row['device_alive'];
+		
+		
+		/////
 		if($row['ip'] != '') {
+			/*
 			$disallowed = array('http://', 'https://');
 			foreach($disallowed as $d) {
 				if(strpos($row['ip'], $d) === 0) {
@@ -79,7 +87,7 @@ try {
 				}
 				//$status = "dead";
 				$addons[$row['rooms_addonsid']]['device_alive']="0";
-			}
+			}*/
 		} else {
 			if($statusorig!=0) {			
 				$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 0 WHERE rooms_addonsid = '$rooms_addonsid';");
@@ -96,30 +104,51 @@ try {
 
 ////// call addon custom info php
 foreach($addons as $addon) {
-	if($addon['device_alive']===0){ continue; }
 	$rooms_addonsid=$addon['rooms_addonsid'];
 	$addonid=$addon['addonid'];
 	$addonName=$addon['addonname'];
 	$ip=$addon['ip'];
 	if(file_exists("../addons/$addonid/$addonid.php") && $ip !='') {
-			if(!isset(${$addonName})) {
-				include "../addons/$addonid/$addonid.php";
-				${$addonName} = new $addonName();
+		if(!isset(${$addonName})) {
+			include "../addons/$addonid/$addonid.php";
+			${$addonName} = new $addonName();
+		}
+		${$addonName}->setIp($ip);
+
+
+		$devicealive=${$addonName}->Ping($ip);
+		if ($devicealive == "alive") {
+			if($statusorig==0) {
+				$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 1 WHERE rooms_addonsid = '$rooms_addonsid';");
 			}
-			${$addonName}->setIp($ip);
-			echo ${$addonName}->Ping();
-			//print_r(${$addonName}->GetPlayingItemInfo());
-			
-			// need some validation below before setting variables, otherwise blank out incase device is unreachable, reset last known info.
-			//$nowPlayingInfo = ${$addonName}->GetPlayingItemInfo();
-			//$title = $nowPlayingInfo['title'];
-			//$type = $nowPlayingInfo['type'];
-			//$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType) VALUES ('$rooms_addonsid','$title','$type')");
-			
-			
-			echo "<br><br>";
-	}
+			$addon['device_alive']="1";
+		} else {
+			if($statusorig==1) {
+				$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 0 WHERE rooms_addonsid = '$rooms_addonsid';");
+			}
+			$addon['device_alive']="0";
+		}		
+		if($addon['device_alive']===0){ continue; }
+
+
+		
+		if($addon['addontype']=='service'){
+			//echo $ip;
+		}	
 	
+		if($addon['addontype']=='mediaplayer'){
+			// need to standardize nowplayinginfo response in class files
+			$nowPlayingInfo = ${$addonName}->GetPlayingItemInfo();
+			//print_r($nowPlayingInfo);
+			if(isset($nowPlayingInfo['title']) && $nowPlayingInfo['title']!='') {
+				$title = $nowPlayingInfo['title'];
+				$type = $nowPlayingInfo['type'];
+				$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType) VALUES ('$rooms_addonsid','$title','$type')");
+			} elseif($addon['info']!='') {
+				$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType) VALUES ('$rooms_addonsid','','')");
+			}
+		}
+	}
 }
 
 

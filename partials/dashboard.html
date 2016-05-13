@@ -6,7 +6,7 @@
 			<ul id="user-menu-ul">
 				<li><a class="title">{{userdata.username}}</a></li>
 				<li><a>Preferences</a></li>
-				<li ng-if="userdata.settingsAccess"><a href="./#/settings">Settings</a></li>
+				<li ng-if="userdata.settingsAccess==='1'"><a href="./#/settings">Settings</a></li>
 				<li><a href="" ng-click="testmessage()">testmessage</a></li>
 				<li><a href=""  ng-click="chatOpen = chatOpen ? false : true">Chat</a></li>
 				<li>&nbsp;</li>
@@ -100,8 +100,8 @@
 								<img ng-if="addon.alive==='1'" class="status" src="img/led-green.png"/>						
 								{{addon.addontype}}: {{addon.addon}}
 							</div>
-							
-							<a ng-if="addon.info">{{addon.info}}</a><img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
+							<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
+							<a ng-if="addon.info">{{addon.info}}</a>
 							
 						</span>
 					</div>

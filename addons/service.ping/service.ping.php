@@ -5,8 +5,8 @@ class ping {
 		$this->IP = $ip;
 	}
 
-	function Ping() {
-		$pingurl = "$this->IP";
+	function Ping($ip) {
+		$pingurl = $ip;
 		$disallowed = array('http://', 'https://');
 		foreach($disallowed as $d) {
 			if(strpos($pingurl, $d) === 0) {
