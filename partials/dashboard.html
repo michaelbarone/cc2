@@ -52,9 +52,10 @@
 							-->
 							<img ng-if="room_addons[0][room][0].allAddonsAlive==='0'" ng-click="wakeAllAddons(room_addons[0][room][0].allAddonsMacs)" class="status pointer" src="img/led-red.png"/>
 							<img ng-if="room_addons[0][room][0].allAddonsAlive==='1'" class="status" src="img/led-green.png"/>
-							<span ng-repeat="addon in room_addons[0][room]">
-								<a ng-if="addon.info">{{addon.info}}</a><img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
-							</span>
+						</td>
+
+						<td ng-repeat="addon in room_addons[0][room].slice().reverse()">
+							<a ng-if="addon.info">{{addon.info}}</a><img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
 						</td>
 					</tr>
 				</table>
@@ -85,24 +86,27 @@
 		<div id="dashboardMask">
 			<span ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
 				<div id="room{{room}}" class="dashboardPage RoomPage">
-					
 					<div class="content">
-						<span class="col-11 addonTitle">
+						<span class="col-12">
+							<div class="addonTitle addonWidget">
 							<!-- wakeAllAddons turns into powerOnAllRoomAddons(roomid) -> will then wake/poweron/switchtoinput that is specified per addon type or individually?  -->
 							<img ng-if="room_addons[0][room][0].allAddonsAlive==='0'" ng-click="wakeAllAddons(room_addons[0][room][0].allAddonsMacs)" class="status pointer" src="img/led-red.png"/>
 							<img ng-if="room_addons[0][room][0].allAddonsAlive==='1'" class="status" src="img/led-green.png"/>
 							{{roomArray.name}}
+							</div>
 						</span>
-						<span class="col-2" ng-repeat="addon in room_addons[0][room]" ng-if="$index > 0">
+						<span class="col-3" ng-repeat="addon in room_addons[0][room]" ng-if="$index > 0">
+							<div class="addonWidget">
 							<div>
-								<p ng-if="addon.addonTitle !=''">{{addon.addonTitle}}</p>
+								<p ng-if="addon.addonTitle !='' || addon.addonTitle !=null">{{addon.addonTitle}}</p>
 								<img ng-if="addon.alive==='0'" ng-click="wakeAddon(addon.mac)" class="status pointer" src="img/led-red.png"/>
 								<img ng-if="addon.alive==='1'" class="status" src="img/led-green.png"/>						
 								{{addon.addontype}}: {{addon.addon}}
 							</div>
 							<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
 							<a ng-if="addon.info">{{addon.info}}</a>
-							
+							<img class="fanart" ng-src="{{addon.fanart}}" ng-if="addon.fanart!=''" />
+							</div>
 						</span>
 					</div>
 				</div>

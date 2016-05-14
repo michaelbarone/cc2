@@ -142,10 +142,27 @@ foreach($addons as $addon) {
 			//print_r($nowPlayingInfo);
 			if(isset($nowPlayingInfo['title']) && $nowPlayingInfo['title']!='') {
 				$title = $nowPlayingInfo['title'];
+				if(isset($nowPlayingInfo['showtitle']) && $nowPlayingInfo['showtitle']!='') {
+					$episode = "";
+					if(isset($nowPlayingInfo['season']) && $nowPlayingInfo['season']!='' && isset($nowPlayingInfo['episode']) && $nowPlayingInfo['episode']!='') {
+						$episode = " " . $nowPlayingInfo['season'] . "x" . $nowPlayingInfo['episode'];
+					}
+					$title = $nowPlayingInfo['showtitle'] . $episode . " - " . $nowPlayingInfo['title'];
+				} elseif(isset($nowPlayingInfo['year']) && $nowPlayingInfo['year']!='') {
+					$title = $nowPlayingInfo['title'] . " (" . $nowPlayingInfo['year'] . ")";
+				}
+				$thumbnail="";
+				$fanart="";
+				if(isset($nowPlayingInfo['thumbnail']) && $nowPlayingInfo['thumbnail']!='') {
+					$thumbnail = $nowPlayingInfo['thumbnail'];
+				}
+				if(isset($nowPlayingInfo['fanart']) && $nowPlayingInfo['fanart']!='') {
+					$fanart = $nowPlayingInfo['fanart'];
+				}
 				$type = $nowPlayingInfo['type'];
-				$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType) VALUES ('$rooms_addonsid','$title','$type')");
+				$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart) VALUES ('$rooms_addonsid','$title','$type','$thumbnail','$fanart')");
 			} elseif($addon['info']!='') {
-				$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType) VALUES ('$rooms_addonsid','','')");
+				$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart) VALUES ('$rooms_addonsid','','','','')");
 			}
 		}
 	}

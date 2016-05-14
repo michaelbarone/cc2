@@ -127,7 +127,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		loginService.logout();
 	};
 
-	var updateAddonsFirst=1;
+	var updateAddonsFirstRun=1;
 	$scope.updateAddons = function(){
 		if( Idle.idling() === true ) {
 			$timeout(function() {
@@ -139,16 +139,16 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 					if(data == "failed") {
 						return;
 					}
-					$scope.room_addons=data;
-					if(updateAddonsFirst===1){
+					if($scope.room_addons != "data") {
+						$scope.room_addons=data;
+					}
+					if(updateAddonsFirstRun===1){
 						var thisRoom = $scope.userdata.currentRoom;
 						$scope.changeRoom(thisRoom);
-						//document.getElementById("room"+thisRoom).scrollIntoView();
-						// add active class to "room"+thisRoom+"L"
-						updateAddonsFirst=0;
+						updateAddonsFirstRun=0;
 					}
 					$timeout(function() {
-						$scope.updateAddons();
+					//	$scope.updateAddons();
 					}, 5000)		
 				});
 		}
@@ -169,7 +169,6 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 					if(data == "failed") {
 						return;
 					}
-					//$scope.room_addons=data;
 					if(data == "takeover") {
 						cronKeeper = "1";
 					}
@@ -183,7 +182,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 					} else {
 						$timeout(function() {
 							$scope.runCron();
-						}, 60000)
+						}, 30000)
 					}
 				});
 		}

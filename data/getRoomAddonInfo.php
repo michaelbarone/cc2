@@ -29,6 +29,8 @@
 				$addonArray[$x][$i]['infoType']=$row['infoType'];
 				$addonArray[$x][$i]['controlWindow']=$row['controlWindow'];
 				$addonArray[$x][$i]['addonTitle']=$row['addonTitle'];
+				$addonArray[$x][$i]['thumbnail']=$row['thumbnail'];
+				$addonArray[$x][$i]['fanart']=$row['fanart'];
 				if($row['device_alive']==="0"&&$row['roomRequiresAlive']==="1") {
 					$allAddonsAlive="0";
 					$addonArray[$x]['0']['allAddonsAlive']=$allAddonsAlive;
