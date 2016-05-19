@@ -128,9 +128,13 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	};
 
 	var updateAddonsFirstRun=1;
+	var updateAddonsRunning = 0;
 	$scope.updateAddons = function(){
+		if(updateAddonsRunning===1) { return; }
+		updateAddonsRunning = 1;	
 		if( Idle.idling() === true ) {
 			$timeout(function() {
+				updateAddonsRunning = 0;
 				$scope.updateAddons();
 			}, 5000)
 		} else {
@@ -148,19 +152,25 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 						updateAddonsFirstRun=0;
 					}
 					$timeout(function() {
-					//	$scope.updateAddons();
+						updateAddonsRunning = 0;
+						$scope.updateAddons();
 					}, 5000)		
 				});
 		}
 	};
 	$timeout(function() {
+		updateAddonsRunning = 0;
 		$scope.updateAddons();
 	}, 500);
 
 	var cronKeeper = 0;
+	var cronRunning = 0;
 	$scope.runCron = function(){
+		if(cronRunning===1) { return; }
+		cronRunning = 1;
 		if( Idle.idling() === true ) {
 			$timeout(function() {
+				cronRunning = 0;
 				$scope.runCron();
 			}, 5000)
 		} else {
@@ -177,17 +187,20 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 					}
 					if (cronKeeper == '1') {
 						$timeout(function() {
+							cronRunning = 0;
 							$scope.runCron();
 						}, 5000)
 					} else {
 						$timeout(function() {
+							cronRunning = 0;
 							$scope.runCron();
-						}, 30000)
+						}, 15000)
 					}
 				});
 		}
 	};		
 	$timeout(function() {
+		cronRunning = 0;
 		$scope.runCron();
 	}, 1500);
 

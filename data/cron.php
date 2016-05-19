@@ -40,7 +40,7 @@ try {
 			LEFT JOIN rooms_addons_info as info ON addons.rooms_addonsid = info.rooms_addonsid
 			WHERE addons.enabled ='1' AND details.globalDisable='0';";
 	foreach ($configdb->query($sql) as $row) {
-		if(($row['lastCheck']+60) < $time) { continue; }
+		if(($row['lastCheck']+60) < $time && $row['lastCheck']!='') { continue; }
 		// create array of addons that can run custom info call
 		$addons[$row['rooms_addonsid']]['rooms_addonsid']=$row['rooms_addonsid'];
 		$addonparts = explode(".",$row['addonid']);
@@ -117,6 +117,7 @@ foreach($addons as $addon) {
 
 
 		$devicealive=${$addonName}->Ping($ip);
+		echo $addonid . $addonName . $ip . $devicealive . "<br><br>";
 		if ($devicealive == "alive") {
 			if($statusorig==0) {
 				$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 1 WHERE rooms_addonsid = '$rooms_addonsid';");
@@ -131,10 +132,6 @@ foreach($addons as $addon) {
 		if($addon['device_alive']===0){ continue; }
 
 
-		
-		if($addon['addontype']=='service'){
-			//echo $ip;
-		}	
 	
 		if($addon['addontype']=='mediaplayer'){
 			// need to standardize nowplayinginfo response in class files

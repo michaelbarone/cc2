@@ -1,5 +1,5 @@
 <?php
-class kodi {
+class denonAVRe400 {
 	
 	function setIp($ip) {
 		$this->IP = $ip;
@@ -16,36 +16,22 @@ class kodi {
 		if(strpos($thisip, "/") != false) {
 			$thisip = substr($thisip, 0, strpos($thisip, "/"));
 		}
-		if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
-			$pingresult = exec("ping -n 1 -w 1 $thisip", $output, $status);
-		} else {
-			$pingresult = exec("/bin/ping -c1 -w1 $thisip", $outcome, $status);
-		}
-		if ($status == "0") {
+		$ch = curl_init();  
+		curl_setopt($ch,CURLOPT_URL,"$thisip/goform/formMainZone_MainZoneXml.xml");
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+		$output = curl_exec($ch);
+		curl_close($ch);
+		$items = simplexml_load_string($output);
+		$json = json_encode($items);
+		$items = json_decode($json, true);
+		if($items['Power']['value']==="ON"){
 			return "alive";	
 		} else {
 			return "dead";
 		}
-		
-		/*
-		$pingurl = "$this->IP/jsonrpc?request={%22jsonrpc%22%3A%20%222.0%22%2C%20%22method%22%3A%20%22JSONRPC.Ping%22%2C%22id%22%3A%201}";
-		//$pingurl = "$this->IP";
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, "$pingurl");
-		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-		$output = curl_exec($ch);
-		echo $pingurl;
-		print_r($output);
-		if($output === FALSE) {
-			return "dead";
-		} else {
-			return "alive";
-		}*/
 	}
 
 	function PowerOn(){
-		// wakeAddon.php
 		$curlThis = "$this->IP/MainZone/index.put.asp?cmd0=PutSystem_OnStandby%2FON&cmd1=aspMainZone_WebUpdateStatus%2F";
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -54,9 +40,59 @@ class kodi {
 		$output = curl_exec($ch);		
 	}
 
+	function PowerOff(){
+		$curlThis = "$this->IP/MainZone/index.put.asp?cmd0=PutSystem_OnStandby%2FSTANDBY&cmd1=aspMainZone_WebUpdateStatus%2F";
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, "$curlThis");
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
+		$output = curl_exec($ch);		
+	}
+	
+	function VolumeUp(){
+		$curlThis = "$this->IP/MainZone/index.put.asp?cmd0=PutMasterVolumeBtn%2F%3E";
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, "$curlThis");
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
+		$output = curl_exec($ch);		
+	}
 
+	function VolumeDown(){
+		$curlThis = "$this->IP/MainZone/index.put.asp?cmd0=PutMasterVolumeBtn%2F%3C";
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, "$curlThis");
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
+		$output = curl_exec($ch);		
+	}	
 
-
+	function VolumeSet($newvolume){
+		$curlThis = "$this->IP/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/$newvolume";
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, "$curlThis");
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
+		$output = curl_exec($ch);		
+	}
+	
+	function VolumeMute(){
+		$curlThis = "$this->IP/MainZone/index.put.asp?cmd0=PutVolumeMute/on";
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, "$curlThis");
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
+		$output = curl_exec($ch);		
+	}
+	
+	
+	
+	
+	
+	/*
+	
+	
+	*/
 	
 	function GetActivePlayer() {
 		// get active player
