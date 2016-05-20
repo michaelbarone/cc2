@@ -48,7 +48,9 @@ try {
 		$addons[$row['rooms_addonsid']]['addonname']=$addonparts[1];	
 		$addons[$row['rooms_addonsid']]['addonid']=$row['addonid'];
 		$addons[$row['rooms_addonsid']]['ip']=$row['ip'];
+		$addons[$row['rooms_addonsid']]['mac']=$row['mac'];
 		$addons[$row['rooms_addonsid']]['info']=$row['info'];
+		$addons[$row['rooms_addonsid']]['device_alive']=$row['device_alive'];
 		//  set below   $addons[$row['rooms_addonsid']]['device_alive']=$row['device_alive'];
 		
 		
@@ -108,16 +110,21 @@ foreach($addons as $addon) {
 	$addonid=$addon['addonid'];
 	$addonName=$addon['addonname'];
 	$ip=$addon['ip'];
+	$mac=$addon['mac'];
+	$statusorig=$addon['device_alive'];
 	if(file_exists("../addons/$addonid/$addonid.php") && $ip !='') {
 		if(!isset(${$addonName})) {
 			include "../addons/$addonid/$addonid.php";
 			${$addonName} = new $addonName();
 		}
-		${$addonName}->setIp($ip);
+		$vars = array();
+		$vars['ip']=$ip;
+		$vars['mac']=$mac;		
+		${$addonName}->SetVariables($vars);
 
 
 		$devicealive=${$addonName}->Ping($ip);
-		echo $addonid . $addonName . $ip . $devicealive . "<br><br>";
+		//echo $addonid . $addonName . $ip . $devicealive . $statusorig . "<br><br>";
 		if ($devicealive == "alive") {
 			if($statusorig==0) {
 				$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 1 WHERE rooms_addonsid = '$rooms_addonsid';");

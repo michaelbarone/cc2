@@ -1,5 +1,10 @@
 <?php
 class kodi {
+
+	function SetVariables($vars){
+		$this->IP = $vars['ip'];
+		$this->MAC = $vars['mac'];
+	}
 	
 	function setIp($ip) {
 		$this->IP = $ip;
@@ -45,15 +50,30 @@ class kodi {
 	}
 
 	function PowerOn(){
-		// wakeAddon.php
-		$curlThis = "$this->IP/MainZone/index.put.asp?cmd0=PutSystem_OnStandby%2FON&cmd1=aspMainZone_WebUpdateStatus%2F";
+		return "wol";
+		
+		/*
+		$curlThis = "data/wakeAddon.php?m=$this->MAC";
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_URL, "$curlThis");
 		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-		$output = curl_exec($ch);		
+		$output = curl_exec($ch);
+		return $curlThis . "--" . dirname(__FILE__) . "--" . $output;*/
 	}
 
+	function PowerOff(){
+		return "wol";
+		
+		/*
+		$curlThis = "data/wakeAddon.php?m=$this->MAC";
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, "$curlThis");
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
+		$output = curl_exec($ch);
+		return $curlThis . "--" . dirname(__FILE__) . "--" . $output;*/
+	}	
 
 
 

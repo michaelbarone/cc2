@@ -69,6 +69,13 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		}
 	};
 	
+	$scope.powerOnAddon = function(addonid){
+	
+	}
+	
+	$scope.powerOnRoom = function(room){
+		$http.post('data/powerOn.php?type=room&room='+room);
+	}
 	
 	$scope.loadLinkLongPress = function(name,element) {
 		if (name.substring(0, 4) == "room") {

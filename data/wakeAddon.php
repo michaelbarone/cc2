@@ -1,5 +1,5 @@
 <?php 
-	require 'startsession.php';
+	require_once 'startsession.php';
 	if(isset($_SESSION['userid'])) {
 		$userid=$_SESSION['userid'];
 	} else {
@@ -7,13 +7,16 @@
 		$log->LogWarn("No user session data from " . basename(__FILE__));
 		exit;
 	}
+	$log->LogDebug("User " . $_SESSION['username'] . " loaded " . basename(__FILE__) . " from " . $_SERVER['SCRIPT_FILENAME']);
+
 ///////////////////////////////////////////////////////////
 // The following are the only parameters you need to set //
 // manually                                              //
 ///////////////////////////////////////////////////////////
 $g_mac="xx.xx.xx.xx.xx.xx";
-
-$mac=$_GET['m'];
+if(!$mac) {
+	$mac=$_GET['m'];
+}
 if(!$mac) {
 	$log->LogWARN("WOL FAILED no mac set from " . basename(__FILE__));
 	print "failed";
@@ -43,7 +46,7 @@ function WakeOnLan($addr, $mac) {
     }
   else {
     // setting a broadcast option to socket:
-    $opt_ret = socket_set_option($s, 1, 6, TRUE);
+	socket_set_option($s, SOL_SOCKET, SO_BROADCAST, 1);
     if($opt_ret <0) {
       echo "setsockopt() failed, error: " . strerror($opt_ret) . "\n";
       return FALSE;

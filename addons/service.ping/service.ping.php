@@ -1,5 +1,9 @@
 <?php
 class ping {
+
+	function SetVariables($vars){
+		$this->IP = $vars['ip'];
+	}
 	
 	function setIp($ip) {
 		$this->IP = $ip;
