@@ -33,6 +33,7 @@ if(isset($_GET)) {
 							${$addonName} = new $addonName();
 						}
 						$vars = array();
+						// foreach $row set variables
 						$vars['ip']=$ip;
 						$vars['mac']=$mac;
 						${$addonName}->SetVariables($vars);
@@ -62,11 +63,4 @@ if($failed>0){
 	$log->LogWarn("BAD GET parameters for " . basename(__FILE__));	
 	Exit;
 }
-
-
-
-
-
-
-exit;
 ?>

@@ -62,7 +62,7 @@ function WakeOnLan($addr, $mac) {
       }
     }
   }
-exit;
+return;
 	
 	
 	

@@ -47,7 +47,7 @@ class denonAVRe400 {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_URL, "$curlThis");
 		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-		$output = curl_exec($ch);		
+		$output = curl_exec($ch);
 	}
 
 	function PowerOff(){
@@ -107,7 +107,7 @@ class denonAVRe400 {
 	/*
 	
 	
-	*/
+
 	
 	function GetActivePlayer() {
 		// get active player
@@ -250,10 +250,10 @@ class denonAVRe400 {
 			$jsonplaylist = json_decode($output,true);
 			//print_r($jsonplaylist);
 			//$test = in_array("$thelabel",$jsonplaylist);
-		/*	echo $thelabel;
-			if(in_array_like("$thelabel",$jsonplaylist)){
-			echo "in the array";
-			} else { echo "not in array"; }*/
+		//	echo $thelabel;
+		//	if(in_array_like("$thelabel",$jsonplaylist)){
+		//	echo "in the array";
+		//	} else { echo "not in array"; }
 
 		} elseif($activeplayerid==2) {
 			echo "pics";
@@ -298,7 +298,7 @@ class denonAVRe400 {
 		$PlayingTime['playerpercentage'] = round($PlayingTime['currenttimesec'] / $PlayingTime['thetotaltimesec'] * 100,1, PHP_ROUND_HALF_UP);
 		
 		return $PlayingTime;
-	}
+	}	*/
 }
 
 
