@@ -74,7 +74,11 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	}
 	
 	$scope.powerOnRoom = function(room){
-		$http.post('data/powerOn.php?type=room&room='+room);
+		$http.post('data/power.php?type=room&option=on&room='+room);
+	}
+
+	$scope.powerOffRoom = function(room){
+		$http.post('data/power.php?type=room&option=off&room='+room);
 	}
 	
 	$scope.loadLinkLongPress = function(name,element) {

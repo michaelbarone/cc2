@@ -93,6 +93,10 @@
 							<img ng-if="room_addons[0][room][0].allAddonsAlive==='0'" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
 							<img ng-if="room_addons[0][room][0].allAddonsAlive==='1'" class="status" src="img/led-green.png"/>
 							{{roomArray.name}}
+							<div class="right" style="margin:-5px;" ng-if="room_addons[0][room][1].addon">
+								<button class="btn btn-danger right" ng-click="powerOffRoom(room)">All Off</button>
+								<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnRoom(room)">All On</button>
+							</div>
 							</div>
 						</span>
 						<span class="col-3" ng-repeat="addon in room_addons[0][room]" ng-if="$index > 0">

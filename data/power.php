@@ -20,7 +20,7 @@ if(isset($_GET)) {
 					LEFT JOIN rooms_addons_info as info ON addons.rooms_addonsid = info.rooms_addonsid
 					WHERE addons.enabled ='1' AND details.globalDisable='0' AND addons.roomid='$room';";
 			foreach ($configdb->query($sql) as $row) {
-				if($row['device_alive']==='0'){
+				if(($row['device_alive']==='0' && $_GET['option']==='on') || ($row['device_alive']==='1' && $_GET['option']==='off')){
 					$addonparts = explode(".",$row['addonid']);
 					$addontype=$addonparts[0];
 					$addonName=$addonparts[1];	
@@ -37,9 +37,14 @@ if(isset($_GET)) {
 						$vars['ip']=$ip;
 						$vars['mac']=$mac;
 						${$addonName}->SetVariables($vars);
-						$poweron = ${$addonName}->PowerOn();
-						if($poweron==="wol" && $mac != ''){
-							include("wakeAddon.php");
+
+						if($_GET['option']==='off') {
+							$poweroff = ${$addonName}->PowerOff();
+						} elseif($_GET['option']==='on') {
+							$poweron = ${$addonName}->PowerOn();
+							if($poweron==="wol" && $mac != ''){
+								include("wakeAddon.php");
+							}
 						}
 					}
 				}

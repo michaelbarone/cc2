@@ -63,17 +63,14 @@ class kodi {
 	}
 
 	function PowerOff(){
-		return "wol";
-		
-		/*
-		$curlThis = "data/wakeAddon.php?m=$this->MAC";
+		$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"System.Shutdown\", \"id\": \"1\"");
+		$getactiveplayer = "$this->IP/jsonrpc?request={".$therequest."}";
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, "$curlThis");
+		curl_setopt($ch, CURLOPT_URL, "$getactiveplayer");
 		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
 		$output = curl_exec($ch);
-		return $curlThis . "--" . dirname(__FILE__) . "--" . $output;*/
-	}	
+		}	
 
 
 
