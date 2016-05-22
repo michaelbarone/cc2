@@ -401,7 +401,7 @@ img.infoType { height:30px; }
 .addonWidget {
 	background-color: rgb(22,22,22);
 	position: relative;
-    padding: 15px;
+    padding: 5px 15px;
     margin: 15px 20px;
 }
 
@@ -412,6 +412,10 @@ img.infoType { height:30px; }
 .addonWidget .fanart {
 	position:relative;
 	width:100%;
+}
+
+.addonTitle {
+	padding: 15px;
 }
 
 /*********

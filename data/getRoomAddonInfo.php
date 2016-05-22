@@ -19,18 +19,16 @@
 			$sql = "SELECT * FROM rooms_addons,rooms_addons_info,rooms_addons_details WHERE rooms_addons.rooms_addonsid = rooms_addons_info.rooms_addonsid AND rooms_addons_details.addonid = rooms_addons.addonid AND rooms_addons.roomid = $x AND rooms_addons.enabled = '1'AND rooms_addons_details.globalDisable='0'";
 			foreach ($configdb->query($sql) as $row) {
 				$i++;
-				$addonparts = explode('.',$row['addonid']);
-				$addonArray[$x][$i]['addontype']=$addonparts[0];
-				$addonArray[$x][$i]['addon']=$addonparts[1];
-				$addonArray[$x][$i]['ip']=$row['ip'];
-				$addonArray[$x][$i]['mac']=$row['mac'];
-				$addonArray[$x][$i]['alive']=$row['device_alive'];
-				$addonArray[$x][$i]['info']=$row['info'];
-				$addonArray[$x][$i]['infoType']=$row['infoType'];
-				$addonArray[$x][$i]['controlWindow']=$row['controlWindow'];
-				$addonArray[$x][$i]['addonTitle']=$row['addonTitle'];
-				$addonArray[$x][$i]['thumbnail']=$row['thumbnail'];
-				$addonArray[$x][$i]['fanart']=$row['fanart'];
+				foreach($row as $item => $value){
+					if($item==='addonid'){
+						$addonparts = explode('.',$value);
+						$addonArray[$x][$i]['addontype']=$addonparts[0];
+						$addonArray[$x][$i]['addon']=$addonparts[1];						
+					}
+					if(is_numeric($item)===false){
+						$addonArray[$x][$i][$item]=$value;
+					}
+				}
 				if($row['device_alive']==="0"&&$row['roomRequiresAlive']==="1") {
 					$allAddonsAlive="0";
 					$addonArray[$x]['0']['allAddonsAlive']=$allAddonsAlive;

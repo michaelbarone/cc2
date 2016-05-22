@@ -102,9 +102,14 @@
 						<span class="col-3" ng-repeat="addon in room_addons[0][room]" ng-if="$index > 0">
 							<div class="addonWidget">
 							<div>
+								<div class="right" style="margin:-5px;">
+									<button class="btn btn-danger right" ng-click="powerOffAddon(addon.rooms_addonsid)">Off</button>
+									<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnAddon(addon.rooms_addonsid)">On</button>
+								</div>
 								<p ng-if="addon.addonTitle !='' || addon.addonTitle !=null">{{addon.addonTitle}}</p>
-								<img ng-if="addon.alive==='0'" ng-click="wakeAddon(addon.mac)" class="status pointer" src="img/led-red.png"/>
-								<img ng-if="addon.alive==='1'" class="status" src="img/led-green.png"/>						
+								<br class="clear"><br>
+								<img ng-if="addon.device_alive==='0'" ng-click="powerOnAddon(addon.rooms_addonsid)" class="status pointer" src="img/led-red.png"/>
+								<img ng-if="addon.device_alive==='1'" class="status" src="img/led-green.png"/>						
 								{{addon.addontype}}: {{addon.addon}}
 							</div>
 							<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>

@@ -70,7 +70,11 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	};
 	
 	$scope.powerOnAddon = function(addonid){
-	
+		$http.post('data/power.php?type=addon&option=on&addonid='+addonid);
+	}
+
+	$scope.powerOffAddon = function(addonid){
+		$http.post('data/power.php?type=addon&option=off&addonid='+addonid);
 	}
 	
 	$scope.powerOnRoom = function(room){
