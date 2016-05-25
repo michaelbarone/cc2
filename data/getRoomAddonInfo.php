@@ -29,7 +29,7 @@
 						$addonArray[$x][$i][$item]=$value;
 					}
 				}
-				if($row['device_alive']==="0"&&$row['roomRequiresAlive']==="1") {
+				if($row['device_alive']==="0" && $row['roomRequiresAlive']==="1") {
 					$allAddonsAlive="0";
 					$addonArray[$x]['0']['allAddonsAlive']=$allAddonsAlive;
 					if($row['mac']!==''||$row['mac']!=='null') {

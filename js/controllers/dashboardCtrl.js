@@ -5,15 +5,23 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	$scope.links = [];
 	$scope.rooms = [];
 	$scope.userdata = [];
-	$scope.userdata.username=sessionStorage.getItem('username');
+	if(sessionStorage.getItem('username')=='' || sessionStorage.getItem('username')==null){
+		loginService.logout();
+	} else {
+		$scope.userdata.username=sessionStorage.getItem('username');
+	}
 	$scope.userdata.userid=sessionStorage.getItem('userid');
-	$scope.userdata.mobile=sessionStorage.getItem('mobile');	
+	$scope.userdata.mobile=sessionStorage.getItem('mobile');
+	if(window.innerWidth<520 && ($scope.userdata.mobile===0 || $scope.userdata.mobile===null)){
+		$scope.userdata.mobile='1';
+		sessionStorage.setItem('mobile','1');
+	}
 	$scope.userdata.linkGroupSelected = '';
 	$scope.userdata.linkSelected = '';
 	$scope.userdata.currentRoom = 'noRoom';
 	$scope.userdata.lastRoomChange=unix;
 	$scope.userdata.settingsAccess=sessionStorage.getItem('settingsAccess');
-	if(sessionStorage.getItem('currentRoom') && sessionStorage.getItem('currentRoom') != '') {
+	if(sessionStorage.getItem('currentRoom') && (sessionStorage.getItem('currentRoom') != '' || sessionStorage.getItem('currentRoom') != null)) {
 		$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
 	} else {
 		$scope.userdata.currentRoom=sessionStorage.getItem('homeRoom');
@@ -124,10 +132,18 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		}
 	};
 
+	
+	// 2 jquery functions here:
     $scope.linkReOrder = function(linkgroup,index) {
 		var theLi = document.getElementById(linkgroup + '-group');
 		$(theLi).parent().prepend(theLi);
     };
+	
+	
+	$(window).resize(function(){
+		var thename = $scope.userdata.linkSelected;
+		document.getElementById(thename).scrollIntoView();
+	});	
 
 /***/
 	

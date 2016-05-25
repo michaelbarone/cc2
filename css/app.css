@@ -386,6 +386,7 @@ img.infoType { height:30px; }
 	height: 100%;
 	margin: 0px auto;
 	position: relative;
+	overflow:auto;
 }
 
 .dashboardPage > .content > iframe {
