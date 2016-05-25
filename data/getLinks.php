@@ -2,7 +2,11 @@
 	require 'startsession.php';
 	if(isset($_SESSION['userid'])) {
 		$userid=$_SESSION['userid'];
-		$mobile=$_SESSION['mobile'];
+		if(isset($_GET['mobile']) && $_GET['mobile'] != '') {
+			$mobile=$_GET['mobile'];
+		} else {
+			$mobile=$_SESSION['mobile'];
+		}
 	} else {
 		echo "failed";
 		$log->LogWarn("No user session data from " . basename(__FILE__));

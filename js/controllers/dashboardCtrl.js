@@ -12,9 +12,13 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	}
 	$scope.userdata.userid=sessionStorage.getItem('userid');
 	$scope.userdata.mobile=sessionStorage.getItem('mobile');
-	if(window.innerWidth<520 && ($scope.userdata.mobile===0 || $scope.userdata.mobile===null)){
+	if(window.innerWidth<620 && ($scope.userdata.mobile==='0' || $scope.userdata.mobile===null)){
 		$scope.userdata.mobile='1';
 		sessionStorage.setItem('mobile','1');
+	}
+	if(window.innerWidth>619 && ($scope.userdata.mobile==='1' || $scope.userdata.mobile===null)){
+		$scope.userdata.mobile='0';
+		sessionStorage.setItem('mobile','0');
 	}
 	$scope.userdata.linkGroupSelected = '';
 	$scope.userdata.linkSelected = '';
@@ -36,7 +40,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 			$scope.rooms = data;
 		});
 
-    $http.get('data/getLinks.php')
+    $http.get('data/getLinks.php?mobile='+$scope.userdata.mobile)
 		.success(function(data) {
 			$scope.links = data;
 		});

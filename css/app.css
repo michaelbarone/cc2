@@ -276,9 +276,11 @@ img.infoType { height:30px; }
 	height:30px;
 }
 
-#link-menu .mobile img {
+#link-menu .mobile li img {
 	margin:10px;
 	padding:10px;
+	width:45px;
+	height:45px;	
 }
 
 #link-menu .title {
