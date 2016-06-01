@@ -10,6 +10,15 @@ class kodi {
 		$this->IP = $ip;
 	}
 
+	private function Curl($content){
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, "$content");
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
+		$output = curl_exec($ch);
+		return $output;
+	}	
+	
 	function Ping($ip) {
 		$pingurl = $ip;
 		$disallowed = array('http://', 'https://');
@@ -51,39 +60,18 @@ class kodi {
 
 	function PowerOn(){
 		return "wol";
-		
-		/*
-		$curlThis = "data/wakeAddon.php?m=$this->MAC";
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, "$curlThis");
-		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-		$output = curl_exec($ch);
-		return $curlThis . "--" . dirname(__FILE__) . "--" . $output;*/
 	}
-
+	
 	function PowerOff(){
 		$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"System.Shutdown\", \"id\": \"1\"");
-		$getactiveplayer = "$this->IP/jsonrpc?request={".$therequest."}";
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, "$getactiveplayer");
-		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-		$output = curl_exec($ch);
-		}	
+		$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
+		$this->Curl($jsoncontents);
+		}
 
-
-
-	
 	function GetActivePlayer() {
-		// get active player
 		$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetActivePlayers\", \"id\": \"1\"");
-		$getactiveplayer = "$this->IP/jsonrpc?request={".$therequest."}";
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, "$getactiveplayer");
-		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-		$output = curl_exec($ch);
+		$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
+		$output = $this->Curl($jsoncontents);
 		$jsonactiveplayer = json_decode($output,true);
 		if(empty($jsonactiveplayer['result'])) {
 			//echo "There is nothing currently playing.";
@@ -104,11 +92,7 @@ class kodi {
 			$filetype='';
 			$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetItem\", \"params\": { \"properties\": [\"album\",\"artist\",\"director\",\"writer\",\"tagline\",\"episode\",\"file\",\"title\",\"showtitle\",\"season\",\"genre\",\"year\",\"rating\",\"runtime\",\"firstaired\",\"plot\",\"fanart\",\"thumbnail\",\"tvshowid\"], \"playerid\": 0 }, \"id\": \"1\"");
 			$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_URL, "$jsoncontents");
-			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-			$output = curl_exec($ch);
+			$output = $this->Curl($jsoncontents);
 			$jsonnowplaying = json_decode($output,true);
 			if(isset($jsonnowplaying) && $jsonnowplaying['result']['item']['label']!='') {
 				$filetype=$jsonnowplaying['result']['item']['type'];
@@ -124,11 +108,7 @@ class kodi {
 		} elseif($activeplayerid=="1") {
 			$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetItem\", \"params\": { \"properties\": [\"director\",\"writer\",\"tagline\",\"episode\",\"file\",\"title\",\"showtitle\",\"season\",\"genre\",\"year\",\"rating\",\"runtime\",\"firstaired\",\"plot\",\"fanart\",\"thumbnail\",\"tvshowid\"], \"playerid\": 1 }, \"id\": \"1\"");
 			$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_URL, "$jsoncontents");
-			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-			$output = curl_exec($ch);
+			$output = $this->Curl($jsoncontents);
 			$jsonnowplaying = json_decode($output,true);
 			foreach($jsonnowplaying['result']['item'] as $item=>$value) {
 				if($value == "" || $value == "0") { continue; }
@@ -200,19 +180,11 @@ class kodi {
 		$activeplayerid = $this->GetActivePlayer();
 		if($activeplayerid==0) {
 			$jsoncontents = "$this->IP/jsonrpc?request={%22jsonrpc%22:%20%222.0%22,%20%22method%22:%20%22Playlist.GetItems%22,%20%22params%22:%20{%20%22playlistid%22:%200%20},%20%22id%22:%20%221%22}";
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_URL, "$jsoncontents");
-			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-			$output = curl_exec($ch);
+			$output = $this->Curl($jsoncontents);
 			$jsonplaylist = json_decode($output,true);								
 		} elseif($activeplayerid==1) {
 			$jsoncontents = "$this->IP/jsonrpc?request={%22jsonrpc%22:%20%222.0%22,%20%22method%22:%20%22Playlist.GetItems%22,%20%22params%22:%20{%20%22playlistid%22:%201%20},%20%22id%22:%20%221%22}";
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_URL, "$jsoncontents");
-			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-			$output = curl_exec($ch);
+			$output = $this->Curl($jsoncontents);
 			$jsonplaylist = json_decode($output,true);
 			//print_r($jsonplaylist);
 			//$test = in_array("$thelabel",$jsonplaylist);
@@ -236,11 +208,7 @@ class kodi {
 		$activeplayerid = $this->GetActivePlayer();
 		$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetProperties\", \"params\": { \"properties\": [\"time\",\"totaltime\",\"position\",\"speed\"], \"playerid\": $activeplayerid }, \"id\": \"1\"");
 		$jsonnowplayingtime = "$this->IP/jsonrpc?request={".$therequest."}";
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, "$jsonnowplayingtime");
-		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-		$output = curl_exec($ch);
+		$output = $this->Curl($jsoncontents);
 		$jsonnowplayingtime = json_decode($output,true);
 		
 		if(!isset($jsonnowplayingtime['result'])) {
