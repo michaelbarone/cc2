@@ -9,7 +9,7 @@ class denonAVRe400 {
 		$this->IP = $ip;
 	}
 
-	function stripIp($ip){
+	private function stripIp($ip){
 		$pingurl = $ip;
 		$disallowed = array('http://', 'https://');
 		foreach($disallowed as $d) {
@@ -22,14 +22,20 @@ class denonAVRe400 {
 		}		
 		return $thisip;
 	}
+
+	private function Curl($content){
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, "$content");
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
+		$output = curl_exec($ch);
+		return $output;
+	}
 	
 	function Ping($ip) {
 		$thisip = $this->stripIp($this->IP);
-		$ch = curl_init();  
-		curl_setopt($ch,CURLOPT_URL,"$thisip/goform/formMainZone_MainZoneXml.xml");
-		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-		$output = curl_exec($ch);
-		curl_close($ch);
+		$curlThis = "$thisip/goform/formMainZone_MainZoneXml.xml";
+		$output = $this->Curl($curlThis);
 		$items = simplexml_load_string($output);
 		$json = json_encode($items);
 		$items = json_decode($json, true);
@@ -44,62 +50,38 @@ class denonAVRe400 {
 		$thisip = $this->stripIp($this->IP);
 		//$curlThis = "$thisip/MainZone/index.put.asp?cmd0=PutSystem_OnStandby%2FON&cmd1=aspMainZone_WebUpdateStatus%2F";
 		$curlThis = "$thisip/MainZone/index.put.asp?cmd0=PutZone_OnOff%2FON";
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, "$curlThis");
-		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-		$output = curl_exec($ch);
+		$output = $this->Curl($curlThis);
 	}
 
 	function PowerOff(){
 		$thisip = $this->stripIp($this->IP);
 		//$curlThis = "$thisip/MainZone/index.put.asp?cmd0=PutSystem_OnStandby%2FSTANDBY&cmd1=aspMainZone_WebUpdateStatus%2F";
 		$curlThis = "$thisip/MainZone/index.put.asp?cmd0=PutZone_OnOff%2FOFF";
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, "$curlThis");
-		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-		$output = curl_exec($ch);
+		$output = $this->Curl($curlThis);
 	}
 	
 	function VolumeUp(){
 		$thisip = $this->stripIp($this->IP);
 		$curlThis = "$thisip/MainZone/index.put.asp?cmd0=PutMasterVolumeBtn%2F%3E";
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, "$curlThis");
-		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-		$output = curl_exec($ch);		
+		$output = $this->Curl($curlThis);		
 	}
 
 	function VolumeDown(){
 		$thisip = $this->stripIp($this->IP);
 		$curlThis = "$thisip/MainZone/index.put.asp?cmd0=PutMasterVolumeBtn%2F%3C";
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, "$curlThis");
-		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-		$output = curl_exec($ch);		
+		$output = $this->Curl($curlThis);	
 	}	
 
 	function VolumeSet($newvolume){
 		$thisip = $this->stripIp($this->IP);
 		$curlThis = "$thisip/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/$newvolume";
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, "$curlThis");
-		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-		$output = curl_exec($ch);		
+		$output = $this->Curl($curlThis);		
 	}
 	
 	function VolumeMute(){
 		$thisip = $this->stripIp($this->IP);
 		$curlThis = "$thisip/MainZone/index.put.asp?cmd0=PutVolumeMute/on";
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, "$curlThis");
-		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
-		$output = curl_exec($ch);		
+		$output = $this->Curl($curlThis);		
 	}
 	
 	

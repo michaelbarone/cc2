@@ -17,6 +17,7 @@ class ping {
 			   $thisip = strtok(str_replace($d, '', $pingurl),':');
 			}
 		}
+		if(!isset($thisip)){ $thisip = $pingurl; }
 		if(strpos($thisip, "/") != false) {
 			$thisip = substr($thisip, 0, strpos($thisip, "/"));
 		}
@@ -36,5 +37,13 @@ class ping {
 		}
 	}
 }
+
+	function PowerOn(){
+		return "false";
+	}
+	function PowerOff(){
+		return "false";
+	}	
+	
 
 ?>

@@ -66,7 +66,7 @@ class kodi {
 		$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"System.Shutdown\", \"id\": \"1\"");
 		$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
 		$this->Curl($jsoncontents);
-		}
+	}
 
 	function GetActivePlayer() {
 		$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetActivePlayers\", \"id\": \"1\"");

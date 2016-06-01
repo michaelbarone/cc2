@@ -121,10 +121,7 @@ foreach($addons as $addon) {
 		$vars['ip']=$ip;
 		$vars['mac']=$mac;		
 		${$addonName}->SetVariables($vars);
-
-
 		$devicealive=${$addonName}->Ping($ip);
-		//echo $addonid . $addonName . $ip . $devicealive . $statusorig . "<br><br>";
 		if ($devicealive == "alive") {
 			if($statusorig==0) {
 				$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 1 WHERE rooms_addonsid = '$rooms_addonsid';");
