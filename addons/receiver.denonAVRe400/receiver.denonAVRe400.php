@@ -45,6 +45,10 @@ class denonAVRe400 {
 			return "dead";
 		}
 	}
+	
+	function PingApp($ip){
+		return $this->Ping($ip);
+	}
 
 	function PowerOn(){
 		$thisip = $this->stripIp($this->IP);

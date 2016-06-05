@@ -36,7 +36,10 @@ class ping {
 			return "dead";
 		}
 	}
-}
+	
+	function PingApp($ip){
+		return $this->Ping($ip);
+	}	
 
 	function PowerOn(){
 		return "false";
@@ -45,5 +48,5 @@ class ping {
 		return "false";
 	}	
 	
-
+}
 ?>

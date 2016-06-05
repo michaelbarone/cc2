@@ -47,10 +47,6 @@ function WakeOnLan($addr, $mac) {
   else {
     // setting a broadcast option to socket:
 	socket_set_option($s, SOL_SOCKET, SO_BROADCAST, 1);
-    if($opt_ret <0) {
-      echo "setsockopt() failed, error: " . strerror($opt_ret) . "\n";
-      return FALSE;
-      }
     if(socket_sendto($s, $msg, strlen($msg), 0, $addr, $socket_number)) {
       echo "Magic Packet sent successfully!";
       socket_close($s);

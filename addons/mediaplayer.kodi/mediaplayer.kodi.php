@@ -40,8 +40,10 @@ class kodi {
 		} else {
 			return "dead";
 		}
-		
-		/*
+	}
+	
+	
+	function PingApp($ip) {	
 		$pingurl = "$this->IP/jsonrpc?request={%22jsonrpc%22%3A%20%222.0%22%2C%20%22method%22%3A%20%22JSONRPC.Ping%22%2C%22id%22%3A%201}";
 		//$pingurl = "$this->IP";
 		$ch = curl_init();
@@ -49,13 +51,11 @@ class kodi {
 		curl_setopt($ch, CURLOPT_URL, "$pingurl");
 		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
 		$output = curl_exec($ch);
-		echo $pingurl;
-		print_r($output);
 		if($output === FALSE) {
 			return "dead";
 		} else {
 			return "alive";
-		}*/
+		}
 	}
 
 	function PowerOn(){
