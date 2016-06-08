@@ -3,6 +3,7 @@ app.factory('loginService',function($http, $location, sessionService, inform){
 	return{
 		login:function(data,scope){
 			var $promise=$http.post('data/session_login.php',data);
+			var oldUID=sessionService.get('userid');
 			$promise.then(function(msg){
 				if(!msg.data['failed']) {
 					var uid=msg.data['uid'];
@@ -13,13 +14,16 @@ app.factory('loginService',function($http, $location, sessionService, inform){
 					var settingsAccess=msg.data['settingsAccess'];
 					if(uid){
 						inform.clear();
-						inform.add('Welcome, ' + username);						
+						inform.add('Welcome, ' + username);
 						sessionService.set('uid',uid);
 						sessionService.set('username',username);
 						sessionService.set('userid',userid);
 						sessionService.set('homeRoom',homeRoom);
 						sessionService.set('mobile',mobile);
 						sessionService.set('settingsAccess',settingsAccess);
+						if(oldUID!=userid){
+							sessionService.set('currentRoom',homeRoom);
+						}
 						$location.path('/dashboard');
 					} else {
 						inform.add('Incorrect Information', {
@@ -44,7 +48,6 @@ app.factory('loginService',function($http, $location, sessionService, inform){
 			sessionService.destroy('uid');
 			sessionStorage.removeItem('uid');
 			sessionStorage.removeItem('username');
-			sessionStorage.removeItem('userid');
 			sessionStorage.removeItem('homeRoom');
 			$location.path('/login');
 		},

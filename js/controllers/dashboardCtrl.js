@@ -5,6 +5,9 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	$scope.links = [];
 	$scope.rooms = [];
 	$scope.userdata = [];
+	/*
+	some security could be to match userid and username in db
+	*/
 	if(sessionStorage.getItem('username')=='' || sessionStorage.getItem('username')==null){
 		loginService.logout();
 	} else {
@@ -25,10 +28,11 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	$scope.userdata.currentRoom = 'noRoom';
 	$scope.userdata.lastRoomChange=unix;
 	$scope.userdata.settingsAccess=sessionStorage.getItem('settingsAccess');
-	if(sessionStorage.getItem('currentRoom') && (sessionStorage.getItem('currentRoom') != '' || sessionStorage.getItem('currentRoom') != null)) {
+	if(sessionStorage.getItem('currentRoom')>0) {
 		$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
 	} else {
 		$scope.userdata.currentRoom=sessionStorage.getItem('homeRoom');
+		sessionStorage.setItem('currentRoom',sessionStorage.getItem('homeRoom'));
 	}
 	$scope.userdata.linkSelected="room"+$scope.userdata.currentRoom;
 
@@ -64,7 +68,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		document.getElementById("room"+room).scrollIntoView();
 	};
 
- 
+ /* needed? */
 	$scope.wakeAddon = function(mac) {
 		if(mac === '' || mac === null){
 		} else {
@@ -80,6 +84,8 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 			}
 		}
 	};
+/* needed? */
+
 	
 	$scope.powerOnAddon = function(addonid){
 		$http.post('data/power.php?type=addon&option=on&addonid='+addonid);
