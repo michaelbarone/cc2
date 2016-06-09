@@ -184,6 +184,10 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 					if(data == "failed") {
 						return;
 					}
+					if(data == "failedAuth"){
+						loginService.logout();
+						return;
+					}
 					if($scope.room_addons != "data") {
 						$scope.room_addons=data;
 					}
