@@ -1,5 +1,10 @@
 <?php 
 	require 'startsession.php';
+	if( isset($_SESSION['uid']) ) {
+	} else {
+		print 'failedAuth';
+		exit;
+	}
 	if(isset($_SESSION['userid'])) {
 		$userid=$_SESSION['userid'];
 		$roomIds=$_SESSION['roomAccess'];
