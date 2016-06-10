@@ -1,11 +1,11 @@
 <div id="Users">
-  <div class="panel panel-default">
+  <div class="panel panel-default loginTiles">
 	<br><br>
 	  <div class="panel-heading"><span class="lead">List of Users </span></div>
 		<div class="row">
 			<div class="right">
 				<button type="button" ng-click="addUser()" class="btn btn-primary btn-sm">Add User</button>
-				<button type="button" ng-click="ctrl.reset()" class="btn btn-success btn-sm" ng-class="usersChanged > 0 ? 'greenPulse' : ''">Save Users</button>
+				<button type="button" ng-click="saveUsers(Users)" class="btn btn-success btn-sm" ng-class="usersChanged > 0 ? 'greenPulse' : ''">Save Users</button>
 			</div>
 		</div>
 	  <div class="tablecontainer">
@@ -31,10 +31,10 @@
 					<td><input type="text" ng-model="u.username" required='required' /></td>
 					<td><input type="password" ng-model="u.password" /></td>
 					<td><select ng-model="u.wanAccess">
-					<option value="1" ng-selected="u.wanAccess==1">Yes</option><option value="0" ng-selected="u.wanAccess==0">No</option>
+					<option value="1" ng-selected="u.wanAccess==1">Yes</option><option value="0" ng-selected="u.wanAccess!=1">No</option>
 					</select></td>					
 					<td><select ng-model="u.settingsAccess">
-					<option value="1" ng-selected="u.settingsAccess==1">Yes</option><option value="0" ng-selected="u.settingsAccess==0">No</option>
+					<option value="1" ng-selected="u.settingsAccess==1">Yes</option><option value="0" ng-selected="u.settingsAccess!=1">No</option>
 					</select></td>						
 					
 					<td><select ng-model="u.navgroupaccess">

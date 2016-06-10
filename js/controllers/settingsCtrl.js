@@ -51,20 +51,10 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 	$scope.usersChanged=0;
 	 
 	$scope.saveUsers = function(users){
-		$scope.usersChanged=0;
-		
-		/*
-		$http.get('data/settingsUsers.php?action=save&users='+users)
+		$http.get('data/settingsUsers.php?action=saveUsers&users='+JSON.stringify(users))
 			.success(function(data) {
-				if(data == "failed") {
-					return;
-				}
-				if(data == "failedAuth"){
-					loginService.logout();
-					return;
-				}
-				return data;
-			});*/
+				$scope.usersChanged=0;
+			});
 	}
 	 
 	$scope.addUser = function(){

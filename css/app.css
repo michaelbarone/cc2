@@ -283,7 +283,11 @@ img.infoType { height:30px; }
   padding:10px 15px 2.5px;
 }
 
-#link-menu img {
+#link-menu a div {
+	height:30px;
+}
+
+#link-menu img{
 	width:30px;
 	height:30px;
 }
@@ -432,6 +436,18 @@ img.infoType { height:30px; }
 .addonTitle {
 	padding: 15px;
 }
+
+/*********
+*** Settings
+*********/
+
+#mainView .panel {
+	width:90%;
+	margin:0 auto;
+}
+
+
+
 
 /*********
 *** Chat
