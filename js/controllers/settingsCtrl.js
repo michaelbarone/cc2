@@ -1,14 +1,11 @@
 'use strict';
 
-app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Idle', function ($scope, $timeout, $http, inform, Idle){
+app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Idle','$route', function ($scope, $timeout, $http, inform, Idle, $route){
 	$scope.userdata = [];
 	$scope.Users = [];
 	$scope.userdata.username=sessionStorage.getItem('username');
 	$scope.userdata.userid=sessionStorage.getItem('userid');
 	$scope.userdata.mobile=sessionStorage.getItem('mobile');
-
-
-
 
     $scope.tabs = [{
             title: 'Users',
@@ -24,9 +21,8 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
             url: './partials/tpl/settings3.tpl.html'
 
 	}];
-
-    $scope.currentTab = './partials/tpl/settingsUsers.tpl.html';
-
+	$scope.currentTab = './partials/tpl/settingsUsers.tpl.html';
+	
     $scope.onClickTab = function (tab) {
         $scope.currentTab = tab.url;
     }
@@ -35,14 +31,17 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
         return tabUrl == $scope.currentTab;
     }
 
-	
+	$scope.cancelChanges = function(){
+		$scope.getAllUsers();
+		$scope.usersChanged=0;
+	}
 	
 	
 	
 	/* users section */
 	
 	$scope.getAllUsers = function() {
-		$http.get('data/settingsUsers.php?action=getUsers')
+		$http.get('data/settings.php?action=getUsers')
 			.success(function(data) {
 				$scope.Users = data;
 			});
@@ -51,7 +50,7 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 	$scope.usersChanged=0;
 	 
 	$scope.saveUsers = function(users){
-		$http.get('data/settingsUsers.php?action=saveUsers&users='+JSON.stringify(users))
+		$http.get('data/settings.php?action=saveUsers&users='+JSON.stringify(users))
 			.success(function(data) {
 				$scope.usersChanged=0;
 			});

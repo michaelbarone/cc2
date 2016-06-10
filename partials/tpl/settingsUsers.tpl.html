@@ -5,6 +5,7 @@
 		<div class="row">
 			<div class="right">
 				<button type="button" ng-click="addUser()" class="btn btn-primary btn-sm">Add User</button>
+				<button type="button" ng-click="cancelChanges(currentTab)" class="btn btn-warning btn-sm">Cancel Changes</button>
 				<button type="button" ng-click="saveUsers(Users)" class="btn btn-success btn-sm" ng-class="usersChanged > 0 ? 'greenPulse' : ''">Save Users</button>
 			</div>
 		</div>
