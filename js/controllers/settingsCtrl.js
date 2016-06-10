@@ -2,6 +2,7 @@
 
 app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Idle', function ($scope, $timeout, $http, inform, Idle){
 	$scope.userdata = [];
+	$scope.Users = [];
 	$scope.userdata.username=sessionStorage.getItem('username');
 	$scope.userdata.userid=sessionStorage.getItem('userid');
 	$scope.userdata.mobile=sessionStorage.getItem('mobile');
@@ -10,6 +11,9 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 
 
     $scope.tabs = [{
+            title: 'Users',
+            url: './partials/tpl/settingsUsers.tpl.html'		
+        }, {
             title: 'One',
             url: './partials/tpl/settings1.tpl.html'
         }, {
@@ -18,13 +22,10 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
         }, {
             title: 'Three',
             url: './partials/tpl/settings3.tpl.html'
-        }, {
-            title: 'Users',
-            url: './partials/tpl/settingsUsers.tpl.html'
 
 	}];
 
-    $scope.currentTab = './partials/tpl/settings1.tpl.html';
+    $scope.currentTab = './partials/tpl/settingsUsers.tpl.html';
 
     $scope.onClickTab = function (tab) {
         $scope.currentTab = tab.url;
@@ -43,20 +44,17 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 	$scope.getAllUsers = function() {
 		$http.get('data/settingsUsers.php?action=getUsers')
 			.success(function(data) {
-				if(data == "failed") {
-					return;
-				}
-				if(data == "failedAuth"){
-					loginService.logout();
-					return;
-				}
 				$scope.Users = data;
 			});
 	}
 	$scope.getAllUsers();
+	$scope.usersChanged=0;
 	 
-	$scope.createUser = function(user){
-		$http.get('data/settingsUsers.php?action=create&user='+user)
+	$scope.saveUsers = function(users){
+		$scope.usersChanged=0;
+		
+		/*
+		$http.get('data/settingsUsers.php?action=save&users='+users)
 			.success(function(data) {
 				if(data == "failed") {
 					return;
@@ -66,36 +64,24 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 					return;
 				}
 				return data;
-			});
+			});*/
 	}
 	 
-	$scope.updateUser = function(user, id){
-		$http.get('data/getRoomAddonInfo.php')
-			.success(function(data) {
-				if(data == "failed") {
-					return;
-				}
-				if(data == "failedAuth"){
-					loginService.logout();
-					return;
-				}
-				return data;
-			});
+	$scope.addUser = function(){
+		var lastuserid = 0;
+		var userid = 0;
+		for(userid in $scope.Users) {
+			lastuserid = userid;
+		}
+		var nextuserid = parseInt(lastuserid) + 1;
+		$scope.Users[nextuserid]={'userid': nextuserid.toString()};
+		$scope.usersChanged++;
 	}
 	 
-	$scope.deleteUser = function(id){
-		$http.get('data/settingsUsers.php?action=delete&userid='+id)
-			.success(function(data) {
-				if(data == "failed") {
-					return;
-				}
-				if(data == "failedAuth"){
-					loginService.logout();
-					return;
-				}
-				return data;
-			});
-	}	
+	$scope.deleteUser = function(index){
+		delete $scope.Users[index];
+		$scope.usersChanged++;
+	}
 	
 	
 	/* end users section  */

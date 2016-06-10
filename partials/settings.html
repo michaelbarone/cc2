@@ -18,18 +18,23 @@
 				<li><a href="" ng-click="logout()">Logout</a></li>
 			</ul>
 		</div>
+		<div id="link-menu">
+			<nav>
+				<ul class="sortable">
+					<li>
+					<a ng-repeat="tab in tabs" 
+						ng-class="{active:isActiveTab(tab.url)}" 
+						class="main panel persistent" 
+						ng-click="onClickTab(tab)">{{tab.title}}</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
 	</div>
 	<div id="dashboardWrapper">
-        <ul>
-            <li ng-repeat="tab in tabs" 
-                ng-class="{active:isActiveTab(tab.url)}" 
-                ng-click="onClickTab(tab)">{{tab.title}}</li>
-        </ul>
         <div id="mainView">
             <div ng-include="currentTab"></div>
         </div>
 	</div>
-
-
 	<div id="chatContainer" ng-class="{'open' : chatOpen == true}" class="transformable-horizontal" chat></div>
 </div>
