@@ -1,0 +1,46 @@
+<div id="Users">
+  <div class="panel panel-default loginTiles">
+	<br><br>
+	  <div class="panel-heading"><span class="lead">Rooms </span></div>
+		<div class="row">
+			<div class="right">
+				<button type="button" ng-click="cancelChanges()" class="btn btn-warning btn-sm" ng-disabled="roomsChanged < 1">Cancel Changes</button>
+				<button type="button" ng-click="saveRooms()" class="btn btn-success btn-sm" ng-class="roomsChanged > 0 ? 'greenPulse' : ''" ng-disabled="roomsChanged < 1">Save Rooms</button>
+			</div>
+		</div>
+	  <div class="tablecontainer">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th><button type="button" ng-click="addRoom()" class="btn btn-primary btn-sm">Add Room</button></th>
+					<th>ID</th>
+					<th>Room</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="r in Rooms">
+					<td><button type="button" ng-click="deleteRoom(r.roomId)" class="btn btn-danger custom-width">X</button></td>
+					<td><span ng-bind="r.roomId"></span></td>
+					<td><input type="text" ng-model="r.roomName" required='required'  ng-change="roomsChangedAdd()"/></td>
+				</tr>
+			</tbody>
+		</table>
+	  </div>
+	</div>
+
+	<!--
+	
+	top left rooms
+	
+	top right addons (global settings)
+	
+	below full rooms_addons grouped by room  >>  maybe modules like on dashboard
+	
+	
+	
+	
+	
+	-->
+
+
+</div>

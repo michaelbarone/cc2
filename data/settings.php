@@ -25,11 +25,31 @@ function GetUsers($configdb){
 	return $json;
 }
 
-
+function GetRooms($configdb){
+	try {
+		$roomsArray = array();
+		foreach ($configdb->query("SELECT * FROM rooms") as $row) {
+			$roomid = $row['roomId'];
+			foreach($row as $item => $key) {
+				if(is_numeric($item)) { continue; }
+				$roomsArray[$roomid][$item] = $key;
+			}
+		}
+		$result = $roomsArray;
+		} catch(PDOException $e) {
+		$log->LogFatal("User could not open DB: $e->getMessage().  from " . basename(__FILE__));
+	}
+	header('Content-Type: application/json');
+	$json=json_encode($result);
+	return $json;
+}
 
 
 if(isset($action)) {	
-	if($action === "getUsers") {
+	if($action === "getRooms") {
+		$rooms=GetRooms($configdb);
+		echo $rooms;
+	} elseif($action === "getUsers") {
 		$users=GetUsers($configdb);
 		echo $users;
 	} elseif($action === "saveUsers"){

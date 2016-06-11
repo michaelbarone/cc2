@@ -3,6 +3,7 @@
 app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Idle','$route', function ($scope, $timeout, $http, inform, Idle, $route){
 	$scope.userdata = [];
 	$scope.Users = [];
+	$scope.Rooms = [];
 	$scope.userdata.username=sessionStorage.getItem('username');
 	$scope.userdata.userid=sessionStorage.getItem('userid');
 	$scope.userdata.mobile=sessionStorage.getItem('mobile');
@@ -11,8 +12,8 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
             title: 'Users',
             url: './partials/tpl/settingsUsers.tpl.html'		
         }, {
-            title: 'One',
-            url: './partials/tpl/settings1.tpl.html'
+            title: 'Rooms',
+            url: './partials/tpl/settingsRooms.tpl.html'
         }, {
             title: 'Two',
             url: './partials/tpl/settings2.tpl.html'
@@ -32,8 +33,14 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
     }
 
 	$scope.cancelChanges = function(){
+		$scope.init();
+	}
+	
+	$scope.init = function(){
 		$scope.getAllUsers();
+		$scope.getRooms();
 		$scope.usersChanged=0;
+		$scope.roomsChanged=0;		
 	}
 	
 	
@@ -46,8 +53,6 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 				$scope.Users = data;
 			});
 	}
-	$scope.getAllUsers();
-	$scope.usersChanged=0;
 	 
 	$scope.saveUsers = function(users){
 		$http.get('data/settings.php?action=saveUsers&users='+JSON.stringify(users))
@@ -83,9 +88,43 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 	
 	/* rooms section */
 	
+	$scope.getRooms = function() {
+		$http.get('data/settings.php?action=getRooms')
+			.success(function(data) {
+				$scope.Rooms = data;
+			});
+	}	
+
+	$scope.addRoom = function(){
+		var lastroomid = 0;
+		var room = 0;
+		for(room in $scope.Rooms) {
+			lastroomid = room;
+		}
+		var nextroomid = parseInt(lastroomid) + 1;
+		$scope.Rooms[nextroomid]={'roomId': nextroomid.toString()};
+		$scope.roomsChanged++;
+	}
+
+	$scope.saveRooms = function(){
+		// get room and addon info ready for saving
+		/*
+		$http.get('data/settings.php?action=saveRooms&data='+JSON.stringify(data))
+			.success(function(data) {
+				$scope.usersChanged=0;
+			});
+		*/
+	}	
 	
+	$scope.deleteRoom = function(index){
+		delete $scope.Rooms[index];
+		$scope.roomsChanged++;
+	}
+
 	
-	
+	$scope.roomsChangedAdd = function(){
+		$scope.roomsChanged++;
+	}
 	
 	/* end rooms section */
 	
@@ -104,7 +143,7 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 	
 
 
-	
+	$scope.init();	
 	
 	$scope.logout=function(){
 		loginService.logout();
