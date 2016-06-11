@@ -5,8 +5,8 @@
 		<div class="row">
 			<div class="right">
 				<button type="button" ng-click="addUser()" class="btn btn-primary btn-sm">Add User</button>
-				<button type="button" ng-click="cancelChanges(currentTab)" class="btn btn-warning btn-sm">Cancel Changes</button>
-				<button type="button" ng-click="saveUsers(Users)" class="btn btn-success btn-sm" ng-class="usersChanged > 0 ? 'greenPulse' : ''">Save Users</button>
+				<button type="button" ng-click="cancelChanges(currentTab)" class="btn btn-warning btn-sm" ng-disabled="usersChanged < 1">Cancel Changes</button>
+				<button type="button" ng-click="saveUsers(Users)" class="btn btn-success btn-sm" ng-class="usersChanged > 0 ? 'greenPulse' : ''" ng-disabled="usersChanged < 1">Save Users</button>
 			</div>
 		</div>
 	  <div class="tablecontainer">
@@ -29,27 +29,27 @@
 				<tr ng-repeat="u in Users">
 					<td><button type="button" ng-click="deleteUser(u.userid)" class="btn btn-danger custom-width">X</button></td>
 					<td><span ng-bind="u.userid"></span></td>
-					<td><input type="text" ng-model="u.username" required='required'  ng-change="usersChangedSet()"/></td>
+					<td><input type="text" ng-model="u.username" required='required'  ng-change="usersChangedAdd()"/></td>
 					<td><input type="password" ng-model="u.password" /></td>
-					<td><select ng-model="u.wanAccess" ng-change="usersChangedSet()">
+					<td><select ng-model="u.wanAccess" ng-change="usersChangedAdd()">
 						<option value="1" ng-selected="u.wanAccess==1">Yes</option>
 						<option value="0" ng-selected="u.wanAccess!=1">No</option>
 					</select></td>					
-					<td><select ng-model="u.settingsAccess" ng-change="usersChangedSet()">
+					<td><select ng-model="u.settingsAccess" ng-change="usersChangedAdd()">
 						<option value="1" ng-selected="u.settingsAccess==1">Yes</option>
 						<option value="0" ng-selected="u.settingsAccess!=1">No</option>
 					</select></td>						
 					
-					<td><select ng-model="u.navgroupaccess" ng-change="usersChangedSet()">
+					<td><select ng-model="u.navgroupaccess" ng-change="usersChangedAdd()">
 					<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
 					</select></td>
-					<td><select ng-model="u.roomAccess" ng-change="usersChangedSet()">
+					<td><select ng-model="u.roomAccess" ng-change="usersChangedAdd()">
 					<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
 					</select></td>
-					<td><select ng-model="u.roomGroupAccess" ng-change="usersChangedSet()">
+					<td><select ng-model="u.roomGroupAccess" ng-change="usersChangedAdd()">
 					<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
 					</select></td>
-					<td><select ng-model="u.homeRoom" ng-change="usersChangedSet()">
+					<td><select ng-model="u.homeRoom" ng-change="usersChangedAdd()">
 					<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
 					</select></td>
 				</tr>
