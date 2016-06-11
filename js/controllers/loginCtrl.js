@@ -1,6 +1,13 @@
 'use strict';
 
-app.controller('loginCtrl', ['$scope','loginService','$http', function ($scope,loginService,$http) {
+app.controller('loginCtrl', ['$scope','loginService','$http', '$location', function ($scope,loginService,$http,$location) {
+	var connected=loginService.islogged();
+	connected.then(function(msg){
+		if(msg.data==="passedAuth") {
+			$location.path('/dashboard');
+		}
+	});
+
 	$scope.msgtxt='';
 	$scope.users = [];
 	

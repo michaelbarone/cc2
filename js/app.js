@@ -1,6 +1,6 @@
 'use strict';
 
-var app= angular.module('ControlCenter', ['ngRoute','ngResource','ngIdle','ngScrollTo','inform','ngAnimate']);
+var app= angular.module('ControlCenter', ['ngRoute','ngResource','ngIdle','ngScrollTo','inform','ngAnimate','NgModel']);
 app.config(['$routeProvider','$controllerProvider','informProvider','KeepaliveProvider', 'IdleProvider', function($routeProvider,$controllerProvider,informProvider,KeepaliveProvider, IdleProvider) {
 	// routes
 	app.settingsController = $controllerProvider.register;
@@ -9,7 +9,7 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 	$routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'loginCtrl'});
 	$routeProvider.when('/dashboard', {templateUrl: 'partials/dashboard.html'});
 	$routeProvider.when('/settings', {templateUrl: 'partials/settings.html'});
-	$routeProvider.otherwise({redirectTo: '/dashboard'});
+	$routeProvider.otherwise({redirectTo: '/login'});
 	
 	// notifications
 	var informDefaults = {

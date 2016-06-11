@@ -82,7 +82,6 @@ if(isset($action)) {
 			echo $user['userid']."<br>";
 			unset($updatedusers[$user['userid']]);
 		}		
-		// unset from $updatedusers
 		print_r($result);
 		echo "<br><br>";
 		
@@ -90,8 +89,17 @@ if(isset($action)) {
 		//else update remaining $updatedusers
 		echo "update these entries:";
 		foreach($updatedusers as $user){
+			print_r($user);
+			print_r($users[$user['userid']]);
+			$result = array_diff($users[$user['userid']], $user);
+			print_r($result);
+			$result = array_diff($user, $users[$user['userid']]);
+			print_r($result);			
 			echo $user['userid']."<br>";
 		}
+		
+		
+		
 	}
 }
 ?>

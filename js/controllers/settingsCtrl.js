@@ -72,6 +72,10 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 		$scope.usersChanged++;
 	}
 	
+	$scope.usersChangedSet = function(){
+		$scope.usersChanged++;
+	}
+	
 	
 	/* end users section  */
 	

@@ -1,6 +1,6 @@
 'use strict';
 
-app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform','Idle', function ($scope, $timeout, loginService, $http, inform, Idle){
+app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform','Idle','$location', function ($scope, $timeout, loginService, $http, inform, Idle, $location){
 	var unix = Math.round(+new Date()/1000);
 	$scope.links = [];
 	$scope.rooms = [];
@@ -171,9 +171,9 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	var updateAddonsFirstRun=1;
 	var updateAddonsRunning = 0;
 	$scope.updateAddons = function(){
-		if(updateAddonsRunning===1) { return; }
+		if(updateAddonsRunning===1 || $location.path()!="/dashboard") { return; }
 		updateAddonsRunning = 1;	
-		if( Idle.idling() === true ) {
+		if( Idle.idling() === true) {
 			$timeout(function() {
 				updateAddonsRunning = 0;
 				$scope.updateAddons();
@@ -211,9 +211,9 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	var cronKeeper = 0;
 	var cronRunning = 0;
 	$scope.runCron = function(){
-		if(cronRunning===1) { return; }
+		if(cronRunning===1 || $location.path()!="/dashboard") { return; }
 		cronRunning = 1;
-		if( Idle.idling() === true ) {
+		if( Idle.idling() === true) {
 			$timeout(function() {
 				cronRunning = 0;
 				$scope.runCron();
