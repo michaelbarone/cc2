@@ -15,8 +15,8 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
             title: 'Rooms',
             url: './partials/tpl/settingsRooms.tpl.html'
         }, {
-            title: 'Two',
-            url: './partials/tpl/settings2.tpl.html'
+            title: 'Navigation',
+            url: './partials/tpl/settingsNavigation.tpl.html'
         }, {
             title: 'Three',
             url: './partials/tpl/settings3.tpl.html'
@@ -39,8 +39,10 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 	$scope.init = function(){
 		$scope.getAllUsers();
 		$scope.getRooms();
+		$scope.getNavigation();
 		$scope.usersChanged=0;
-		$scope.roomsChanged=0;		
+		$scope.roomsChanged=0;
+		$scope.navChanged=0;
 	}
 	
 	
@@ -126,6 +128,28 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 		$scope.roomsChanged++;
 	}
 	
+	
+	
+	/*
+	
+	addons:
+	
+	need scan addon folder for new addons (add)
+	
+	save addons
+	
+	delete addons?  remove folder from dir?
+	
+need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addonname.version-subversion-subversion   classname in {addon}.php remains addonname
+	
+	
+	
+	*/
+	
+	
+	
+	
+	
 	/* end rooms section */
 	
 	
@@ -134,7 +158,43 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 	
 	/* navigation section */	
 	
+	$scope.getNavigation = function() {
+		$http.get('data/settings.php?action=getNavigation')
+			.success(function(data) {
+				$scope.Navigation = data;
+			});
+	}	
+
+	$scope.addNavigation = function(){
+		var lastnavid = 0;
+		var nav = 0;
+		for(nav in $scope.Navigation) {
+			lastnavid = nav;
+		}
+		var nextnavid = parseInt(lastnavid) + 1;
+		$scope.Navigation[nextnavid]={'navid': nextnavid.toString()};
+		$scope.navChanged++;
+	}
+
+	$scope.saveNavigation = function(){
+		// get room and addon info ready for saving
+		/*
+		$http.get('data/settings.php?action=saveRooms&data='+JSON.stringify(data))
+			.success(function(data) {
+				$scope.usersChanged=0;
+			});
+		*/
+	}	
 	
+	$scope.deleteNavigation = function(index){
+		delete $scope.Navigation[index];
+		$scope.navChanged++;
+	}
+
+	
+	$scope.navChangedAdd = function(){
+		$scope.navChanged++;
+	}	
 	
 	
 	/* end navigation section */	

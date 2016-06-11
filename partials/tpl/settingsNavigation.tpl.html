@@ -1,0 +1,52 @@
+<div id="Users">
+  <div class="panel panel-default loginTiles">
+	<br><br>
+	  <div class="panel-heading"><span class="lead">Navigation </span></div>
+		<div class="row">
+			<div class="right">
+				<button type="button" ng-click="addNavigation()" class="btn btn-primary btn-sm">Add Item</button>
+				<button type="button" ng-click="cancelChanges(currentTab)" class="btn btn-warning btn-sm" ng-disabled="navChanged < 1">Cancel Changes</button>
+				<button type="button" ng-click="saveNavigation(Navigation)" class="btn btn-success btn-sm" ng-class="navChanged > 0 ? 'greenPulse' : ''" ng-disabled="navChanged < 1">Save Items</button>
+			</div>
+		</div>
+	  <div class="tablecontainer">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th></th>
+					<th>ID</th>
+					<th>Name</th>
+					<th>ip</th>
+					<th>wan ip</th>
+					<th>mobile</th>
+					<th>wan mobile</th>
+					<th>persistent</th>
+					<th>autorefresh</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="n in Navigation">
+					<td><button type="button" ng-click="deleteNavigation(n.navid)" class="btn btn-danger custom-width">X</button></td>
+					<td><span ng-bind="n.navid"></span></td>
+					<td><input type="text" ng-model="n.navname" required='required'  ng-change="navChangedAdd()"/></td>
+					<td><input type="text" ng-model="n.navip" required='required'  ng-change="navChangedAdd()"/></td>
+					<td><input type="text" ng-model="n.navipw" ng-change="navChangedAdd()"/></td>
+					<td><input type="text" ng-model="n.mobile" ng-change="navChangedAdd()"/></td>
+					<td><input type="text" ng-model="n.mobilew" ng-change="navChangedAdd()"/></td>	
+					<td><select ng-model="n.persistent" ng-change="navChangedAdd()">
+						<option value="1" ng-selected="n.persistent==1">Yes</option>
+						<option value="0" ng-selected="n.persistent!=1">No</option>
+					</select></td>						
+					<td><select ng-model="n.autorefresh" ng-change="navChangedAdd()">
+						<option value="1" ng-selected="n.autorefresh==1">Yes</option>
+						<option value="0" ng-selected="n.autorefresh!=1">No</option>
+					</select></td>	
+				</tr>
+			</tbody>
+		</table>
+	  </div>
+	</div>
+
+
+
+</div>

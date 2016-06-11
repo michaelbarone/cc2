@@ -44,9 +44,30 @@ function GetRooms($configdb){
 	return $json;
 }
 
+function GetNavigation($configdb){
+	try {
+		$roomsArray = array();
+		foreach ($configdb->query("SELECT * FROM navigation") as $row) {
+			$navid = $row['navid'];
+			foreach($row as $item => $key) {
+				if(is_numeric($item)) { continue; }
+				$roomsArray[$navid][$item] = $key;
+			}
+		}
+		$result = $roomsArray;
+		} catch(PDOException $e) {
+		$log->LogFatal("User could not open DB: $e->getMessage().  from " . basename(__FILE__));
+	}
+	header('Content-Type: application/json');
+	$json=json_encode($result);
+	return $json;
+}
 
 if(isset($action)) {	
-	if($action === "getRooms") {
+	if($action === "getNavigation") {
+		$navigation=GetNavigation($configdb);
+		echo $navigation;
+	} elseif($action === "getRooms") {
 		$rooms=GetRooms($configdb);
 		echo $rooms;
 	} elseif($action === "getUsers") {
