@@ -35,10 +35,10 @@ if($lastcron < ($time - 30)) {
 //  check addon alive status for all enabled users' addons that have been checked recently
 try {
 	$addons=array();
-	$sql = "SELECT addons.*,details.globalDisable,details.controlWindow,info.* FROM rooms_addons as addons 
-			LEFT JOIN rooms_addons_details as details ON addons.addonid = details.addonid 
+	$sql = "SELECT addons.*,settings.globalDisable,settings.controlWindow,info.* FROM rooms_addons as addons 
+			LEFT JOIN rooms_addons_global_settings as settings ON addons.addonid = settings.addonid 
 			LEFT JOIN rooms_addons_info as info ON addons.rooms_addonsid = info.rooms_addonsid
-			WHERE addons.enabled ='1' AND details.globalDisable='0';";
+			WHERE addons.enabled ='1' AND settings.globalDisable='0';";
 	foreach ($configdb->query($sql) as $row) {
 		if(($row['lastCheck']+60) < $time && $row['lastCheck']!='') { continue; }
 		$rooms_addonsid=$row['rooms_addonsid'];
