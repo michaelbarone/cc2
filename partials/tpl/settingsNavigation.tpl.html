@@ -4,7 +4,6 @@
 	  <div class="panel-heading"><span class="lead">Navigation </span></div>
 		<div class="row">
 			<div class="right">
-				<button type="button" ng-click="addNavigation()" class="btn btn-primary btn-sm">Add Item</button>
 				<button type="button" ng-click="cancelChanges(currentTab)" class="btn btn-warning btn-sm" ng-disabled="navChanged < 1">Cancel Changes</button>
 				<button type="button" ng-click="saveNavigation(Navigation)" class="btn btn-success btn-sm" ng-class="navChanged > 0 ? 'greenPulse' : ''" ng-disabled="navChanged < 1">Save Items</button>
 			</div>
@@ -13,7 +12,7 @@
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th></th>
+					<th><button type="button" ng-click="addNavigation()" class="btn btn-primary btn-sm">Add Item</button></th>
 					<th>ID</th>
 					<th>Name</th>
 					<th>ip</th>
@@ -25,7 +24,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="n in Navigation">
+				<tr ng-repeat="n in Navigation" ng-if="n.navid!='groups'">
 					<td><button type="button" ng-click="deleteNavigation(n.navid)" class="btn btn-danger custom-width">X</button></td>
 					<td><span ng-bind="n.navid"></span></td>
 					<td><input type="text" ng-model="n.navname" required='required'  ng-change="navChangedAdd()"/></td>
@@ -45,6 +44,32 @@
 			</tbody>
 		</table>
 	  </div>
+	  
+	  <br><br><br>
+	   <div class="panel-heading"><span class="lead">Navigation Groups </span></div>
+	  <div class="tablecontainer">
+		  <table class="table table-hover">
+			  <thead>
+				  <tr>
+					  <th><button type="button" ng-click="addNavigationGroup()" class="btn btn-primary btn-sm">Add Item</button></th>
+					  <th>ID</th>
+					  <th>Name</th>
+					  <th>Items</th>
+				  </tr>
+			  </thead>
+			  <tbody>
+				  <tr ng-repeat="g in Navigation['groups']" ng-if="g!='groups'">
+					  <td><button type="button" ng-click="deleteNavigationGroup(g.navgroupid)" class="btn btn-danger custom-width">X</button></td>
+					  <td><span ng-bind="g.navgroupid"></span></td>
+					  <td><input type="text" ng-model="g.navgroupname" required='required' ng-change="navChangedAdd()"/></td>
+					<td><input type="text" ng-model="g.navitems" required='required' ng-change="navChangedAdd()"/></td>
+				  </tr>
+			  </tbody>
+		  </table>
+	  </div> 
+	   
+	  
+	  
 	</div>
 
 

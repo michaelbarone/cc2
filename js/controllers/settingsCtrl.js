@@ -101,11 +101,26 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 		var lastroomid = 0;
 		var room = 0;
 		for(room in $scope.Rooms) {
-			lastroomid = room;
+			if(!isNaN(parseFloat(room)) && isFinite(room)){
+				lastroomid = room;
+			}
 		}
 		var nextroomid = parseInt(lastroomid) + 1;
 		$scope.Rooms[nextroomid]={'roomId': nextroomid.toString()};
 		$scope.roomsChanged++;
+	}
+
+	$scope.addRoomGroup = function(){
+		var lastroomid = 0;
+		var room = 0;
+		for(room in $scope.Rooms['groups']) {
+			if(!isNaN(parseFloat(room)) && isFinite(room)){
+				lastroomid = room;
+			}
+		}
+		var nextroomid = parseInt(lastroomid) + 1;
+		$scope.Rooms['groups'][nextroomid]={'roomGroupId': nextroomid.toString()};
+		$scope.navChanged++;
 	}
 
 	$scope.saveRooms = function(){
@@ -123,6 +138,10 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 		$scope.roomsChanged++;
 	}
 
+	$scope.deleteRoomGroup = function(index){
+		delete $scope.Rooms['groups'][index];
+		$scope.roomsChanged++;
+	}
 	
 	$scope.roomsChangedAdd = function(){
 		$scope.roomsChanged++;
@@ -169,13 +188,28 @@ need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addo
 		var lastnavid = 0;
 		var nav = 0;
 		for(nav in $scope.Navigation) {
-			lastnavid = nav;
+			if(!isNaN(parseFloat(nav)) && isFinite(nav)){
+				lastnavid = nav;
+			}
 		}
 		var nextnavid = parseInt(lastnavid) + 1;
 		$scope.Navigation[nextnavid]={'navid': nextnavid.toString()};
 		$scope.navChanged++;
 	}
 
+	$scope.addNavigationGroup = function(){
+		var lastnavid = 0;
+		var nav = 0;
+		for(nav in $scope.Navigation['groups']) {
+			if(!isNaN(parseFloat(nav)) && isFinite(nav)){
+				lastnavid = nav;
+			}
+		}
+		var nextnavid = parseInt(lastnavid) + 1;
+		$scope.Navigation['groups'][nextnavid]={'navgroupid': nextnavid.toString()};
+		$scope.navChanged++;
+	}	
+	
 	$scope.saveNavigation = function(){
 		// get room and addon info ready for saving
 		/*
@@ -191,7 +225,11 @@ need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addo
 		$scope.navChanged++;
 	}
 
-	
+	$scope.deleteNavigationGroup = function(index){
+		delete $scope.Navigation['groups'][index];
+		$scope.navChanged++;
+	}
+
 	$scope.navChangedAdd = function(){
 		$scope.navChanged++;
 	}	

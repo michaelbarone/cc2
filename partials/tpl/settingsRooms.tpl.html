@@ -18,7 +18,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="r in Rooms">
+				<tr ng-repeat="r in Rooms"  ng-if="r.roomId!='groups'">
 					<td><button type="button" ng-click="deleteRoom(r.roomId)" class="btn btn-danger custom-width">X</button></td>
 					<td><span ng-bind="r.roomId"></span></td>
 					<td><input type="text" ng-model="r.roomName" required='required'  ng-change="roomsChangedAdd()"/></td>
@@ -26,7 +26,32 @@
 			</tbody>
 		</table>
 	  </div>
-	</div>
+
+		<br><br><br>
+	  <div class="tablecontainer">
+		  <table class="table table-hover">
+			  <thead>
+				  <tr>
+					  <th><button type="button" ng-click="addRoomGroup()" class="btn btn-primary btn-sm">Add Group</button></th>
+					  <th>ID</th>
+					  <th>Group Name</th>
+					  <th>Room Access</th>
+				  </tr>
+			  </thead>
+			  <tbody>
+				  <tr ng-repeat="r in Rooms['groups']" ng-if="r!='groups'">
+					  <td><button type="button" ng-click="deleteRoomGroup(r.roomGroupId)" class="btn btn-danger custom-width">X</button></td>
+					  <td><span ng-bind="r.roomGroupId"></span></td>
+					  <td><input type="text" ng-model="r.roomGroupName" required='required'  ng-change="roomsChangedAdd()"/></td>
+					  <td><input type="text" ng-model="r.roomAccess" required='required'  ng-change="roomsChangedAdd()"/></td>
+				  </tr>
+			  </tbody>
+		  </table>
+	  </div>
+
+
+
+  </div>
 
 	<!--
 	

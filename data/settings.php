@@ -35,6 +35,14 @@ function GetRooms($configdb){
 				$roomsArray[$roomid][$item] = $key;
 			}
 		}
+		foreach ($configdb->query("SELECT * FROM roomgroups") as $row) {
+			$roomGroupId = $row['roomGroupId'];
+			$roomsArray["groups"]["roomId"]="groups";
+			foreach($row as $item => $key) {
+				if(is_numeric($item)) { continue; }
+				$roomsArray["groups"][$roomGroupId][$item] = $key;
+			}
+		}		
 		$result = $roomsArray;
 		} catch(PDOException $e) {
 		$log->LogFatal("User could not open DB: $e->getMessage().  from " . basename(__FILE__));
@@ -54,6 +62,14 @@ function GetNavigation($configdb){
 				$roomsArray[$navid][$item] = $key;
 			}
 		}
+		foreach ($configdb->query("SELECT * FROM navigationgroups") as $row) {
+			$navgroupid = $row['navgroupid'];
+			$roomsArray["groups"]["navid"]="groups";
+			foreach($row as $item => $key) {
+				if(is_numeric($item)) { continue; }
+				$roomsArray["groups"][$navgroupid][$item] = $key;
+			}
+		}		
 		$result = $roomsArray;
 		} catch(PDOException $e) {
 		$log->LogFatal("User could not open DB: $e->getMessage().  from " . basename(__FILE__));
