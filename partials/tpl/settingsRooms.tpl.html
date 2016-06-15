@@ -8,8 +8,9 @@
 				<button type="button" ng-click="saveRooms()" class="btn btn-success btn-sm" ng-class="roomsChanged > 0 ? 'greenPulse' : ''" ng-disabled="roomsChanged < 1">Save Rooms</button>
 			</div>
 		</div>
+		<br class="clear" />
 	  <div class="tablecontainer">
-		<table class="table table-hover">
+		<table class="table table-hover left addonWidget">
 			<thead>
 				<tr>
 					<th><button type="button" ng-click="addRoom()" class="btn btn-primary btn-sm">Add Room</button></th>
@@ -25,28 +26,24 @@
 				</tr>
 			</tbody>
 		</table>
-	  </div>
-
-		<br><br><br>
-	  <div class="tablecontainer">
-		  <table class="table table-hover">
-			  <thead>
-				  <tr>
-					  <th><button type="button" ng-click="addRoomGroup()" class="btn btn-primary btn-sm">Add Group</button></th>
-					  <th>ID</th>
-					  <th>Group Name</th>
-					  <th>Room Access</th>
-				  </tr>
-			  </thead>
-			  <tbody>
-				  <tr ng-repeat="r in Rooms['groups']" ng-if="r!='groups'">
-					  <td><button type="button" ng-click="deleteRoomGroup(r.roomGroupId)" class="btn btn-danger custom-width">X</button></td>
-					  <td><span ng-bind="r.roomGroupId"></span></td>
-					  <td><input type="text" ng-model="r.roomGroupName" required='required'  ng-change="roomsChangedAdd()"/></td>
-					  <td><input type="text" ng-model="r.roomAccess" required='required'  ng-change="roomsChangedAdd()"/></td>
-				  </tr>
-			  </tbody>
-		  </table>
+		<table class="table table-hover left addonWidget">
+		  <thead>
+			  <tr>
+				  <th><button type="button" ng-click="addRoomGroup()" class="btn btn-primary btn-sm">Add Group</button></th>
+				  <th>ID</th>
+				  <th>Group Name</th>
+				  <th>Room Access</th>
+			  </tr>
+		  </thead>
+		  <tbody>
+			  <tr ng-repeat="r in Rooms['groups']" ng-if="r!='groups'">
+				  <td><button type="button" ng-click="deleteRoomGroup(r.roomGroupId)" class="btn btn-danger custom-width">X</button></td>
+				  <td><span ng-bind="r.roomGroupId"></span></td>
+				  <td><input type="text" ng-model="r.roomGroupName" required='required'  ng-change="roomsChangedAdd()"/></td>
+				  <td><input type="text" ng-model="r.roomAccess" required='required'  ng-change="roomsChangedAdd()"/></td>
+			  </tr>
+		  </tbody>
+		</table>
 	  </div>
 
 

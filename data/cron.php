@@ -103,7 +103,17 @@ try {
 						$fanart = $nowPlayingInfo['fanart'];
 					}
 					$type = $nowPlayingInfo['type'];
-					$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart) VALUES ('$rooms_addonsid','$title','$type','$thumbnail','$fanart')");
+					$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart) VALUES (:rooms_addonsid,:title,:type,:thumbnail,:fanart)");
+					try {
+						$statement->execute(array(':rooms_addonsid'=>$rooms_addonsid,
+						':title'=>$title,
+						':type'=>$type,
+						':thumbnail'=>$thumbnail,
+						':fanart'=>$fanart
+						));
+					} catch(PDOException $e) {
+						return "Statement failed: " . $e->getMessage();
+					}
 				} elseif($row['info']!='') {
 					$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart) VALUES ('$rooms_addonsid','','','','')");
 				}
