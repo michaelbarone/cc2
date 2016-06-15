@@ -106,11 +106,13 @@
 									<button class="btn btn-danger right" ng-click="powerOffAddon(addon.rooms_addonsid)">Off</button>
 									<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnAddon(addon.rooms_addonsid)">On</button>
 								</div>
-								<p ng-if="addon.addonTitle !='' || addon.addonTitle !=null">{{addon.addonTitle}}</p>
-								<br class="clear"><br>
-								<img ng-if="addon.device_alive==='0'" ng-click="powerOnAddon(addon.rooms_addonsid)" class="status pointer" src="img/led-red.png"/>
-								<img ng-if="addon.device_alive==='1'" class="status" src="img/led-green.png"/>						
-								{{addon.addontype}}: {{addon.addon}}
+								<img ng-if="addon.device_alive==='0'" ng-click="powerOnAddon(addon.rooms_addonsid)" class="status pointer left" src="img/led-red.png"/>
+								<img ng-if="addon.device_alive==='1'" class="status left" src="img/led-green.png"/>								
+								<p ng-if="addon.addonTitle !='' || addon.addonTitle !=null" class="left">{{addon.addonTitle}}</p>
+								<p ng-if="addon.addonTitle =='' || addon.addonTitle ==null" class="left">{{addon.addon}}</p>
+								<!--<br class="clear"><br>
+									-->				
+								<p class="clear">{{addon.addontype}}</p>
 							</div>
 							<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
 							<a ng-if="addon.info">{{addon.info}}</a>
