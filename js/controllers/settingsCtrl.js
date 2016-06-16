@@ -1,6 +1,6 @@
 'use strict';
 
-app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Idle','$route', function ($scope, $timeout, $http, inform, Idle, $route){
+app.settingsController('settingsCtrl', ['$scope','$timeout','loginService','$http','inform','Idle','$route', function ($scope, $timeout, loginService, $http, inform, Idle, $route){
 	$scope.userdata = [];
 	$scope.Users = [];
 	$scope.Rooms = [];
@@ -25,9 +25,21 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 	$scope.currentTab = './partials/tpl/settingsUsers.tpl.html';
 	
     $scope.onClickTab = function (tab) {
+		$scope.CheckLogged();
         $scope.currentTab = tab.url;
     }
     
+	$scope.CheckLogged = function() {
+		var connected=loginService.islogged();
+		connected.then(function(msg){
+			if(msg.data==="failedAuth" || !msg.data) {
+				$location.path('/login');
+			} else {
+				return msg.data;
+			}
+		});		
+	}
+	
     $scope.isActiveTab = function(tabUrl) {
         return tabUrl == $scope.currentTab;
     }
@@ -57,6 +69,7 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 	}
 	 
 	$scope.saveUsers = function(users){
+		$scope.CheckLogged();
 		$http.get('data/settings.php?action=saveUsers&users='+JSON.stringify(users))
 			.success(function(data) {
 				$scope.usersChanged=0;
@@ -124,6 +137,7 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$http','inform','Id
 	}
 
 	$scope.saveRooms = function(){
+		$scope.CheckLogged();
 		// get room and addon info ready for saving
 		/*
 		$http.get('data/settings.php?action=saveRooms&data='+JSON.stringify(data))
@@ -211,6 +225,7 @@ need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addo
 	}	
 	
 	$scope.saveNavigation = function(){
+		$scope.CheckLogged();
 		// get room and addon info ready for saving
 		/*
 		$http.get('data/settings.php?action=saveRooms&data='+JSON.stringify(data))
