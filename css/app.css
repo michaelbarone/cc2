@@ -483,8 +483,12 @@ img.infoType { height:30px; }
 	margin:0 auto;
 }
 
+.tablecontainer {
+	margin: 0 auto;
+}
+
 .panel .table {
-	margin:0 auto;
+	margin-left:15px;
 }
 
 
