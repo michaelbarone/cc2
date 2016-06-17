@@ -31,8 +31,38 @@ if($lastcron < ($time - 30)) {
 }
 //////   Cron items
 
+function curl_post_async($url, $params)
+{
+	foreach ($params as $key => &$val) {
+		if (is_array($val)) $val = implode(‘,’, $val);
+		$post_params[] = $key . "=" . urlencode($val);
+	}
+	$post_string = implode("&", $post_params);
+	
+	$parts=parse_url($url);
+	
+	$fp = fsockopen($parts['host'],
+	isset($parts['port'])?$parts['port']:80,
+	$errno, $errstr, 30);
+	
+	//pete_assert(($fp!=0), "Couldn’t open a socket to ".$url." (".$errstr.")");
+	
+	$out = "POST ".$parts['path']." HTTP/1.1\r\n";
+	$out.= "Host: ".$parts['host']."\r\n";
+	$out.= "Content-Type: application/x-www-form-urlencoded\r\n";
+	$out.= "Content-Length: ".strlen($post_string)."\r\n";
+	$out.= "Connection: Close\r\n\r\n";
+	if (isset($post_string)) $out.= $post_string;
+	
+	fwrite($fp, $out);
+	fclose($fp);
+}
+
+
 
 //  check addon alive status for all enabled users' addons that have been checked recently
+$URL = "http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
+$URL = $URL."/cron-addon.php";
 try {
 	$addons=array();
 	$sql = "SELECT addons.*,settings.globalDisable,settings.controlWindow,info.* FROM rooms_addons as addons 
@@ -41,84 +71,7 @@ try {
 			WHERE addons.enabled ='1' AND settings.globalDisable='0';";
 	foreach ($configdb->query($sql) as $row) {
 		if(($row['lastCheck']+60) < $time && $row['lastCheck']!='') { continue; }
-		$rooms_addonsid=$row['rooms_addonsid'];
-		$addonid=$row['addonid'];
-		$addonparts = explode(".",$row['addonid']);
-		$addonName=$addonparts[1];
-		$addonType=$addonparts[0];
-		$ip=$row['ip'];
-		$mac=$row['mac'];
-		$statusorig=$row['device_alive'];
-		if(file_exists("../addons/$addonid/$addonid.php") && $ip !='') {
-			if(!isset(${$addonName})) {
-				include "../addons/$addonid/$addonid.php";
-				${$addonName} = new $addonName();
-			}
-			$vars = array();
-			$vars['ip']=$ip;
-			$vars['mac']=$mac;		
-			${$addonName}->SetVariables($vars);
-			$devicealive='';
-			if($statusorig==1) {
-				$devicealive=${$addonName}->PingApp($ip);
-			} 
-			if($statusorig==0 || $devicealive!='alive') {
-				$devicealive=${$addonName}->Ping($ip);
-			}
-			if ($devicealive == "alive") {
-				if($statusorig==0) {
-					$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 1 WHERE rooms_addonsid = '$rooms_addonsid';");
-				}
-			} else {
-				if($statusorig==1) {
-					$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 0 WHERE rooms_addonsid = '$rooms_addonsid';");
-				}
-				continue;
-			}
-			
-			
-			
-			
-			if($addonType=='mediaplayer'){
-				// need to standardize nowplayinginfo response in class files
-				$nowPlayingInfo = ${$addonName}->GetPlayingItemInfo();
-				//print_r($nowPlayingInfo);
-				if(isset($nowPlayingInfo['title']) && $nowPlayingInfo['title']!='') {
-					$title = $nowPlayingInfo['title'];
-					if(isset($nowPlayingInfo['showtitle']) && $nowPlayingInfo['showtitle']!='') {
-						$episode = "";
-						if(isset($nowPlayingInfo['season']) && $nowPlayingInfo['season']!='' && isset($nowPlayingInfo['episode']) && $nowPlayingInfo['episode']!='') {
-							$episode = " " . $nowPlayingInfo['season'] . "x" . $nowPlayingInfo['episode'];
-						}
-						$title = $nowPlayingInfo['showtitle'] . $episode . " - " . $nowPlayingInfo['title'];
-					} elseif(isset($nowPlayingInfo['year']) && $nowPlayingInfo['year']!='') {
-						$title = $nowPlayingInfo['title'] . " (" . $nowPlayingInfo['year'] . ")";
-					}
-					$thumbnail="";
-					$fanart="";
-					if(isset($nowPlayingInfo['thumbnail']) && $nowPlayingInfo['thumbnail']!='') {
-						$thumbnail = $nowPlayingInfo['thumbnail'];
-					}
-					if(isset($nowPlayingInfo['fanart']) && $nowPlayingInfo['fanart']!='') {
-						$fanart = $nowPlayingInfo['fanart'];
-					}
-					$type = $nowPlayingInfo['type'];
-					$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart) VALUES (:rooms_addonsid,:title,:type,:thumbnail,:fanart)");
-					try {
-						$statement->execute(array(':rooms_addonsid'=>$rooms_addonsid,
-						':title'=>$title,
-						':type'=>$type,
-						':thumbnail'=>$thumbnail,
-						':fanart'=>$fanart
-						));
-					} catch(PDOException $e) {
-						return "Statement failed: " . $e->getMessage();
-					}
-				} elseif($row['info']!='') {
-					$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart) VALUES ('$rooms_addonsid','','','','')");
-				}
-			}
-		}
+		curl_post_async($URL, $row);
 	}
 } catch(PDOException $e)
 	{
