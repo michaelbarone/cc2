@@ -234,7 +234,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 						$timeout(function() {
 							cronRunning = 0;
 							$scope.runCron();
-						}, 5000)
+						}, 4000)
 					} else {
 						$timeout(function() {
 							cronRunning = 0;

@@ -1,5 +1,5 @@
 <?php
-if(!isset($_POST){ exit; }
+//if(!isset($_POST['rooms_addonsid']){ exit; }
 require_once "startsession.php";
 $rooms_addonsid=$_POST['rooms_addonsid'];
 $addonid=$_POST['addonid'];
@@ -16,7 +16,7 @@ if(file_exists("../addons/$addonid/$addonid.php") && $ip !='') {
 	}
 	$vars = array();
 	$vars['ip']=$ip;
-	$vars['mac']=$mac;		
+	$vars['mac']=$mac;
 	${$addonName}->SetVariables($vars);
 	$devicealive='';
 	if($statusorig==1) {
@@ -33,12 +33,8 @@ if(file_exists("../addons/$addonid/$addonid.php") && $ip !='') {
 		if($statusorig==1) {
 			$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 0 WHERE rooms_addonsid = '$rooms_addonsid';");
 		}
-		continue;
 	}
-	
-	
-	
-	
+
 	if($addonType=='mediaplayer'){
 		// need to standardize nowplayinginfo response in class files
 		$nowPlayingInfo = ${$addonName}->GetPlayingItemInfo();
@@ -71,10 +67,11 @@ if(file_exists("../addons/$addonid/$addonid.php") && $ip !='') {
 				':thumbnail'=>$thumbnail,
 				':fanart'=>$fanart
 				));
-				} catch(PDOException $e) {
+			} catch(PDOException $e) {
+				$log->LogError("$e->getMessage()" . basename(__FILE__));
 				return "Statement failed: " . $e->getMessage();
 			}
-		} elseif($row['info']!='') {
+		} elseif($_POST['info']!='') {
 			$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart) VALUES ('$rooms_addonsid','','','','')");
 		}
 	}
