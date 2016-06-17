@@ -1,6 +1,6 @@
 'use strict';
 
-app.settingsController('settingsCtrl', ['$scope','$timeout','loginService','$http','inform','Idle','$route', function ($scope, $timeout, loginService, $http, inform, Idle, $route){
+app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginService','$http','inform','Idle','$route', function ($scope, $timeout, $location, loginService, $http, inform, Idle, $route){
 	$scope.userdata = [];
 	$scope.Users = [];
 	$scope.Rooms = [];
@@ -64,6 +64,10 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','loginService','$htt
 	$scope.getAllUsers = function() {
 		$http.get('data/settings.php?action=getUsers')
 			.success(function(data) {
+				if(data[$scope.userdata.userid]['settingsAccess']==='0'){
+					$location.path('/dashboard');
+					return;
+				}
 				$scope.Users = data;
 			});
 	}
