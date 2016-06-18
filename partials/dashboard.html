@@ -56,7 +56,7 @@
 						</td>
 
 						<td ng-if="addon.info" ng-repeat="addon in room_addons[0][room].slice().reverse()">
-							<a ng-if="addon.info">{{addon.info}}</a><img ng-if="addon.infoType" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
+							<a ng-click="showModal(addon)" ng-if="addon.info">{{addon.info}}</a><img ng-if="addon.infoType" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
 						</td>
 					</tr>
 				</table>
@@ -115,7 +115,7 @@
 								<p class="clear">{{addon.addontype}}</p>
 							</div>
 							<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
-							<a ng-if="addon.info">{{addon.info}}</a>
+							<a ng-click="showModal(addon)" ng-if="addon.info">{{addon.info}}</a>
 							<img class="fanart" ng-src="{{addon.fanart}}" ng-if="addon.fanart!=''" />
 							</div>
 						</span>

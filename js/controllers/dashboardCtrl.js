@@ -1,6 +1,6 @@
 'use strict';
 
-app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform','Idle','$location', function ($scope, $timeout, loginService, $http, inform, Idle, $location){
+app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform','Idle','$location',"ModalService", function ($scope, $timeout, loginService, $http, inform, Idle, $location, ModalService){
 	var unix = Math.round(+new Date()/1000);
 	$scope.links = [];
 	$scope.rooms = [];
@@ -160,6 +160,28 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	
 	
 /**
+ *  Modal service
+ *
+ */
+
+	$scope.showModal = function(data) {
+		ModalService.showModal({
+			templateUrl: "./partials/tpl/modalAddonInfo.html"
+			, controller: "ModalController"
+			,inputs: {
+				data: data,
+				
+		    }
+		}).then(function(modal) {
+			$scope.modalOpen=1;
+		});
+	};
+
+
+
+
+
+/**
  *  Logout service
  *  update and cron loops
  */ 	
@@ -179,7 +201,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 				$scope.updateAddons();
 			}, 5000)
 		} else {
-			$http.get('data/getRoomAddonInfo.php')
+			$http.get('data/getRoomAddonsData.php')
 				.success(function(data) {
 					if(data == "failed") {
 						return;
@@ -199,7 +221,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 					$timeout(function() {
 						updateAddonsRunning = 0;
 						$scope.updateAddons();
-					}, 5000)		
+					}, 5000)
 				});
 		}
 	};
@@ -234,7 +256,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 						$timeout(function() {
 							cronRunning = 0;
 							$scope.runCron();
-						}, 4000)
+						}, 2500)
 					} else {
 						$timeout(function() {
 							cronRunning = 0;
@@ -243,11 +265,12 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 					}
 				});
 		}
-	};		
+	};
 	$timeout(function() {
 		cronRunning = 0;
 		$scope.runCron();
 	}, 1500);
+
 
 /***/
 

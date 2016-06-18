@@ -1,0 +1,31 @@
+ <div class="modal fade in">
+  <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title">Yes or No?</h4>
+	  </div>
+	  <div class="modal-body">
+		<div ng-if="modalContent[0]['addonType']=='mediaplayer'">
+			<img style="margin: 0;
+			position: absolute;
+			opacity: 0.25;
+			left: 0px;
+			width: 100%;" ng-src="{{modalContent[0]['fanart']}}"></img>
+			<img class="left" ng-src="{{modalContent[0]['thumbnail']}}"></img>
+			<div class="left">
+				{{modalContent}}
+				<p ng-if="modalContent[0]['title']">Title: {{modalContent[0]['title']}}</p>
+				<p ng-if="modalContent[0]['runtime']">Runtime: {{modalContent[0]['runtime']}}</p>
+				<p ng-if="modalContent[0]['runtime']">Runtime: {{modalContent[0]['runtime']}}</p>
+			
+			</div>
+		
+		</div>
+	   
+	   
+	  </div>
+	</div>
+  </div>
+  <div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
+  </div>

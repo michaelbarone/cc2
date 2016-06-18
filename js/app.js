@@ -1,6 +1,6 @@
 'use strict';
 
-var app= angular.module('ControlCenter', ['ngRoute','ngResource','ngIdle','ngScrollTo','inform','ngAnimate','NgModel']);
+var app= angular.module('ControlCenter', ['ngRoute','ngResource','ngIdle','ngScrollTo','inform','ngAnimate','NgModel','angularModalService']);
 app.config(['$routeProvider','$controllerProvider','informProvider','KeepaliveProvider', 'IdleProvider', function($routeProvider,$controllerProvider,informProvider,KeepaliveProvider, IdleProvider) {
 	// routes
 	app.settingsController = $controllerProvider.register;
@@ -132,6 +132,24 @@ app.directive('onLongPress', function($timeout) {
 		}
 	};
 })
+
+app.controller('ModalController', function($scope, close, data, $http) {
+	//$scope.modaldata=data;
+	$scope.modalContent=[];
+	$http.get('data/getRoomAddonDataExtended.php?data='+JSON.stringify(data))
+	.success(function(data) {
+		$scope.modalContent = data;
+	});
+	
+	
+	$scope.modalOpen=1;
+  	$scope.closeModal = function() {
+		if($scope.modalOpen) {
+			$scope.modalOpen=0;
+			close("Closed",250);
+		}
+	};
+});
 
 /*
 app.directive('resize', function ($window) {
