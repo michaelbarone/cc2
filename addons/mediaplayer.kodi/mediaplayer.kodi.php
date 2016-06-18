@@ -90,7 +90,7 @@ class kodi {
 		$nowplayingarray = Array();
 		if($activeplayerid=="0") {
 			$filetype='';
-			$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetItem\", \"params\": { \"properties\": [\"album\",\"artist\",\"director\",\"writer\",\"tagline\",\"episode\",\"file\",\"title\",\"showtitle\",\"season\",\"genre\",\"year\",\"rating\",\"runtime\",\"firstaired\",\"plot\",\"fanart\",\"thumbnail\",\"tvshowid\"], \"playerid\": 0 }, \"id\": \"1\"");
+			$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetItem\", \"params\": { \"properties\": [\"art\",\"album\",\"artist\",\"director\",\"writer\",\"tagline\",\"episode\",\"file\",\"title\",\"showtitle\",\"season\",\"genre\",\"year\",\"rating\",\"runtime\",\"firstaired\",\"plot\",\"fanart\",\"thumbnail\",\"tvshowid\"], \"playerid\": 0 }, \"id\": \"1\"");
 			$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
 			$output = $this->Curl($jsoncontents);
 			$jsonnowplaying = json_decode($output,true);
@@ -106,7 +106,7 @@ class kodi {
 
 			return $jsonnowplaying;
 		} elseif($activeplayerid=="1") {
-			$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetItem\", \"params\": { \"properties\": [\"director\",\"writer\",\"tagline\",\"episode\",\"file\",\"title\",\"showtitle\",\"season\",\"genre\",\"year\",\"rating\",\"runtime\",\"firstaired\",\"plot\",\"fanart\",\"thumbnail\",\"tvshowid\"], \"playerid\": 1 }, \"id\": \"1\"");
+			$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetItem\", \"params\": { \"properties\": [\"art\",\"director\",\"writer\",\"tagline\",\"episode\",\"file\",\"title\",\"showtitle\",\"season\",\"genre\",\"year\",\"rating\",\"runtime\",\"firstaired\",\"plot\",\"fanart\",\"thumbnail\",\"tvshowid\"], \"playerid\": 1 }, \"id\": \"1\"");
 			$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
 			$output = $this->Curl($jsoncontents);
 			$jsonnowplaying = json_decode($output,true);
@@ -120,8 +120,16 @@ class kodi {
 					//$nowplayingarray[$item] = "<img src='$this->IP/image/".urlencode($value)."'/>";
 				} elseif(is_array($value)) {
 					if(empty($value)) { continue; }
+					foreach($value as $key => $item){    
+						$array = array("image://");
+						$item = rtrim(urldecode(str_ireplace($array, '', $item)), '/');
+						$nowplayingarray[$key] = $item;	
+					}
+					
+					/*
 					$nowplayingarray[$item] = implode(",",$value);
-
+					*/
+					
 				} else {  // normal cases, everything else
 					$nowplayingarray[$item] = $value;
 				}

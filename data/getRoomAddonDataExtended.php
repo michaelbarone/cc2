@@ -45,17 +45,9 @@
 				if(isset($nowPlayingInfo['season']) && $nowPlayingInfo['season']!='' && isset($nowPlayingInfo['episode']) && $nowPlayingInfo['episode']!='') {
 					$episode = " " . $nowPlayingInfo['season'] . "x" . $nowPlayingInfo['episode'];
 				}
-				$title = $nowPlayingInfo['showtitle'] . $episode . " - " . $nowPlayingInfo['title'];
+				$nowPlayingInfo['title'] = $nowPlayingInfo['showtitle'] . $episode . " - " . $nowPlayingInfo['title'];
 			} elseif(isset($nowPlayingInfo['year']) && $nowPlayingInfo['year']!='') {
-				$title = $nowPlayingInfo['title'] . " (" . $nowPlayingInfo['year'] . ")";
-			}
-			$thumbnail="";
-			$fanart="";
-			if(isset($nowPlayingInfo['thumbnail']) && $nowPlayingInfo['thumbnail']!='') {
-				$thumbnail = $nowPlayingInfo['thumbnail'];
-			}
-			if(isset($nowPlayingInfo['fanart']) && $nowPlayingInfo['fanart']!='') {
-				$fanart = $nowPlayingInfo['fanart'];
+				$nowPlayingInfo['title'] = $nowPlayingInfo['title'] . " (" . $nowPlayingInfo['year'] . ")";
 			}
 			$nowPlayingInfo['addonType']=$addonType;
 			header('Content-Type: application/json');
