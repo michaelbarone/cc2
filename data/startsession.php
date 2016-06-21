@@ -27,6 +27,7 @@ $log = new KLogger ( $PRIVATE_DATA."/logs/log-$date.log" , KLogger::INFO );
 
 try {
 	$configdb = new PDO('sqlite:' . $PRIVATE_DATA . '/db/config.db');
+	$configdb->exec("pragma synchronous = off;");
 } catch (PDOException $e) {
 	$log->LogFatal("Fatal: User could not open DB: $e->getMessage().  from " . basename(__FILE__));
 }
