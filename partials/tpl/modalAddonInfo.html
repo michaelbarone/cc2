@@ -1,9 +1,11 @@
 <div class="modal fade in">
 	<div class="modal-dialog">
 		<div class="modal-content">
-		  <div class="modal-header">
-			<button type="button" class="close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3 class="modal-title">{{modalContent[0]['title']}}</h3>
+		  <div class="header">
+			<ul><li>
+				<button type="button" class="close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<a class="title main panel">{{modalContent[0]['title']}}</a>
+			</li></ul>
 		  </div>
 		  <div class="modal-body">
 			<div ng-if="modalContent[0]['addonType']=='mediaplayer'">

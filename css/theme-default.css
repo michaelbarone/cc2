@@ -17,23 +17,23 @@ a:visited { color:#eee; }
 	background: #222528 url("../img/background.png") repeat scroll 0% 0%;
 }
 
-#header {
+#header, .header {
 	background: #222528 url("../img/background.png") repeat scroll 0% 0%;
 	moz-box-shadow: inset 0 -10px 10px -10px #000000;
     -webkit-box-shadow: inset 0 -10px 10px -10px #000000;
     box-shadow: inset 0 -10px 10px -10px #000000;
 }
 
-#header a {
+#header a, .header a {
 	text-shadow: rgba(0,0,0,.5) 0px 1px 0px;
 }
 
-#header a:hover {
+#header a:hover, .header a:hover {
 	color: #0099ff;
 	text-shadow: rgba(255,255,255,.5) 0px 1px 10px;
 }
 
-#header .title:hover {  color:rgb(204,204,204) !important; }
+#header .title:hover, .header .title:hover {  color:rgb(204,204,204) !important; }
 
 #link-menu,#user-menu,#room-menu {
 	background: #222528 url("../img/background.png") repeat scroll 0% 0%;

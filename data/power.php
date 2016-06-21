@@ -32,12 +32,9 @@ if(isset($_GET)) {
 							${$addonName} = new $addonName();
 						}
 						$vars = array();
-						// foreach $row set variables
 						foreach($row as $item => $value){
 							$vars[$item]=$value;
 						}
-						//$vars['ip']=$ip;
-						//$vars['mac']=$mac;
 						${$addonName}->SetVariables($vars);
 
 						if($_GET['option']==='off') {
@@ -51,13 +48,10 @@ if(isset($_GET)) {
 					}
 				}
 			}			
-		
-		
 		}
 	} elseif(isset($_GET['type']) && $_GET['type']==="room") {
 		if(isset($_GET['room']) && $_GET['room']>0) {
 			$room=$_GET['room'];
-			$addons=array();
 			$sql = "SELECT addons.*,settings.globalDisable,settings.controlWindow FROM rooms_addons as addons 
 					LEFT JOIN rooms_addons_global_settings as settings ON addons.addonid = settings.addonid 
 					WHERE addons.enabled ='1' AND settings.globalDisable='0' AND addons.roomid='$room';";
@@ -66,25 +60,25 @@ if(isset($_GET)) {
 					$addonparts = explode(".",$row['addonid']);
 					$addontype=$addonparts[0];
 					$addonName=$addonparts[1];	
-					$addonid=$row['addonid'];				
+					$addonid=$row['addonid'];
 					$ip=$row['ip'];
-					$mac=$row['mac'];
-					if(file_exists("../addons/$addonid/$addonid.php") && $ip !='') {
+					$mac=$row['mac'];					
+					if(file_exists("../addons/$addonid/$addonid.php") && $ip != '') {
 						if(!isset(${$addonName})) {
 							include "../addons/$addonid/$addonid.php";
 							${$addonName} = new $addonName();
 						}
 						$vars = array();
-						// foreach $row set variables
-						$vars['ip']=$ip;
-						$vars['mac']=$mac;
+						foreach($row as $item => $value){
+							$vars[$item]=$value;
+						}
 						${$addonName}->SetVariables($vars);
 
 						if($_GET['option']==='off') {
 							$poweroff = ${$addonName}->PowerOff();
 						} elseif($_GET['option']==='on') {
 							$poweron = ${$addonName}->PowerOn();
-							if($poweron==="wol" && $mac != ''){
+							if($poweron==="wol" && $vars['mac'] != ''){
 								include("wakeAddon.php");
 							}
 						}
@@ -95,7 +89,7 @@ if(isset($_GET)) {
 		} else {
 			$failed++;
 		}
-	} elseif(isset($_GET['type']) && $_GET['type']==="addon") {
+	} elseif(isset($_GET['type']) && $_GET['type']==="addon555") {
 	
 	
 	}
