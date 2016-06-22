@@ -116,7 +116,8 @@
 							</div>
 							<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
 							<a ng-click="showModal(addon)" ng-if="addon.info">{{addon.info}}</a>
-							<img class="fanart" ng-src="{{addon.thumbnail}}" ng-if="addon.thumbnail!=''" />
+							<img class="fanart" ng-src="{{addon.thumbnail}}" ng-if="addon.thumbnail!='' && addon.infoType!='movie'" />
+							<img class="fanart" ng-src="{{addon.fanart}}" ng-if="addon.fanart!='' && addon.infoType=='movie'" />
 							</div>
 						</span>
 					</div>

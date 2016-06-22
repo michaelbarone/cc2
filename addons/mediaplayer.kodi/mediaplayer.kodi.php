@@ -94,16 +94,6 @@ class kodi {
 			$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
 			$output = $this->Curl($jsoncontents);
 			$jsonnowplaying = json_decode($output,true);
-			if(isset($jsonnowplaying) && $jsonnowplaying['result']['item']['label']!='') {
-				$filetype=$jsonnowplaying['result']['item']['type'];
-				$theartist = $jsonnowplaying['result']['item']['artist'];
-				$thealbum = $jsonnowplaying['result']['item']['album'];
-				$thelabel = $jsonnowplaying['result']['item']['label'];
-				$thetitle = $jsonnowplaying['result']['item']['title'];
-				$theyear = $jsonnowplaying['result']['item']['year'];
-				$thesongid = $jsonnowplaying['result']['item']['id'];
-			}
-
 			return $jsonnowplaying;
 		} elseif($activeplayerid=="1") {
 			$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetItem\", \"params\": { \"properties\": [\"art\",\"director\",\"writer\",\"tagline\",\"episode\",\"file\",\"title\",\"showtitle\",\"season\",\"genre\",\"year\",\"rating\",\"runtime\",\"firstaired\",\"plot\",\"fanart\",\"thumbnail\",\"tvshowid\"], \"playerid\": 1 }, \"id\": \"1\"");
@@ -116,8 +106,14 @@ class kodi {
 				//  special cases
 				if($item == "fanart" || $item == "thumbnail") {
 					if($value == '') { continue; }
+					/*if($jsonnowplaying['result']['item']['type']=="movie") {
+						if($item=="thumbnail"){
+							$item="fanart";
+						}else {
+							$item="thumbnail";
+						}
+					}*/
 					$nowplayingarray[$item] = "$this->IP/image/".urlencode($value);
-					//$nowplayingarray[$item] = "<img src='$this->IP/image/".urlencode($value)."'/>";
 				} elseif(is_array($value)) {
 					if(empty($value)) { continue; }
 					foreach($value as $key => $item){    
@@ -147,11 +143,7 @@ class kodi {
 						break;
 					}
 				}
-			}
-			if($jsonnowplaying['result']['item']['type'] == "unknown") {
 				$movieneedles = array('(19','(20','[19','[20');				
-				$ext = pathinfo($jsonnowplaying['result']['item']['file'], PATHINFO_EXTENSION);
-				$file = basename($jsonnowplaying['result']['item']['file'], ".".$ext);
 				$needles = $movieneedles;
 				foreach($needles as $needle) {
 					if (strpos($file,$needle) !== false) {
