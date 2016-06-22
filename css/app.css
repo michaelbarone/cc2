@@ -425,6 +425,10 @@ img.infoType { height:30px; }
 	overflow: hidden;
 }
 
+#dashboardWrapper.settings {
+	overflow:auto;
+}
+
 #dashboardMask {
 	height: 100%;
 	width: 100%;

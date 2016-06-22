@@ -23,7 +23,7 @@
 				<ul class="sortable">
 					<li>
 					<a ng-repeat="tab in tabs" 
-						ng-class="{active:isActiveTab(tab.url)}" 
+						ng-class="{selected:isActiveTab(tab.url)}" 
 						class="main panel persistent" 
 						ng-click="onClickTab(tab)"><div>{{tab.title}}</div></a>
 					</li>
@@ -31,7 +31,7 @@
 			</nav>
 		</div>
 	</div>
-	<div id="dashboardWrapper">
+	<div id="dashboardWrapper" class="settings">
         <div id="mainView">
             <div ng-include="currentTab"></div>
         </div>
