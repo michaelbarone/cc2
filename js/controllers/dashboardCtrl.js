@@ -30,11 +30,12 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	$scope.userdata.settingsAccess=sessionStorage.getItem('settingsAccess');
 	if(sessionStorage.getItem('currentRoom')>0) {
 		$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
+		$scope.userdata.linkSelected="room"+$scope.userdata.currentRoom;
 	} else {
 		$scope.userdata.currentRoom=sessionStorage.getItem('homeRoom');
 		sessionStorage.setItem('currentRoom',sessionStorage.getItem('homeRoom'));
+		$scope.userdata.linkSelected="room"+$scope.userdata.currentRoom;
 	}
-	$scope.userdata.linkSelected="room"+$scope.userdata.currentRoom;
 
 /**
  *  Load Initial Data
@@ -63,7 +64,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		spinnerService.add();
 		updateAddonsRunning = 0;
 		$scope.updateAddons();
-		spinnerService.add();		
+		spinnerService.add();
 	}, 250);
 	
 	$timeout(function() {
@@ -79,8 +80,8 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	
 /**
  *  Top Menu
- */ 	
-
+ */
+ 
 	$scope.changeRoom = function(room) {
 		$scope.room_addons_current = $scope.room_addons;
 		var unix = Math.round(+new Date()/1000);
@@ -89,7 +90,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		sessionStorage.setItem('currentRoom',room);
 		sessionStorage.setItem('lastRoomChange',unix);
 		$scope.userdata.linkSelected="room"+room;
-		document.getElementById("room"+room).scrollIntoView();		
+		document.getElementById("room"+room).scrollIntoView();
 	};
 
  /* needed? */
@@ -189,6 +190,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
  */
 
 	$scope.showModal = function(data) {
+		spinnerService.add();
 		ModalService.showModal({
 			templateUrl: "./partials/tpl/modalAddonInfo.html"
 			, controller: "ModalController"
@@ -198,6 +200,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		    }
 		}).then(function(modal) {
 			$scope.modalOpen=1;
+			spinnerService.remove();
 		});
 	};
 
@@ -252,6 +255,9 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 						$scope.room_addons=data;
 					}
 					if(updateAddonsFirstRun===1){
+						if($scope.userdata.currentRoom<1) {
+							$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
+						}
 						var thisRoom = $scope.userdata.currentRoom;
 						$scope.changeRoom(thisRoom);
 						updateAddonsFirstRun=0;
