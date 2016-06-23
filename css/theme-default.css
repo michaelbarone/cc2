@@ -13,6 +13,17 @@ a:hover,#header table td:first-of-type:hover { color:#0099ff !important;cursor:p
 
 a:visited { color:#eee; }
 
+.spinner{
+	border-top-color: #1DD300;
+	##border-top-color: #0099ff;
+	border-bottom-color: #0099ff;
+	border-left-color: #FF9522;
+	##border-right-color: #FF9522;
+	## border-left-color: rgb(204,204,204);
+	 border-right-color: rgb(204,204,204);
+	box-shadow: 0 0 7px 5px #000000, inset 0 0 7px 5px #000000;
+}
+
 .windowContainer {
 	background: #222528 url("../img/background.png") repeat scroll 0% 0%;
 }
