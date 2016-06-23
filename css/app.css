@@ -173,6 +173,42 @@ img.infoType { height:30px; }
 }
 
 
+/* loading spinner */
+
+@keyframes rotate360 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@-webkit-keyframes rotate360 {
+  from { -webkit-transform: rotate(0deg); }
+  to { -webkit-transform: rotate(360deg); }
+}
+
+.spinner {
+  display:inline-block;
+  border-radius: 50px;
+  border-style: solid;
+  border-bottom-color: #3b5641;
+  border-top-color: #67b3a9;
+  border-left-color: #df7950;
+  border-right-color: #decb3f;
+  text-align: center;
+  vertical-align: middle;
+  animation: rotate360 1.5s linear infinite;
+  -webkit-animation: rotate360 1.5s linear infinite;
+
+	border-width: 8px;
+	width: 75px;
+	height: 75px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	box-shadow: 0 0 7px 5px #000000, inset 0 0 7px 5px #000000;
+}
+
+
+
 /*****************
 ***  Login Page
 *****************/

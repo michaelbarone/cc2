@@ -1,6 +1,6 @@
 'use strict';
 
-app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform','Idle','$location',"ModalService", function ($scope, $timeout, loginService, $http, inform, Idle, $location, ModalService){
+app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService', function ($scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService){
 	var unix = Math.round(+new Date()/1000);
 	$scope.links = [];
 	$scope.rooms = [];
@@ -39,15 +39,39 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 /**
  *  Load Initial Data
  */	
-    $http.get('data/getRooms.php')
-		.success(function(data) {
-			$scope.rooms = data;
-		});
+ 
+	$scope.loadRooms = function(){
+		$http.get('data/getRooms.php')
+			.success(function(data) {
+				$scope.rooms = data;
+				spinnerService.remove();
+			});
+	}
 
-    $http.get('data/getLinks.php?mobile='+$scope.userdata.mobile)
-		.success(function(data) {
-			$scope.links = data;
-		});
+	$scope.loadLinks = function(){
+		$http.get('data/getLinks.php?mobile='+$scope.userdata.mobile)
+			.success(function(data) {
+				$scope.links = data;
+				spinnerService.remove();
+			});
+	}
+
+	spinnerService.add();
+	$timeout(function() {
+		$scope.loadRooms();
+		$scope.loadLinks();
+		spinnerService.add();
+		updateAddonsRunning = 0;
+		$scope.updateAddons();
+		spinnerService.add();		
+	}, 250);
+	
+	$timeout(function() {
+		cronRunning = 0;
+		$scope.runCron();
+	}, 1500);	
+	
+	
 /***/
 	
 
@@ -65,7 +89,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		sessionStorage.setItem('currentRoom',room);
 		sessionStorage.setItem('lastRoomChange',unix);
 		$scope.userdata.linkSelected="room"+room;
-		document.getElementById("room"+room).scrollIntoView();
+		document.getElementById("room"+room).scrollIntoView();		
 	};
 
  /* needed? */
@@ -201,6 +225,20 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 				$scope.updateAddons();
 			}, 5000)
 		} else {
+			if($scope.links.constructor.toString().indexOf("Array") != -1){
+				// console.log("yes");
+			} else {
+				console.log("running loadLinks()");
+				$scope.loadLinks();
+			}
+			if($scope.rooms.constructor.toString().indexOf("Array") != -1){
+				// console.log("yes");
+			} else {
+				console.log("running loadLinks()");
+				$scope.loadRooms();
+			}
+			
+			
 			$http.get('data/getRoomAddonsData.php')
 				.success(function(data) {
 					if(data == "failed") {
@@ -217,6 +255,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 						var thisRoom = $scope.userdata.currentRoom;
 						$scope.changeRoom(thisRoom);
 						updateAddonsFirstRun=0;
+						spinnerService.remove();
 					}
 					$timeout(function() {
 						updateAddonsRunning = 0;
@@ -225,10 +264,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 				});
 		}
 	};
-	$timeout(function() {
-		updateAddonsRunning = 0;
-		$scope.updateAddons();
-	}, 500);
+
 
 	var cronKeeper = 0;
 	var cronRunning = 0;
@@ -266,10 +302,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 				});
 		}
 	};
-	$timeout(function() {
-		cronRunning = 0;
-		$scope.runCron();
-	}, 1500);
+
 
 
 /***/

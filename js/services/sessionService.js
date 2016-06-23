@@ -12,4 +12,4 @@ app.factory('sessionService', ['$http', function($http){
 			$http.post('data/session_destroy.php');
 		}
 	};
-}])
+}]);
