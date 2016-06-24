@@ -94,6 +94,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	};
 
  /* needed? */
+ /*
 	$scope.wakeAddon = function(mac) {
 		if(mac === '' || mac === null){
 		} else {
@@ -109,6 +110,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 			}
 		}
 	};
+*/
 /* needed? */
 
 	
@@ -131,31 +133,39 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	$scope.loadLinkLongPress = function(name,element) {
 		if (name.substring(0, 4) == "room") {
 			document.getElementById(name+'L').attributes['class'].value += ' longpress';
-		} else {		
-			if(document.getElementById(name+'L').classList.contains('loaded')) {
-				document.getElementById(name+'L').classList.remove('loaded');
-				document.getElementById(name).attributes['src'].value = '';
-				document.getElementById(name+'L').attributes['class'].value += ' longpress';
-			}
+		} else if(document.getElementById(name+'L').classList.contains('loaded')) {
+			console.log("longpress");
+			document.getElementById(name+'L').attributes['class'].value += ' longpress';
+			document.getElementById(name+'L').classList.remove('loaded');
+			document.getElementById(name).attributes['src'].value = '';
 		}
 	};
 	
 	$scope.loadLink = function(name,element) {
+		console.log("loadlink function");
 		if (name.substring(0, 4) == "room") {
 			if(document.getElementById(name+'L').classList.contains('longpress')) {
+				console.log("room change");
 				document.getElementById(name+'L').classList.remove('longpress');
 			} else {
+				console.log("room scroll into view");
 				document.getElementById(name).scrollIntoView();
-			}		
-		} else {	
+				$scope.userdata.linkSelected=name;
+			}
+		} else {
 			if(document.getElementById(name+'L').classList.contains('longpress')) {
+				console.log("remove longpress");
 				document.getElementById(name+'L').classList.remove('longpress');
-			}else if(document.getElementById(name+'L').classList.contains('selected')) {
+				return;
+			} else if(document.getElementById(name+'L').classList.contains('selected')) {
+				console.log("else no longpress but selected");
 				document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
 				if(!document.getElementById(name+'L').classList.contains('loaded')) {
 					document.getElementById(name+'L').attributes['class'].value += ' loaded';
+					$scope.userdata.linkSelected=name;
 				}
 			} else {
+				console.log("else no longpress but not selected");
 				if(document.getElementById(name+'L').classList.contains('loaded')) {
 					document.getElementById(name).scrollIntoView();
 				} else {
@@ -163,6 +173,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 					document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
 					document.getElementById(name).scrollIntoView();
 				}
+				$scope.userdata.linkSelected=name;
 			}
 		}
 	};

@@ -19,10 +19,10 @@
 				<!-- addon buttons -->
 				<li ng-repeat="addon in room_addons_current[0][userdata.currentRoom]" ng-if="$index > 0 && addon.controlWindow == '1'">
 					<a id="{{addon.addon + $index + 'L'}}" 
-						scroll-to="{{addon.addon + $index}}" 
+						scrolsl-to-disable="{{addon.addon + $index}}" 
 						class="main link persistent" 
 						on-long-press="loadLinkLongPress(addon.addon + $index);" 
-						ng-click="loadLink(addon.addon + $index);userdata.linkSelected=addon.addon + $index;" 
+						ng-click="loadLink(addon.addon + $index);" 
 						ng-class="{'selected': userdata.linkSelected==addon.addon + $index}"
 						>
 						<img ng-src="addons/{{addon.addontype + '.' + addon.addon}}/icon.png"  height="30px" width="30px" />
@@ -31,10 +31,10 @@
 				<li>
 					<a id="{{'room' + userdata.currentRoom + 'L'}}" 
 						class="loaded"
-						scroll-to="{{'room' + userdata.currentRoom}}" 
+						scroll-to-disable="{{'room' + userdata.currentRoom}}" 
 						class="main link persistent" 
 						on-long-press="loadLinkLongPress('room' + userdata.currentRoom);" 
-						ng-click="loadLink('room' + userdata.currentRoom);userdata.linkSelected='room' + userdata.currentRoom;" 
+						ng-click="loadLink('room' + userdata.currentRoom);" 
 						ng-class="{'selected': userdata.linkSelected=='room' + userdata.currentRoom}"
 						>
 						<img src="img/control-panel.png"  height="30px" width="30px" />
@@ -68,7 +68,7 @@
 				<ul class="sortable" ng-if="userdata.mobile==='0'">
 					<li id="{{linkgroup}}-group" class="sortable clear" ng-repeat="(linkgroup, linkgrouparray) in links[0]" ng-click="userdata.linkGroupSelected=linkgroup;linkReOrder(linkgroup,$index)">
 						<a class="main panel persistent title" ng-hide="$last && $index=='0'">{{linkgroup}}</a>
-						<a id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
+						<a id="{{thislink['navname']+'L'}}" scroll-to-disable="{{thislink['navname']}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);" ng-class="{'selected': userdata.linkSelected==thislink.navname}" ng-repeat="thislink in linkgrouparray">
 							<img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px">
 						</a>
 					</li>	
@@ -76,7 +76,7 @@
 				<ul class="mobile" ng-if="userdata.mobile==='1'">
 					<img height="50px" src="img/3dots.png" />
 					<span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
-						<li id="{{thislink['navname']+'L'}}" scroll-to="{{thislink['navname']}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);userdata.linkSelected=thislink" ng-class="{'selected': userdata.linkSelected==thislink}" ng-repeat="thislink in linkgrouparray">
+						<li id="{{thislink['navname']+'L'}}" scroll-to-disable="{{thislink['navname']}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);" ng-class="{'selected': userdata.linkSelected==thislink.navname}" ng-repeat="thislink in linkgrouparray">
 							<img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px">
 						</li>
 					</span>
