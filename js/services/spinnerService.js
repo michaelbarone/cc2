@@ -5,7 +5,7 @@ app.factory('spinnerService', function($rootScope){
 	var spinnerTimout='';
 	function resetTimeout(){
 		clearTimeout(spinnerTimout);
-		var spinnerTimout = setTimeout(function(){ $rootScope.spinnerCount=0; }, 30000);
+		var spinnerTimout = setTimeout(function(){ $rootScope.spinnerCount=0; }, 10000);
 	}
 	
 	
