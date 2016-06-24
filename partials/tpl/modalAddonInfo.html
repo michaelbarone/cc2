@@ -9,21 +9,23 @@
 		  </div>
 		  <div class="modal-body">
 			<div ng-if="modalContent[0]['addonType']=='mediaplayer'">
-				<img class="left col-1" ng-src="{{modalContent[0]['tvshow.thumb']}}"></img>
-				<img class="left col-1" ng-if="!modalContent[0]['tvshow.thumb']" ng-src="{{modalContent[0]['thumbnail']}}"></img>
-				<div class="right col-5">
+				<div class="col-7">
+					<div class="right col-6" style="padding:5px;">
+						<p ng-if="modalContent[0]['tagline']">{{modalContent[0]['tagline']}}</p>
+						<p ng-if="modalContent[0]['runtime']">Runtime: {{modalContent[0]['runtime']}}</p>
+						<p ng-if="modalContent[0]['year']">Year: {{modalContent[0]['year']}}</p>
+						<p ng-if="modalContent[0]['firstaired']">First Aired: {{modalContent[0]['firstaired']}}</p>
+						<p ng-if="modalContent[0]['genre']">Genre: {{modalContent[0]['genre']}}</p>
+						<p ng-if="modalContent[0]['plot']">Plot: {{modalContent[0]['plot']}}</p>
+					</div>				
+					<img class="left col-6" ng-src="{{modalContent[0]['tvshow.thumb']}}"></img>
+					<img class="left col-6" ng-if="!modalContent[0]['tvshow.thumb']" ng-src="{{modalContent[0]['thumbnail']}}"></img>
+				</div>
+				<div class="left col-5">
 					<img class="left col-12" ng-if="modalContent[0]['tvshow.thumb']" ng-src="{{modalContent[0]['thumbnail']}}"></img>
 					<img class="left col-12" ng-if="!modalContent[0]['tvshow.thumb']" ng-src="{{modalContent[0]['fanart']}}"></img>
 					<img class="left col-12" ng-src="{{modalContent[0]['tvshow.banner']}}"></img>
 					<img class="left col-12" ng-src="{{modalContent[0]['banner']}}"></img>
-				</div>
-				<div class="right col-4">
-					<p ng-if="modalContent[0]['tagline']">{{modalContent[0]['tagline']}}</p>
-					<p ng-if="modalContent[0]['runtime']">Runtime: {{modalContent[0]['runtime']}}</p>
-					<p ng-if="modalContent[0]['year']">Year: {{modalContent[0]['year']}}</p>
-					<p ng-if="modalContent[0]['firstaired']">First Aired: {{modalContent[0]['firstaired']}}</p>
-					<p ng-if="modalContent[0]['genre']">Genre: {{modalContent[0]['genre']}}</p>
-					<p ng-if="modalContent[0]['plot']">Plot: {{modalContent[0]['plot']}}</p>
 				</div>
 				<br class="clear" />
 				<img class="left col-6" ng-src="{{modalContent[0]['tvshow.landscape']}}"></img>
