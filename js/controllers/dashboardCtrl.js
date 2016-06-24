@@ -57,15 +57,20 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 			});
 	}
 
-	spinnerService.add();
+
 	$timeout(function() {
 		$scope.loadRooms();
+		spinnerService.add();
+	}, 50);		
+	$timeout(function() {
 		$scope.loadLinks();
 		spinnerService.add();
+	}, 250);
+	$timeout(function() {		
 		updateAddonsRunning = 0;
 		$scope.updateAddons();
 		spinnerService.add();
-	}, 250);
+	}, 350);
 	
 	$timeout(function() {
 		cronRunning = 0;
