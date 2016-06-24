@@ -14,6 +14,10 @@
 	box-sizing:border-box;
 }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
 body {
     font-size: 12px;
     line-height: 140%;
@@ -638,10 +642,6 @@ img.infoType { height:30px; }
 /*******************
 *** media queries
 *******************/
-
-
-
-
 
 
 
