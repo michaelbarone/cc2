@@ -322,10 +322,14 @@ img.infoType { height:30px; }
 #header li { width:100%; }
 
 #link-menu {
-	position:absolute;
+	position: fixed;
 	display: block;
-	font-size:1em;
-	z-index:11;
+	font-size: 1em;
+	z-index: 11;
+	max-height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	direction: rtl;
 }
 
 #link-menu .sortable:not(:first-child) {	display:none; }
@@ -350,7 +354,7 @@ img.infoType { height:30px; }
 }
 
 #link-menu ul.mobile > img {
-	height:45px;
+	height:50px;
 	margin:0 !important;
 	padding:0 !important;
 }

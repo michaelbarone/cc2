@@ -74,7 +74,7 @@
 					</li>	
 				</ul>
 				<ul class="mobile" ng-cloak ng-if="userdata.mobile==='1' && links[0].length != 0">
-					<img height="50px" src="img/3dots.png" />
+					<img class="left" height="50px" src="img/3dots.png" />
 					<span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
 						<li id="{{thislink['navname']+'L'}}" scroll-to-disable="{{thislink['navname']}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);" ng-class="{'selected': userdata.linkSelected==thislink.navname}" ng-repeat="thislink in linkgrouparray">
 							<img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px">
