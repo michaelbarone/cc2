@@ -1,5 +1,6 @@
 <?php
 //if(!isset($_POST['rooms_addonsid']){ exit; }
+$cronaddon=1;
 require_once "startsession.php";
 $rooms_addonsid=$_POST['rooms_addonsid'];
 $addonid=$_POST['addonid'];

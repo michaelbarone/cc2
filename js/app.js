@@ -1,6 +1,6 @@
 'use strict';
 
-var app= angular.module('ControlCenter', ['ngRoute','ngResource','ngIdle','ngScrollTo','inform','ngAnimate','NgModel','angularModalService','ngDraggable']);
+var app= angular.module('ControlCenter', ['ngRoute','ngResource','ngIdle','ngScrollTo','inform','ngAnimate','NgModel','angularModalService','ngDraggable','FBAngular']);
 app.config(['$routeProvider','$controllerProvider','informProvider','KeepaliveProvider', 'IdleProvider', function($routeProvider,$controllerProvider,informProvider,KeepaliveProvider, IdleProvider) {
 	// routes
 	app.settingsController = $controllerProvider.register;
@@ -150,26 +150,3 @@ app.controller('ModalController', function($scope, close, data, $http) {
 		}
 	};
 });
-
-/*
-app.directive('resize', function ($window) {
-    return function (scope, element) {
-        var w = angular.element($window);
-        scope.getWindowDimensions = function () {
-            return {
-                'h': w.height(),
-                'w': w.width()
-            };
-        };
-        scope.$watch(scope.getWindowDimensions, function (scope) {
-			var thisid = scope.userdata.linkSelected;
-			var myEl = document.getElementById(thisid);		
-			myEl.scrollIntoView();
-
-        }, true);
-
-        w.bind('resize', function () {
-            scope.$apply();
-        });
-    }
-})*/

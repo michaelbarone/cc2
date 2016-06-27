@@ -10,6 +10,7 @@
 				<li ng-if="userdata.settingsAccess==='1'"><a href="./#/settings">Settings</a></li>
 				<li><a href="" ng-click="testmessage()">testmessage</a></li>
 				<li><a href=""  ng-click="chatOpen = chatOpen ? false : true">Chat</a></li>
+				<li><a href="" ng-if="FullscreenSupported" ng-click="toggleFullscreen()">Fullscreen Toggle</a></li>
 				<li>&nbsp;</li>
 				<li><a href="" ng-click="logout()">Logout</a></li>
 			</ul>
@@ -49,9 +50,6 @@
 					<tr ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
 						<td ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name}}</td>
 						<td>
-							<!-- wakeAllAddons turns into powerOnAllRoomAddons(roomid) -> will then wake/poweron/switchtoinput that is specified per addon type or individually?
-							wakeAllAddons(room_addons[0][room][0].allAddonsMacs)
-							-->
 							<img ng-if="room_addons[0][room][0].allAddonsAlive==='0'" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
 							<img ng-if="room_addons[0][room][0].allAddonsAlive==='1'" class="status" src="img/led-green.png"/>
 						</td>

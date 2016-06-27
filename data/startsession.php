@@ -33,7 +33,7 @@ try {
 }
 
 
-if(!isset($_SESSION)){
+if(!isset($_SESSION) && !isset($cronaddon)){
 	//disable top 3 for production
 	ini_set('display_errors', 'On');
 	ini_set('display_startup_errors', 'On');

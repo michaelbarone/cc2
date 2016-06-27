@@ -1,6 +1,6 @@
 'use strict';
 
-app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService', function ($scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService){
+app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService','Fullscreen', function ($rootScope, $scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService, Fullscreen){
 	var unix = Math.round(+new Date()/1000);
 	$scope.links = [];
 	$scope.rooms = [];
@@ -35,7 +35,7 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		$scope.userdata.currentRoom=sessionStorage.getItem('homeRoom');
 		sessionStorage.setItem('currentRoom',sessionStorage.getItem('homeRoom'));
 		$scope.userdata.linkSelected="room"+$scope.userdata.currentRoom;
-	}
+	}	
 
 /**
  *  Load Initial Data
@@ -76,10 +76,22 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		cronRunning = 0;
 		$scope.runCron();
 	}, 1500);	
-	
+	$scope.FullscreenSupported = Fullscreen.isSupported();
 	
 /***/
-	
+
+
+   $rootScope.toggleFullscreen = function () {
+
+      if (Fullscreen.isEnabled())
+         Fullscreen.cancel();
+      else
+         Fullscreen.all();
+
+      // Set Fullscreen to a specific element (bad practice)
+      // Fullscreen.enable( document.getElementById('img') )
+
+   }	
 
 	
 	
@@ -97,26 +109,6 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		$scope.userdata.linkSelected="room"+room;
 		document.getElementById("room"+room).scrollIntoView();
 	};
-
- /* needed? */
- /*
-	$scope.wakeAddon = function(mac) {
-		if(mac === '' || mac === null){
-		} else {
-			$http.post('data/wakeAddon.php?m='+mac);
-		}
-	};
-
-	$scope.wakeAllAddons = function(macs) {
-		var macsArray = macs.split(',');
-		for(var i = 0; i < macsArray.length; i++) {
-			if(macsArray[i]!=='') {
-				$http.post('data/wakeAddon.php?m='+macsArray[i]);
-			}
-		}
-	};
-*/
-/* needed? */
 
 	
 	$scope.powerOnAddon = function(addonid){
@@ -147,30 +139,24 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 	};
 	
 	$scope.loadLink = function(name,element) {
-		console.log("loadlink function");
 		if (name.substring(0, 4) == "room") {
 			if(document.getElementById(name+'L').classList.contains('longpress')) {
-				console.log("room change");
 				document.getElementById(name+'L').classList.remove('longpress');
 			} else {
-				console.log("room scroll into view");
 				document.getElementById(name).scrollIntoView();
 				$scope.userdata.linkSelected=name;
 			}
 		} else {
 			if(document.getElementById(name+'L').classList.contains('longpress')) {
-				console.log("remove longpress");
 				document.getElementById(name+'L').classList.remove('longpress');
 				return;
 			} else if(document.getElementById(name+'L').classList.contains('selected')) {
-				console.log("else no longpress but selected");
 				document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
 				if(!document.getElementById(name+'L').classList.contains('loaded')) {
 					document.getElementById(name+'L').attributes['class'].value += ' loaded';
 					$scope.userdata.linkSelected=name;
 				}
 			} else {
-				console.log("else no longpress but not selected");
 				if(document.getElementById(name+'L').classList.contains('loaded')) {
 					document.getElementById(name).scrollIntoView();
 				} else {
@@ -219,8 +205,6 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 			spinnerService.remove();
 		});
 	};
-
-
 
 
 
@@ -323,9 +307,17 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 					}
 				});
 		}
-	};
-
-
+	};	
+	
+	
+	
+	
+	/*  not working, need to figure out why cannot call functions from these
+	inform.add("Go Full Screen <a ng-click='$rootScope.toggleFullscreen();remove(msg)' class='btn btn-default'>Full Screen</a>", {
+		  ttl: 60000, type: 'success', "html": true
+	});
+	console.log("load");
+	*/
 
 /***/
 
@@ -349,6 +341,9 @@ app.dashboardController('dashboardCtrl', ['$scope','$timeout','loginService','$h
 		});
 		inform.add('Danger', {
 		  ttl: 120000, type: 'danger'
+		});
+		inform.add("text and <a class='btn btn-default'>a button</a>", {
+			  ttl: 60000, type: 'success', "html": true
 		});
 	};
 }])
