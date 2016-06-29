@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('loginCtrl', ['$scope','loginService','$http', '$location', function ($scope,loginService,$http,$location) {
+app.controller('loginCtrl', ['$scope','loginService','$http', '$location','spinnerService', function ($scope,loginService,$http,$location,spinnerService) {
 	var connected=loginService.islogged();
 	connected.then(function(msg){
 		if(msg.data==="passedAuth") {
@@ -10,11 +10,13 @@ app.controller('loginCtrl', ['$scope','loginService','$http', '$location', funct
 
 	$scope.msgtxt='';
 	$scope.users = [];
+	spinnerService.add();
 	
     $http.get('data/getUsers.php')
 		.success(function(data) {
 			$scope.users = data;
-		});	
+			spinnerService.remove();
+		});
 
 	$scope.closeLockedTile=function(toggleLockedLogin) {
 		$scope.loginMsg = '';

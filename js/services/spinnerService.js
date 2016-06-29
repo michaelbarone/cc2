@@ -12,16 +12,19 @@ app.factory('spinnerService', function($rootScope){
 	
 	return{
 		add:function(){
-			resetTimeout();
 			$rootScope.spinnerCount=$rootScope.spinnerCount+1;
+			resetTimeout();
 		},
 		remove:function(){
 			if($rootScope.spinnerCount>0){
-				resetTimeout();
 				$rootScope.spinnerCount=$rootScope.spinnerCount-1;
+				resetTimeout();
 			} else {
 				clearTimeout(spinnerTimout);
 			}
+		},
+		clear:function(){
+			$rootScope.spinnerCount=0;
 		}
 	};
 });

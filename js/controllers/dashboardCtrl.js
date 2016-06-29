@@ -276,19 +276,23 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	var cronRunning = 0;
 	$scope.runCron = function(){
 		if(cronRunning===1 || $location.path()!="/dashboard") { return; }
-		cronRunning = 1;
+		if(cronRunning!=2) {
+			cronRunning = 1;
+		}
 		if( Idle.idling() === true) {
 			$timeout(function() {
-				cronRunning = 0;
+				cronRunning = 2;
 				$scope.runCron();
 			}, 5000)
 		} else {
+			if(cronRunning===2){ spinnerService.add(); }
 			$http.get('data/cron.php')
 				.success(function(data) {
+					if(cronRunning===2){ spinnerService.remove(); }
 					if(data == "failed") {
 						return;
 					}
-					if(data == "takeover") {
+					if(data == "takeover" || cronKeeper===2) {
 						cronKeeper = "1";
 					}
 					if(data == "release") {
