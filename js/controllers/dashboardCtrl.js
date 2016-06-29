@@ -198,7 +198,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			, controller: "ModalController"
 			,inputs: {
 				data: data,
-				
+
 		    }
 		}).then(function(modal) {
 			$scope.modalOpen=1;
@@ -254,6 +254,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 					if($scope.room_addons != "data") {
 						$scope.room_addons=data;
 					}
+					if(idleResumee===1 && cronRunning===0){ spinnerService.remove();idleResumee=0; }
 					if(updateAddonsFirstRun===1){
 						if($scope.userdata.currentRoom<1) {
 							$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
@@ -271,41 +272,36 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		}
 	};
 
-
+	var idleResumee = 0;
 	var cronKeeper = 0;
 	var cronRunning = 0;
 	$scope.runCron = function(){
 		if(cronRunning===1 || $location.path()!="/dashboard") { return; }
-		if(cronRunning!=2) {
-			cronRunning = 1;
-		}
 		if( Idle.idling() === true) {
 			$timeout(function() {
-				cronRunning = 2;
+				idleResumee = 1;
 				$scope.runCron();
 			}, 5000)
 		} else {
-			if(cronRunning===2){ spinnerService.add(); }
+			cronRunning = 1;
+			if(idleResumee===1){ spinnerService.add(); }
 			$http.get('data/cron.php')
 				.success(function(data) {
-					if(cronRunning===2){ spinnerService.remove(); }
 					if(data == "failed") {
 						return;
 					}
-					if(data == "takeover" || cronKeeper===2) {
+					if(data == "takeover") {
 						cronKeeper = "1";
-					}
-					if(data == "release") {
+					}else if(data == "release") {
 						cronKeeper = "0";
 					}
+					cronRunning = 0;
 					if (cronKeeper == '1') {
 						$timeout(function() {
-							cronRunning = 0;
 							$scope.runCron();
 						}, 2500)
 					} else {
 						$timeout(function() {
-							cronRunning = 0;
 							$scope.runCron();
 						}, 15000)
 					}
