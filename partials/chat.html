@@ -21,14 +21,18 @@
 		<br />
 		<h5>Users</h5>
 		<ul>
-			<li ng-repeat="user in users" ng-class="{'selected': chattingWith==user.username}">
-				<img ng-if="user.lastaccess==null || user.lastaccess < (currenttime - 460)" class="status ng-scope" src="img/led-red.png">
-				<img ng-if="user.lastaccess!=null && (currenttime - 15) > user.lastaccess && user.lastaccess > (currenttime - 160)" class="status ng-scope" src="img/led-orange.png">
-				<img ng-if="user.lastaccess!=null && user.lastaccess > (currenttime - 15)" class="status ng-scope" src="img/led-green.png">
+			<li ng-repeat="user in users" ng-if="user.lastaccess!=null && user.lastaccess > (currenttime - 900)" ng-class="{'selected': chattingWith==user.username}">
+				<img ng-if="(currenttime - 15) > user.lastaccess" class="status ng-scope" src="img/led-orange.png">
+				<img ng-if="user.lastaccess > (currenttime - 15)" class="status ng-scope" src="img/led-green.png">
 				<a ng-click="chatWithUser(user.userid)">{{user.username}}</a>
 			</li>
 		</ul>
-		
+		<ul>
+			<li ng-repeat="user in users" ng-if="user.lastaccess==null || user.lastaccess < (currenttime - 900)" ng-class="{'selected': chattingWith==user.username}">
+				<img class="status ng-scope" src="img/led-red.png">
+				<a ng-click="chatWithUser(user.userid)">{{user.username}}</a>
+			</li>
+		</ul>		
 		<!--  offline users list -->
 
 		<p ng-click="chatWithRoom(userdata.currentRoom)">{{userdata.lastRoomChange}}</p>
