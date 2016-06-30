@@ -5,10 +5,12 @@ app.chatController('chatCtrl', ['$scope','$timeout','$http','inform','Idle', fun
 	if(sessionStorage.getItem('currentRoom') && sessionStorage.getItem('currentRoom') != '') {
 		$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
 	}
-
+	$scope.currenttime = Date.now() / 1000 | 0;
+	
+	
 	$scope.users = [];
 	
-    $http.get('data/getUsers.php')
+    $http.get('data/getUsers.php?type=chat')
 		.success(function(data) {
 			$scope.users = data;
 		});	

@@ -1,8 +1,12 @@
 <?php 
 	require 'startsession.php';
+	$type='';
+	if(isset($_GET['type']) && $_GET['type'] != '') {
+		$type=$_GET['type'];
+	}
 	try {
 		$usersArray = array();
-		foreach ($configdb->query("SELECT userid,username,password,passwordreset,avatar FROM users") as $row) {
+		foreach ($configdb->query("SELECT userid,username,password,passwordreset,avatar,lastaccess FROM users") as $row) {
 			$passwordset="0";
 			if($row['password']=="" || !isset($row['password'])) {
 				$passwordset="0";
@@ -17,6 +21,9 @@
 				'passwordreset' => $row['passwordreset'],
 				'avatar' => $row['avatar']
 			);
+			if($type==="chat"){
+				$usersArray[$userid]['lastaccess'] = $row['lastaccess'];
+			}
 		}
 		$result = $usersArray;
 		

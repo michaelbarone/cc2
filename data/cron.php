@@ -18,8 +18,14 @@ try {
 	{
 		echo "failed";
 		$log->LogError("$e->getMessage()" . basename(__FILE__));
+		exit;
 	}
-
+try {
+	$execquery = $configdb->exec("UPDATE users SET lastaccess=$time WHERE userid = '$userid';");
+} catch(PDOException $e)
+{
+	$log->LogError("$e->getMessage()" . basename(__FILE__));
+}
 $echoTakeover=0;
 if($lastcron < ($time - 30)) {
 	echo "takeover";
