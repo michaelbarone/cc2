@@ -31,9 +31,7 @@
 				</li>
 				<li>
 					<a id="{{'room' + userdata.currentRoom + 'L'}}" 
-						class="loaded"
-						scroll-to-disable="{{'room' + userdata.currentRoom}}" 
-						class="main link persistent" 
+						class="main link persistent loaded" 
 						on-long-press="loadLinkLongPress('room' + userdata.currentRoom);" 
 						ng-click="loadLink('room' + userdata.currentRoom);" 
 						ng-class="{'selected': userdata.linkSelected=='room' + userdata.currentRoom}"
@@ -62,22 +60,24 @@
 			</ul>
 		</div>
 		<div id="link-menu">
-			<nav>
-				<ul class="sortable" ng-if="userdata.mobile==='0'">
+			<img src="img/3dots.png" ng-cloak ng-if="userdata.mobile==='1' && links[0].length != 0" style="float: left; height: 50px;" />
+			<nav ng-cloak ng-if="userdata.mobile==='1' && links[0].length != 0" style="margin-top: 50px;">
+				<ul class="mobile">
+					<span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
+						<li id="{{thislink['navname']+'L'}}" class="main persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);" ng-class="{'selected': userdata.linkSelected==thislink.navname}" ng-repeat="thislink in linkgrouparray">
+							<img ng-src="img/Programs/{{thislink['navname']}}.png" class="link" height="35px">
+						</li>
+					</span>
+				</ul>
+			</nav>		
+			<nav ng-cloak ng-if="userdata.mobile==='0'">
+				<ul class="sortable">
 					<li id="{{linkgroup}}-group" class="sortable clear" ng-repeat="(linkgroup, linkgrouparray) in links[0]" ng-click="userdata.linkGroupSelected=linkgroup;linkReOrder(linkgroup,$index)">
 						<a ng-cloak class="main panel persistent title" ng-hide="$last && $index=='0'">{{linkgroup}}</a>
-						<a id="{{thislink['navname']+'L'}}" scroll-to-disable="{{thislink['navname']}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);" ng-class="{'selected': userdata.linkSelected==thislink.navname}" ng-repeat="thislink in linkgrouparray">
+						<a id="{{thislink['navname']+'L'}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);" ng-class="{'selected': userdata.linkSelected==thislink.navname}" ng-repeat="thislink in linkgrouparray">
 							<img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px">
 						</a>
 					</li>	
-				</ul>
-				<ul class="mobile" ng-cloak ng-if="userdata.mobile==='1' && links[0].length != 0">
-					<img class="left" height="50px" src="img/3dots.png" />
-					<span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
-						<li id="{{thislink['navname']+'L'}}" scroll-to-disable="{{thislink['navname']}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);" ng-class="{'selected': userdata.linkSelected==thislink.navname}" ng-repeat="thislink in linkgrouparray">
-							<img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px">
-						</li>
-					</span>
 				</ul>
 			</nav>
 		</div>

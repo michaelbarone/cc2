@@ -315,7 +315,7 @@ img.infoType { height:30px; }
 	vertical-align:middle;
 }
 
-#header a:not(.title),.header a:not(.title) {
+#header a:not(.title),.header a:not(.title),#header img:not(.title),.header img:not(.title) {
 	cursor:pointer;
 }
 
@@ -390,7 +390,7 @@ img.infoType { height:30px; }
 
 .link:hover { opacity:.7; }
 
-.link.loaded,.link.loaded:hover { opacity:1 !important; }
+.loaded .link,.loaded .link:hover,.link.loaded,.link.loaded:hover { opacity:1 !important; }
 
 #user-menu,#room-menu {
 	position: absolute;
