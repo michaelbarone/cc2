@@ -110,28 +110,11 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		document.getElementById("room"+room).scrollIntoView();
 	};
 
-	
-	$scope.powerOnAddon = function(addonid){
-		$http.post('data/power.php?type=addon&option=on&addonid='+addonid);
-	}
-
-	$scope.powerOffAddon = function(addonid){
-		$http.post('data/power.php?type=addon&option=off&addonid='+addonid);
-	}
-	
-	$scope.powerOnRoom = function(room){
-		$http.post('data/power.php?type=room&option=on&room='+room);
-	}
-
-	$scope.powerOffRoom = function(room){
-		$http.post('data/power.php?type=room&option=off&room='+room);
-	}
-	
 	$scope.loadLinkLongPress = function(name,element) {
 		if (name.substring(0, 4) == "room") {
 			document.getElementById(name+'L').attributes['class'].value += ' longpress';
 		} else if(document.getElementById(name+'L').classList.contains('loaded')) {
-			console.log("longpress");
+			// console.log("longpress");
 			document.getElementById(name+'L').attributes['class'].value += ' longpress';
 			document.getElementById(name+'L').classList.remove('loaded');
 			document.getElementById(name).attributes['src'].value = '';
@@ -142,6 +125,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		if (name.substring(0, 4) == "room") {
 			if(document.getElementById(name+'L').classList.contains('longpress')) {
 				document.getElementById(name+'L').classList.remove('longpress');
+				return;
 			} else {
 				document.getElementById(name).scrollIntoView();
 				$scope.userdata.linkSelected=name;
@@ -169,7 +153,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		}
 	};
 
-	
 	// 2 jquery functions here:
     $scope.linkReOrder = function(linkgroup,index) {
 		var theLi = document.getElementById(linkgroup + '-group');
@@ -181,6 +164,29 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		var thename = $scope.userdata.linkSelected;
 		document.getElementById(thename).scrollIntoView();
 	});	
+
+/***/
+
+
+
+
+/**
+ *  Ad
+	$scope.powerOnAddon = function(addonid){
+		$http.post('data/power.php?type=addon&option=on&addonid='+addonid);
+	}
+
+	$scope.powerOffAddon = function(addonid){
+		$http.post('data/power.php?type=addon&option=off&addonid='+addonid);
+	}
+	
+	$scope.powerOnRoom = function(room){
+		$http.post('data/power.php?type=room&option=on&room='+room);
+	}
+
+	$scope.powerOffRoom = function(room){
+		$http.post('data/power.php?type=room&option=off&room='+room);
+	}
 
 /***/
 	
@@ -231,13 +237,13 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			if($scope.links.constructor.toString().indexOf("Array") != -1){
 				// console.log("yes");
 			} else {
-				console.log("running loadLinks()");
+				// console.log("running loadLinks()");
 				$scope.loadLinks();
 			}
 			if($scope.rooms.constructor.toString().indexOf("Array") != -1){
 				// console.log("yes");
 			} else {
-				console.log("running loadLinks()");
+				// console.log("running loadLinks()");
 				$scope.loadRooms();
 			}
 			
@@ -251,7 +257,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 						loginService.logout();
 						return;
 					}
-					if($scope.room_addons != "data") {
+					if($scope.room_addons != data) {
 						$scope.room_addons=data;
 					}
 					if(idleResumee===1 && cronRunning===0){ spinnerService.remove();idleResumee=0; }
