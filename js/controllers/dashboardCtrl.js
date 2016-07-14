@@ -15,6 +15,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	}
 	$scope.userdata.userid=sessionStorage.getItem('userid');
 	$scope.userdata.mobile=sessionStorage.getItem('mobile');
+	$scope.userdata.avatar=sessionStorage.getItem('avatar');
 	if(window.innerWidth<850 && ($scope.userdata.mobile==='0' || $scope.userdata.mobile===null)){
 		$scope.userdata.mobile='1';
 		sessionStorage.setItem('mobile','1');

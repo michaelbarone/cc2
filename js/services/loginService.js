@@ -12,6 +12,7 @@ app.factory('loginService',function($http, $location, sessionService, inform){
 					var homeRoom=msg.data['homeRoom'];
 					var mobile=msg.data['mobile'];
 					var settingsAccess=msg.data['settingsAccess'];
+					var avatar=msg.data['avatar'];
 					if(uid){
 						inform.clear();
 						inform.add('Welcome, ' + username);
@@ -21,6 +22,7 @@ app.factory('loginService',function($http, $location, sessionService, inform){
 						sessionService.set('homeRoom',homeRoom);
 						sessionService.set('mobile',mobile);
 						sessionService.set('settingsAccess',settingsAccess);
+						sessionService.set('avatar',avatar);
 						if(oldUID!=userid){
 							sessionService.set('currentRoom',homeRoom);
 						}

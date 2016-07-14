@@ -7,6 +7,7 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginSe
 	$scope.userdata.username=sessionStorage.getItem('username');
 	$scope.userdata.userid=sessionStorage.getItem('userid');
 	$scope.userdata.mobile=sessionStorage.getItem('mobile');
+	$scope.userdata.avatar=sessionStorage.getItem('avatar');
 
     $scope.tabs = [{
             title: 'Users',
