@@ -4,29 +4,20 @@
 	<div id="header">
 		<div id="user-menu" class="right">
 			<img src="img/options.png" />
-			<ul id="user-menu-ul">
-				<li><a ng-cloak class="title">{{userdata.username}}</a></li>
-				<li><a>Preferences</a></li>
-				<li ng-if="userdata.settingsAccess==='1'"><a href="./#/settings">Settings</a></li>
-				<li><a href="" ng-click="testmessage()">testmessage</a></li>
-				<li><a href=""  ng-click="chatOpen = chatOpen ? false : true">Chat</a></li>
-				<li><a href="" ng-if="FullscreenSupported" ng-click="toggleFullscreen()">Fullscreen Toggle</a></li>
-				<li>&nbsp;</li>
-				<li><a href="" ng-click="logout()">Logout</a></li>
+			<ul id="user-menu-ul" ng-include src="'partials/user-menu.html'">
 			</ul>
 		</div>
 		<div id="room-menu">
-			<ul id="room-menu-items">
+			<ul class="room-menu-items">
 				<!-- addon buttons -->
 				<li ng-repeat="addon in room_addons_current[0][userdata.currentRoom]" ng-if="$index > 0 && addon.controlWindow == '1'">
-					<a id="{{addon.addon + $index + 'L'}}" 
-						scrolsl-to-disable="{{addon.addon + $index}}" 
+					<a id="{{addon.addon + $index + 'L'}}"  
 						class="main link persistent" 
 						on-long-press="loadLinkLongPress(addon.addon + $index);" 
 						ng-click="loadLink(addon.addon + $index);" 
 						ng-class="{'selected': userdata.linkSelected==addon.addon + $index}"
 						>
-						<img ng-src="addons/{{addon.addontype + '.' + addon.addon}}/icon.png"  height="30px" width="30px" />
+						<img ng-src="addons/{{addon.addontype + '.' + addon.addon}}/icon.png"  height="27px" width="27px" />
 					</a>		
 				</li>
 				<li>
@@ -36,11 +27,11 @@
 						ng-click="loadLink('room' + userdata.currentRoom);" 
 						ng-class="{'selected': userdata.linkSelected=='room' + userdata.currentRoom}"
 						>
-						<img src="img/control-panel.png"  height="30px" width="30px" />
+						<img src="img/control-panel.png"  height="27px" width="27px" />
 					</a>
 				</li>
 				<li>
-					<a ng-cloak class="title">{{rooms[0][userdata.currentRoom]['name']}}</a>
+					<a ng-cloak class="ng-cloak title">{{rooms[0][userdata.currentRoom]['name']}}</a>
 				</li>
 			</ul>
 			<ul id="room-menu-ul">

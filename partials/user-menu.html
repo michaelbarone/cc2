@@ -1,0 +1,18 @@
+<table style="margin: 0px 0px 5px 10px;">
+	<tr>
+		<td><li>
+			<img ng-if="userdata.avatar==='0'" ng-src="img/Users/user-default.jpg"/>
+			<img ng-if="userdata.avatar==='1'" ng-src="img/Users/user{{userdata.userid}}.jpg"/>
+		</li></td>
+		<td>		
+			<li><a ng-cloak class="title">{{userdata.username}}</a></li>
+			<li><a>Preferences</a></li>
+			<li ng-if="userdata.settingsAccess==='1'"><a href="./#/settings">Settings</a></li>
+			<li><a href="" ng-click="testmessage()">testmessage</a></li>
+			<li><a href=""  ng-click="chatOpen = chatOpen ? false : true">Chat</a></li>
+			<li><a href="" ng-if="FullscreenSupported" ng-click="toggleFullscreen()">Fullscreen Toggle</a></li>
+			<li>&nbsp;</li>
+			<li><a href="" ng-click="logout()">Logout</a></li>
+		</td>
+	</tr>
+</table>
