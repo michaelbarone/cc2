@@ -406,14 +406,15 @@ img.infoType { height:30px; }
 	margin-top: -50px;
 }
 
-#room-menu-items {
+.room-menu-items {
 	position: absolute;
-	margin-top: -35px;
+	margin-top: -30px;
 	top:0;
 	right:30px;
 	white-space: nowrap;
+	height:40px;
 }
-#room-menu-items li {
+.room-menu-items li {
 	height:50px;
 	display:inline;
 }
@@ -436,6 +437,8 @@ img.infoType { height:30px; }
 
 #user-menu li { text-align:right; }
 
+#room-menu a.title { vertical-align:baseline; }
+
 #room-menu table {
 	direction: rtl;
 	border-spacing:5px;
@@ -451,7 +454,15 @@ img.infoType { height:30px; }
 }
 
 #user-menu:hover li { display:block !Important; }
+
+/* #room-menu .hover:hover table,#room-menu table:hover { display:block !Important; }
+*/
 #room-menu:hover table { display:block !Important; }
+
+
+/*
+#room-menu ul:first-child:hover + ul table { display:none !Important; }
+ */
 
 
 #user-menu a,#room-menu a { padding:0 15px; }

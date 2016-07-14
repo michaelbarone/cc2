@@ -50,7 +50,7 @@ a:visited { color:#eee; }
 	background: #222528 url("../img/background.png") repeat scroll 0% 0%;
 }
 
-#link-menu li a.selected, #room-menu-items a.selected {
+#link-menu li a.selected, .room-menu-items a.selected {
 	## border-bottom:2px solid #0099ff !important; 
 	box-shadow: 0 3px 0px #0099ff;
 }
