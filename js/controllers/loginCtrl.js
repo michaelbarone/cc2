@@ -15,6 +15,8 @@ app.controller('loginCtrl', ['$scope','loginService','$http', '$location','spinn
     $http.get('data/getUsers.php')
 		.success(function(data) {
 			$scope.users = data;
+		})
+		.finally(function() {
 			spinnerService.remove();
 		});
 

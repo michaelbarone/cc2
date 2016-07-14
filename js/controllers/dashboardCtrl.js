@@ -45,6 +45,8 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		$http.get('data/getRooms.php')
 			.success(function(data) {
 				$scope.rooms = data;
+			})
+			.finally(function() {
 				spinnerService.remove();
 			});
 	}
@@ -53,6 +55,8 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		$http.get('data/getLinks.php?mobile='+$scope.userdata.mobile)
 			.success(function(data) {
 				$scope.links = data;
+			})
+			.finally(function() {
 				spinnerService.remove();
 			});
 	}
@@ -145,8 +149,8 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 					document.getElementById(name).scrollIntoView();
 				} else {
 					document.getElementById(name+'L').attributes['class'].value += ' loaded';
-					document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
 					document.getElementById(name).scrollIntoView();
+					document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
 				}
 				$scope.userdata.linkSelected=name;
 			}
