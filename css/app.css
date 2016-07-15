@@ -18,6 +18,12 @@
   display: none !important;
 }
 
+html {
+	background: black;
+	height: 100%;
+	width: 100%;		
+}
+
 body {
     font-size: 12px;
     line-height: 140%;
@@ -56,6 +62,7 @@ a img {border:0;}
 
 .right { float:right !important; }
 .left { float:left !important; }
+.center { min-width:50px;margin:0 auto;text-align:center; }
 .clear { clear:both; }
 .clearr { clear:right; }
 .clearl { clear:left; }
@@ -429,13 +436,15 @@ img.infoType { height:30px; }
 
 
 
-#user-menu li,#room-menu-ul table {
+#user-menu ul,#room-menu-ul table {
 	display:none;
-	margin:0;
-	padding:10px 0;
 }
 
-#user-menu li { text-align:right; }
+#user-menu li { 
+	text-align:right;
+	margin:0;
+	padding:10px 0; 
+}
 
 #room-menu a.title { vertical-align:baseline; }
 
@@ -453,7 +462,7 @@ img.infoType { height:30px; }
 	direction: ltr; 
 }
 
-#user-menu:hover li { display:block !Important; }
+#user-menu:hover ul { display:block !Important; }
 
 /* #room-menu .hover:hover table,#room-menu table:hover { display:block !Important; }
 */
@@ -516,7 +525,7 @@ img.infoType { height:30px; }
 .addonWidget {
 	background-color: rgb(22,22,22);
 	position: relative;
-    padding: 25px 15px;
+    padding: 15px;
     margin: 15px 20px;
 }
 

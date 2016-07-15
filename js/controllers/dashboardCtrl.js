@@ -176,7 +176,9 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 
 
 /**
- *  Ad
+ *  Addon power functions
+ *
+ */
 	$scope.powerOnAddon = function(addonid){
 		$http.post('data/power.php?type=addon&option=on&addonid='+addonid);
 	}
