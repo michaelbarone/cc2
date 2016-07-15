@@ -4,11 +4,17 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginSe
 	$scope.userdata = [];
 	$scope.Users = [];
 	$scope.Rooms = [];
-	$scope.userdata.username=sessionStorage.getItem('username');
-	$scope.userdata.userid=sessionStorage.getItem('userid');
-	$scope.userdata.mobile=sessionStorage.getItem('mobile');
-	$scope.userdata.avatar=sessionStorage.getItem('avatar');
-
+	var firstrun=1;
+	if(firstrun===1){
+		$scope.userdata.userid=0;
+		var firstrun=1;
+	}else{
+		$scope.userdata.username=sessionStorage.getItem('username');
+		$scope.userdata.userid=sessionStorage.getItem('userid');
+		$scope.userdata.mobile=sessionStorage.getItem('mobile');
+		$scope.userdata.avatar=sessionStorage.getItem('avatar');
+	}
+	
     $scope.tabs = [{
             title: 'Users',
             url: './partials/tpl/settingsUsers.tpl.html'		
@@ -26,8 +32,10 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginSe
 	$scope.currentTab = './partials/tpl/settingsUsers.tpl.html';
 	
     $scope.onClickTab = function (tab) {
-		$scope.CheckLogged();
-        $scope.currentTab = tab.url;
+		if(firstrun===0){
+			$scope.CheckLogged();
+        }
+		$scope.currentTab = tab.url;
     }
     
 	$scope.CheckLogged = function() {
@@ -49,15 +57,18 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginSe
 		$scope.init();
 	}
 	
+
 	$scope.init = function(){
+	/*
 		$scope.getAllUsers();
 		$scope.getRooms();
 		$scope.getNavigation();
 		$scope.usersChanged=0;
 		$scope.roomsChanged=0;
 		$scope.navChanged=0;
+	*/
 	}
-	
+
 	
 	
 	/* users section */
@@ -74,7 +85,9 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginSe
 	}
 	 
 	$scope.saveUsers = function(users){
-		$scope.CheckLogged();
+		if(firstrun===0){
+			$scope.CheckLogged();
+        }
 		$http.get('data/settings.php?action=saveUsers&users='+JSON.stringify(users))
 			.success(function(data) {
 				$scope.usersChanged=0;
@@ -142,7 +155,9 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginSe
 	}
 
 	$scope.saveRooms = function(){
-		$scope.CheckLogged();
+		if(firstrun===0){
+			$scope.CheckLogged();
+        }
 		// get room and addon info ready for saving
 		/*
 		$http.get('data/settings.php?action=saveRooms&data='+JSON.stringify(data))
@@ -230,7 +245,9 @@ need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addo
 	}	
 	
 	$scope.saveNavigation = function(){
-		$scope.CheckLogged();
+		if(firstrun===0){
+			$scope.CheckLogged();
+        }
 		// get room and addon info ready for saving
 		/*
 		$http.get('data/settings.php?action=saveRooms&data='+JSON.stringify(data))

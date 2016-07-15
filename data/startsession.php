@@ -25,14 +25,6 @@ $log = new KLogger ( $PRIVATE_DATA."/logs/log-$date.log" , KLogger::INFO );
 // Print out the value of some variables
 //$log->LogDebug("Loaded Somethings from " . $_SERVER['SCRIPT_FILENAME']);
 
-try {
-	$configdb = new PDO('sqlite:' . $PRIVATE_DATA . '/db/config.db');
-	$configdb->exec("pragma synchronous = off;");
-} catch (PDOException $e) {
-	$log->LogFatal("Fatal: User could not open DB: $e->getMessage().  from " . basename(__FILE__));
-}
-
-
 if(!isset($_SESSION) && !isset($cronaddon)){
 	//disable top 3 for production
 	ini_set('display_errors', 'On');
@@ -46,5 +38,24 @@ if(!isset($_SESSION) && !isset($cronaddon)){
 	ini_set('session.save_path', $PRIVATE_DATA . "/sessions");
 	ini_set('session.cookie_lifetime', 604800);
 	session_start();
+}
+
+
+
+// first run/no db found
+$filename = $PRIVATE_DATA . '/db/config.db';
+if(!file_exists($filename)) {
+    echo "No Db found";
+	$_SESSION['firstrun']=1;
+	require("$PRIVATE_DATA/db/dbcreate.php");
+}
+
+if(!isset($configdb)) {
+	try {
+		$configdb = new PDO('sqlite:' . $PRIVATE_DATA . '/db/config.db');
+		$configdb->exec("pragma synchronous = off;");
+		} catch (PDOException $e) {
+		$log->LogFatal("Fatal: User could not open DB: $e->getMessage().  from " . basename(__FILE__));
+	}
 }
 ?>
