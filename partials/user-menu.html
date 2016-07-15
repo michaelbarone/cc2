@@ -7,7 +7,10 @@
 		<td>		
 			<li><a ng-cloak class="title">{{userdata.username}}</a></li>
 			<li><a>Preferences</a></li>
-			<li ng-if="userdata.settingsAccess==='1'"><a href="./#/settings">Settings</a></li>
+			<li ng-if="userdata.settingsAccess==='1'">
+				<a ng-if="userdata.currentpage==='dashboard'" href="./#/settings">Settings</a>
+				<a ng-if="userdata.currentpage==='settings'" href="./#/dashboard" class="orange">Dashboard</a>
+			</li>
 			<li><a href="" ng-click="testmessage()">testmessage</a></li>
 			<li><a href=""  ng-click="chatOpen = chatOpen ? false : true">Chat</a></li>
 			<li><a href="" ng-if="FullscreenSupported" ng-click="toggleFullscreen()">Fullscreen Toggle</a></li>

@@ -19,6 +19,7 @@
 					<a ng-repeat="tab in tabs" 
 						ng-class="{selected:isActiveTab(tab.url)}" 
 						class="main panel persistent" 
+						ng-cloak
 						ng-click="onClickTab(tab)"><div>{{tab.title}}</div></a>
 					</li>
 				</ul>

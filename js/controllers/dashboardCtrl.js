@@ -5,6 +5,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.links = [];
 	$scope.rooms = [];
 	$scope.userdata = [];
+	$scope.userdata.currentpage = "dashboard";
 	/*
 	some security could be to match userid and username in db
 	*/

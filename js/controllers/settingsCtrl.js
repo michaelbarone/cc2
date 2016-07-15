@@ -2,9 +2,10 @@
 
 app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginService','$http','inform','Idle','$route', function ($scope, $timeout, $location, loginService, $http, inform, Idle, $route){
 	$scope.userdata = [];
+	$scope.userdata.currentpage = "settings";
 	$scope.Users = [];
 	$scope.Rooms = [];
-	var firstrun=1;
+	var firstrun=0;
 	if(firstrun===1){
 		$scope.userdata.userid=0;
 		var firstrun=1;
@@ -59,14 +60,12 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginSe
 	
 
 	$scope.init = function(){
-	/*
 		$scope.getAllUsers();
 		$scope.getRooms();
 		$scope.getNavigation();
 		$scope.usersChanged=0;
 		$scope.roomsChanged=0;
 		$scope.navChanged=0;
-	*/
 	}
 
 	
