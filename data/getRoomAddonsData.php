@@ -18,6 +18,7 @@
 		foreach($roomIds as $x) {
 			if(!isset($x) || $x == '' || is_array($x)) { continue; }
 			$allAddonsAlive="1";
+			$allPowerOptions=0;
 			$addonArray[$x]['0']['allAddonsAlive']=$allAddonsAlive;
 			$addonArray[$x]['0']['allAddonsMacs']='';
 			$i=0;
@@ -41,6 +42,10 @@
 						$addonArray[$x]['0']['allAddonsMacs']=$row['mac'] . "," . $addonArray[$x]['0']['allAddonsMacs'];
 					}
 				}
+				if($row['PowerOptions']==="1") {
+					$allPowerOptions++;
+					$addonArray[$x]['0']['allPowerOptions']=$allPowerOptions;
+				}				
 				$timenow = time();
 				if(($row['lastCheck']+4) < $timenow) {
 					$addonid = $row['addonid'];
