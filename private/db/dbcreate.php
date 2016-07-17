@@ -1,7 +1,7 @@
 <?php
 $log->LogWarn("Database: stats.db not found, trying to create now");	
 try {
-	$configdb = new PDO('sqlite:' . $PRIVATE_DATA . '/db/config.db');
+	$configdbcreate = new PDO('sqlite:' . $PRIVATE_DATA . '/db/config.db');
 } catch (PDOException $e) {
 	$log->LogError("Database: config.db could not be created: $e->getMessage()");
 	echo "Fatal: User could not open DB: $e->getMessage()";
@@ -25,11 +25,11 @@ $query = "CREATE TABLE IF NOT EXISTS users (
 `passwordreset`	INTEGER NOT NULL DEFAULT 0,
 `lastaccess`	INTEGER DEFAULT 0
 )";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 $query = "CREATE TABLE IF NOT EXISTS settings (settingid integer PRIMARY KEY AUTOINCREMENT, setting text UNIQUE, description text, settingvalue1type text, settingvalue1 text)";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 $query = "CREATE TABLE IF NOT EXISTS rooms_addons_info (
@@ -40,7 +40,7 @@ $query = "CREATE TABLE IF NOT EXISTS rooms_addons_info (
 `fanart`	TEXT,
 PRIMARY KEY(rooms_addonsid)
 )";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 $query = "CREATE TABLE IF NOT EXISTS rooms_addons_global_settings (
@@ -49,7 +49,7 @@ $query = "CREATE TABLE IF NOT EXISTS rooms_addons_global_settings (
 `globalDisable`	INTEGER NOT NULL DEFAULT 0,
 `controlWindow`	INTEGER NOT NULL DEFAULT 0
 )";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 $query = "CREATE TABLE IF NOT EXISTS rooms_addons (
@@ -63,16 +63,17 @@ $query = "CREATE TABLE IF NOT EXISTS rooms_addons (
 `device_alive`	INTEGER,
 `enabled`	INTEGER NOT NULL DEFAULT 1,
 `lastCheck`	INTEGER,
-`roomRequiresAlive`	INTEGER DEFAULT 0
+`roomRequiresAlive`	INTEGER DEFAULT 0,
+`PowerOptions`	INTEGER DEFAULT 0
 )";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 $query = "CREATE TABLE IF NOT EXISTS rooms (
 `roomId`	integer PRIMARY KEY AUTOINCREMENT,
 `roomName`	text NOT NULL UNIQUE
 )";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 $query = "CREATE TABLE IF NOT EXISTS roomgroups (
@@ -80,7 +81,7 @@ $query = "CREATE TABLE IF NOT EXISTS roomgroups (
 `roomGroupName`	text UNIQUE,
 `roomAccess`	string
 )";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 $query = "CREATE TABLE IF NOT EXISTS preferences_options (
@@ -88,7 +89,7 @@ $query = "CREATE TABLE IF NOT EXISTS preferences_options (
 `preftitle`	TEXT NOT NULL,
 `preferences`	TEXT
 )";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 $query = "CREATE TABLE IF NOT EXISTS `preferences` (
@@ -97,7 +98,7 @@ $query = "CREATE TABLE IF NOT EXISTS `preferences` (
 `userid`	INTEGER NOT NULL,
 `preference`	TEXT NOT NULL
 )";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 $query = "CREATE TABLE IF NOT EXISTS `navigationgroups` (
@@ -105,7 +106,7 @@ $query = "CREATE TABLE IF NOT EXISTS `navigationgroups` (
 `navgroupname` TEXT  NOT NULL,
 `navitems` TEXT  NOT NULL
 )";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 $query = "CREATE TABLE IF NOT EXISTS navigation (
@@ -119,20 +120,20 @@ $query = "CREATE TABLE IF NOT EXISTS navigation (
 `autorefresh`	integer NOT NULL DEFAULT '0',
 PRIMARY KEY(navid)
 )";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 
 
 
 $query = "CREATE TABLE IF NOT EXISTS controlcenter (CCid integer PRIMARY KEY AUTOINCREMENT UNIQUE, CCsetting TEXT UNIQUE, CCvalue TEXT)";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 $query = "INSERT INTO `controlcenter` (CCid,CCsetting,CCvalue) VALUES (1,'ccversion','1.0.0'),
 (2,'dbversion','0.0.1'),
 (3,'lastcrontime','1468539538')";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 
@@ -144,7 +145,7 @@ $query = "CREATE TABLE IF NOT EXISTS chat_viewed (
 `chatId`	INTEGER NOT NULL DEFAULT '0',
 `viewed`	INTEGER NOT NULL DEFAULT 0
 )";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 $query = "CREATE TABLE IF NOT EXISTS chat (
@@ -155,13 +156,13 @@ $query = "CREATE TABLE IF NOT EXISTS chat (
 `fromUserId`	INTEGER NOT NULL DEFAULT '0',
 `created`	INTEGER NOT NULL DEFAULT 0
 )";
-$statement = $configdb->prepare($query);
+$statement = $configdbcreate->prepare($query);
 $statement->execute();
 
 
 
 
 
-
+$configdbcreate->close();
 
 ?>

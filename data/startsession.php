@@ -45,8 +45,7 @@ if(!isset($_SESSION) && !isset($cronaddon)){
 // first run/no db found
 $filename = $PRIVATE_DATA . '/db/config.db';
 if(!file_exists($filename)) {
-    echo "No Db found";
-	$_SESSION['firstrun']=1;
+    // echo "No Db found";
 	require("$PRIVATE_DATA/db/dbcreate.php");
 }
 

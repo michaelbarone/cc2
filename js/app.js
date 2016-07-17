@@ -9,6 +9,7 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 	$routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'loginCtrl'});
 	$routeProvider.when('/dashboard', {templateUrl: 'partials/dashboard.html'});
 	$routeProvider.when('/settings', {templateUrl: 'partials/settings.html'});
+	$routeProvider.when('/servercheck', {templateUrl: 'partials/servercheck.html'});
 	$routeProvider.otherwise({redirectTo: '/login'});
 	
 	// notifications
