@@ -57,7 +57,7 @@
 			$_SESSION['settingsAccess']=$settingsAccess;
 			$_SESSION['wanAccess']=$wanAccess;
 			$_SESSION['avatar']=$avatar;
-			require_once "../lib/php//mobile_device_detect.php";
+			require_once "../lib/php/mobile_device_detect.php";
 			if(mobile_device_detect(true,false,true,true,true,true,true,false,false) ) {
 				$_SESSION['mobile']='1';
 				$log->LogInfo("Login Success in mobile mode by " . $user['username'] . " from " . basename(__FILE__));

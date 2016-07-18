@@ -89,6 +89,33 @@ if(isset($action)) {
 	} elseif($action === "getUsers") {
 		$users=GetUsers($configdb);
 		echo $users;
+	} elseif($action === "createFirstUser") {
+		$users=json_decode(GetUsers($configdb),true);	
+		//print_r($users);
+		if(empty($users)){
+			$username = $_GET['username'];
+			$password = $_GET['password'];
+
+			require "../lib/php/PasswordHash.php";
+			$hasher = new PasswordHash(8, false);
+			if (strlen($password) > 72) { $password = substr($password,0,72); }
+			$password = $hasher->HashPassword($password);
+
+			$query = "INSERT INTO `users` (username,password,passwordv) VALUES ('$username','$password','2')";
+			$statement = $configdb->prepare($query);
+			$statement->execute();			
+
+			header('Content-Type: application/json');
+			$json=json_encode("success");
+			return $json;	
+		} else {
+			$log->LogWarn("Create First User attempt failed: users already present in system. " . basename(__FILE__));
+			echo "error";
+		}
+		
+
+		
+		return;
 	} elseif($action === "saveUsers"){
 		$users=json_decode(GetUsers($configdb),true);
 		//print_r($users);

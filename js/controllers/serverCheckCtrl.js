@@ -39,14 +39,14 @@ app.settingsController('serverCheckCtrl', ['$scope','$timeout','$location','logi
 		$scope.getAllUsers();
 		
 		if($scope.Users.length===0){
-
-
-			console.log('success - no existing users');
-			console.log("username: "+this.username+" and pass: "+this.password);
-			
+			$http.get('data/settings.php?action=createFirstUser&username='+this.username+'&password='+this.password)
+				.finally(function() {
+					$scope.getAllUsers();
+					if(!$scope.Users.length){
+						$location.path('/login');
+					}
+				});			
 		} else {
-			console.log('failed-existing users');
-			console.log("username: "+this.username+" and pass: "+this.password);
 			return;
 		}
 		
