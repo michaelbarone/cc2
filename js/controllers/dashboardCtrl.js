@@ -49,7 +49,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 				$scope.rooms = data;
 			})
 			.finally(function() {
-				spinnerService.remove();
+				spinnerService.remove("loadRooms");
 			});
 	}
 
@@ -59,23 +59,23 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 				$scope.links = data;
 			})
 			.finally(function() {
-				spinnerService.remove();
+				spinnerService.remove("loadLinks");
 			});
 	}
 
 
 	$timeout(function() {
+		spinnerService.add("loadRooms");
 		$scope.loadRooms();
-		spinnerService.add();
 	}, 50);		
 	$timeout(function() {
+		spinnerService.add("loadLinks");
 		$scope.loadLinks();
-		spinnerService.add();
 	}, 250);
 	$timeout(function() {		
 		updateAddonsRunning = 0;
+		spinnerService.add("updateAddons");
 		$scope.updateAddons();
-		spinnerService.add();
 	}, 350);
 	
 	$timeout(function() {
@@ -206,7 +206,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  */
 
 	$scope.showModal = function(data) {
-		spinnerService.add();
+		spinnerService.add("showModal");
 		ModalService.showModal({
 			templateUrl: "./partials/tpl/modalAddonInfo.html"
 			, controller: "ModalController"
@@ -216,7 +216,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		    }
 		}).then(function(modal) {
 			$scope.modalOpen=1;
-			spinnerService.remove();
+			spinnerService.remove("showModal");
 		});
 	};
 
@@ -231,12 +231,14 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		loginService.logout();
 	};
 
+	var idleResumee = 0;
 	var updateAddonsFirstRun=1;
 	var updateAddonsRunning = 0;
 	$scope.updateAddons = function(){
 		if(updateAddonsRunning===1 || $location.path()!="/dashboard") { return; }
 		updateAddonsRunning = 1;	
 		if( Idle.idling() === true) {
+			spinnerService.remove("updateAddons");
 			$timeout(function() {
 				updateAddonsRunning = 0;
 				$scope.updateAddons();
@@ -251,42 +253,45 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			if($scope.rooms.constructor.toString().indexOf("Array") != -1){
 				// console.log("yes");
 			} else {
-				// console.log("running loadLinks()");
+				//console.log("running loadLinks()");
 				$scope.loadRooms();
 			}
-			
-			
-			$http.get('data/getRoomAddonsData.php')
-				.success(function(data) {
-					if(data == "failed") {
-						return;
-					}
-					if(data == "failedAuth"){
-						loginService.logout();
-						return;
-					}
-					if($scope.room_addons != data) {
-						$scope.room_addons=data;
-					}
-					if(idleResumee===1 && cronRunning===0){ spinnerService.remove();idleResumee=0; }
-					if(updateAddonsFirstRun===1){
-						if($scope.userdata.currentRoom<1) {
-							$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
+
+			if($scope.rooms['0'].length!=0){
+				$http.get('data/getRoomAddonsData.php')
+					.success(function(data) {
+						if(data == "failed") {
+							return;
 						}
-						var thisRoom = $scope.userdata.currentRoom;
-						$scope.changeRoom(thisRoom);
-						updateAddonsFirstRun=0;
-						spinnerService.remove();
-					}
-					$timeout(function() {
-						updateAddonsRunning = 0;
-						$scope.updateAddons();
-					}, 5000)
-				});
+						if(data == "failedAuth"){
+							loginService.logout();
+							return;
+						}
+						if($scope.room_addons != data) {
+							$scope.room_addons=data;
+						}
+						if(idleResumee===1 && cronRunning===0){ spinnerService.remove("idleResume");idleResumee=0; }
+						if(updateAddonsFirstRun===1){
+							if($scope.userdata.currentRoom<1) {
+								$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
+							}
+							var thisRoom = $scope.userdata.currentRoom;
+							$scope.changeRoom(thisRoom);
+							updateAddonsFirstRun=0;
+							spinnerService.remove("updateAddons");
+						}
+						$timeout(function() {
+							updateAddonsRunning = 0;
+							$scope.updateAddons();
+						}, 5000)
+					});
+			} else {
+				updateAddonsFirstRun=0;
+				spinnerService.remove("updateAddons");			
+			}
 		}
 	};
 
-	var idleResumee = 0;
 	var cronKeeper = 0;
 	var cronRunning = 0;
 	$scope.runCron = function(){
@@ -298,7 +303,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			}, 5000)
 		} else {
 			cronRunning = 1;
-			if(idleResumee===1){ spinnerService.add(); }
+			if(idleResumee===1){ spinnerService.add("idleResume"); }
 			$http.get('data/cron.php')
 				.success(function(data) {
 					if(data == "failed") {

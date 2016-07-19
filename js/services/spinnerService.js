@@ -11,12 +11,14 @@ app.factory('spinnerService', function($rootScope){
 	
 	
 	return{
-		add:function(){
+		add:function(func=null){
+			console.log("Spinner: added "+func)
 			$rootScope.spinnerCount=$rootScope.spinnerCount+1;
 			resetTimeout();
 		},
-		remove:function(){
+		remove:function(func=null){
 			if($rootScope.spinnerCount>0){
+				console.log("Spinner: removed "+func)
 				$rootScope.spinnerCount=$rootScope.spinnerCount-1;
 				resetTimeout();
 			} else {
@@ -24,6 +26,7 @@ app.factory('spinnerService', function($rootScope){
 			}
 		},
 		clear:function(){
+			console.log("Spinner: clear all")
 			$rootScope.spinnerCount=0;
 		}
 	};

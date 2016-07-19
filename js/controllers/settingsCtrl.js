@@ -24,7 +24,7 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginSe
 			url: './partials/tpl/settingsNavigation.tpl.html'
 		}, {
 			title: 'Server Info',
-			url: './partials/tpl/settingsServerCheck.tpl.html'
+			url: './partials/servercheck.html'
 		}];
 	$scope.currentTab = './partials/tpl/settingsUsers.tpl.html';
 	

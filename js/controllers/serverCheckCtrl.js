@@ -1,6 +1,6 @@
 'use strict';
 
-app.settingsController('serverCheckCtrl', ['$scope','$timeout','$location','loginService','$http','inform','$route', function ($scope, $timeout, $location, loginService, $http, inform, $route){
+app.settingsController('serverCheckCtrl', ['$scope','$timeout','$location','loginService','$http','inform','$route','spinnerService', function ($scope, $timeout, $location, loginService, $http, inform, $route, spinnerService){
 	$scope.userdata = [];
 	$scope.userdata.currentpage = "Server Check";
 	$scope.Users = [];
@@ -13,9 +13,13 @@ app.settingsController('serverCheckCtrl', ['$scope','$timeout','$location','logi
 
 	
 	$scope.serverCheck = function() {
+		spinnerService.add("serverCheck");
 		$http.get('data/serverCheck.php')
 			.success(function(data) {
 				$scope.serverCheck = data;
+			})
+			.finally(function() {
+				spinnerService.remove("serverCheck");
 			});		
 	}
 	
