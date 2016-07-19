@@ -7,7 +7,7 @@
 		<td>		
 			<li><a ng-cloak class="title">{{userdata.username}}</a></li>
 			<li><a>Preferences</a></li>
-			<li ng-if="userdata.settingsAccess==='1'">
+			<li ng-if="userdata.settingsAccess==='1' || userdata.currentpage==='settings'">
 				<a ng-if="userdata.currentpage==='dashboard'" href="./#/settings">Settings</a>
 				<a ng-if="userdata.currentpage==='settings'" href="./#/dashboard" class="orange">Dashboard</a>
 			</li>

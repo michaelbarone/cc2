@@ -101,7 +101,7 @@ if(isset($action)) {
 			if (strlen($password) > 72) { $password = substr($password,0,72); }
 			$password = $hasher->HashPassword($password);
 
-			$query = "INSERT INTO `users` (username,password,passwordv) VALUES ('$username','$password','2')";
+			$query = "INSERT INTO `users` (username,password,passwordv,settingsAccess) VALUES ('$username','$password','2','1')";
 			$statement = $configdb->prepare($query);
 			$statement->execute();			
 

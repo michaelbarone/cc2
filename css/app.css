@@ -490,7 +490,7 @@ img.infoType { height:30px; }
 }
 
 #dashboardWrapper.settings {
-	overflow:auto;
+	overflow-y:auto;
 }
 
 #dashboardMask {
