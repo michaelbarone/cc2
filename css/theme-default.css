@@ -9,7 +9,7 @@ h1,h2,h3,h4,h5,td,p { color:#ccc; }
 
 a:link { color:#eee; }
 
-a:hover,#header table td:first-of-type:hover { color:#0099ff !important;cursor:pointer; }
+a:not(.btn):hover,#header table td:first-of-type:hover { color:#0099ff !important;cursor:pointer; }
 
 a:visited { color:#eee; }
 

@@ -75,7 +75,7 @@
 	</div>
 	<div id="dashboardWrapper" scrolling="auto">
 		<div id="dashboardMask">
-			<span ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
+			<span ng-cloak ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}" ng-if="rooms[0].length!=0">
 				<div id="room{{room}}" class="dashboardPage RoomPage">
 					<div class="content">
 						<span class="col-12">
@@ -112,7 +112,7 @@
 					</div>
 				</div>
 			</span>
-			<span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
+			<span ng-cloak ng-repeat="(linkgroup, linkgrouparray) in links[0]" ng-if="links[0].length!=0">
 				<div class="dashboardPage" ng-repeat="thislink in linkgrouparray">
 					<div class="content">
 						<iframe id="{{thislink['navname']}}" src="" data="{{thislink['navip'] | trustUrl }}" scrolling="auto" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
@@ -123,6 +123,13 @@
 				<div class="dashboardPage">
 					<div class="content">
 						<iframe id="{{addon.addon+$index}}" src="" data="{{room_addons_current[0][userdata.currentRoom][$index]['ip'] | trustUrl}}" scrolling="no" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
+					</div>
+				</div>
+			</span>	
+			<span>
+				<div ng-cloak class="dashboardPage">
+					<div class="content">
+						<div id="dashboard-welcome" ng-cloak ng-include src="'partials/dashboard-welcome.html'"></div>
 					</div>
 				</div>
 			</span>			

@@ -4,6 +4,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	var unix = Math.round(+new Date()/1000);
 	$scope.links = [];
 	$scope.rooms = [];
+	$scope.rooms['0'] = [];
 	$scope.userdata = [];
 	$scope.userdata.currentpage = "dashboard";
 	/*
@@ -168,7 +169,9 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	
 	$(window).resize(function(){
 		var thename = $scope.userdata.linkSelected;
-		document.getElementById(thename).scrollIntoView();
+		if(thename!="roomnull" || thename !='' || thename !=null){
+			document.getElementById(thename).scrollIntoView();
+		}
 	});	
 
 /***/
@@ -286,8 +289,11 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 						}, 5000)
 					});
 			} else {
-				updateAddonsFirstRun=0;
-				spinnerService.remove("updateAddons");			
+				spinnerService.remove("updateAddons");
+				$timeout(function() {
+					updateAddonsRunning = 0;
+					$scope.updateAddons();
+				}, 5000)
 			}
 		}
 	};

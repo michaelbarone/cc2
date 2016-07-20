@@ -1,7 +1,7 @@
 <div ng-cloak ng-show="spinnerCount" class="spinner"></div>
 <div id="loginTiles">
 	<br />
-	<div ng-if="users.length!=0">
+	<div ng-cloak ng-if="users.length!=0">
 		<h2 class="w50 left txtright">Control Center</h2>
 		<h2 class="w50 right txtleft">User Selection</h2>
 		<br /><br /><br />
@@ -40,7 +40,7 @@
 			<img ng-src="img/Users/user-default.jpg" class="image" ng-if="thisuser.passwordset=='1' && thisuser.avatar=='0'">
 		</div>
 	</div>
-	<div ng-if="users.length===0">
+	<div ng-cloak ng-if="users.length===0">
 		<h2 class="w50 left txtright">Control Center</h2>
 		<h2 class="w50 right txtleft">First Run Setup</h2>
 		<br /><br /><br />
