@@ -1153,19 +1153,20 @@ input[type="submit"].btn.btn-mini {
     margin: 15px auto;
     z-index: 1045;
     max-width: 90%;
-	max-height: 90%;
-	overflow: auto;	
+	max-height: 100%;
+	border-radius: 6px;
+	overflow: hidden;
+	height:15000px;
 }
 .modal-content {
   position: relative;
   background: rgb(46, 46, 46) none repeat scroll 0% 0%;
-  border-radius: 6px;
   -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   background-clip: padding-box;
   outline: 0;
   padding-bottom:50px;
-  overflow:auto;
+  height:90%;
 }
 .modal-backdrop {
   position: fixed;
@@ -1196,9 +1197,11 @@ input[type="submit"].btn.btn-mini {
   line-height: 1.42857143;
 }
 .modal-body {
-  position: relative;
-  padding: 15px;
-  margin-top:50px;
+	position: relative;
+	padding: 15px;
+	top: 50px;
+	height: 100%;
+	overflow: auto;
 }
 .modal-footer {
   padding: 15px;

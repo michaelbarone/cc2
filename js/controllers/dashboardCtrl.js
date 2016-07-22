@@ -208,14 +208,20 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *
  */
 
-	$scope.showModal = function(data) {
+	$scope.showModal = function(data,type) {
 		spinnerService.add("showModal");
+		
+		if(type==="addon"){
+			var turl = "./partials/tpl/modalAddonInfo.html";
+		}else if(type==="userpref"){
+			var turl = "./partials/tpl/modalUserPreferences.html";
+		}
+		
 		ModalService.showModal({
-			templateUrl: "./partials/tpl/modalAddonInfo.html"
+			templateUrl: turl
 			, controller: "ModalController"
 			,inputs: {
 				data: data,
-
 		    }
 		}).then(function(modal) {
 			$scope.modalOpen=1;
@@ -270,9 +276,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							loginService.logout();
 							return;
 						}
-						if($scope.room_addons != data) {
-							$scope.room_addons=data;
-						}
 						if(idleResumee===1 && cronRunning===0){ spinnerService.remove("idleResume");idleResumee=0; }
 						if(updateAddonsFirstRun===1){
 							if($scope.userdata.currentRoom<1) {
@@ -283,6 +286,9 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							updateAddonsFirstRun=0;
 							spinnerService.remove("updateAddons");
 						}
+						if($scope.room_addons != data) {
+							$scope.room_addons=data;
+						}						
 						$timeout(function() {
 							updateAddonsRunning = 0;
 							$scope.updateAddons();
