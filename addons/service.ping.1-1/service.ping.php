@@ -1,6 +1,14 @@
 <?php
 class ping {
 
+	function AddonInfo(){
+		$info = array();
+		$info['type']="service";
+		$info['name']="ping";
+		$info['version']="1-1";  // version matches the 3rd section of the folder name. first number relates to compatibility with connecting api (will be updates when that app updates).  second number is the revision for this class.
+		$info['info']="Addon that pings an ip and reports status.";  // brief description and list compatible versions of the connecting app
+	}
+
 	function SetVariables($vars){
 		$this->IP = $vars['ip'];
 	}

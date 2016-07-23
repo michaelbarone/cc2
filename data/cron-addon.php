@@ -10,9 +10,9 @@ $addonType=$addonparts[0];
 $ip=$_POST['ip'];
 $mac=$_POST['mac'];
 $statusorig=$_POST['device_alive'];
-if(file_exists("../addons/$addonid/$addonid.php") && $ip !='') {
+if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	if(!isset(${$addonName})) {
-		include "../addons/$addonid/$addonid.php";
+		include "../addons/$addonid/$addonType.$addonName.php";
 		${$addonName} = new $addonName();
 	}
 	$vars = array();

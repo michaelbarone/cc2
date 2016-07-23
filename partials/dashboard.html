@@ -17,11 +17,11 @@
 						ng-click="loadLink(addon.addon + $index);" 
 						ng-class="{'selected': userdata.linkSelected==addon.addon + $index}"
 						>
-						<img ng-src="addons/{{addon.addontype + '.' + addon.addon}}/icon.png"  height="27px" width="27px" />
+						<img ng-src="addons/{{addon.addontype + '.' + addon.addon + '.' + addon.addonversion}}/icon.png"  height="27px" width="27px" />
 					</a>		
 				</li>
 				<li>
-					<a id="{{'room' + userdata.currentRoom + 'L'}}" 
+					<a id="{{'room' + userdata.currentRoom + 'L'}}"
 						class="main link persistent loaded" 
 						on-long-press="loadLinkLongPress('room' + userdata.currentRoom);" 
 						ng-click="loadLink('room' + userdata.currentRoom);" 

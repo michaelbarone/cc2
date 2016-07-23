@@ -1,6 +1,15 @@
 <?php
 class kodi {
 
+	function AddonInfo(){
+		$info = array();
+		$info['type']="mediaplayer";
+		$info['name']="kodi";
+		$info['version']="6-1";  // version matches the 3rd section of the folder name. first number relates to compatibility with connecting api (will be updates when that app updates).  second number is the revision for this class.
+		$info['info']="Addon that supports Kodi JSON-RPC v6 for Frodo, Gotham, Helix, Isengard, and Jarvis.";  // brief description and list compatible versions of the connecting app
+	}
+
+
 	function SetVariables($vars){
 		$this->IP = $vars['ip'];
 		$this->MAC = $vars['mac'];

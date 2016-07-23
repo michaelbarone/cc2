@@ -1,5 +1,15 @@
 <?php
 class denonAVRe400 {
+
+	function AddonInfo(){
+		$info = array();
+		$info['type']="receiver";
+		$info['name']="denon";
+		$info['version']="1-1";  // version matches the 3rd section of the folder name. first number relates to compatibility with connecting api (will be updates when that app updates).  second number is the revision for this class.
+		$info['info']="Addon that supports Denon Receivers.";  // brief description and list compatible versions of the connecting app
+	}
+
+
 	
 	function SetVariables($vars){
 		$this->IP = $vars['ip'];

@@ -29,7 +29,8 @@
 					if($item==='addonid'){
 						$addonparts = explode('.',$value);
 						$addonArray[$x][$i]['addontype']=$addonparts[0];
-						$addonArray[$x][$i]['addon']=$addonparts[1];						
+						$addonArray[$x][$i]['addon']=$addonparts[1];
+						$addonArray[$x][$i]['addonversion']=$addonparts[2];						
 					}
 					if(is_numeric($item)===false){
 						$addonArray[$x][$i][$item]=$value;
