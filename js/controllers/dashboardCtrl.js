@@ -1,6 +1,7 @@
 'use strict';
 
 app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService','Fullscreen', function ($rootScope, $scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService, Fullscreen){
+	spinnerService.clear();
 	var unix = Math.round(+new Date()/1000);
 	$scope.links = [];
 	$scope.rooms = [];
@@ -38,7 +39,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		$scope.userdata.currentRoom=sessionStorage.getItem('homeRoom');
 		sessionStorage.setItem('currentRoom',sessionStorage.getItem('homeRoom'));
 		$scope.userdata.linkSelected="room"+$scope.userdata.currentRoom;
-	}	
+	}
 
 /**
  *  Load Initial Data
@@ -80,6 +81,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	}, 350);
 	
 	$timeout(function() {
+		$scope.loaded=1;
 		cronRunning = 0;
 		$scope.runCron();
 	}, 1500);	
