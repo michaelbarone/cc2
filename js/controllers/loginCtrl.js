@@ -22,7 +22,7 @@ app.controller('loginCtrl', ['$scope','loginService','$http', '$location','spinn
 			spinnerService.remove("login page users load");
 		});
 
-	$scope.closeLockedTile=function(toggleLockedLogin) {
+	$scope.closeLockedTile=function(toggleLockedLogin=null) {
 		$scope.loginMsg = '';
 		toggleLockedLogin.user = null;
 	};
