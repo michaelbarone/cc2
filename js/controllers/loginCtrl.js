@@ -24,7 +24,9 @@ app.controller('loginCtrl', ['$scope','loginService','$http', '$location','spinn
 
 	$scope.closeLockedTile=function(toggleLockedLogin=null) {
 		$scope.loginMsg = '';
-		toggleLockedLogin.user = null;
+		if(toggleLockedLogin!=null){
+			toggleLockedLogin.user = null;
+		}
 	};
 		
 	$scope.login=function(data){
