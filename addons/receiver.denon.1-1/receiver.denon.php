@@ -1,5 +1,5 @@
 <?php
-class denonAVRe400 {
+class denon {
 
 	function AddonInfo(){
 		$info = array();

@@ -21,7 +21,7 @@ if(isset($_GET)) {
 			foreach ($configdb->query($sql) as $row) {
 				if(($row['device_alive']==='0' && $_GET['option']==='on') || ($row['device_alive']==='1' && $_GET['option']==='off')){
 					$addonparts = explode(".",$row['addonid']);
-					$addontype=$addonparts[0];
+					$addonType=$addonparts[0];
 					$addonName=$addonparts[1];	
 					$addonid=$row['addonid'];				
 					$ip=$row['ip'];
@@ -58,7 +58,7 @@ if(isset($_GET)) {
 			foreach ($configdb->query($sql) as $row) {
 				if(($row['device_alive']==='0' && $_GET['option']==='on') || ($row['device_alive']==='1' && $_GET['option']==='off')){
 					$addonparts = explode(".",$row['addonid']);
-					$addontype=$addonparts[0];
+					$addonType=$addonparts[0];
 					$addonName=$addonparts[1];	
 					$addonid=$row['addonid'];
 					$ip=$row['ip'];
