@@ -278,7 +278,10 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							loginService.logout();
 							return;
 						}
-						if(idleResumee===1 && cronRunning===0){ spinnerService.remove("idleResume");idleResumee=0; }
+						if(idleResumee===1 && cronRunning===0){ 
+							spinnerService.clear();
+							idleResumee=0;
+						}
 						if(updateAddonsFirstRun===1){
 							if($scope.userdata.currentRoom<1) {
 								$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
