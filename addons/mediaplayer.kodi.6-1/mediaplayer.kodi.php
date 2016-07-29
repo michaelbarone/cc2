@@ -105,12 +105,20 @@ class kodi {
 			$jsonnowplaying = json_decode($output,true);
 			return $jsonnowplaying;
 		} elseif($activeplayerid=="1") {
-			$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetItem\", \"params\": { \"properties\": [\"art\",\"director\",\"writer\",\"tagline\",\"episode\",\"file\",\"title\",\"showtitle\",\"season\",\"genre\",\"year\",\"rating\",\"runtime\",\"firstaired\",\"plot\",\"fanart\",\"thumbnail\",\"tvshowid\"], \"playerid\": 1 }, \"id\": \"1\"");
+				
+				
+				
+			// $therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetItem\", \"params\": { \"properties\": [\"art\",\"director\",\"writer\",\"tagline\",\"episode\",\"file\",\"title\",\"showtitle\",\"season\",\"genre\",\"year\",\"rating\",\"runtime\",\"firstaired\",\"plot\",\"fanart\",\"thumbnail\",\"tvshowid\"], \"playerid\": 1 }, \"id\": \"1\"");
+			
+			
+			
+			$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.GetItem", "params": { "properties": ["title","artist","albumartist","genre","year","rating","album","track","duration","comment","lyrics","musicbrainztrackid","musicbrainzartistid","musicbrainzalbumid","musicbrainzalbumartistid","playcount","fanart","director","trailer","tagline","plot","plotoutline","originaltitle","lastplayed","writer","studio","mpaa","cast","country","imdbnumber","premiered","productioncode","runtime","set","showlink","streamdetails","top250","votes","firstaired","season","episode","showtitle","thumbnail","file","resume","artistid","albumid","tvshowid","setid","watchedepisodes","disc","tag","art","genreid","displayartist","albumartistid","description","theme","mood","style","albumlabel","sorttitle","episodeguide","uniqueid","dateadded","channel","channeltype","hidden","locked","channelnumber","starttime","endtime"], "playerid": 1 }, "id": "1"');
+			
 			$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
 			$output = $this->Curl($jsoncontents);
 			$jsonnowplaying = json_decode($output,true);
 			foreach($jsonnowplaying['result']['item'] as $item=>$value) {
-				if($value == "" || $value == "0") { continue; }
+				if($value == "" || $value == "0" || $item =="0") { continue; }
 				
 				//  special cases
 				if($item == "fanart" || $item == "thumbnail") {
@@ -125,10 +133,22 @@ class kodi {
 					$nowplayingarray[$item] = "$this->IP/image/".urlencode($value);
 				} elseif(is_array($value)) {
 					if(empty($value)) { continue; }
-					foreach($value as $key => $item){    
-						$array = array("image://");
-						$item = rtrim(urldecode(str_ireplace($array, '', $item)), '/');
-						$nowplayingarray[$key] = $item;	
+					foreach($value as $key => $item){
+							
+						if (!is_array($item) && substr($item, 0, 8) === 'image://') {
+							if(substr($key, 0, 7) === 'tvshow.') {
+								$key = ltrim($key, 'tvshow.');
+							}
+							$item = ltrim($item, 'image://');
+							//$item = urldecode($item);
+							if(substr($key, 0, 6) === 'fanart') {
+								$nowplayingarray['images']['fanart'][$key] = $item;
+							} else {
+								$nowplayingarray['images'][$key] = $item;
+							}
+						} else {
+							$nowplayingarray[$key] = $item;
+						}
 					}
 					
 					/*
@@ -242,11 +262,76 @@ class kodi {
 		
 		return $PlayingTime;
 	}
+
+	
+	
+	
+	
+	function SendMedia($to,$from=false,$sendtype=false,$video=false){
+		
+		
+		if($sendtype=="youtube") {
+			$jsoncontents = "$to/jsonrpc?request={%22jsonrpc%22:%222.0%22,%22id%22:%221%22,%22method%22:%22Playlist.Clear%22,%22params%22:{%22playlistid%22:1}}";
+			$jsoncontents .= "====$to/jsonrpc?request={\"jsonrpc\":\"2.0\",\"method\":\"Player.Open\",\"params\":{\"item\":{\"file\":\"plugin://plugin.video.youtube/?action=play_video%26videoid=$video\"}},\"id\":\"1\"}";
+		} else {
+
+
+
+
+		
+			$playingtime=$this->GetPlayingTimeInfo();
+			$playerpercentage=$playingtime['playerpercentage'];
+		
+		
+		
+
+			$jsoncontents = '';	
+			
+			if($activeplayerid==0) {
+				
+			} elseif($activeplayerid==1) {
+				//if($thelabel !in playlist array || !isset(playlist array)) {
+				
+				$jsoncontents = "$to/jsonrpc?request=%7B%22jsonrpc%22:%222.0%22,%22id%22:%221%22,%22method%22:%22Player.Open%22,%22params%22:%7B%22item%22:%7B%22file%22:%22$filepath%22%7D%7D%7D";
+				if($sendtype=="clone") {
+					$jsoncontents .= "====$to/jsonrpc?request=%7B%22jsonrpc%22:%222.0%22,%22id%22:1,%22method%22:%22Player.Seek%22,%22params%22:%7B%22playerid%22:1,%22value%22:$playerpercentage%7D%7D";
+				} else {
+					$jsoncontents .= "====$to/jsonrpc?request=%7B%22jsonrpc%22:%222.0%22,%22id%22:1,%22method%22:%22Player.Seek%22,%22params%22:%7B%22playerid%22:1,%22value%22:$playerpercentage%7D%7D";
+					$jsoncontents .= "====$from/jsonrpc?request=%7B%22jsonrpc%22:%222.0%22,%22id%22:1,%22method%22:%22Player.Stop%22,%22params%22:%7B%22playerid%22:1%7D%7D";
+				}
+				
+				//} elseif(currentlyplayingtitle != playlist[0]title) {
+				//		
+				
+				//} else {
+				
+				
+				//}
+			} elseif($activeplayerid==2) {
+				
+			}
+
+
+http://192.168.3.226:8080/jsonrpc?request={"jsonrpc":"2.0","method":"Player.Open","params":{"item":{"file":"plugin://plugin.video.youtube/?action=play_video%26videoid=plugin://plugin.video.emby.tvshows/294002a81930b112dd314d957fc15826/?dbid=14895&mode=play&id=3e402edd72193af8c859be9c765e2340"}},"id":"1"}
+	
+
+
+	
+				
+		}
+		
+		
+		
+	}
+	
+	
+	
+	
 }
 
 
 
-
+	
 
 
 
