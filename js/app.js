@@ -1,6 +1,6 @@
 'use strict';
 
-var app= angular.module('ControlCenter', ['ngRoute','ngResource','ngIdle','ngScrollTo','inform','ngAnimate','NgModel','angularModalService','ngDraggable','FBAngular']);
+var app= angular.module('ControlCenter', ['ngRoute','ngResource','ngIdle','ngScrollTo','inform','ngAnimate','NgModel','angularModalService','ngDraggable','FBAngular','angular-carousel']);
 app.config(['$routeProvider','$controllerProvider','informProvider','KeepaliveProvider', 'IdleProvider', function($routeProvider,$controllerProvider,informProvider,KeepaliveProvider, IdleProvider) {
 	// routes
 	app.settingsController = $controllerProvider.register;
@@ -134,9 +134,10 @@ app.directive('onLongPress', function($timeout) {
 	};
 })
 
-app.controller('ModalController', function($scope, close, data, $http) {
+app.controller('ModalController', function($scope, close, data, $http, Carousel) {
 	//$scope.modaldata=data;
 	$scope.modalContent=[];
+	$scope.Carousel = Carousel;
 	
 	if(data>=0){
 		$http.get('data/getRoomAddonDataExtended.php?data='+JSON.stringify(data))

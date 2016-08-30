@@ -18,6 +18,10 @@
   display: none !important;
 }
 
+[class*="col-"] {
+    float: left;
+}
+
 html {
 	background: black;
 	height: 100%;
@@ -62,10 +66,16 @@ a img {border:0;}
 
 .right { float:right !important; }
 .left { float:left !important; }
+.floatnone { float: none !important; }
 .center { min-width:50px;margin:0 auto;text-align:center; }
 .clear { clear:both; }
 .clearr { clear:right; }
 .clearl { clear:left; }
+
+.overflowx { overflow-x:hidden; }
+.overflowy { overflow-y:hidden; }
+
+.nowrap { white-space: nowrap; }
 
 .txtright { text-align: right; margin: 0 3px 0 -3px; }
 .txtleft { text-align: left; margin: 0 -3px 0 3px; }
@@ -86,10 +96,6 @@ a img {border:0;}
 .col-10 {width: 83.33%;}
 .col-11 {width: 91.66%;}
 .col-12 {width: 100%;}
-
-[class*="col-"] {
-    float: left;
-}
 
 .addonTitle {
 	font-size:15pt;
@@ -693,8 +699,8 @@ img.infoType { height:30px; }
 }
 
 @media only screen and (max-width: 520px) {
-	.col-1 {width: 100%;}
-	.col-2 {width: 100%;}
+	.col-1 {width: 50%;}
+	.col-2 {width: 50%;}
 	.col-3 {width: 100%;}
 	.col-4 {width: 100%;}
 	.col-5 {width: 100%;}
@@ -709,6 +715,8 @@ img.infoType { height:30px; }
 
 
 @media all and (max-width: 350px) {
+	.col-1 {width: 100%;}
+	.col-2 {width: 100%;}		
 	.w50 { width:100%;}
 	.txtright { text-align:center;margin:0; }
 	.txtleft { text-align:center;margin:0; }
@@ -1224,4 +1232,129 @@ input[type="submit"].btn.btn-mini {
   width: 50px;
   height: 50px;
   overflow: scroll;
+}
+
+.ng-carousel {
+	display: block;
+	width: 80%;
+	height: 3px;
+	white-space: nowrap;
+	position: relative;
+	overflow: hidden;
+	padding-bottom: 46.6%;
+	margin: 20px 10%;
+}
+.ng-carousel slidecontainer {
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  font-size: 0;
+}
+.ng-carousel slidecontainer.carousel-ignore-first-slide {
+  -webkit-transform: translate(-100%, 0);
+  -moz-transform: translate(-100%, 0);
+  -o-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+}
+.ng-carousel slidecontainer.carousel-animate {
+  -webkit-transition: -webkit-transform 0.5s ease-out 0s;
+  -moz-transition: -moz-transform 0.5s ease-out 0s;
+  -ms-transition: -ms-transform 0.5s ease-out 0s;
+  -o-transition: -o-transform 0.5s ease-out 0s;
+  transition: transform 0.5s ease-out 0s;
+}
+.ng-carousel slide {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 16px;
+  width: 100%;
+  height: 100%;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-position: center;
+}
+.ng-carousel slide img{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	z-index:10;
+}
+.ng-carousel slide p.title{
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	z-index: 100;
+	background-color: rgba(15,15,15,.7);
+	vertical-align: middle;
+	text-align: center;
+	font-weight: bold;
+	padding-top: 1%;
+	margin: 0;
+}
+.ng-carousel slide p.title .subtitle{
+	color: darkgrey;
+}
+
+.ng-carousel .carousel-arrow {
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	z-index: 1;
+	width: 50px;
+	text-align: center;
+	background-color: rgba(15,15,15,.5);
+	padding-top: 175px;
+	font-weight: bold;
+	font-size: 25pt;
+	color: #eee;
+	cursor: pointer;
+}
+.ng-carousel .carousel-arrow.carousel-arrow-left {
+  left: 0;
+}
+.ng-carousel .carousel-arrow.carousel-arrow-right {
+  right: 0;
+}
+
+.imageslider {
+	width: 95%;
+	right: 0;
+	## height: 400px;
+	overflow-x: auto;
+	position: absolute;
+	overflow-y: hidden;
+}
+
+.imageslider > div {
+	position: relative;
+}
+
+.imageslider img {
+	width: 100%;
+}
+
+.imageslider .title {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	z-index: 100;
+	background-color: rgba(15,15,15,.7);
+	vertical-align: middle;
+	text-align: center;
+	font-weight: bold;
+	padding: 15px;
+	margin: 0;
+	font-size: initial;
+}
+
+.imageslider .title .subtitle{
+	color: darkgrey;
+	font-size: small;
 }

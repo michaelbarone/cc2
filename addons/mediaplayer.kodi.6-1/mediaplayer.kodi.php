@@ -131,6 +131,24 @@ class kodi {
 						}
 					}*/
 					$nowplayingarray[$item] = "$this->IP/image/".urlencode($value);
+				} elseif($item == "cast"){
+					if(empty($value)) { continue; }
+					foreach($value as $key => $item){
+	
+						foreach($item as $thiskey => $thisitem){
+							if (!is_array($thisitem) && substr($thisitem, 0, 8) == 'image://') {
+								$nowplayingarray['cast'][$key][$thiskey] = "$this->IP/image/".urlencode($thisitem);
+							} else {
+								$nowplayingarray['cast'][$key][$thiskey] = $thisitem;
+							}	
+						}
+	
+	
+						
+
+					}
+
+
 				} elseif(is_array($value)) {
 					if(empty($value)) { continue; }
 					foreach($value as $key => $item){
@@ -139,12 +157,14 @@ class kodi {
 							if(substr($key, 0, 7) === 'tvshow.') {
 								$key = ltrim($key, 'tvshow.');
 							}
-							$item = ltrim($item, 'image://');
-							//$item = urldecode($item);
+							//if (strpos($item, 'image://') !== false) {
+							//	$item = ltrim($item, 'image://');
+								//$item = urldecode($item);
+							//}
 							if(substr($key, 0, 6) === 'fanart') {
-								$nowplayingarray['images']['fanart'][$key] = $item;
+								$nowplayingarray['images']['fanart'][$key] = "$this->IP/image/".urlencode($item);
 							} else {
-								$nowplayingarray['images'][$key] = $item;
+								$nowplayingarray['images'][$key] = "$this->IP/image/".urlencode($item);
 							}
 						} else {
 							$nowplayingarray[$key] = $item;
