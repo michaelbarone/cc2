@@ -1236,13 +1236,12 @@ input[type="submit"].btn.btn-mini {
 
 .ng-carousel {
 	display: block;
-	width: 80%;
 	height: 3px;
 	white-space: nowrap;
 	position: relative;
 	overflow: hidden;
 	padding-bottom: 46.6%;
-	margin: 20px 10%;
+	margin-left: 20px;
 }
 .ng-carousel slidecontainer {
   display: block;
