@@ -19,11 +19,11 @@ if(isset($_GET)) {
 					LEFT JOIN rooms_addons_global_settings as settings ON addons.addonid = settings.addonid 
 					WHERE addons.enabled ='1' AND settings.globalDisable='0' AND addons.rooms_addonsid='$addonid';";
 			foreach ($configdb->query($sql) as $row) {
-				if(($row['device_alive']==='0' && $_GET['option']==='on') || ($row['device_alive']==='1' && $_GET['option']==='off')){
+				if((($row['device_alive']==='0' && $_GET['option']==='on') || ($row['device_alive']==='1' && $_GET['option']==='off')) && $row['PowerOptions']==='1'){
 					$addonparts = explode(".",$row['addonid']);
 					$addonType=$addonparts[0];
-					$addonName=$addonparts[1];	
-					$addonid=$row['addonid'];				
+					$addonName=$addonparts[1];
+					$addonid=$row['addonid'];			
 					$ip=$row['ip'];
 					$mac=$row['mac'];
 					if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
@@ -56,7 +56,7 @@ if(isset($_GET)) {
 					LEFT JOIN rooms_addons_global_settings as settings ON addons.addonid = settings.addonid 
 					WHERE addons.enabled ='1' AND settings.globalDisable='0' AND addons.roomid='$room';";
 			foreach ($configdb->query($sql) as $row) {
-				if(($row['device_alive']==='0' && $_GET['option']==='on') || ($row['device_alive']==='1' && $_GET['option']==='off')){
+				if((($row['device_alive']==='0' && $_GET['option']==='on') || ($row['device_alive']==='1' && $_GET['option']==='off')) && $row['PowerOptions']==='1'){
 					$addonparts = explode(".",$row['addonid']);
 					$addonType=$addonparts[0];
 					$addonName=$addonparts[1];	

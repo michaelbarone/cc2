@@ -36,7 +36,7 @@
 				<div class="col-9">
 					<div ng-if="modalContent[0]['images']['fanart']" ng-carousel ng-carousel-name="fanart-carousel" ng-carousel-timer="10000">
 						<slidecontainer>
-							<slide>
+							<slide ng-if="modalContent[0]['images']['landscape']">
 								<img ng-src="{{modalContent[0]['images']['landscape']}}">
 							</slide>
 							<slide ng-repeat="fanart in modalContent[0]['images']['fanart']">
