@@ -319,14 +319,12 @@ class kodi {
 			//} elseif($activeplayerid==1) {
 				//if($thelabel !in playlist array || !isset(playlist array)) {
 				
-				$therequest = '"jsonrpc": "2.0", "id": "'.$activeplayerid.'", "method": "Player.Open", "params": { "item": {"file":"'.urlencode($video).'"}}';
+				$therequest = urlencode('"jsonrpc": "2.0", "id": "'.$activeplayerid.'", "method": "Player.Open", "params": { "item": {"file":"'.$video.'"}}');
 				$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
+
 				
-				echo "<br><br>";
-				print_r($jsoncontents);
-				
-				if($playerpercentage!=false){
-					$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.Seek", "params": { "playerid": "'.$activeplayerid.'", "value": "'.$playerpercentage.'"}');
+				if($playerpercentage!=false){   // {"jsonrpc":"2.0","method":"Player.Seek","params":{ "playerid":1,"value":"smallforward"},"id":1}
+					$therequest = urlencode('"jsonrpc": "2.0", "id": "'.$activeplayerid.'", "method": "Player.Seek", "params": { "playerid": '.$activeplayerid.', "value": '.$playerpercentage.'}');
 					$jsoncontents .= "====$this->IP/jsonrpc?request={".$therequest."}";
 				}
 
@@ -356,21 +354,23 @@ class kodi {
 			$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
 			$output = $this->Curl($jsoncontents);
 			$jsonnowplaying = json_decode($output,true);
-			print_r($jsonnowplaying);
 			if(isset($jsonnowplaying['error'])) { echo "parse error";return; }
-			$nowplayingarray['file']=urlencode($jsonnowplaying['result']['item']['file']);
+			$nowplayingarray['file']=$jsonnowplaying['result']['item']['file'];
 			$nowplayingarray['activeplayerid']=$activeplayerid;
-			
-			$playingtime=$this->GetPlayingTimeInfo();
-			$nowplayingarray['playerpercentage']=$playingtime['playerpercentage'];
-			
-			if($sendtype=="clone"){
+			if($nowplayingarray['activeplayerid']=="none") {
+
 			} else {
-				$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.Stop", "params": { "playerid": "$activeplayerid"}');
-				$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
-				$output = $this->Curl($jsoncontents);
-			}
 			
+				$playingtime=$this->GetPlayingTimeInfo();
+				$nowplayingarray['playerpercentage']=$playingtime['playerpercentage'];
+				
+				if($sendtype=="clone"){
+				} else {
+					$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.Stop", "params": { "playerid": "$activeplayerid"}');
+					$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
+					$output = $this->Curl($jsoncontents);
+				}
+			}
 			
 			return $nowplayingarray;
 		}
@@ -378,103 +378,6 @@ class kodi {
 			
 			
 	}
-	
-	
-	
-	function SendMediaOLD($to,$from=false,$sendtype=false,$video=false){
-		
-		
-		if($sendtype=="youtube") {
-			$therequest = urlencode('"jsonrpc": "2.0", "method": "Playlist.Clear", "params": { "playlistid": 1 }');
-			$jsoncontents = "$to/jsonrpc?request={".$therequest."}";
 
-			$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.Open", "params": { "item": {"file":"plugin://plugin.video.youtube/?action=play_video%26videoid=$video"}, "id": "1" }');
-			$jsoncontents .= "$to/jsonrpc?request={".$therequest."}";
-
-
-			// $jsoncontents .= "====$to/jsonrpc?request={\"jsonrpc\":\"2.0\",\"method\":\"Player.Open\",\"params\":{\"item\":{\"file\":\"plugin://plugin.video.youtube/?action=play_video%26videoid=$video\"}},\"id\":\"1\"}";
-		} else {
-
-
-
-			$activeplayerid = $this->GetActivePlayer();
-		
-
-		
-			$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.GetItem", "params": { "properties": ["file"], "playerid": 1 }, "id": "1"');
-			$jsoncontents = "$from/jsonrpc?request={".$therequest."}";
-			$output = $this->Curl($jsoncontents);
-			$jsonnowplaying = json_decode($output,true);
-			$filepath = $jsonnowplaying['file'];
-		
-			$playingtime=$this->GetPlayingTimeInfo();
-			$playerpercentage=$playingtime['playerpercentage'];
-
-			$jsoncontents = '';	
-			
-			if($activeplayerid==0) {
-				
-			} elseif($activeplayerid==1) {
-				//if($thelabel !in playlist array || !isset(playlist array)) {
-				
-				$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.Open", "params": { "item": {"file":"$filepath"}, "id": "1" }');
-				$jsoncontents .= "$to/jsonrpc?request={".$therequest."}";
-
-				//$jsoncontents = "$to/jsonrpc?request=%7B%22jsonrpc%22:%222.0%22,%22id%22:%221%22,%22method%22:%22Player.Open%22,%22params%22:%7B%22item%22:%7B%22file%22:%22$filepath%22%7D%7D%7D";
-				if($sendtype=="clone") {
-
-					$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.Seek", "params": { "playerid": 1, "value": "$playerpercentage"}');
-					$jsoncontents .= "$to/jsonrpc?request={".$therequest."}";
-
-
-					//$jsoncontents .= "====$to/jsonrpc?request=%7B%22jsonrpc%22:%222.0%22,%22id%22:1,%22method%22:%22Player.Seek%22,%22params%22:%7B%22playerid%22:1,%22value%22:$playerpercentage%7D%7D";
-				} else {
-					
-					$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.Seek", "params": { "playerid": "1", "value": "$playerpercentage"}');
-					$jsoncontents .= "$to/jsonrpc?request={".$therequest."}";
-					
-					$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.Stop", "params": { "playerid": "1"}');
-					$jsoncontents .= "$to/jsonrpc?request={".$therequest."}";					
-
-
-					//$jsoncontents .= "====$to/jsonrpc?request=%7B%22jsonrpc%22:%222.0%22,%22id%22:1,%22method%22:%22Player.Seek%22,%22params%22:%7B%22playerid%22:1,%22value%22:$playerpercentage%7D%7D";
-					//$jsoncontents .= "====$from/jsonrpc?request=%7B%22jsonrpc%22:%222.0%22,%22id%22:1,%22method%22:%22Player.Stop%22,%22params%22:%7B%22playerid%22:1%7D%7D";
-				}
-				
-				//} elseif(currentlyplayingtitle != playlist[0]title) {
-				//		
-				
-				//} else {
-				
-				
-				//}
-			} elseif($activeplayerid==2) {
-				
-			}
-
-/*
-http://192.168.3.226:8080/jsonrpc?request=%7B%22jsonrpc%22:%222.0%22,%22id%22:%221%22,%22method%22:%22Player.Open%22,%22params%22:%7B%22item%22:%7B%22file%22:%22plugin://plugin.video.emby.movies/?dbid=14&mode=play&id=8f02d225f46c0aaf7bd9e199f2c955a2&filename=21+Jump+Street+%282012%29.mkv%22%7D%7D%7D"
-	
-
-http://192.168.3.226:8080/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Player.Open","params":{"item":{"file":"plugin://plugin.video.emby.movies/?dbid=14&mode=play&id=8f02d225f46c0aaf7bd9e199f2c955a2&filename=21+Jump+Street+%282012%29.mkv"}}}
-*/	
-				
-		}
-		
-		$contents = explode("====",$jsoncontents);
-		foreach($contents as $content) {
-			$output = $this->Curl($content);
-		}
-		
-		
-		
-	}
-	
-	
-	
-	
 }
-
-
-
 ?>

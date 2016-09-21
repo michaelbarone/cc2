@@ -182,7 +182,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 
 
 /**
- *  Addon power functions
+ *  Addon functions
  *
  */
 	$scope.powerOnAddon = function(addonid){
@@ -200,6 +200,16 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.powerOffRoom = function(room){
 		$http.post('data/power.php?type=room&option=off&room='+room);
 	}
+
+	
+	$scope.sendMedia = function (sendFromRoomIP,sendFromRoomAddonID,sendToRoomIP,sendToRoomAddonID){
+		$http.post('data/mediaSend.php?fromip='+sendFromRoomIP+'&fromaddon='+sendFromRoomAddonID+'&toip='+sendToRoomIP+'&toaddon='+sendToRoomAddonID);
+	}
+
+	$scope.cloneMedia = function (sendFromRoomIP,sendFromRoomAddonID,sendToRoomIP,sendToRoomAddonID){
+		$http.post('data/mediaSend.php?fromip='+sendFromRoomIP+'&fromaddon='+sendFromRoomAddonID+'&toip='+sendToRoomIP+'&toaddon='+sendToRoomAddonID+'&type=clone');
+	}	
+	
 
 /***/
 	

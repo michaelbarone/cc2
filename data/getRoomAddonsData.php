@@ -35,6 +35,7 @@
 					if(is_numeric($item)===false){
 						$addonArray[$x][$i][$item]=$value;
 					}
+					$addonArray[$x][$i]['id']=$i;
 				}
 				if($row['device_alive']==="0" && $row['roomRequiresAlive']==="1") {
 					$allAddonsAlive="0";
@@ -46,7 +47,7 @@
 				if($row['PowerOptions']==="1") {
 					$allPowerOptions++;
 					$addonArray[$x]['0']['allPowerOptions']=$allPowerOptions;
-				}				
+				}			
 				$timenow = time();
 				if(($row['lastCheck']+4) < $timenow) {
 					$addonid = $row['addonid'];

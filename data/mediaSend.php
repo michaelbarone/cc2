@@ -56,9 +56,6 @@ if(isset($_GET)) {
 		$sendmedia = ${$addonName}->SendMedia();
 	}
 	
-	echo "<br><br>";
-	print_r($sendmedia);
-	
 	if(isset($sendmedia['file']) && $sendmedia['file']!='') {
 	
 	
