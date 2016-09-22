@@ -464,6 +464,10 @@ img.infoType { height:30px; }
 #room-menu-ul table tr td {
 	padding:8px;
 }
+#room-menu-ul table tr td div {
+	display:inline;
+}
+
 #room-menu table.result_table caption, #room-menu table.result_table th, #room-menu table.result_table td {
 	direction: ltr; 
 }

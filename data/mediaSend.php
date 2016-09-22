@@ -20,19 +20,6 @@ if(isset($_GET)) {
 	if(isset($_GET['type'])){
 		$type=$_GET['type'];
 	}
-
-
-		
-	// on dashboard, only show send/clone options if mediaplayer is on in room (playing something else?)
-	//  this page will need :  ?fromip=ip&fromaddon=addonid&toip=ip&toaddon=addonid&type=clone{optional}
-	
-	
-	//   127.0.0.1/e/cc2/data/mediaSend.php?fromip=http://192.168.3.226:8080&fromaddon=mediaplayer.kodi.6-1&toip=http://192.168.3.223:8080&toaddon=mediaplayer.kodi.6-1&type=clone
-	
-	
-	
-	 //  
-		
 		
 		// at some point, to info might be arrays to send media to multiple destinations
 
@@ -50,8 +37,8 @@ if(isset($_GET)) {
 		}
 	}
 	${$addonName}->setIp($fromip);
-	if($type=="clone") {
-		$sendmedia = ${$addonName}->SendMedia("clone");
+	if($type=="clone" || $type=="start") {
+		$sendmedia = ${$addonName}->SendMedia("$type");
 	}else{
 		$sendmedia = ${$addonName}->SendMedia();
 	}
@@ -75,12 +62,12 @@ if(isset($_GET)) {
 		
 		$video=$sendmedia['file'];
 		$activeplayerid=$sendmedia['activeplayerid'];
-		if($type=="clone") {
-			$playtype="clone";
+		if($type=="clone" || $type=="start") {
+			$playtype=$type;
 		}else{
 			$playtype=false;
 		}
-		if($sendmedia['playerpercentage']>=0){
+		if($type!="start" && isset($sendmedia['playerpercentage']) && $sendmedia['playerpercentage']>=0){
 			$playerpercentage=$sendmedia['playerpercentage'];
 		}else{
 			$playerpercentage=false;

@@ -323,7 +323,7 @@ class kodi {
 				$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
 
 				
-				if($playerpercentage!=false){   // {"jsonrpc":"2.0","method":"Player.Seek","params":{ "playerid":1,"value":"smallforward"},"id":1}
+				if($playerpercentage!=false && $playtype!="play"){   // {"jsonrpc":"2.0","method":"Player.Seek","params":{ "playerid":1,"value":"smallforward"},"id":1}
 					$therequest = urlencode('"jsonrpc": "2.0", "id": "'.$activeplayerid.'", "method": "Player.Seek", "params": { "playerid": '.$activeplayerid.', "value": '.$playerpercentage.'}');
 					$jsoncontents .= "====$this->IP/jsonrpc?request={".$therequest."}";
 				}
@@ -360,13 +360,14 @@ class kodi {
 			if($nowplayingarray['activeplayerid']=="none") {
 
 			} else {
-			
-				$playingtime=$this->GetPlayingTimeInfo();
-				$nowplayingarray['playerpercentage']=$playingtime['playerpercentage'];
+				if($sendtype!="play"){
+					$playingtime=$this->GetPlayingTimeInfo();
+					$nowplayingarray['playerpercentage']=$playingtime['playerpercentage'];
+				}
 				
-				if($sendtype=="clone"){
+				if($sendtype=="clone" || $sendtype=="play"){
 				} else {
-					$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.Stop", "params": { "playerid": "$activeplayerid"}');
+					$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.Stop", "params": { "playerid": '.$activeplayerid.'}');
 					$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
 					$output = $this->Curl($jsoncontents);
 				}

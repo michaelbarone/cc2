@@ -202,14 +202,51 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	}
 
 	
-	$scope.sendMedia = function (sendFromRoomIP,sendFromRoomAddonID,sendToRoomIP,sendToRoomAddonID){
-		$http.post('data/mediaSend.php?fromip='+sendFromRoomIP+'&fromaddon='+sendFromRoomAddonID+'&toip='+sendToRoomIP+'&toaddon='+sendToRoomAddonID);
+	
+	
+	
+	$scope.sendFromAddonReSet = function(){
+		$scope.sendFromAddonID = '';
+		$scope.sendFromAddonIP = '';
+		$scope.sendFromAddonLock = 0;
+	};
+	$scope.sendFromAddonReSet();
+
+	$scope.sendFromAddonSet = function(sendFromAddonIP,sendFromAddonID){
+		if($scope.sendFromAddonIP==sendFromAddonIP){
+			$scope.sendFromAddonLockAdd();
+		} else {
+			$scope.sendFromAddonID = sendFromAddonID;
+			$scope.sendFromAddonIP = sendFromAddonIP;
+			$scope.sendFromAddonLock = 1;
+		}
+	};
+	
+	$scope.sendFromAddonLockAdd = function(){
+		$scope.sendFromAddonLock++;
+		if($scope.sendFromAddonLock==3){
+			$scope.sendFromAddonReSet();
+		}
+	};
+	
+	$scope.sendMedia = function (sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
+		$http.post('data/mediaSend.php?fromip='+sendFromAddonIP+'&fromaddon='+sendFromAddonID+'&toip='+sendToAddonIP+'&toaddon='+sendToAddonID);
+		if($scope.sendFromAddonLock!=2){
+			$scope.sendFromAddonReSet();
+		}
 	}
 
-	$scope.cloneMedia = function (sendFromRoomIP,sendFromRoomAddonID,sendToRoomIP,sendToRoomAddonID){
-		$http.post('data/mediaSend.php?fromip='+sendFromRoomIP+'&fromaddon='+sendFromRoomAddonID+'&toip='+sendToRoomIP+'&toaddon='+sendToRoomAddonID+'&type=clone');
-	}	
+	$scope.cloneMedia = function (sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
+		$http.post('data/mediaSend.php?fromip='+sendFromAddonIP+'&fromaddon='+sendFromAddonID+'&toip='+sendToAddonIP+'&toaddon='+sendToAddonID+'&type=clone');
+		if($scope.sendFromAddonLock!=2){
+			$scope.sendFromAddonReSet();
+		}
+	}
 	
+	$scope.startMedia = function (sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
+		$http.post('data/mediaSend.php?fromip='+sendFromAddonIP+'&fromaddon='+sendFromAddonID+'&toip='+sendToAddonIP+'&toaddon='+sendToAddonID+'&type=start');
+		$scope.sendFromAddonReSet();
+	}
 
 /***/
 	
