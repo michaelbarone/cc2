@@ -60,20 +60,22 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 				$fanart = $nowPlayingInfo['fanart'];
 			}
 			$type = $nowPlayingInfo['type'];
-			$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart) VALUES (:rooms_addonsid,:title,:type,:thumbnail,:fanart)");
+			$time = $nowPlayingInfo['time'];
+			$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart, time) VALUES (:rooms_addonsid,:title,:type,:thumbnail,:fanart,:time)");
 			try {
 				$statement->execute(array(':rooms_addonsid'=>$rooms_addonsid,
 				':title'=>$title,
 				':type'=>$type,
 				':thumbnail'=>$thumbnail,
-				':fanart'=>$fanart
+				':fanart'=>$fanart,
+				':time'=>$time
 				));
 			} catch(PDOException $e) {
 				$log->LogError("$e->getMessage()" . basename(__FILE__));
 				return "Statement failed: " . $e->getMessage();
 			}
 		} elseif($_POST['info']!='') {
-			$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart) VALUES ('$rooms_addonsid','','','','')");
+			$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart, time) VALUES ('$rooms_addonsid','','','','','')");
 		}
 	}
 }

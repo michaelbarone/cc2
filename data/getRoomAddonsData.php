@@ -32,6 +32,12 @@
 						$addonArray[$x][$i]['addon']=$addonparts[1];
 						$addonArray[$x][$i]['addonversion']=$addonparts[2];						
 					}
+					if($item==='time' && $value!=''){
+						$temparray = json_decode($value, true);
+						foreach($temparray as $temp => $item) {
+							$addonArray[$x][$i]['time'][$temp]=$item;
+						}
+					}
 					if(is_numeric($item)===false){
 						$addonArray[$x][$i][$item]=$value;
 					}

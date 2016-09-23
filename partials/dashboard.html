@@ -102,22 +102,23 @@
 						</span>
 						<span class="col-4" ng-repeat="addon in room_addons[0][room]" ng-if="$index > 0">
 							<div class="addonWidget">
-							<div>
-								<p class="center">{{addon.addontype}}</p>
-								<div class="right" style="margin:-5px;" ng-if="addon.PowerOptions > 0">
-									<button class="btn btn-danger right" ng-click="powerOffAddon(addon.rooms_addonsid)">Off</button>
-									<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnAddon(addon.rooms_addonsid)">On</button>
+								<div>
+									<p class="center">{{addon.addontype}}</p>
+									<div class="right" style="margin:-5px;" ng-if="addon.PowerOptions > 0">
+										<button class="btn btn-danger right" ng-click="powerOffAddon(addon.rooms_addonsid)">Off</button>
+										<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnAddon(addon.rooms_addonsid)">On</button>
+									</div>
+									<img ng-if="addon.device_alive==='0'" ng-click="powerOnAddon(addon.rooms_addonsid)" class="status pointer left" src="img/led-red.png"/>
+									<img ng-if="addon.device_alive==='1'" class="status left" src="img/led-green.png"/>								
+									<p ng-if="addon.addonTitle !='' || addon.addonTitle !=null" class="left">{{addon.addonTitle}}</p>
+									<p ng-if="addon.addonTitle =='' || addon.addonTitle ==null" class="left">{{addon.addon}}</p>
+									<br class="clear">
 								</div>
-								<img ng-if="addon.device_alive==='0'" ng-click="powerOnAddon(addon.rooms_addonsid)" class="status pointer left" src="img/led-red.png"/>
-								<img ng-if="addon.device_alive==='1'" class="status left" src="img/led-green.png"/>								
-								<p ng-if="addon.addonTitle !='' || addon.addonTitle !=null" class="left">{{addon.addonTitle}}</p>
-								<p ng-if="addon.addonTitle =='' || addon.addonTitle ==null" class="left">{{addon.addon}}</p>
-								<br class="clear">
-							</div>
-							<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
-							<a ng-click="showModal(addon,'addon')" ng-if="addon.info">{{addon.info}}</a>
-							<img class="fanart" ng-src="{{addon.thumbnail}}" ng-if="addon.thumbnail!='' && addon.infoType!='movie'" />
-							<img class="fanart" ng-src="{{addon.fanart}}" ng-if="addon.fanart!='' && addon.infoType=='movie'" />
+								<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
+								<a ng-if="addon.info" ng-click="showModal(addon,'addon')">{{addon.info}}</a>
+								<img ng-if="addon.thumbnail!='' && addon.infoType!='movie'" class="fanart" ng-src="{{addon.thumbnail}}" />
+								<img ng-if="addon.fanart!='' && addon.infoType=='movie'" class="fanart" ng-src="{{addon.fanart}}" />
+								<div ng-if="addon.time.playerpercentage>0" class="timebar" style="width:{{addon.time.playerpercentage}}%"></div>
 							</div>
 						</span>
 					</div>

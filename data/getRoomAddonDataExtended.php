@@ -49,6 +49,17 @@
 			} elseif(isset($nowPlayingInfo['year']) && $nowPlayingInfo['year']!='') {
 				$nowPlayingInfo['title'] = $nowPlayingInfo['title'] . " (" . $nowPlayingInfo['year'] . ")";
 			}
+			if(isset($nowPlayingInfo['time']) && $nowPlayingInfo['time']!=''){
+				$temparray = json_decode($nowPlayingInfo['time'], true);
+				unset($nowPlayingInfo['time']);
+				foreach($temparray as $temp => $item) {
+					if(!isset($item)||!isset($temp)){continue;}
+					$nowPlayingInfo['time'][$temp]=$item;
+				}
+			}			
+			
+			
+			
 			$nowPlayingInfo['addonType']=$addonType;
 			header('Content-Type: application/json');
 			$json=json_encode($nowPlayingInfo);

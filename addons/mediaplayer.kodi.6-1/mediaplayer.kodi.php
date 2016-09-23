@@ -105,7 +105,8 @@ class kodi {
 			$jsonnowplaying = json_decode($output,true);
 			return $jsonnowplaying;
 		} elseif($activeplayerid=="1") {
-				
+			$playingTime = $this->GetPlayingTimeInfo($activeplayerid);
+			$nowplayingarray['time'] = json_encode($playingTime);
 				
 				
 			// $therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetItem\", \"params\": { \"properties\": [\"art\",\"director\",\"writer\",\"tagline\",\"episode\",\"file\",\"title\",\"showtitle\",\"season\",\"genre\",\"year\",\"rating\",\"runtime\",\"firstaired\",\"plot\",\"fanart\",\"thumbnail\",\"tvshowid\"], \"playerid\": 1 }, \"id\": \"1\"");
@@ -253,8 +254,8 @@ class kodi {
 	
 	
 	
-	function GetPlayingTimeInfo() {
-		$activeplayerid = $this->GetActivePlayer();
+	function GetPlayingTimeInfo($activeplayerid) {
+		//$activeplayerid = $this->GetActivePlayer();
 		$therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetProperties\", \"params\": { \"properties\": [\"time\",\"totaltime\",\"position\",\"speed\"], \"playerid\": $activeplayerid }, \"id\": \"1\"");
 		$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
 		$output = $this->Curl($jsoncontents);
@@ -361,7 +362,7 @@ class kodi {
 
 			} else {
 				if($sendtype!="play"){
-					$playingtime=$this->GetPlayingTimeInfo();
+					$playingtime=$this->GetPlayingTimeInfo($activeplayerid);
 					$nowplayingarray['playerpercentage']=$playingtime['playerpercentage'];
 				}
 				
