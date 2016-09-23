@@ -548,8 +548,7 @@ img.infoType { height:30px; }
 	width:100%;
 	z-index: 10;
 }
-.addonWidget .timebar {
-	##width: 100%;
+.addonWidget .timebar,.timebar {
 	height: 5px;
 	background: lightgreen;
 	margin-top: -5px;
