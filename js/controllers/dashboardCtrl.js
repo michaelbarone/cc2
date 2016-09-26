@@ -7,6 +7,8 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.rooms = [];
 	$scope.rooms['0'] = [];
 	$scope.userdata = [];
+	$scope.room_addons = '';
+	$scope.room_addons_current = '';
 	$scope.userdata.currentpage = "dashboard";
 	/*
 	some security could be to match userid and username in db
@@ -329,17 +331,16 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							spinnerService.clear();
 							idleResumee=0;
 						}
+						if($scope.room_addons != data) {
+							$scope.room_addons=data;
+						}
 						if(updateAddonsFirstRun===1){
 							if($scope.userdata.currentRoom<1) {
 								$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
 							}
-							var thisRoom = $scope.userdata.currentRoom;
-							$scope.changeRoom(thisRoom);
+							$scope.changeRoom($scope.userdata.currentRoom);
 							updateAddonsFirstRun=0;
 							spinnerService.remove("updateAddons");
-						}
-						if($scope.room_addons != data) {
-							$scope.room_addons=data;
 						}						
 						$timeout(function() {
 							updateAddonsRunning = 0;

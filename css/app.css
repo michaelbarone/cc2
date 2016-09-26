@@ -508,6 +508,13 @@ img.infoType { height:30px; }
 	width: 100%;
 }
 
+#dashboardMask > span {
+	display:none;
+}
+#dashboardMask > span.selected {
+	display:block !important;
+}
+
 .dashboardPage {
 	width:100%;
 	height:100%;
