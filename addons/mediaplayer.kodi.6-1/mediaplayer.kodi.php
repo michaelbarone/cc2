@@ -273,6 +273,9 @@ class kodi {
 		
 		$PlayingTime = Array();
 
+		// this needs to get pulled into user preferences some how
+		date_default_timezone_set('America/Los_Angeles');
+		
 		$PlayingTime['currenttimesec'] = ($thecurtime[0]*3600)+($thecurtime[2]*60)+$thecurtime[3];
 		$PlayingTime['thetotaltimesec'] = ($thetotaltime[0]*3600)+($thetotaltime[2]*60)+$thetotaltime[3];
 		$PlayingTime['timeleft'] = $PlayingTime['thetotaltimesec'] - $PlayingTime['currenttimesec'];

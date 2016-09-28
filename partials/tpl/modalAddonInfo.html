@@ -10,6 +10,9 @@
 		  <div class="modal-body">
 			<div ng-if="modalContent[0]['addonType']=='mediaplayer'">
 				<div class="col-6">
+					<div ng-if="modalContent[0]['time']['playerpercentage']>0" class="timebar left" style="width:{{modalContent[0]['time']['playerpercentage']}}%"></div>
+					<span ng-if="modalContent[0].time.timenow" class="left">Now: {{modalContent[0].time.timenow}}</span><span  ng-if="modalContent[0].time.endtime"  class="right">Ending: {{modalContent[0].time.endtime}}</span>
+					<br />
 					<p ng-if="modalContent[0]['tagline']">{{modalContent[0]['tagline']}}</p>
 					<p ng-if="modalContent[0]['runtime']">Runtime: {{modalContent[0]['runtime']}}</p>
 					<p ng-if="modalContent[0]['year']">Year: {{modalContent[0]['year']}}</p>
@@ -20,7 +23,6 @@
 				<div class="right col-5">
 					<img class="left col-12" ng-if="modalContent[0]['type']=='episode'" ng-src="{{modalContent[0]['images']['thumb']}}"></img>
 					<img class="left col-12" ng-if="modalContent[0]['type']!='episode'" ng-src="{{modalContent[0]['fanart']}}"></img>
-					<div ng-if="modalContent[0]['time']['playerpercentage']>0" class="timebar left" style="width:{{modalContent[0]['time']['playerpercentage']}}%"></div>
 					<img class="left col-12" ng-src="{{modalContent[0]['images']['banner']}}"></img>
 				</div>
 

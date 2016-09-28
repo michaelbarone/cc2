@@ -63,6 +63,7 @@ a {
 a img {border:0;}
 
 .hidden { display:none !important; }
+.showme { display:block !important; }
 
 .right { float:right !important; }
 .left { float:left !important; }

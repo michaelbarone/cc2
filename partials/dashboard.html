@@ -35,7 +35,7 @@
 				</li>
 			</ul>
 			<ul id="room-menu-ul">
-				<table>
+				<table ng-class="{showme: sendFromAddonLock>0}">
 					<tr ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
 						<td ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name}}</td>
 						<td>
@@ -91,13 +91,13 @@
 					<div class="content">
 						<span class="col-12">
 							<div class="addonTitle addonWidget">
-							<img ng-if="room_addons[0][room][0].allAddonsAlive==='0'" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
-							<img ng-if="room_addons[0][room][0].allAddonsAlive==='1'" class="status" src="img/led-green.png"/>
-							{{roomArray.name}}
-							<div ng-if="room_addons[0][room][0].allPowerOptions > 0" class="right" style="margin:-5px;">
-								<button class="btn btn-danger right" ng-click="powerOffRoom(room)">All Off</button>
-								<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnRoom(room)">All On</button>
-							</div>
+								<img ng-if="room_addons[0][room][0].allAddonsAlive==='0'" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
+								<img ng-if="room_addons[0][room][0].allAddonsAlive==='1'" class="status" src="img/led-green.png"/>
+								{{roomArray.name}}
+								<div ng-if="room_addons[0][room][0].allPowerOptions > 0" class="right" style="margin:-5px;">
+									<button class="btn btn-danger right" ng-click="powerOffRoom(room)">All Off</button>
+									<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnRoom(room)">All On</button>
+								</div>
 							</div>
 						</span>
 						<span ng-if="$index > 0" class="col-4" ng-repeat="addon in room_addons[0][room]">
@@ -119,6 +119,8 @@
 								<img ng-if="addon.thumbnail!='' && addon.infoType!='movie'" class="fanart" ng-src="{{addon.thumbnail}}" />
 								<img ng-if="addon.fanart!='' && addon.infoType=='movie'" class="fanart" ng-src="{{addon.fanart}}" />
 								<div ng-if="addon.time.playerpercentage>0" class="timebar" style="width:{{addon.time.playerpercentage}}%"></div>
+								<span ng-if="addon.time.timenow" class="left">Now: {{addon.time.timenow}}</span><span ng-if="addon.time.endtime" class="right">Ending: {{addon.time.endtime}}</span>
+								<br />
 							</div>
 						</span>
 					</div>
