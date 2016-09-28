@@ -321,6 +321,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 				$http.get('data/getRoomAddonsData.php')
 					.success(function(data) {
 						if(data == "failed") {
+							// need to differentiate failed vs server not responding/not found.  if server not responding, dont return.  only if fail (as fail currently means there is no room data set in db)
 							return;
 						}
 						if(data == "failedAuth"){
