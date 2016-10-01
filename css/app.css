@@ -556,10 +556,17 @@ img.infoType { height:30px; }
 	width:100%;
 	z-index: 10;
 }
-.addonWidget .timebar,.timebar {
+.timebar {
+	height: 5px;
+	margin-top:-5px;
+	background-color:rgba(22,22,22,.5);
+	width: 100%;
+	position: relative;
+	z-index: 13;
+}
+.timebar .elapsed {
 	height: 5px;
 	background: lightgreen;
-	margin-top: -5px;
 	z-index: 15;
 	position: relative;
 	left: 0;

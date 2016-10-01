@@ -118,7 +118,7 @@
 								<a ng-if="addon.info" ng-click="showModal(addon,'addon')">{{addon.info}}</a>
 								<img ng-if="addon.thumbnail!='' && addon.infoType!='movie'" class="fanart" ng-src="{{addon.thumbnail}}" />
 								<img ng-if="addon.fanart!='' && addon.infoType=='movie'" class="fanart" ng-src="{{addon.fanart}}" />
-								<div ng-if="addon.time.playerpercentage>0" class="timebar" style="width:{{addon.time.playerpercentage}}%"></div>
+								<div ng-if="addon.time.playerpercentage>0" class="timebar"><div class="elapsed" style="width:{{addon.time.playerpercentage}}%"></div></div>
 								<span ng-if="addon.time.timenow" class="left">Now: {{addon.time.timenow}}</span><span ng-if="addon.time.endtime" class="right">Ending: {{addon.time.endtime}}</span>
 								<br />
 							</div>

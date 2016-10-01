@@ -318,14 +318,15 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			}
 
 			if($scope.rooms['0'].length!=0){
+
 				$http.get('data/getRoomAddonsData.php')
 					.success(function(data) {
-						if(data == "failed") {
-							// need to differentiate failed vs server not responding/not found.  if server not responding, dont return.  only if fail (as fail currently means there is no room data set in db)
-							return;
-						}
 						if(data == "failedAuth"){
 							loginService.logout();
+							return;
+						}
+						if(data == "failed") {
+							// need to differentiate failed vs server not responding/not found.  if server not responding, dont return.  only if fail (as fail currently means there is no room data set in db)
 							return;
 						}
 						if(idleResumee===1 && cronRunning===0){ 
@@ -347,13 +348,22 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							updateAddonsRunning = 0;
 							$scope.updateAddons();
 						}, 5000)
+					}).error(function(){
+						// no access to server
+						//inform.add('No Connection to Server', {
+						//	ttl: 16500, type: 'danger'
+						//});
+						$timeout(function() {
+							updateAddonsRunning = 0;
+							$scope.updateAddons();
+						}, 15000);
 					});
 			} else {
 				spinnerService.remove("updateAddons");
 				$timeout(function() {
 					updateAddonsRunning = 0;
 					$scope.updateAddons();
-				}, 5000)
+				}, 5000);
 			}
 		}
 	};
@@ -361,6 +371,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	var cronKeeper = 0;
 	var cronRunning = 0;
 	$scope.runCron = function(){
+		//console.log("runcron");
 		if(cronRunning===1 || $location.path()!="/dashboard") { return; }
 		if( Idle.idling() === true) {
 			$timeout(function() {
@@ -380,16 +391,26 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 					}else if(data == "release") {
 						cronKeeper = "0";
 					}
-					cronRunning = 0;
 					if (cronKeeper == '1') {
 						$timeout(function() {
+							cronRunning = 0;
 							$scope.runCron();
-						}, 2500)
+						}, 2500);
 					} else {
 						$timeout(function() {
+							cronRunning = 0;
 							$scope.runCron();
-						}, 15000)
+						}, 15000);
 					}
+				}).error(function(){
+					// no access to server
+					$timeout(function() {
+						cronRunning = 0;
+						$scope.runCron();
+					}, 15000);
+					inform.add('No Connection to Server', {
+						ttl: 8000, type: 'danger'
+					});
 				});
 		}
 	};	

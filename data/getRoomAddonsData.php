@@ -3,6 +3,7 @@
 	if( isset($_SESSION['uid']) ) {
 	} else {
 		print 'failedAuth';
+		$log->LogWarn("No user session data from " . basename(__FILE__));		
 		exit;
 	}
 	if(isset($_SESSION['userid'])) {
@@ -10,7 +11,6 @@
 		$roomIds=$_SESSION['roomAccess'];
 	} else {
 		echo "failed";
-		$log->LogWarn("No user session data from " . basename(__FILE__));
 		exit;
 	}
 	try {
