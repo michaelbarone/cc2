@@ -513,7 +513,7 @@ img.infoType { height:30px; }
 	display:none;
 }
 #dashboardMask > span.selected {
-	display:block !important;
+	display:inline !important;
 }
 
 .dashboardPage {
