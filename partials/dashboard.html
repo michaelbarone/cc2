@@ -86,7 +86,7 @@
 	</div>
 	<div id="dashboardWrapper" scrolling="auto">
 		<div id="dashboardMask">
-			<span ng-cloak ng-if="rooms[0].length!=0" ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.linkSelected==='room{{room}}'}">
+			<span ng-cloak ng-if="rooms[0].length!=0" ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.linkSelected==='room{{room}}'}" class="dash">
 				<div id="room{{room}}" class="dashboardPage RoomPage">
 					<div class="content">
 						<span class="col-12">
@@ -112,7 +112,7 @@
 									<img ng-if="addon.device_alive==='1'" class="status left" src="img/led-green.png"/>								
 									<p ng-if="addon.addonTitle !='' || addon.addonTitle !=null" class="left">{{addon.addonTitle}}</p>
 									<p ng-if="addon.addonTitle =='' || addon.addonTitle ==null" class="left">{{addon.addon}}</p>
-									<br class="clear">
+									<br class="clear" />
 								</div>
 								<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
 								<a ng-if="addon.info" ng-click="showModal(addon,'addon')">{{addon.info}}</a>
@@ -126,21 +126,28 @@
 					</div>
 				</div>
 			</span>
-			<span ng-cloak ng-if="links[0].length!=0" ng-repeat="(linkgroup, linkgrouparray) in links[0]" ng-class="{'selected': userdata.linkGroupSelected===linkgroup}">
-				<div class="dashboardPage hidden" ng-repeat="thislink in linkgrouparray" ng-class="{'showme': userdata.linkSelected==='{{thislink['navname']}}'}">
+			<span ng-cloak ng-if="links[0].length!=0 && userdata.mobile==='0'" ng-repeat="(linkgroup, linkgrouparray) in links[0]" ng-class="{'selected': userdata.linkGroupSelected===linkgroup}">
+				<div class="dashboardPage hidden" ng-repeat="thislink in linkgrouparray" ng-class="{'showme': userdata.linkSelected==='{{thislink['navname']}}'}" class="dash">
 					<div class="content">
 						<iframe id="{{thislink['navname']}}" src="" data="{{thislink['navip'] | trustUrl }}" scrolling="auto" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
 					</div>
 				</div>
 			</span>
-			<span ng-if="$index > 0 && room_addons_current[0][userdata.currentRoom][$index]['controlWindow'] == '1'" ng-repeat="addon in room_addons_current[0][userdata.currentRoom]" ng-class="{'selected': userdata.linkSelected==='{{addon.addon+$index}}'}">
+			<span ng-cloak ng-if="links[0].length!=0 && userdata.mobile==='1'" ng-repeat="(linkgroup, linkgrouparray) in links[0]">
+				<span class="dashboardPage hidden" ng-repeat="thislink in linkgrouparray" ng-class="{'showme': userdata.linkSelected==='{{thislink['navname']}}'}" class="dash">
+					<div class="content">
+						<iframe id="{{thislink['navname']}}" src="" data="{{thislink['navip'] | trustUrl }}" scrolling="auto" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
+					</div>
+				</span>
+			</span>			
+			<span ng-if="$index > 0 && room_addons_current[0][userdata.currentRoom][$index]['controlWindow'] == '1'" ng-repeat="addon in room_addons_current[0][userdata.currentRoom]" ng-class="{'selected': userdata.linkSelected==='{{addon.addon+$index}}'}" class="dash">
 				<div class="dashboardPage">
 					<div class="content">
 						<iframe id="{{addon.addon+$index}}" src="" data="{{room_addons_current[0][userdata.currentRoom][$index]['ip'] | trustUrl}}" scrolling="no" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
 					</div>
 				</div>
 			</span>	
-			<span ng-if="loaded==1">
+			<span ng-if="loaded==1" class="dash">
 				<div ng-cloak class="dashboardPage">
 					<div class="content">
 						<div id="dashboard-welcome" ng-cloak ng-include src="'partials/dashboard-welcome.html'"></div>

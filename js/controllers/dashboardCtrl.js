@@ -329,7 +329,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							// need to differentiate failed vs server not responding/not found.  if server not responding, dont return.  only if fail (as fail currently means there is no room data set in db)
 							return;
 						}
-						if(idleResumee===1 && cronRunning===0){ 
+						if(idleResumee===1){ 
 							spinnerService.clear();
 							idleResumee=0;
 						}
@@ -404,8 +404,8 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 					}
 				}).error(function(){
 					// no access to server
+					cronRunning = 0;
 					$timeout(function() {
-						cronRunning = 0;
 						$scope.runCron();
 					}, 15000);
 					inform.add('No Connection to Server', {

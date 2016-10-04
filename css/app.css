@@ -509,10 +509,10 @@ img.infoType { height:30px; }
 	width: 100%;
 }
 
-#dashboardMask > span {
+#dashboardMask > .dash {
 	display:none;
 }
-#dashboardMask > span.selected {
+#dashboardMask > .dash.selected {
 	display:inline !important;
 }
 
