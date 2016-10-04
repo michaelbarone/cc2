@@ -134,11 +134,11 @@
 				</div>
 			</span>
 			<span ng-cloak ng-if="links[0].length!=0 && userdata.mobile==='1'" ng-repeat="(linkgroup, linkgrouparray) in links[0]">
-				<span class="dashboardPage hidden" ng-repeat="thislink in linkgrouparray" ng-class="{'showme': userdata.linkSelected==='{{thislink['navname']}}'}" class="dash">
+				<div class="dashboardPage hidden" ng-repeat="thislink in linkgrouparray" ng-class="{'showme': userdata.linkSelected==='{{thislink['navname']}}'}" class="dash">
 					<div class="content">
 						<iframe id="{{thislink['navname']}}" src="" data="{{thislink['navip'] | trustUrl }}" scrolling="auto" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
 					</div>
-				</span>
+				</div>
 			</span>			
 			<span ng-if="$index > 0 && room_addons_current[0][userdata.currentRoom][$index]['controlWindow'] == '1'" ng-repeat="addon in room_addons_current[0][userdata.currentRoom]" ng-class="{'selected': userdata.linkSelected==='{{addon.addon+$index}}'}" class="dash">
 				<div class="dashboardPage">

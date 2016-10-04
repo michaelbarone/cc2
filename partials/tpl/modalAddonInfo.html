@@ -21,8 +21,8 @@
 					<p ng-if="modalContent[0]['plot']">Plot: {{modalContent[0]['plot']}}</p>
 				</div>
 				<div class="right col-5">
-					<img class="left col-12" ng-if="modalContent[0]['type']=='episode'" ng-src="{{modalContent[0]['images']['thumb']}}"></img>
-					<img class="left col-12" ng-if="modalContent[0]['type']!='episode'" ng-src="{{modalContent[0]['fanart']}}"></img>
+					<img class="left col-12" ng-if="modalContent[0]['type']=='episode'" ng-src="{{modalContent[0]['images']['thumb']}}" onerror="this.style.display='none';"></img>
+					<img class="left col-12" ng-if="modalContent[0]['type']!='episode'" ng-src="{{modalContent[0]['fanart']}}" onerror="this.style.display='none';"></img>
 					<img class="left col-12" ng-src="{{modalContent[0]['images']['banner']}}"></img>
 				</div>
 
