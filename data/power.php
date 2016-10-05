@@ -27,20 +27,20 @@ if(isset($_GET)) {
 					$ip=$row['ip'];
 					$mac=$row['mac'];
 					if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
-						if(!isset(${$addonName})) {
+						if(!isset(${$addonid})) {
 							include "../addons/$addonid/$addonType.$addonName.php";
-							${$addonName} = new $addonName();
+							${$addonid} = new $addonName();
 						}
 						$vars = array();
 						foreach($row as $item => $value){
 							$vars[$item]=$value;
 						}
-						${$addonName}->SetVariables($vars);
+						${$addonid}->SetVariables($vars);
 
 						if($_GET['option']==='off') {
-							$poweroff = ${$addonName}->PowerOff();
+							$poweroff = ${$addonid}->PowerOff();
 						} elseif($_GET['option']==='on') {
-							$poweron = ${$addonName}->PowerOn();
+							$poweron = ${$addonid}->PowerOn();
 							if($poweron==="wol" && $mac != ''){
 								include("wakeAddon.php");
 							}
@@ -64,20 +64,20 @@ if(isset($_GET)) {
 					$ip=$row['ip'];
 					$mac=$row['mac'];					
 					if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip != '') {
-						if(!isset(${$addonName})) {
+						if(!isset(${$addonid})) {
 							include "../addons/$addonid/$addonType.$addonName.php";
-							${$addonName} = new $addonName();
+							${$addonid} = new $addonName();
 						}
 						$vars = array();
 						foreach($row as $item => $value){
 							$vars[$item]=$value;
 						}
-						${$addonName}->SetVariables($vars);
+						${$addonid}->SetVariables($vars);
 
 						if($_GET['option']==='off') {
-							$poweroff = ${$addonName}->PowerOff();
+							$poweroff = ${$addonid}->PowerOff();
 						} elseif($_GET['option']==='on') {
-							$poweron = ${$addonName}->PowerOn();
+							$poweron = ${$addonid}->PowerOn();
 							if($poweron==="wol" && $vars['mac'] != ''){
 								include("wakeAddon.php");
 							}

@@ -31,16 +31,16 @@ if(isset($_GET)) {
 	$addonType=$addonparts[0];
 	$addonName=$addonparts[1];
 	if(file_exists("../addons/$addonid/$addonType.$addonName.php")) {
-		if(!isset(${$addonName})) {
+		if(!isset(${$addonid})) {
 			include "../addons/$addonid/$addonType.$addonName.php";
-			${$addonName} = new $addonName();
+			${$addonid} = new $addonName();
 		}
 	}
-	${$addonName}->setIp($fromip);
+	${$addonid}->setIp($fromip);
 	if($type=="clone" || $type=="start") {
-		$sendmedia = ${$addonName}->SendMedia("$type");
+		$sendmedia = ${$addonid}->SendMedia("$type");
 	}else{
-		$sendmedia = ${$addonName}->SendMedia();
+		$sendmedia = ${$addonid}->SendMedia();
 	}
 	
 	if(isset($sendmedia['file']) && $sendmedia['file']!='') {
@@ -52,12 +52,12 @@ if(isset($_GET)) {
 		$addonType=$addonparts[0];
 		$addonName=$addonparts[1];
 		if(file_exists("../addons/$addonid/$addonType.$addonName.php")) {
-			if(!isset(${$addonName})) {
+			if(!isset(${$addonid})) {
 				include "../addons/$addonid/$addonType.$addonName.php";
-				${$addonName} = new $addonName();
+				${$addonid} = new $addonName();
 			}
 		}
-		${$addonName}->setIp($toip);
+		${$addonid}->setIp($toip);
 		
 		
 		$video=$sendmedia['file'];
@@ -73,7 +73,7 @@ if(isset($_GET)) {
 			$playerpercentage=false;
 		}
 		
-		${$addonName}->PlayMedia($video,$activeplayerid,$playtype,$playerpercentage);
+		${$addonid}->PlayMedia($video,$activeplayerid,$playtype,$playerpercentage);
 		
 		
 	} else {

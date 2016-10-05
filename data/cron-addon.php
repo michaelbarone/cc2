@@ -11,20 +11,20 @@ $ip=$_POST['ip'];
 $mac=$_POST['mac'];
 $statusorig=$_POST['device_alive'];
 if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
-	if(!isset(${$addonName})) {
+	if(!isset(${$addonid})) {
 		include "../addons/$addonid/$addonType.$addonName.php";
-		${$addonName} = new $addonName();
+		${$addonid} = new $addonName();
 	}
 	$vars = array();
 	$vars['ip']=$ip;
 	$vars['mac']=$mac;
-	${$addonName}->SetVariables($vars);
+	${$addonid}->SetVariables($vars);
 	$devicealive='';
 	if($statusorig==1) {
-		$devicealive=${$addonName}->PingApp($ip);
+		$devicealive=${$addonid}->PingApp($ip);
 	} 
 	if($statusorig==0 || $devicealive!='alive') {
-		$devicealive=${$addonName}->Ping($ip);
+		$devicealive=${$addonid}->Ping($ip);
 	}
 	if ($devicealive == "alive") {
 		if($statusorig==0) {
@@ -38,7 +38,7 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 
 	if($addonType=='mediaplayer'){
 		// need to standardize nowplayinginfo response in class files
-		$nowPlayingInfo = ${$addonName}->GetPlayingItemInfo();
+		$nowPlayingInfo = ${$addonid}->GetPlayingItemInfo();
 		//print_r($nowPlayingInfo);
 		if(isset($nowPlayingInfo['title']) && $nowPlayingInfo['title']!='') {
 			$title = $nowPlayingInfo['title'];

@@ -26,17 +26,17 @@
 	$ip=$addonArray['ip'];
 	$mac=$addonArray['mac'];	
 	if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
-		if(!isset(${$addonName})) {
+		if(!isset(${$addonid})) {
 			include "../addons/$addonid/$addonType.$addonName.php";
-			${$addonName} = new $addonName();
+			${$addonid} = new $addonName();
 		}
 		$vars = array();
 		$vars['ip']=$ip;
 		$vars['mac']=$mac;
-		${$addonName}->SetVariables($vars);	
+		${$addonid}->SetVariables($vars);	
 	
 	
-		$nowPlayingInfo = ${$addonName}->GetPlayingItemInfo();
+		$nowPlayingInfo = ${$addonid}->GetPlayingItemInfo();
 		//print_r($nowPlayingInfo);
 		if(isset($nowPlayingInfo['title']) && $nowPlayingInfo['title']!='') {
 			$title = $nowPlayingInfo['title'];
