@@ -19,6 +19,7 @@
 			if(!isset($x) || $x == '' || is_array($x)) { continue; }
 			$allAddonsAlive="1";
 			$allPowerOptions=0;
+			$addonArray[$x]['0']['addonsAlive']=0;
 			$addonArray[$x]['0']['allAddonsAlive']=$allAddonsAlive;
 			$addonArray[$x]['0']['allAddonsMacs']='';
 			$i=0;
@@ -49,6 +50,9 @@
 					if($row['mac']!==''||$row['mac']!=='null') {
 						$addonArray[$x]['0']['allAddonsMacs']=$row['mac'] . "," . $addonArray[$x]['0']['allAddonsMacs'];
 					}
+				}
+				if($row['device_alive']==="1"){
+					$addonArray[$x]['0']['addonsAlive']++;
 				}
 				if($row['PowerOptions']==="1") {
 					$allPowerOptions++;

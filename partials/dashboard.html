@@ -39,8 +39,10 @@
 					<tr ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
 						<td ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name}}</td>
 						<td>
-							<img ng-if="room_addons[0][room][0].allAddonsAlive==='0'" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
-							<img ng-if="room_addons[0][room][0].allAddonsAlive==='1'" class="status" src="img/led-green.png"/>
+							<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Room Offline" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
+							<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Some Addons Online" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-orange.png"/>
+							<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='1'" title="No Addons Configured" class="status" src="img/led-cyan.png"/>
+							<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
 						</td>
 
 						<td ng-if="addon.info || (sendFromAddonIP && addon.device_alive==1)" ng-repeat="addon in room_addons[0][room].slice().reverse()">
@@ -91,8 +93,10 @@
 					<div class="content">
 						<span class="col-12">
 							<div class="addonTitle addonWidget">
-								<img ng-if="room_addons[0][room][0].allAddonsAlive==='0'" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
-								<img ng-if="room_addons[0][room][0].allAddonsAlive==='1'" class="status" src="img/led-green.png"/>
+								<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Room Offline" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
+								<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Some Addons Online" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-orange.png"/>
+								<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='1'" title="No Addons Configured" class="status" src="img/led-cyan.png"/>
+								<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
 								{{roomArray.name}}
 								<div ng-if="room_addons[0][room][0].allPowerOptions > 0" class="right" style="margin:-5px;">
 									<button class="btn btn-danger right" ng-click="powerOffRoom(room)">All Off</button>
