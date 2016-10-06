@@ -10,6 +10,11 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.room_addons = '';
 	$scope.room_addons_current = '';
 	$scope.userdata.currentpage = "dashboard";
+	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
+	
+	
+	
+	
 	/*
 	some security could be to match userid and username in db
 	*/
@@ -71,22 +76,22 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$timeout(function() {
 		spinnerService.add("loadRooms");
 		$scope.loadRooms();
-	}, 50);		
+	}, 1);		
 	$timeout(function() {
 		spinnerService.add("loadLinks");
 		$scope.loadLinks();
-	}, 250);
+	}, 50);
 	$timeout(function() {		
 		updateAddonsRunning = 0;
 		spinnerService.add("updateAddons");
 		$scope.updateAddons();
-	}, 350);
+	}, 100);
 	
 	$timeout(function() {
 		$scope.loaded=1;
 		cronRunning = 0;
 		$scope.runCron();
-	}, 1500);	
+	}, 250);	
 	$scope.FullscreenSupported = Fullscreen.isSupported();
 	
 /***/

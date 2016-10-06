@@ -45,11 +45,11 @@
 							<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
 						</td>
 
-						<td ng-if="addon.info || (sendFromAddonIP && addon.device_alive==1)" ng-repeat="addon in room_addons[0][room].slice().reverse()">
+						<td ng-if="addon.info || (sendFromAddonIP && addon.device_alive==1 && addon.addontype=='mediaplayer')" ng-repeat="addon in room_addons[0][room].slice().reverse()" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 							<div>
-								<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip && addon.addontype=='mediaplayer'" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
-								<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip && addon.addontype=='mediaplayer'" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
-								<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip && addon.addontype=='mediaplayer'" ng-click="startMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Start</a>
+								<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
+								<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
+								<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="startMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Start</a>
 								<a ng-if="addon.info && (sendFromAddonLock==0 || sendFromAddonIP!=addon.ip)" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><img class="infoType" ng-src="img/send.png"/></a>
 								<a ng-if="addon.info && sendFromAddonLock==1 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><img class="infoType" ng-src="img/sendToggled.png"/></a>
 								<a ng-if="addon.info && sendFromAddonLock==2 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><img class="infoType" ng-src="img/sendToggleLocked.png"/></a>
@@ -105,7 +105,7 @@
 							</div>
 						</span>
 						<span ng-if="$index > 0" class="col-4" ng-repeat="addon in room_addons[0][room]">
-							<div class="addonWidget">
+							<div class="addonWidget" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 								<div>
 									<p class="center">{{addon.addontype}}</p>
 									<div ng-if="addon.PowerOptions > 0" class="right" style="margin:-5px;">
