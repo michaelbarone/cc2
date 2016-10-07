@@ -51,18 +51,18 @@ a:visited { color:#eee; }
 }
 
 #link-menu li a.selected, .room-menu-items a.selected {
-	## border-bottom:2px solid #0099ff !important; 
-	box-shadow: 0 3px 0px #0099ff;
+	border-bottom:2px solid #0099ff !important;
+	##box-shadow: 0 3px 0px #0099ff;
 }
 
 #link-menu li.selected img {  
-	## border-right:3px solid #0099ff !important; 
-	box-shadow: 3px 0px 0px #0099ff;
+	border-right:3px solid #0099ff !important; 
+	## box-shadow: 3px 0px 0px #0099ff;
 }
 
 #room-menu tr.selected td:first-of-type {  
-	## border-left:3px solid #0099ff !important;
-	box-shadow: -3px 0px 0px #0099ff;
+	border-left:3px solid #0099ff !important;
+	## box-shadow: -3px 0px 0px #0099ff;
 }
 
 #room-menu tr.selected td:first-of-type { color:#0099ff !important; }
