@@ -129,58 +129,99 @@ if(isset($action)) {
 			}
 		}
 		
-		
-		
-		/*
-		foreach($updatedusers as $user){
-			if(!isset($user['username']) || $user['username']===''){ continue; }
-			echo $user['username']."<br>";
-			$usertable = '';
-			$count=0;
-			foreach($user as $item => $name) {
-				if($count===0){
-					$count++;
-				}else{
-					$usertable .= ",";
-				}
-				$usertable .= " $item = '$name'";
-			}
-			echo $usertable;
-			
-		*/
 		$result = array_diff_key($users, $updatedusers);
 		// delete these
-		echo "delete these:<br>";
 		foreach($result as $user){
-			echo $user['userid']."<br>";
+			$query = "DELETE FROM `users` WHERE userid = ".$user['userid']." AND username = ".$user['username'];
+			$statement = $configdb->prepare($query);
+			$statement->execute();
 		}
-		print_r($result);
-		echo "<br><br>";
+
 		
 		
 		
 		$result = array_diff_key($updatedusers, $users);
 		// add these
-		echo "add these:<br>";
+		//echo "add these:<br>";
 		foreach($result as $user){
-			echo $user['userid']."<br>";
+			// need to add all user options here... include password?  or leave blank and use general password reset modal
+			// see update query below 
+			$query = "INSERT INTO `users` (";
+			
+			foreach($user as $setting => $setas){
+				if($setting==='userid'){ continue; }
+				if($setting==='password'){ continue; }
+				if($setting==='passwordv'){ continue; }
+				if($setting==='lastaccess'){ continue; }
+				if($setting!='username') {
+					$query .= ",";
+				}
+				$query .= $setting;
+			}
+			
+			$query .= ") VALUES (";
+			
+			foreach($user as $setting => $setas){
+				if($setting==='userid'){ continue; }
+				if($setting==='password'){ continue; }
+				if($setting==='passwordv'){ continue; }
+				if($setting==='lastaccess'){ continue; }
+				if($setting!='username') {
+					$query .= ",";
+				}
+				$query .= "'$setas'";
+			}			
+			$query.= ")";
+
+			$statement = $configdb->prepare($query);
+			$statement->execute();				
 			unset($updatedusers[$user['userid']]);
 		}		
-		print_r($result);
-		echo "<br><br>";
+		//print_r($result);
+		//echo "<br><br>";
 		
 		
 		//else update remaining $updatedusers
-		echo "update these entries:";
-		foreach($updatedusers as $user){
-			print_r($user);
-			print_r($users[$user['userid']]);
-			$result = array_diff($users[$user['userid']], $user);
-			print_r($result);
-			$result = array_diff($user, $users[$user['userid']]);
-			print_r($result);			
-			echo $user['userid']."<br>";
-		}
+		//echo "update these entries:";
+		foreach($updatedusers as $user){			
+			// show changed item column(s)
+			$result2 = array_diff($user, $users[$user['userid']]);
+			//print_r($result2);
+			
+			
+			// check if $result2 is an array, if so update this whole userid
+			if(is_array($result2) && count($result2)>0){
+				$query = "UPDATE `users` SET ";
+
+				foreach($user as $setting => $setas){
+					if($setting==='userid'){ continue; }
+					if($setting==='password'){ continue; }
+					if($setting==='passwordv'){ continue; }
+					if($setting==='lastaccess'){ continue; }
+					if($setting!='username') {
+						$query .= ", ";
+					}
+					$query .= "$setting = '$setas'";
+				}
+
+				$query .= " WHERE userid = ".$user['userid'];
+				$statement = $configdb->prepare($query);
+				$statement->execute();
+			}
+		}		
+		return;
+	} elseif($action === "saveRooms"){
+		//$users=json_decode(GetUsers($configdb),true);
+		//print_r($users);
+		//echo "<br /><br />";
+		$data = json_decode($_GET['data'], true);
+		print_r($data);
+		
+		
+		
+		
+		
+		
 		
 		
 		

@@ -148,13 +148,11 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginSe
 
 	$scope.saveRooms = function(){
 		$scope.CheckLogged();
-		// get room and addon info ready for saving
-		/*
-		$http.get('data/settings.php?action=saveRooms&data='+JSON.stringify(data))
-			.success(function(data) {
-				$scope.usersChanged=0;
+		var thisdata = $scope.Rooms;
+		$http.get('data/settings.php?action=saveRooms&data='+JSON.stringify(thisdata))
+			.success(function() {
+				$scope.roomsChanged=0;
 			});
-		*/
 	}	
 	
 	$scope.deleteRoom = function(index){
