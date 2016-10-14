@@ -76,16 +76,16 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$timeout(function() {
 		spinnerService.add("loadRooms");
 		$scope.loadRooms();
-	}, 1);		
+	}, 10);		
 	$timeout(function() {
 		spinnerService.add("loadLinks");
 		$scope.loadLinks();
-	}, 50);
+	}, 75);
 	$timeout(function() {		
 		updateAddonsRunning = 0;
 		spinnerService.add("updateAddons");
 		$scope.updateAddons();
-	}, 100);
+	}, 125);
 	
 	$timeout(function() {
 		$scope.loaded=1;
@@ -126,7 +126,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		document.getElementById("room"+room).scrollIntoView();
 	};
 
-	$scope.loadLinkLongPress = function(name,element) {
+	$scope.loadLinkLongPress = function(name) {
 		if (name.substring(0, 4) == "room") {
 			document.getElementById(name+'L').attributes['class'].value += ' longpress';
 		} else if(document.getElementById(name+'L').classList.contains('loaded')) {
@@ -137,34 +137,38 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		}
 	};
 	
-	$scope.loadLink = function(name,element) {
+	$scope.loadLink = function(name) {
 		if (name.substring(0, 4) == "room") {
 			if(document.getElementById(name+'L').classList.contains('longpress')) {
 				document.getElementById(name+'L').classList.remove('longpress');
 				return;
 			} else {
-				document.getElementById(name).scrollIntoView();
 				$scope.userdata.linkSelected=name;
+				document.getElementById(name).scrollIntoView();
 			}
 		} else {
 			if(document.getElementById(name+'L').classList.contains('longpress')) {
 				document.getElementById(name+'L').classList.remove('longpress');
 				return;
 			} else if(document.getElementById(name+'L').classList.contains('selected')) {
-				document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
+				if(document.getElementById(name).attributes['data'].value != "none"){
+					document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
+				}
 				if(!document.getElementById(name+'L').classList.contains('loaded')) {
-					document.getElementById(name+'L').attributes['class'].value += ' loaded';
 					$scope.userdata.linkSelected=name;
+					document.getElementById(name+'L').attributes['class'].value += ' loaded';
 				}
 			} else {
+				$scope.userdata.linkSelected=name;
 				if(document.getElementById(name+'L').classList.contains('loaded')) {
 					document.getElementById(name).scrollIntoView();
 				} else {
 					document.getElementById(name+'L').attributes['class'].value += ' loaded';
 					document.getElementById(name).scrollIntoView();
-					document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
+					if(document.getElementById(name).attributes['data'].value != "none"){
+						document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
+					}
 				}
-				$scope.userdata.linkSelected=name;
 			}
 		}
 	};
@@ -176,6 +180,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
     };
 	
 	
+	// needed now?  after selective hiding panels may not be needed
 	$(window).resize(function(){
 		var thename = $scope.userdata.linkSelected;
 		if(thename!="roomnull" || thename !='' || thename !=null){
@@ -193,6 +198,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *
  */
 	$scope.powerOnAddon = function(addonid){
+		spinnerService.add("powerOnAddon");
 		$http.post('data/power.php?type=addon&option=on&addonid='+addonid);
 	}
 
@@ -201,6 +207,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	}
 	
 	$scope.powerOnRoom = function(room){
+		spinnerService.add("powerOnRoom");
 		$http.post('data/power.php?type=room&option=on&room='+room);
 	}
 
