@@ -12,7 +12,10 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.userdata.currentpage = "dashboard";
 	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
 	
-	
+	$scope.testrun = 0;
+	if($location.search()['command']=="test"){
+		$scope.testrun = 1;
+	}
 	
 	
 	/*
@@ -85,13 +88,13 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		updateAddonsRunning = 0;
 		spinnerService.add("updateAddons");
 		$scope.updateAddons();
-	}, 125);
+	}, 150);
 	
 	$timeout(function() {
 		$scope.loaded=1;
 		cronRunning = 0;
 		$scope.runCron();
-	}, 250);	
+	}, 300);	
 	$scope.FullscreenSupported = Fullscreen.isSupported();
 	
 /***/
@@ -197,23 +200,49 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *  Addon functions
  *
  */
+ 
+ 
+ 
+	/* replace 1 with 2 below for this to work again on dashboard.html. not needed due to now working ng-init on switch div above this statement
+	1<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_current[0][userdata.currentRoom][$index].rooms_addonsid);" />
+	2<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_current[0][userdata.currentRoom][$index].rooms_addonsid);checkAddonForPowerOn(userdata.currentRoom,$index,addon.addon+$index);" />
+		
+	
+	var checkAddonForPowerOnCount = 0;
+	$scope.checkAddonForPowerOn = function(room,roomaddonid,loadthislink){
+		$timeout(function() {
+			checkAddonForPowerOnCount++;
+			if(checkAddonForPowerOnCount>30){ checkAddonForPowerOnCount = 0;return; }
+			console.log(checkAddonForPowerOnCount);
+			if($scope.room_addons[0][room][roomaddonid]['device_alive']=="1"){
+				$scope.loadLink(loadthislink);
+				return;
+			}
+			$scope.checkAddonForPowerOn(room,roomaddonid,loadthislink);
+		}, 1000);		
+	};
+	
+	*/
+ 
+ 
+ 
 	$scope.powerOnAddon = function(addonid){
 		spinnerService.add("powerOnAddon");
 		$http.post('data/power.php?type=addon&option=on&addonid='+addonid);
-	}
+	};
 
 	$scope.powerOffAddon = function(addonid){
 		$http.post('data/power.php?type=addon&option=off&addonid='+addonid);
-	}
+	};
 	
 	$scope.powerOnRoom = function(room){
 		spinnerService.add("powerOnRoom");
 		$http.post('data/power.php?type=room&option=on&room='+room);
-	}
+	};
 
 	$scope.powerOffRoom = function(room){
 		$http.post('data/power.php?type=room&option=off&room='+room);
-	}
+	};
 
 	
 	
@@ -355,7 +384,8 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							$scope.changeRoom($scope.userdata.currentRoom);
 							updateAddonsFirstRun=0;
 							spinnerService.remove("updateAddons");
-						}						
+						}
+						if($scope.testrun==1){ return; }
 						$timeout(function() {
 							updateAddonsRunning = 0;
 							$scope.updateAddons();
@@ -365,6 +395,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 						//inform.add('No Connection to Server', {
 						//	ttl: 16500, type: 'danger'
 						//});
+						if($scope.testrun==1){ return; }
 						$timeout(function() {
 							updateAddonsRunning = 0;
 							$scope.updateAddons();
@@ -404,11 +435,13 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 						cronKeeper = "0";
 					}
 					if (cronKeeper == '1') {
+						if($scope.testrun==1){ return; }
 						$timeout(function() {
 							cronRunning = 0;
 							$scope.runCron();
 						}, 2500);
 					} else {
+						if($scope.testrun==1){ return; }
 						$timeout(function() {
 							cronRunning = 0;
 							$scope.runCron();
@@ -417,12 +450,13 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 				}).error(function(){
 					// no access to server
 					cronRunning = 0;
-					$timeout(function() {
-						$scope.runCron();
-					}, 15000);
 					inform.add('No Connection to Server', {
 						ttl: 8000, type: 'danger'
 					});
+					if($scope.testrun==1){ return; }
+					$timeout(function() {
+						$scope.runCron();
+					}, 15000);
 				});
 		}
 	};	

@@ -157,16 +157,18 @@
 								scrolling="no" 
 								height="100%" 
 								width="100%"
-								style="z-index:1;"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
+								style="z-index:1;"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>	
+						<div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] == '1'" ng-init="loadLink(addon.addon+$index)">
+						</div>
 						<div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] != '1'"
 							 class="content"
-							 style="z-index:10;z-index: 10;position: absolute;height: 100%;width: 100%;background: black;">
+							 style="z-index: 10;position: absolute;height: 100%;width: 100%;background: black;">
 							<span class="col-3" style="min-height:10px;">
 							</span>
 							<span class="col-6">
 								<br /><br />
 								<h1 class="center">Power On</h1>
-								<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_current[0][userdata.currentRoom][$index].rooms_addonsid)" />
+								<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_current[0][userdata.currentRoom][$index].rooms_addonsid);" />
 							</span>
 						</div>
 					</div>
