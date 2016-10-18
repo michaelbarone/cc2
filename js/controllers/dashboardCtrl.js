@@ -175,6 +175,12 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			}
 		}
 	};
+	
+	$scope.refreshLink = function(name) {
+		if(document.getElementById(name).attributes['data'].value != "none"){
+			document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
+		}
+	}
 
 	// 2 jquery functions here:
     $scope.linkReOrder = function(linkgroup,index) {

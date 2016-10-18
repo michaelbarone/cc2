@@ -1,6 +1,6 @@
 <script src="js/controllers/dashboardCtrl.js"></script>
 <div class="wrap dashboard" ng-controller="dashboardCtrl">
-<div ng-show="spinnerCount" class="spinner"></div>
+	<div ng-show="spinnerCount" class="spinner"></div>
 	<div id="header">
 		<div id="user-menu" class="right">
 			<img src="img/options.png" />
@@ -47,7 +47,7 @@
 									<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
 								</td>
 								
-								<td ng-if="addon.info || (sendFromAddonIP && addon.device_alive==1 && addon.addontype=='mediaplayer')" ng-repeat="addon in room_addons[0][room].slice().reverse()" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
+								<td ng-if="addon.info || (sendFromAddonIP && addon.device_alive==1 && addon.addontype=='mediaplayer')" ng-repeat="addon in room_addons_current[0][room].slice().reverse()" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 									<div>
 										<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
 										<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
@@ -108,7 +108,7 @@
 								</div>
 							</div>
 						</span>
-						<span ng-if="$index > 0" class="col-4" ng-repeat="addon in room_addons[0][room]">
+						<span ng-if="$index > 0" class="col-4" ng-repeat="addon in room_addons_current[0][room]">
 							<div class="addonWidget" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 								<div>
 									<p class="center">{{addon.addontype}}</p>
@@ -158,7 +158,7 @@
 								height="100%" 
 								width="100%"
 								style="z-index:1;"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>	
-						<div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] == '1'" ng-init="loadLink(addon.addon+$index)">
+						<div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] == '1'" ng-init="refreshLink(addon.addon+$index)">
 						</div>
 						<div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] != '1'"
 							 class="content"
@@ -168,6 +168,8 @@
 							<span class="col-6">
 								<br /><br />
 								<h1 class="center">Power On</h1>
+								<br /><h1 class="center">{{room_addons_current[0][userdata.currentRoom][$index].addontype}} : {{room_addons_current[0][userdata.currentRoom][$index].addonTitle}}</h1>
+								<br /><h1 class="center">in the {{rooms[0][userdata.currentRoom]['name']}}</h1>
 								<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_current[0][userdata.currentRoom][$index].rooms_addonsid);" />
 							</span>
 						</div>
