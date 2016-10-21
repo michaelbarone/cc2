@@ -7,8 +7,9 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.rooms = [];
 	$scope.rooms['0'] = [];
 	$scope.userdata = [];
-	$scope.room_addons = '';
-	$scope.room_addons_current = '';
+	$scope.room_addons = [];
+	$scope.room_addons['0'] = [];
+	$scope.room_addons_static = '';
 	$scope.userdata.currentpage = "dashboard";
 	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
 	
@@ -119,7 +120,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  */
  
 	$scope.changeRoom = function(room) {
-		$scope.room_addons_current = $scope.room_addons;
+		$scope.room_addons_static = $scope.room_addons;
 		var unix = Math.round(+new Date()/1000);
 		$scope.userdata.currentRoom=room;
 		$scope.userdata.lastRoomChange=unix;
@@ -177,6 +178,9 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	};
 	
 	$scope.refreshLink = function(name) {
+		// temp fix return
+		return;
+		console.log("refreshLink");
 		if(document.getElementById(name).attributes['data'].value != "none"){
 			document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
 		}
@@ -210,8 +214,8 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  
  
 	/* replace 1 with 2 below for this to work again on dashboard.html. not needed due to now working ng-init on switch div above this statement
-	1<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_current[0][userdata.currentRoom][$index].rooms_addonsid);" />
-	2<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_current[0][userdata.currentRoom][$index].rooms_addonsid);checkAddonForPowerOn(userdata.currentRoom,$index,addon.addon+$index);" />
+	1<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_static[0][userdata.currentRoom][$index].rooms_addonsid);" />
+	2<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_static[0][userdata.currentRoom][$index].rooms_addonsid);checkAddonForPowerOn(userdata.currentRoom,$index,addon.addon+$index);" />
 		
 	
 	var checkAddonForPowerOnCount = 0;
@@ -351,21 +355,20 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 				$scope.updateAddons();
 			}, 5000)
 		} else {
+			if($scope.rooms.constructor.toString().indexOf("Array") != -1){
+				// console.log("yes");
+			} else {
+				//console.log("running loadLinks()");
+				$scope.loadRooms();
+			}			
 			if($scope.links.constructor.toString().indexOf("Array") != -1){
 				// console.log("yes");
 			} else {
 				// console.log("running loadLinks()");
 				$scope.loadLinks();
 			}
-			if($scope.rooms.constructor.toString().indexOf("Array") != -1){
-				// console.log("yes");
-			} else {
-				//console.log("running loadLinks()");
-				$scope.loadRooms();
-			}
 
 			if($scope.rooms['0'].length!=0){
-
 				$http.get('data/getRoomAddonsData.php')
 					.success(function(data) {
 						if(data == "failedAuth"){
@@ -376,13 +379,61 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							// need to differentiate failed vs server not responding/not found.  if server not responding, dont return.  only if fail (as fail currently means there is no room data set in db)
 							return;
 						}
-						if(idleResumee===1){ 
-							spinnerService.clear();
-							idleResumee=0;
-						}
-						if($scope.room_addons != data) {
+						
+						
+						
+						/*
+						may want to change this to:
+
+						angular.forEach(data[0], function(value, key) {
+							console.log($scope.rooms[0][key].name + ': ' + value);
+						});	
+
+						instead of using $scope.room_addons
+						have a top level array for each room.
+						$scope.Theater[value]
+						$scope.Kitchen[value]
+						etc..
+						user angular.equals per room, so only rooms with updates get updated.
+						
+						
+						
+						
+						option2
+						leave $scope.room_addons  (get rid of room_addons_static)
+						pull out now playing data into a different array:
+						$scope.room_addons_info
+						
+						That way this is updated as needed, while room_addons is only updated if something changes
+						use angular.equals for both of these arrays to control when they get updated.
+						this option will need an update to getRoomAddonsData.php to return an array with 2 parts:
+						data[room_addons]
+						data[room_addons_info]
+						
+						*/
+						var arrayEqual = '';
+						angular.forEach(data[0], function(value, key) {
+							if(!$scope.room_addons[0][key]) {
+								$scope.room_addons[0][key]=data[0][key];
+							} else {
+								arrayEqual = angular.equals($scope.room_addons[0][key], data[0][key]);
+								//console.log(key + "  " + arrayEqual);
+								if(arrayEqual===false){
+									$scope.room_addons[0][key]=data[0][key];
+								}
+							}
+							
+							
+						});	
+					
+						
+						/*
+						var arrayEqual = angular.equals($scope.room_addons, data);						
+						//if($scope.room_addons != data) {
+						if(arrayEqual===false || !$scope.room_addons){
 							$scope.room_addons=data;
 						}
+						*/
 						if(updateAddonsFirstRun===1){
 							if($scope.userdata.currentRoom<1) {
 								$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
@@ -390,22 +441,17 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							$scope.changeRoom($scope.userdata.currentRoom);
 							updateAddonsFirstRun=0;
 							spinnerService.remove("updateAddons");
+						}						
+					}).finally(function(){
+						if(idleResumee===1){ 
+							spinnerService.clear();
+							idleResumee=0;
 						}
 						if($scope.testrun==1){ return; }
 						$timeout(function() {
 							updateAddonsRunning = 0;
 							$scope.updateAddons();
-						}, 5000)
-					}).error(function(){
-						// no access to server
-						//inform.add('No Connection to Server', {
-						//	ttl: 16500, type: 'danger'
-						//});
-						if($scope.testrun==1){ return; }
-						$timeout(function() {
-							updateAddonsRunning = 0;
-							$scope.updateAddons();
-						}, 15000);
+						}, 1500);
 					});
 			} else {
 				spinnerService.remove("updateAddons");
@@ -420,7 +466,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	var cronKeeper = 0;
 	var cronRunning = 0;
 	$scope.runCron = function(){
-		//console.log("runcron");
 		if(cronRunning===1 || $location.path()!="/dashboard") { return; }
 		if( Idle.idling() === true) {
 			$timeout(function() {
@@ -440,29 +485,24 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 					}else if(data == "release") {
 						cronKeeper = "0";
 					}
+				}).error(function(){
+					cronRunning = 0;
+					inform.add('No Connection to Server', {
+						ttl: 4700, type: 'danger'
+					});
+				}).finally(function(){
+					if($scope.testrun==1){ return; }
 					if (cronKeeper == '1') {
-						if($scope.testrun==1){ return; }
 						$timeout(function() {
 							cronRunning = 0;
 							$scope.runCron();
 						}, 2500);
 					} else {
-						if($scope.testrun==1){ return; }
 						$timeout(function() {
 							cronRunning = 0;
 							$scope.runCron();
-						}, 15000);
+						}, 5000);
 					}
-				}).error(function(){
-					// no access to server
-					cronRunning = 0;
-					inform.add('No Connection to Server', {
-						ttl: 8000, type: 'danger'
-					});
-					if($scope.testrun==1){ return; }
-					$timeout(function() {
-						$scope.runCron();
-					}, 15000);
 				});
 		}
 	};	

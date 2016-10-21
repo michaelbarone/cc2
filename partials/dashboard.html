@@ -3,23 +3,28 @@
 	<div ng-show="spinnerCount" class="spinner"></div>
 	<div id="header">
 		<div id="user-menu" class="right">
-			<img src="img/options.png" />
-			<ul id="user-menu-ul" ng-include src="'partials/user-menu.html'">
+			
+			<ul>
+				<li>
+				<img src="img/options.png" class="options" />
+				<ul id="user-menu-ul" ng-include src="'partials/user-menu.html'">
+				</ul>
+				</li>
 			</ul>
 		</div>
 		<div id="room-menu">
 			<nav>
 				<ul class="room-menu-items">
-					<li ng-repeat="addon in room_addons_current[0][userdata.currentRoom]" ng-if="$index > 0 && addon.controlWindow == '1'">
+					<li ng-repeat="addon in room_addons_static[0][userdata.currentRoom] track by addon.rooms_addonsid" ng-if="$index > 0 && addon.controlWindow == '1'">
 						<a id="{{addon.addon + $index + 'L'}}"  
-						class="main link persistent" 
-						on-long-press="loadLinkLongPress(addon.addon + $index);" 
-						ng-click="loadLink(addon.addon + $index);" 
-						ng-class="{'selected': userdata.linkSelected==addon.addon + $index}"
-						style="box-shadow: inset 0 0 10px {{colors[addon.id]}};"
+							class="main link persistent" 
+							on-long-press="loadLinkLongPress(addon.addon + $index);" 
+							ng-click="loadLink(addon.addon + $index);" 
+							ng-class="{'selected': userdata.linkSelected==addon.addon + $index}"
+							style="box-shadow: inset 0 0 10px {{colors[addon.id]}};"
 						>
 							<img ng-src="addons/{{addon.addontype + '.' + addon.addon + '.' + addon.addonversion}}/icon.png"  height="27px" width="27px" />
-						</a>		
+						</a>
 					</li>
 					<li>
 						<a id="{{'room' + userdata.currentRoom + 'L'}}"
@@ -31,38 +36,38 @@
 							<img src="img/control-panel.png"  height="27px" width="27px" />
 						</a>
 					</li>
-					<li>
+					<li class="rooms" style="padding:20px 0;">
 						<a ng-cloak class="ng-cloak title">{{rooms[0][userdata.currentRoom]['name']}}</a>
-					</li>
-				</ul>
-				<ul id="room-menu-ul">
-					<li>
-						<table ng-class="{showme: sendFromAddonLock>0}">
-							<tr ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
-								<td ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name}}</td>
-								<td>
-									<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Room Offline" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
-									<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Some Addons Online" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-orange.png"/>
-									<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='1'" title="No Addons Configured" class="status" src="img/led-cyan.png"/>
-									<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
-								</td>
-								
-								<td ng-if="addon.info || (sendFromAddonIP && addon.device_alive==1 && addon.addontype=='mediaplayer')" ng-repeat="addon in room_addons[0][room].slice().reverse()" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
-									<div>
-										<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
-										<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
-										<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="startMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Start</a>
-										<a ng-if="addon.info && (sendFromAddonLock==0 || sendFromAddonIP!=addon.ip)" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><img class="infoType" ng-src="img/send.png"/></a>
-										<a ng-if="addon.info && sendFromAddonLock==1 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><img class="infoType" ng-src="img/sendToggled.png"/></a>
-										<a ng-if="addon.info && sendFromAddonLock==2 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><img class="infoType" ng-src="img/sendToggleLocked.png"/></a>
-									</div>
-									<div>
-										<a ng-click="showModal(addon,'addon')" ng-if="addon.info">{{addon.info}}</a>
-										<img ng-if="addon.infoType" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
-									</div>
-								</td>
-							</tr>
-						</table>
+						<ul id="room-menu-ul">
+							<li class="rooms">
+								<table ng-class="{showme: sendFromAddonLock>0}">
+									<tr ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
+										<td ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name}}</td>
+										<td>
+											<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Room Offline" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
+											<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Some Addons Online" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-orange.png"/>
+											<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='1'" title="No Addons Configured" class="status" src="img/led-cyan.png"/>
+											<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
+										</td>
+										
+										<td ng-if="addon.info || (sendFromAddonIP && addon.device_alive==1 && addon.addontype=='mediaplayer')" ng-repeat="addon in room_addons[0][room].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
+											<div>
+												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
+												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
+												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="startMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Start</a>
+												<a ng-if="addon.info && (sendFromAddonLock==0 || sendFromAddonIP!=addon.ip)" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><img class="infoType" ng-src="img/send.png"/></a>
+												<a ng-if="addon.info && sendFromAddonLock==1 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><img class="infoType" ng-src="img/sendToggled.png"/></a>
+												<a ng-if="addon.info && sendFromAddonLock==2 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><img class="infoType" ng-src="img/sendToggleLocked.png"/></a>
+											</div>
+											<div>
+												<a ng-click="showModal(addon,'addon')" ng-if="addon.info">{{addon.info}}</a>
+												<img ng-if="addon.infoType" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</nav>
@@ -108,7 +113,7 @@
 								</div>
 							</div>
 						</span>
-						<span ng-if="$index > 0" class="col-4" ng-repeat="addon in room_addons[0][room]">
+						<span ng-if="$index > 0" class="col-4" ng-repeat="addon in room_addons[0][room] track by addon.rooms_addonsid">
 							<div class="addonWidget" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 								<div>
 									<p class="center">{{addon.addontype}}</p>
@@ -148,16 +153,16 @@
 					</div>
 				</div>
 			</span>			
-			<span ng-if="$index > 0 && room_addons_current[0][userdata.currentRoom][$index]['controlWindow'] == '1'" ng-repeat="addon in room_addons_current[0][userdata.currentRoom]" ng-class="{'selected': userdata.linkSelected==='{{addon.addon+$index}}'}" class="dash">
+			<span ng-if="$index > 0 && room_addons_static[0][userdata.currentRoom][$index]['controlWindow'] == '1'" ng-repeat="addon in room_addons_static[0][userdata.currentRoom] track by addon.rooms_addonsid" ng-class="{'selected': userdata.linkSelected==='{{addon.addon+$index}}'}" class="dash">
 				<div class="dashboardPage">
 					<div class="content">
 						<iframe id="{{addon.addon+$index}}" 
 								src="" 
-								data="{{room_addons_current[0][userdata.currentRoom][$index]['ip'] | trustUrl}}" 
+								data="{{room_addons_static[0][userdata.currentRoom][$index]['ip'] | trustUrl}}" 
 								scrolling="no" 
 								height="100%" 
 								width="100%"
-								style="z-index:1;"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>	
+								style="z-index:1;"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
 						<div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] == '1'" ng-init="refreshLink(addon.addon+$index)">
 						</div>
 						<div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] != '1'"
@@ -168,9 +173,9 @@
 							<span class="col-6">
 								<br /><br />
 								<h1 class="center">Power On</h1>
-								<br /><h1 class="center">{{room_addons_current[0][userdata.currentRoom][$index].addontype}} : {{room_addons_current[0][userdata.currentRoom][$index].addonTitle}}</h1>
+								<br /><h1 class="center">{{room_addons_static[0][userdata.currentRoom][$index].addontype}} : {{room_addons_static[0][userdata.currentRoom][$index].addonTitle}}</h1>
 								<br /><h1 class="center">in the {{rooms[0][userdata.currentRoom]['name']}}</h1>
-								<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_current[0][userdata.currentRoom][$index].rooms_addonsid);" />
+								<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_static[0][userdata.currentRoom][$index].rooms_addonsid);" />
 							</span>
 						</div>
 					</div>

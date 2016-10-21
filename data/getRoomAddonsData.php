@@ -33,6 +33,7 @@
 						$addonArray[$x][$i]['addon']=$addonparts[1];
 						$addonArray[$x][$i]['addonversion']=$addonparts[2];						
 					}
+					if($item == "lastCheck"){ continue; }
 					if($item==='time' && $value!=''){
 						$temparray = json_decode($value, true);
 						foreach($temparray as $temp => $item) {

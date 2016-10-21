@@ -46,7 +46,7 @@ a:visited { color:#eee; }
 
 #header .title:hover, .header .title:hover {  color:rgb(204,204,204) !important; }
 
-#link-menu,#user-menu,#room-menu {
+#link-menu,#user-menu,#room-menu,#room-menu-ul,#user-menu-ul {
 	background: #222528 url("../img/background.png") repeat scroll 0% 0%;
 }
 
@@ -86,9 +86,8 @@ a:visited { color:#eee; }
     -webkit-box-shadow: inset -10px 0px 10px -10px #000000;
     box-shadow: inset -10px 0px 10px -10px #000000;
 }
-
-#user-menu ul,#room-menu-ul {
-    -moz-box-shadow: inset 10px 0px 10px -10px #000000;
-    -webkit-box-shadow: inset 10px 0px 10px -10px #000000;
-    box-shadow: inset 10px 0px 10px -10px #000000;
+#room-menu-ul,#user-menu-ul {
+    -moz-box-shadow: inset 10px 0px 10px -10px #000000, inset 0 -10px 10px -10px #000000;
+    -webkit-box-shadow: inset 10px 0px 10px -10px #000000, inset 0 -10px 10px -10px #000000;
+    box-shadow: inset 10px 0px 10px -10px #000000, inset 0 -10px 10px -10px #000000;
 }
