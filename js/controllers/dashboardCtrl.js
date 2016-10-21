@@ -9,7 +9,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.userdata = [];
 	$scope.room_addons = [];
 	$scope.room_addons['0'] = [];
-	$scope.room_addons_static = '';
+	//$scope.room_addons_static = '';
 	$scope.userdata.currentpage = "dashboard";
 	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
 	
@@ -120,7 +120,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  */
  
 	$scope.changeRoom = function(room) {
-		$scope.room_addons_static = $scope.room_addons;
+		//$scope.room_addons_static = $scope.room_addons;
 		var unix = Math.round(+new Date()/1000);
 		$scope.userdata.currentRoom=room;
 		$scope.userdata.lastRoomChange=unix;
@@ -178,10 +178,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	};
 	
 	$scope.refreshLink = function(name) {
-		// temp fix return
-		return;
-		console.log("refreshLink");
-		if(document.getElementById(name).attributes['data'].value != "none"){
+		if(document.getElementById(name).attributes['data'].value != "none" && $scope.userdata.linkSelected==name){
 			document.getElementById(name).attributes['src'].value = document.getElementById(name).attributes['data'].value;
 		}
 	}
@@ -210,30 +207,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *  Addon functions
  *
  */
- 
- 
- 
-	/* replace 1 with 2 below for this to work again on dashboard.html. not needed due to now working ng-init on switch div above this statement
-	1<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_static[0][userdata.currentRoom][$index].rooms_addonsid);" />
-	2<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_static[0][userdata.currentRoom][$index].rooms_addonsid);checkAddonForPowerOn(userdata.currentRoom,$index,addon.addon+$index);" />
-		
-	
-	var checkAddonForPowerOnCount = 0;
-	$scope.checkAddonForPowerOn = function(room,roomaddonid,loadthislink){
-		$timeout(function() {
-			checkAddonForPowerOnCount++;
-			if(checkAddonForPowerOnCount>30){ checkAddonForPowerOnCount = 0;return; }
-			console.log(checkAddonForPowerOnCount);
-			if($scope.room_addons[0][room][roomaddonid]['device_alive']=="1"){
-				$scope.loadLink(loadthislink);
-				return;
-			}
-			$scope.checkAddonForPowerOn(room,roomaddonid,loadthislink);
-		}, 1000);		
-	};
-	
-	*/
- 
  
  
 	$scope.powerOnAddon = function(addonid){
@@ -382,34 +355,8 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 						
 						
 						
-						/*
-						may want to change this to:
-
-						angular.forEach(data[0], function(value, key) {
-							console.log($scope.rooms[0][key].name + ': ' + value);
-						});	
-
-						instead of using $scope.room_addons
-						have a top level array for each room.
-						$scope.Theater[value]
-						$scope.Kitchen[value]
-						etc..
-						user angular.equals per room, so only rooms with updates get updated.
-						
-						
-						
-						
-						option2
-						leave $scope.room_addons  (get rid of room_addons_static)
-						pull out now playing data into a different array:
-						$scope.room_addons_info
-						
-						That way this is updated as needed, while room_addons is only updated if something changes
-						use angular.equals for both of these arrays to control when they get updated.
-						this option will need an update to getRoomAddonsData.php to return an array with 2 parts:
-						data[room_addons]
-						data[room_addons_info]
-						
+						/*						
+							dont know if overhead of forEach is better than just overwriting the whole variable below
 						*/
 						var arrayEqual = '';
 						angular.forEach(data[0], function(value, key) {
@@ -471,7 +418,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			$timeout(function() {
 				idleResumee = 1;
 				$scope.runCron();
-			}, 5000)
+			}, 5000);
 		} else {
 			cronRunning = 1;
 			if(idleResumee===1){ spinnerService.add("idleResume"); }

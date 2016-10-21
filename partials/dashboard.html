@@ -15,7 +15,7 @@
 		<div id="room-menu">
 			<nav>
 				<ul class="room-menu-items">
-					<li ng-repeat="addon in room_addons_static[0][userdata.currentRoom] track by addon.rooms_addonsid" ng-if="$index > 0 && addon.controlWindow == '1'">
+					<li ng-repeat="addon in room_addons[0][userdata.currentRoom] track by addon.rooms_addonsid" ng-if="$index > 0 && addon.controlWindow == '1'" class="topmenu">
 						<a id="{{addon.addon + $index + 'L'}}"  
 							class="main link persistent" 
 							on-long-press="loadLinkLongPress(addon.addon + $index);" 
@@ -26,7 +26,7 @@
 							<img ng-src="addons/{{addon.addontype + '.' + addon.addon + '.' + addon.addonversion}}/icon.png"  height="27px" width="27px" />
 						</a>
 					</li>
-					<li>
+					<li class="topmenu">
 						<a id="{{'room' + userdata.currentRoom + 'L'}}"
 						class="main link persistent loaded" 
 						on-long-press="loadLinkLongPress('room' + userdata.currentRoom);" 
@@ -153,12 +153,12 @@
 					</div>
 				</div>
 			</span>			
-			<span ng-if="$index > 0 && room_addons_static[0][userdata.currentRoom][$index]['controlWindow'] == '1'" ng-repeat="addon in room_addons_static[0][userdata.currentRoom] track by addon.rooms_addonsid" ng-class="{'selected': userdata.linkSelected==='{{addon.addon+$index}}'}" class="dash">
+			<span ng-if="$index > 0 && room_addons[0][userdata.currentRoom][$index]['controlWindow'] == '1'" ng-repeat="addon in room_addons[0][userdata.currentRoom] track by addon.rooms_addonsid" ng-class="{'selected': userdata.linkSelected==='{{addon.addon+$index}}'}" class="dash">
 				<div class="dashboardPage">
 					<div class="content">
 						<iframe id="{{addon.addon+$index}}" 
 								src="" 
-								data="{{room_addons_static[0][userdata.currentRoom][$index]['ip'] | trustUrl}}" 
+								data="{{room_addons[0][userdata.currentRoom][$index]['ip'] | trustUrl}}" 
 								scrolling="no" 
 								height="100%" 
 								width="100%"
@@ -173,9 +173,9 @@
 							<span class="col-6">
 								<br /><br />
 								<h1 class="center">Power On</h1>
-								<br /><h1 class="center">{{room_addons_static[0][userdata.currentRoom][$index].addontype}} : {{room_addons_static[0][userdata.currentRoom][$index].addonTitle}}</h1>
+								<br /><h1 class="center">{{room_addons[0][userdata.currentRoom][$index].addontype}} : {{room_addons[0][userdata.currentRoom][$index].addonTitle}}</h1>
 								<br /><h1 class="center">in the {{rooms[0][userdata.currentRoom]['name']}}</h1>
-								<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons_static[0][userdata.currentRoom][$index].rooms_addonsid);" />
+								<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons[0][userdata.currentRoom][$index].rooms_addonsid);" />
 							</span>
 						</div>
 					</div>

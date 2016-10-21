@@ -434,7 +434,7 @@ img.infoType { height:30px; }
 	display:inline;
 	position:relative;
 }
-.room-menu-items li img {
+.room-menu-items li.topmenu img {
 	top: 5px;
 	position: relative;
 }

@@ -11,7 +11,7 @@
 			<div ng-if="modalContent[0]['addonType']=='mediaplayer'">
 				<div class="col-6">
 					<div ng-if="modalContent[0]['time']['playerpercentage']>0" class="timebar left"><div class="elapsed" style="width:{{modalContent[0]['time']['playerpercentage']}}%"></div></div>
-					<span ng-if="modalContent[0].time.timenow" class="left">Now: {{modalContent[0].time.timenow}}</span><span  ng-if="modalContent[0].time.endtime"  class="right">Ending: {{modalContent[0].time.endtime}}</span>
+					<span ng-if="modalContent[0].time.timenow" class="left">Now: {{modalContent[0].time.timenow}}</span><span ng-if="modalContent[0].time.endtime" class="right">Ending: {{modalContent[0].time.endtime}}</span>
 					<br />
 					<p ng-if="modalContent[0]['tagline']">{{modalContent[0]['tagline']}}</p>
 					<p ng-if="modalContent[0]['runtime']">Runtime: {{modalContent[0]['runtime']}}</p>
