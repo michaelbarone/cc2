@@ -577,6 +577,13 @@ img.infoType { height:30px; }
 	width: 100%;
 	position: relative;
 	z-index: 13;
+	direction:ltr;
+	display:block;
+}
+#header .timebar {
+	margin-top: 5px;
+	margin-bottom: -10px;
+	height: 3px;
 }
 .timebar .elapsed {
 	height: 5px;
@@ -584,8 +591,11 @@ img.infoType { height:30px; }
 	z-index: 15;
 	position: relative;
 	left: 0;
+	display: inherit;
 }
-
+#header .timebar .elapsed {
+	height: 3px;
+}
 
 .addonTitle {
 	padding: 15px;

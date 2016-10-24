@@ -134,16 +134,17 @@ app.directive('onLongPress', function($timeout) {
 	};
 })
 
-app.controller('ModalController', function($scope, close, data, $http, Carousel) {
+app.controller('ModalController', function($scope, close, data, $http, Carousel, $timeout) {
 	//$scope.modaldata=data;
 	$scope.modalContent=[];
 	$scope.Carousel = Carousel;
+	$scope.initdata=data;
 	
 	if(data>=0){
 		$http.get('data/getRoomAddonDataExtended.php?data='+JSON.stringify(data))
 		.success(function(data) {
 			$scope.modalContent = data;
-		});		
+		});	
 	} else {
 		$http.get('data/getRoomAddonDataExtended.php?data='+JSON.stringify(data))
 		.success(function(data) {
@@ -152,6 +153,25 @@ app.controller('ModalController', function($scope, close, data, $http, Carousel)
 	}
 	
 	$scope.modalOpen=1;
+	
+	
+	
+	$scope.checkInitData = function(){
+		if($scope.initdata.addontype==$scope.modalContent[0].addonType && $scope.initdata.info==$scope.modalContent[0].title){
+			$timeout(function() {
+				$scope.checkInitData();
+			}, 5000);
+		} else {
+			$scope.modalContent=[];
+		}
+	}
+	
+	$timeout(function() {
+		$scope.checkInitData();
+	}, 5000);
+	
+	
+	
   	$scope.closeModal = function() {
 		if($scope.modalOpen) {
 			$scope.modalOpen=0;

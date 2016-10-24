@@ -282,7 +282,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *  Modal service
  *
  */
-
 	$scope.showModal = function(data,type) {
 		spinnerService.add("showModal");
 		
@@ -298,9 +297,13 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			,inputs: {
 				data: data,
 		    }
+			, scope: $scope
 		}).then(function(modal) {
 			$scope.modalOpen=1;
 			spinnerService.remove("showModal");
+            modal.close.then(function() {
+				$scope.modalOpen=0;
+            });
 		});
 	};
 

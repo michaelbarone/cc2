@@ -60,7 +60,7 @@
 												<a ng-if="addon.info && sendFromAddonLock==2 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><img class="infoType" ng-src="img/sendToggleLocked.png"/></a>
 											</div>
 											<div>
-												<a ng-click="showModal(addon,'addon')" ng-if="addon.info">{{addon.info}}</a>
+												<a ng-click="showModal(addon,'addon')" ng-if="addon.info" style="display:inline-block;">{{addon.info}}<span ng-if="addon.time.playerpercentage>0" class="timebar"><span class="elapsed" style="width:{{addon.time.playerpercentage}}%"></span></span></a>											
 												<img ng-if="addon.infoType" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
 											</div>
 										</td>
