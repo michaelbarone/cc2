@@ -128,6 +128,7 @@
 									<br class="clear" />
 								</div>
 								<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
+								<a ng-if="addon.info" ng-click="sendFromAddonSet(addon.ip,addon.addonid)" class="right"><img class="infoType" ng-src="img/send.png"/></a>
 								<a ng-if="addon.info" ng-click="showModal(addon,'addon')">{{addon.info}}</a>
 								<img ng-if="addon.thumbnail!='' && addon.infoType!='movie'" class="fanart" ng-src="{{addon.thumbnail}}" />
 								<img ng-if="addon.fanart!='' && addon.infoType=='movie'" class="fanart" ng-src="{{addon.fanart}}" />
