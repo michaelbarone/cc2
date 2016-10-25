@@ -478,6 +478,7 @@ img.infoType { height:30px; }
 }
 #room-menu-ul table tr td {
 	padding:8px;
+	text-align:right;
 }
 #room-menu-ul table tr td div {
 	display:inline;

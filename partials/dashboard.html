@@ -42,7 +42,8 @@
 							<li class="rooms">
 								<table ng-class="{showme: sendFromAddonLock>0}">
 									<tr ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
-										<td ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name}}</td>
+										<td ng-if="userdata.mobile==='1'" ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name | abvTitle}}</td>
+										<td ng-if="userdata.mobile!='1'" ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name}}</td>
 										<td>
 											<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Room Offline" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
 											<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Some Addons Online" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-orange.png"/>

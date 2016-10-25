@@ -157,6 +157,12 @@ app.controller('ModalController', function($scope, close, data, $http, Carousel,
 	
 	
 	$scope.checkInitData = function(){
+		//  1   initdata == modalcontent ==>  timeout function
+		//  2   initdata != modalcontent ==>  refresh modalcontent?
+		//  3   initdata != parentscope
+		
+		
+		
 		if($scope.initdata.addontype==$scope.modalContent[0].addonType && $scope.initdata.info==$scope.modalContent[0].title){
 			$timeout(function() {
 				$scope.checkInitData();
