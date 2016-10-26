@@ -62,6 +62,9 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 				$scope.rooms = data;
 			})
 			.finally(function() {
+				var updateAddonsRunning = 0;
+				$scope.updateAddons();
+				spinnerService.add("updateAddons");
 				spinnerService.remove("loadRooms");
 			});
 	}
@@ -84,13 +87,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$timeout(function() {
 		spinnerService.add("loadLinks");
 		$scope.loadLinks();
-	}, 75);
-	$timeout(function() {		
-		updateAddonsRunning = 0;
-		spinnerService.add("updateAddons");
-		$scope.updateAddons();
-	}, 150);
-	
+	}, 75);	
 	$timeout(function() {
 		$scope.loaded=1;
 		cronRunning = 0;
