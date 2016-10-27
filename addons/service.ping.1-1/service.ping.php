@@ -1,5 +1,7 @@
 <?php
 class ping {
+		
+	private $IP;
 
 	function AddonInfo(){
 		$info = array();
@@ -7,6 +9,7 @@ class ping {
 		$info['name']="ping";
 		$info['version']="1-1";  // version matches the 3rd section of the folder name. first number relates to compatibility with connecting api (will be updates when that app updates).  second number is the revision for this class.
 		$info['info']="Addon that pings an ip and reports status.";  // brief description and list compatible versions of the connecting app
+		return $info;
 	}
 
 	function SetVariables($vars){
@@ -17,8 +20,12 @@ class ping {
 		$this->IP = $ip;
 	}
 
-	function Ping($ip) {
-		$pingurl = $ip;
+	function Ping($ip='') {
+		if($ip==''){
+			$pingurl = $this->IP;
+		}else{
+			$pingurl = $ip;
+		}
 		$disallowed = array('http://', 'https://');
 		foreach($disallowed as $d) {
 			if(strpos($pingurl, $d) === 0) {
