@@ -62,7 +62,7 @@ class denon {
 		$items = json_decode($json, true);
 
 		$returnArray=array();
-		$returnArray['data']=$output;
+		$returnArray['data']=$json;
 		$returnArray['pingApp']=$pingApp;
 		if($items['Power']['value']==="ON"){
 			//$status = "alive";

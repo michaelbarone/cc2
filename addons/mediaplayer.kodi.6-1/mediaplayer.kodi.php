@@ -161,105 +161,107 @@ class kodi {
 			$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
 			$output = $this->Curl($jsoncontents);
 			$jsonnowplaying = json_decode($output,true);
-			foreach($jsonnowplaying['result']['item'] as $item=>$value) {
-				if($value == "" || $value == "0" || $item =="0") { continue; }
-				
-				//  special cases
-				if($item == "fanart" || $item == "thumbnail") {
-					if($value == '') { continue; }
-					/*if($jsonnowplaying['result']['item']['type']=="movie") {
-						if($item=="thumbnail"){
-							$item="fanart";
-						}else {
-							$item="thumbnail";
-						}
-					}*/
-					$nowplayingarray[$item] = "$this->IP/image/".urlencode($value);
-				} elseif($item == "cast"){
-					if(empty($value)) { continue; }
-					foreach($value as $key => $item){
-	
-						foreach($item as $thiskey => $thisitem){
-							if (!is_array($thisitem) && substr($thisitem, 0, 8) == 'image://') {
-								$nowplayingarray['cast'][$key][$thiskey] = "$this->IP/image/".urlencode($thisitem);
-							} else {
-								$nowplayingarray['cast'][$key][$thiskey] = $thisitem;
-							}	
-						}
-	
-	
-						
-
-					}
-
-
-				} elseif(is_array($value)) {
-					if(empty($value)) { continue; }
-					foreach($value as $key => $item){
+			if(is_array($jsonnowplaying['result']['item'])) {
+				foreach($jsonnowplaying['result']['item'] as $item=>$value) {
+					if($value == "" || $value == "0" || $item =="0") { continue; }
+					
+					//  special cases
+					if($item == "fanart" || $item == "thumbnail") {
+						if($value == '') { continue; }
+						/*if($jsonnowplaying['result']['item']['type']=="movie") {
+							if($item=="thumbnail"){
+								$item="fanart";
+							}else {
+								$item="thumbnail";
+							}
+						}*/
+						$nowplayingarray[$item] = "$this->IP/image/".urlencode($value);
+					} elseif($item == "cast"){
+						if(empty($value)) { continue; }
+						foreach($value as $key => $item){
+		
+							foreach($item as $thiskey => $thisitem){
+								if (!is_array($thisitem) && substr($thisitem, 0, 8) == 'image://') {
+									$nowplayingarray['cast'][$key][$thiskey] = "$this->IP/image/".urlencode($thisitem);
+								} else {
+									$nowplayingarray['cast'][$key][$thiskey] = $thisitem;
+								}	
+							}
+		
+		
 							
-						if (!is_array($item) && substr($item, 0, 8) === 'image://') {
-							if(substr($key, 0, 7) === 'tvshow.') {
-								$key = ltrim($key, 'tvshow.');
-							}
-							//if (strpos($item, 'image://') !== false) {
-							//	$item = ltrim($item, 'image://');
-								//$item = urldecode($item);
-							//}
-							if(substr($key, 0, 6) === 'fanart') {
-								$nowplayingarray['images']['fanart'][$key] = "$this->IP/image/".urlencode($item);
+
+						}
+
+
+					} elseif(is_array($value)) {
+						if(empty($value)) { continue; }
+						foreach($value as $key => $item){
+								
+							if (!is_array($item) && substr($item, 0, 8) === 'image://') {
+								if(substr($key, 0, 7) === 'tvshow.') {
+									$key = ltrim($key, 'tvshow.');
+								}
+								//if (strpos($item, 'image://') !== false) {
+								//	$item = ltrim($item, 'image://');
+									//$item = urldecode($item);
+								//}
+								if(substr($key, 0, 6) === 'fanart') {
+									$nowplayingarray['images']['fanart'][$key] = "$this->IP/image/".urlencode($item);
+								} else {
+									$nowplayingarray['images'][$key] = "$this->IP/image/".urlencode($item);
+								}
 							} else {
-								$nowplayingarray['images'][$key] = "$this->IP/image/".urlencode($item);
+								$nowplayingarray[$key] = $item;
 							}
-						} else {
-							$nowplayingarray[$key] = $item;
+						}
+						
+						/*
+						$nowplayingarray[$item] = implode(",",$value);
+						*/
+						
+					} else {  // normal cases, everything else
+						$nowplayingarray[$item] = $value;
+					}
+				}
+		
+				if($jsonnowplaying['result']['item']['type'] == "unknown") {
+					$tvshowneedles = array('1x','2x','3x','4x','5x','6x','7x','8x','9x','0x','s0','S0','00E','00e','e0','E0','e1','E1');
+					$ext = pathinfo($jsonnowplaying['result']['item']['file'], PATHINFO_EXTENSION);
+					$file = basename($jsonnowplaying['result']['item']['file'], ".".$ext);
+					$needles = $tvshowneedles;
+					foreach($needles as $needle) {
+						if (strpos($file,$needle) !== false) {
+							$nowplayingarray['type'] = "tv";
+							$nowplayingarray['title'] = "$file";							
+							break;
 						}
 					}
-					
-					/*
-					$nowplayingarray[$item] = implode(",",$value);
-					*/
-					
-				} else {  // normal cases, everything else
-					$nowplayingarray[$item] = $value;
-				}
-			}
-	
-			if($jsonnowplaying['result']['item']['type'] == "unknown") {
-				$tvshowneedles = array('1x','2x','3x','4x','5x','6x','7x','8x','9x','0x','s0','S0','00E','00e','e0','E0','e1','E1');
-				$ext = pathinfo($jsonnowplaying['result']['item']['file'], PATHINFO_EXTENSION);
-				$file = basename($jsonnowplaying['result']['item']['file'], ".".$ext);
-				$needles = $tvshowneedles;
-				foreach($needles as $needle) {
-					if (strpos($file,$needle) !== false) {
-						$nowplayingarray['type'] = "tv";
-						$nowplayingarray['title'] = "$file";							
-						break;
+					$movieneedles = array('(19','(20','[19','[20');				
+					$needles = $movieneedles;
+					foreach($needles as $needle) {
+						if (strpos($file,$needle) !== false) {
+							$nowplayingarray['type'] = "movie";
+							$nowplayingarray['title'] = "$file";
+							break;
+						}
 					}
 				}
-				$movieneedles = array('(19','(20','[19','[20');				
-				$needles = $movieneedles;
-				foreach($needles as $needle) {
-					if (strpos($file,$needle) !== false) {
-						$nowplayingarray['type'] = "movie";
-						$nowplayingarray['title'] = "$file";
-						break;
+					
+					
+				if($jsonnowplaying['result']['item']['type'] == "channel") {
+					$nowplayingarray['type'] = "tv";
+					$nowplayingarray['channel'] = $jsonnowplaying['result']['item']['label'];
+					$nowplayingarray['runtime'] = $nowplayingarray['runtime'] . " minutes";
+				} else {
+					if(isset($nowplayingarray['runtime']) && $nowplayingarray['runtime'] != '') {
+						$nowplayingarray['runtime'] = round($nowplayingarray['runtime']/60) . " minutes";
 					}
 				}
-			}
 				
-				
-			if($jsonnowplaying['result']['item']['type'] == "channel") {
-				$nowplayingarray['type'] = "tv";
-				$nowplayingarray['channel'] = $jsonnowplaying['result']['item']['label'];
-				$nowplayingarray['runtime'] = $nowplayingarray['runtime'] . " minutes";
-			} else {
-				if(isset($nowplayingarray['runtime']) && $nowplayingarray['runtime'] != '') {
-					$nowplayingarray['runtime'] = round($nowplayingarray['runtime']/60) . " minutes";
-				}
-			}
-			
 
-			return $nowplayingarray;		
+				return $nowplayingarray;
+			}
 
 		} elseif($activeplayerid=="2") {
 			echo "pics";
@@ -305,9 +307,9 @@ class kodi {
 		$jsonnowplayingtime = json_decode($output,true);
 		
 		if(!isset($jsonnowplayingtime['result'])) {
-			if($showtime!=0) {
+			//if($showtime!=0) {
 				return "Playback Ended";
-			}
+			//}
 		}
 		$thecurtime = implode(', ', $jsonnowplayingtime['result']['time']);
 		$thetotaltime = implode(', ', $jsonnowplayingtime['result']['totaltime']);

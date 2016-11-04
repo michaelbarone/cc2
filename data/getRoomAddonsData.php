@@ -42,8 +42,10 @@
 					}
 					if($item==='ping' && $value!=''){
 						$temparray = json_decode($value, true);
-						foreach($temparray as $temp => $item) {
-							$addonArray[$x][$i]['ping'][$temp]=$item;
+						if(is_array($temparray)){
+							foreach($temparray as $temp => $item) {
+								$addonArray[$x][$i]['ping'][$temp]=$item;
+							}
 						}
 					}					
 					if(is_numeric($item)===false){
