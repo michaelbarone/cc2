@@ -14,7 +14,7 @@ app.filter('abvTitle', function(){
 			matches = myStr.match(/\b(\w)/g);
 			matches = matches.join('');
 		} else {
-			matches = myStr.substring(0, 3);
+			matches = myStr.substring(0, 2).charAt(0).toUpperCase() + myStr.substring(0, 2).charAt(1).toLowerCase();
 		}
 		
 		

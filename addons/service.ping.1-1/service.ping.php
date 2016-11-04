@@ -43,15 +43,17 @@ class ping {
 			$thisip = substr($thisip, 0, strpos($thisip, "/"));
 		}
 		if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
-			$pingresult = exec("ping -n 2 -w 1 $thisip", $output, $status);
+			$pingresult = exec("ping -n 2 -w 2 $thisip", $output, $status);
 			// echo 'This is a server using Windows!';
 		} else {
-			$pingresult = exec("/bin/ping -c2 -w1 $thisip", $output, $status);
+			$pingresult = exec("/bin/ping -c2 -w2 $thisip", $output, $status);
 			// echo 'This is a server not using Windows!';
 		}
 		$returnArray=Array();
 		$json = json_encode($output);
-		$result = preg_replace('/\"",.*?\,"",/', '', $json);
+		//$result = preg_replace('/\"",.*?\,"",/', '', $json);
+		$expStr=explode(',"",',$json);
+		$result="[".$expStr[1];		
 		$returnArray['data']=$result;
 		$returnArray['pingApp']=$pingApp;
 		if ($status == "0") {
