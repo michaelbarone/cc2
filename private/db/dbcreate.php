@@ -39,6 +39,7 @@ $query = "CREATE TABLE IF NOT EXISTS rooms_addons_info (
 `thumbnail`	TEXT,
 `fanart`	TEXT,
 `time`	TEXT,
+`ping`	TEXT,
 PRIMARY KEY(rooms_addonsid)
 )";
 $statement = $configdbcreate->prepare($query);

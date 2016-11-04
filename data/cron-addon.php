@@ -45,11 +45,11 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 		}
 	}
 	if($addonType=='service'){
-			$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, infoType, time) VALUES (:rooms_addonsid,:type,:time)");
+			$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, infoType, ping) VALUES (:rooms_addonsid,:type,:ping)");
 			try {
 				$statement->execute(array(':rooms_addonsid'=>$rooms_addonsid,
 				':type'=>$addonName,
-				':time'=>$devicealive['data']
+				':ping'=>$devicealive['data']
 				));
 			} catch(PDOException $e) {
 				$log->LogError("$e->getMessage()" . basename(__FILE__));
@@ -81,21 +81,22 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 			}
 			$type = $nowPlayingInfo['type'];
 			$time = $nowPlayingInfo['time'];
-			$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart, time) VALUES (:rooms_addonsid,:title,:type,:thumbnail,:fanart,:time)");
+			$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart, time, ping) VALUES (:rooms_addonsid,:title,:type,:thumbnail,:fanart,:time,:ping)");
 			try {
 				$statement->execute(array(':rooms_addonsid'=>$rooms_addonsid,
 				':title'=>$title,
 				':type'=>$type,
 				':thumbnail'=>$thumbnail,
 				':fanart'=>$fanart,
-				':time'=>$time
+				':time'=>$time,
+				':ping'=>$devicealive['data']
 				));
 			} catch(PDOException $e) {
 				$log->LogError("$e->getMessage()" . basename(__FILE__));
 				return "Statement failed: " . $e->getMessage();
 			}
 		} elseif($_POST['info']!='') {
-			$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart, time) VALUES ('$rooms_addonsid','','','','','')");
+			$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart, time, ping) VALUES ('$rooms_addonsid','','','','','','')");
 		}
 	}
 }

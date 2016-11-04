@@ -53,7 +53,7 @@ class ping {
 		$json = json_encode($output);
 		//$result = preg_replace('/\"",.*?\,"",/', '', $json);
 		$expStr=explode(',"",',$json);
-		$result="[".$expStr[1];		
+		$result="[".$expStr[1];
 		$returnArray['data']=$result;
 		$returnArray['pingApp']=$pingApp;
 		if ($status == "0") {
