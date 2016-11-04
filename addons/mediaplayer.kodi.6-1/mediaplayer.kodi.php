@@ -13,6 +13,11 @@ class kodi {
 		return $info;
 	}
 
+	private function returnJSON($returnArray){
+		header('Content-Type: application/json');
+		$json=json_encode($returnArray);
+		return $json;
+	}
 
 	function SetVariables($vars){
 		$this->IP = $vars['ip'];
@@ -32,8 +37,12 @@ class kodi {
 		return $output;
 	}	
 	
-	function Ping($ip) {
-		$pingurl = $ip;
+	function Ping($ip='',$pingApp=0) {
+		if($ip==''){
+			$pingurl = $this->IP;
+		}else{
+			$pingurl = $ip;
+		}
 		$disallowed = array('http://', 'https://');
 		foreach($disallowed as $d) {
 			if(strpos($pingurl, $d) === 0) {
@@ -48,27 +57,57 @@ class kodi {
 		} else {
 			$pingresult = exec("/bin/ping -c1 -w1 $thisip", $outcome, $status);
 		}
+		$returnArray=array();
+		$returnArray['data']=$output;
+		$returnArray['pingApp']=$pingApp;
+		if ($status == "0") {
+			//$status = "alive";
+			$returnArray['status']="alive";
+		} else {
+			//$status = "dead";
+			$returnArray['status']="dead";
+		}
+		$return = $this->returnJSON($returnArray);
+		return $return;
+		/*
 		if ($status == "0") {
 			return "alive";	
 		} else {
 			return "dead";
-		}
+		}*/
 	}
 	
 	
-	function PingApp($ip) {	
+	function PingApp($ip) {
 		$pingurl = "$this->IP/jsonrpc?request={%22jsonrpc%22%3A%20%222.0%22%2C%20%22method%22%3A%20%22JSONRPC.Ping%22%2C%22id%22%3A%201}";
 		//$pingurl = "$this->IP";
+		/*
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_URL, "$pingurl");
 		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
 		$output = curl_exec($ch);
+		*/
+		$output = $this->Curl($pingurl);
+
+		$returnArray=array();
+		$returnArray['data']=$output;
+		$returnArray['pingApp']=0;
+		if($output === FALSE) {
+			$returnArray['status']="dead";
+		} else {
+			$returnArray['status']="alive";
+		}
+		$return = $this->returnJSON($returnArray);
+		return $return;
+
+		/*
 		if($output === FALSE) {
 			return "dead";
 		} else {
 			return "alive";
 		}
+		*/
 	}
 
 	function PowerOn(){

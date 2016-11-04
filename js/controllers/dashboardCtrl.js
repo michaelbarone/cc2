@@ -202,6 +202,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 
 /**
  *  Addon functions
+ *  move into services? or directive?
  *
  */
  
@@ -390,9 +391,10 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							spinnerService.remove("updateAddons");
 						}						
 					}).finally(function(){
-						if(idleResumee===1){ 
+						if(idleResumee===1 && idleResumeWait===1){
 							spinnerService.clear();
 							idleResumee=0;
+							idleResumeWait = 0;
 						}
 						if($scope.testrun==1){ return; }
 						$timeout(function() {
@@ -410,6 +412,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		}
 	};
 
+	var idleResumeWait = 0;
 	var cronKeeper = 0;
 	var cronRunning = 0;
 	$scope.runCron = function(){
@@ -421,7 +424,9 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			}, 5000);
 		} else {
 			cronRunning = 1;
-			if(idleResumee===1){ spinnerService.add("idleResume"); }
+			if(idleResumee===1){
+				spinnerService.add("idleResume"); 
+			}
 			$http.get('data/cron.php')
 				.success(function(data) {
 					if(data == "failed") {
@@ -438,6 +443,9 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 						ttl: 4700, type: 'danger'
 					});
 				}).finally(function(){
+					if(idleResumee===1){
+						idleResumeWait = 1;
+					}
 					if($scope.testrun==1){ return; }
 					if (cronKeeper == '1') {
 						$timeout(function() {

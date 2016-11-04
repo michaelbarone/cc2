@@ -12,6 +12,12 @@ class ping {
 		return $info;
 	}
 
+	private function returnJSON($returnArray){
+		header('Content-Type: application/json');
+		$json=json_encode($returnArray);
+		return $json;
+	}
+	
 	function SetVariables($vars){
 		$this->IP = $vars['ip'];
 	}
@@ -20,7 +26,7 @@ class ping {
 		$this->IP = $ip;
 	}
 
-	function Ping($ip='') {
+	function Ping($ip='',$pingApp=0) {	
 		if($ip==''){
 			$pingurl = $this->IP;
 		}else{
@@ -37,23 +43,30 @@ class ping {
 			$thisip = substr($thisip, 0, strpos($thisip, "/"));
 		}
 		if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
-			$pingresult = exec("ping -n 1 -w 1 $thisip", $output, $status);
+			$pingresult = exec("ping -n 2 -w 1 $thisip", $output, $status);
 			// echo 'This is a server using Windows!';
 		} else {
-			$pingresult = exec("/bin/ping -c1 -w1 $thisip", $outcome, $status);
+			$pingresult = exec("/bin/ping -c2 -w1 $thisip", $output, $status);
 			// echo 'This is a server not using Windows!';
 		}
+		$returnArray=Array();
+		$json = json_encode($output);
+		$result = preg_replace('/\"",.*?\,"",/', '', $json);
+		$returnArray['data']=$result;
+		$returnArray['pingApp']=$pingApp;
 		if ($status == "0") {
 			//$status = "alive";
-			return "alive";	
+			$returnArray['status']="alive";
 		} else {
 			//$status = "dead";
-			return "dead";
+			$returnArray['status']="dead";
 		}
+		$return = $this->returnJSON($returnArray);
+		return $return;
 	}
 	
 	function PingApp($ip){
-		return $this->Ping($ip);
+		return $this->Ping($ip,1);
 	}	
 
 	function PowerOn(){

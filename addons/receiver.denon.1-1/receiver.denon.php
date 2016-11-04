@@ -12,7 +12,11 @@ class denon {
 		return $info;
 	}
 
-
+	private function returnJSON($returnArray){
+		header('Content-Type: application/json');
+		$json=json_encode($returnArray);
+		return $json;
+	}
 	
 	function SetVariables($vars){
 		$this->IP = $vars['ip'];
@@ -45,22 +49,42 @@ class denon {
 		return $output;
 	}
 	
-	function Ping($ip) {
-		$thisip = $this->stripIp($this->IP);
+	function Ping($ip='',$pingApp=0) {
+		if($ip==''){
+			$thisip = $this->stripIp($this->IP);
+		}else{
+			$thisip = $this->stripIp($ip);
+		}
 		$curlThis = "$thisip/goform/formMainZone_MainZoneXml.xml";
 		$output = $this->Curl($curlThis);
 		$items = simplexml_load_string($output);
 		$json = json_encode($items);
 		$items = json_decode($json, true);
+
+		$returnArray=array();
+		$returnArray['data']=$output;
+		$returnArray['pingApp']=$pingApp;
+		if($items['Power']['value']==="ON"){
+			//$status = "alive";
+			$returnArray['status']="alive";
+		} else {
+			//$status = "dead";
+			$returnArray['status']="dead";
+		}
+		$return = $this->returnJSON($returnArray);
+		return $return;	
+		
+		/*
 		if($items['Power']['value']==="ON"){
 			return "alive";	
 		} else {
 			return "dead";
 		}
+		*/
 	}
 	
 	function PingApp($ip){
-		return $this->Ping($ip);
+		return $this->Ping($ip,1);
 	}
 
 	function PowerOn(){

@@ -128,6 +128,7 @@
 									<p ng-if="addon.addonTitle =='' || addon.addonTitle ==null" class="left">{{addon.addon}}</p>
 									<br class="clear" />
 								</div>
+								<p ng-if="addon.infoType=='ping'" ng-repeat="timepart in addon.time">{{timepart}}</p>								
 								<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
 								<a ng-if="addon.info" ng-click="sendFromAddonSet(addon.ip,addon.addonid)" class="right"><img class="infoType" ng-src="img/send.png"/></a>
 								<a ng-if="addon.info" ng-click="showModal(addon,'addon')">{{addon.info}}</a>

@@ -15,28 +15,48 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 		include "../addons/$addonid/$addonType.$addonName.php";
 		${$addonid} = new $addonName();
 	}
+	$count=0;
 	$vars = array();
 	$vars['ip']=$ip;
 	$vars['mac']=$mac;
 	${$addonid}->SetVariables($vars);
-	$devicealive='';
+	$devicealive=array();
 	if($statusorig==1) {
-		$devicealive=${$addonid}->PingApp($ip);
-	} 
-	if($statusorig==0 || $devicealive!='alive') {
-		$devicealive=${$addonid}->Ping($ip);
+		$devicealive=json_decode(${$addonid}->PingApp($ip), true);
 	}
-	if ($devicealive == "alive") {
+	if($statusorig==0 || (isset($devicealive['status']) && $devicealive['status']!='alive')) {
+		if(isset($devicealive['pingApp']) && $devicealive['pingApp']==1){
+		} else {
+			checkfalseneg:
+			$devicealive=json_decode(${$addonid}->Ping($ip), true);
+		}
+	}
+	if (isset($devicealive['status']) && $devicealive['status'] == "alive") {
 		if($statusorig==0) {
 			$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 1 WHERE rooms_addonsid = '$rooms_addonsid';");
 		}
 	} else {
 		if($statusorig==1) {
+			if($count==0){
+				$count++;
+				goto checkfalseneg;
+			}
 			$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 0 WHERE rooms_addonsid = '$rooms_addonsid';");
 		}
 	}
+	if($addonType=='service'){
+			$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, infoType, time) VALUES (:rooms_addonsid,:type,:time)");
+			try {
+				$statement->execute(array(':rooms_addonsid'=>$rooms_addonsid,
+				':type'=>$addonName,
+				':time'=>$devicealive['data']
+				));
+			} catch(PDOException $e) {
+				$log->LogError("$e->getMessage()" . basename(__FILE__));
+				return "Statement failed: " . $e->getMessage();
+			}
 
-	if($addonType=='mediaplayer'){
+	} elseif($addonType=='mediaplayer'){
 		// need to standardize nowplayinginfo response in class files
 		$nowPlayingInfo = ${$addonid}->GetPlayingItemInfo();
 		//print_r($nowPlayingInfo);
