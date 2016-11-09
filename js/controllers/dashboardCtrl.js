@@ -358,7 +358,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 						
 						/*						
 							dont know if overhead of forEach is better than just overwriting the whole variable below
-						*/
+						
 						var arrayEqual = '';
 						angular.forEach(data[0], function(value, key) {
 							if(!$scope.room_addons[0][key]) {
@@ -373,15 +373,17 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							
 							
 						});	
-					
+						*/
 						
-						/*
+						/*  option 2
 						var arrayEqual = angular.equals($scope.room_addons, data);						
 						//if($scope.room_addons != data) {
 						if(arrayEqual===false || !$scope.room_addons){
 							$scope.room_addons=data;
 						}
 						*/
+						
+						$scope.room_addons=data;
 						if(updateAddonsFirstRun===1){
 							if($scope.userdata.currentRoom<1) {
 								$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');

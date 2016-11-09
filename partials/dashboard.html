@@ -41,7 +41,7 @@
 						<ul id="room-menu-ul">
 							<li class="rooms">
 								<table ng-class="{showme: sendFromAddonLock>0}">
-									<tr ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
+									<tr ng-if="!$first || !$last" ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
 										<td ng-if="userdata.mobile==='1'" ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name | abvTitle}}</td>
 										<td ng-if="userdata.mobile!='1'" ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name}}</td>
 										<td>
