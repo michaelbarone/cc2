@@ -2,14 +2,10 @@
 
 app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService','Fullscreen', function ($rootScope, $scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService, Fullscreen){
 	spinnerService.clear();
-	var unix = Math.round(+new Date()/1000);
 	$scope.links = [];
-	$scope.rooms = [];
-	$scope.rooms['0'] = [];
 	$scope.userdata = [];
 	$scope.room_addons = [];
 	$scope.room_addons['0'] = [];
-	//$scope.room_addons_static = '';
 	$scope.userdata.currentpage = "dashboard";
 	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
 	
@@ -41,7 +37,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.userdata.linkGroupSelected = '';
 	$scope.userdata.linkSelected = '';
 	$scope.userdata.currentRoom = 'noRoom';
-	$scope.userdata.lastRoomChange=unix;
+	$scope.userdata.lastRoomChange=Math.round(+new Date()/1000);
 	$scope.userdata.settingsAccess=sessionStorage.getItem('settingsAccess');
 	if(sessionStorage.getItem('currentRoom')>0) {
 		$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
@@ -56,19 +52,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *  Load Initial Data
  */	
  
-	$scope.loadRooms = function(){
-		$http.get('data/getRooms.php')
-			.success(function(data) {
-				$scope.rooms = data;
-			})
-			.finally(function() {
-				var updateAddonsRunning = 0;
-				$scope.updateAddons();
-				spinnerService.add("updateAddons");
-				spinnerService.remove("loadRooms");
-			});
-	}
-
 	$scope.loadLinks = function(){
 		$http.get('data/getLinks.php?mobile='+$scope.userdata.mobile)
 			.success(function(data) {
@@ -79,15 +62,14 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			});
 	}
 
-
 	$timeout(function() {
-		spinnerService.add("loadRooms");
-		$scope.loadRooms();
-	}, 10);		
+		spinnerService.add("updateAddons");
+		$scope.updateAddons();
+	}, 10);
 	$timeout(function() {
 		spinnerService.add("loadLinks");
 		$scope.loadLinks();
-	}, 75);	
+	}, 100);	
 	$timeout(function() {
 		$scope.loaded=1;
 		cronRunning = 0;
@@ -117,7 +99,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  */
  
 	$scope.changeRoom = function(room) {
-		//$scope.room_addons_static = $scope.room_addons;
 		var unix = Math.round(+new Date()/1000);
 		$scope.userdata.currentRoom=room;
 		$scope.userdata.lastRoomChange=unix;
@@ -329,34 +310,33 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 				$scope.updateAddons();
 			}, 5000)
 		} else {
-			if($scope.rooms.constructor.toString().indexOf("Array") != -1){
-				// console.log("yes");
-			} else {
-				//console.log("running loadLinks()");
-				$scope.loadRooms();
-			}			
-			if($scope.links.constructor.toString().indexOf("Array") != -1){
-				// console.log("yes");
-			} else {
-				// console.log("running loadLinks()");
-				$scope.loadLinks();
-			}
-
-			if($scope.rooms['0'].length!=0){
-				$http.get('data/getRoomAddonsData.php')
-					.success(function(data) {
-						if(data == "failedAuth"){
-							loginService.logout();
-							return;
-						}
-						if(data == "failed") {
-							// need to differentiate failed vs server not responding/not found.  if server not responding, dont return.  only if fail (as fail currently means there is no room data set in db)
-							return;
-						}
+			$http.get('data/getRoomAddonsData.php')
+				.success(function(data) {
+					// maybe use switch instead of if/else
+					
+					
+					if(data == "failedAuth"){
+						loginService.logout();
+						return;
+					}
+					else if(data == "failed") {
+						// need to differentiate failed vs server not responding/not found.  if server not responding, dont return.  only if fail (as fail currently means there is no room data set in db)
+						return;
+					}
+					
+					
+					// new return from getRoomAddonsData.php
+					else if(data == "noRoomAccess"){
+						// do nothing
+					} else {
+						// everything below here
 						
 						
-						
-						/*						
+					
+					
+					
+					
+						/*				
 							dont know if overhead of forEach is better than just overwriting the whole variable below
 						
 						var arrayEqual = '';
@@ -388,29 +368,26 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							if($scope.userdata.currentRoom<1) {
 								$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
 							}
-							$scope.changeRoom($scope.userdata.currentRoom);
-							updateAddonsFirstRun=0;
-							spinnerService.remove("updateAddons");
-						}						
-					}).finally(function(){
-						if(idleResumee===1 && idleResumeWait===1){
-							spinnerService.clear();
-							idleResumee=0;
-							idleResumeWait = 0;
+							/* timeout added to allow dom to create the room divs, otherwise the first run gets a console error (cannot find div) */
+							$timeout(function() {
+								$scope.changeRoom($scope.userdata.currentRoom);
+								updateAddonsFirstRun=0;
+								spinnerService.remove("updateAddons");
+							}, 100);
 						}
-						if($scope.testrun==1){ return; }
-						$timeout(function() {
-							updateAddonsRunning = 0;
-							$scope.updateAddons();
-						}, 1500);
-					});
-			} else {
-				spinnerService.remove("updateAddons");
-				$timeout(function() {
-					updateAddonsRunning = 0;
-					$scope.updateAddons();
-				}, 5000);
-			}
+					}
+				}).finally(function(){
+					if(idleResumee===1 && idleResumeWait===1){
+						spinnerService.clear();
+						idleResumee=0;
+						idleResumeWait = 0;
+					}
+					if($scope.testrun==1){ return; }
+					$timeout(function() {
+						updateAddonsRunning = 0;
+						$scope.updateAddons();
+					}, 1500);
+				});
 		}
 	};
 

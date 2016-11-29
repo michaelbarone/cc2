@@ -37,13 +37,13 @@
 						</a>
 					</li>
 					<li class="rooms" style="padding:20px 0;">
-						<a ng-cloak class="ng-cloak title">{{rooms[0][userdata.currentRoom]['name']}}</a>
+						<a ng-cloak class="ng-cloak title">{{room_addons[0][userdata.currentRoom][0]['roomName']}}</a>
 						<ul id="room-menu-ul">
 							<li class="rooms">
 								<table ng-class="{showme: sendFromAddonLock>0}">
-									<tr ng-if="!$first || !$last" ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.currentRoom==room}">
-										<td ng-if="userdata.mobile==='1'" ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name | abvTitle}}</td>
-										<td ng-if="userdata.mobile!='1'" ng-click="changeRoom(room)" class="addonTitle">{{roomArray.name}}</td>
+									<tr ng-if="!$first || !$last" ng-repeat="(room,roomArray) in room_addons[0]" ng-class="{'selected': userdata.currentRoom==room}">
+										<td ng-if="userdata.mobile==='1'" ng-click="changeRoom(room)" class="addonTitle">{{room_addons[0][room][0].roomName | abvTitle}}</td>
+										<td ng-if="userdata.mobile!='1'" ng-click="changeRoom(room)" class="addonTitle">{{room_addons[0][room][0].roomName}}</td>
 										<td>
 											<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Room Offline" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
 											<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Some Addons Online" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-orange.png"/>
@@ -98,23 +98,23 @@
 	</div>
 	<div id="dashboardWrapper" scrolling="auto">
 		<div id="dashboardMask">
-			<span ng-cloak ng-if="rooms[0].length!=0" ng-repeat="(room,roomArray) in rooms[0]" ng-class="{'selected': userdata.linkSelected==='room{{room}}'}" class="dash">
-				<div id="room{{room}}" class="dashboardPage RoomPage">
+			<span ng-cloak ng-if="room_addons.length!=0" ng-repeat="room in room_addons[0]" ng-class="{'selected': userdata.linkSelected==='room{{room[0].roomId}}'}" class="dash">
+				<div id="room{{room[0].roomId}}" class="dashboardPage RoomPage">
 					<div class="content">
 						<span class="col-12">
 							<div class="addonTitle addonWidget">
-								<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Room Offline" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
-								<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Some Addons Online" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-orange.png"/>
-								<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='1'" title="No Addons Configured" class="status" src="img/led-cyan.png"/>
-								<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
-								{{roomArray.name}}
-								<div ng-if="room_addons[0][room][0].allPowerOptions > 0" class="right" style="margin:-5px;">
-									<button class="btn btn-danger right" ng-click="powerOffRoom(room)">All Off</button>
-									<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnRoom(room)">All On</button>
+								<img ng-if="room_addons[0][room[0].roomId][0].addonsAlive===0 && room_addons[0][room[0].roomId][0].allAddonsAlive==='0'" title="Room Offline" ng-click="powerOnRoom(room[0].roomId)" class="status pointer" src="img/led-red.png"/>
+								<img ng-if="room_addons[0][room[0].roomId][0].addonsAlive>0 && room_addons[0][room[0].roomId][0].allAddonsAlive==='0'" title="Some Addons Online" ng-click="powerOnRoom(room[0].roomId)" class="status pointer" src="img/led-orange.png"/>
+								<img ng-if="room_addons[0][room[0].roomId][0].addonsAlive===0 && room_addons[0][room[0].roomId][0].allAddonsAlive==='1'" title="No Addons Configured" class="status" src="img/led-cyan.png"/>
+								<img ng-if="room_addons[0][room[0].roomId][0].addonsAlive>0 && room_addons[0][room[0].roomId][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
+								{{room_addons[0][room[0].roomId][0].roomName}}
+								<div ng-if="room_addons[0][room[0].roomId][0].allPowerOptions > 0" class="right" style="margin:-5px;">
+									<button class="btn btn-danger right" ng-click="powerOffRoom(room[0].roomId)">All Off</button>
+									<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnRoom(room[0].roomId)">All On</button>
 								</div>
 							</div>
 						</span>
-						<span ng-if="$index > 0" class="col-4" ng-repeat="addon in room_addons[0][room] track by addon.rooms_addonsid">
+						<span ng-if="$index > 0" class="col-4" ng-repeat="addon in room_addons[0][room[0].roomId] track by addon.rooms_addonsid">
 							<div class="addonWidget" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 								<div>
 									<p class="center">{{addon.addontype}}</p>
@@ -179,7 +179,7 @@
 								<br /><br />
 								<h1 class="center">Power On</h1>
 								<br /><h1 class="center">{{room_addons[0][userdata.currentRoom][$index].addontype}} : {{room_addons[0][userdata.currentRoom][$index].addonTitle}}</h1>
-								<br /><h1 class="center">in the {{rooms[0][userdata.currentRoom]['name']}}</h1>
+								<br /><h1 class="center">in the {{room_addons[0][userdata.currentRoom][0]['roomName']}}</h1>
 								<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons[0][userdata.currentRoom][$index].rooms_addonsid);" />
 							</span>
 						</div>

@@ -32,7 +32,12 @@ try {
 	
 	
 	
-/*	try {
+/*
+
+	// $_SESSION['roomAccess']  has been removed, need to get room list from $scope or pass to this 
+
+
+	try {
 		$roomArray = array();
 		$roomIds = '';
 		foreach ($configdb->query("SELECT roomGroupAccess,roomAccess FROM users WHERE userid = $userid LIMIT 1") as $row) {

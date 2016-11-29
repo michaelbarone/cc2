@@ -10,12 +10,12 @@
 		</!-->
 		<br />
 		<h5>System Announcements</h5>
-		<li ng-class="{'selected': chattingWith==rooms[0][userdata.currentRoom].name}"><a ng-click="chatWithRoom(userdata.currentRoom,userdata.lastRoomChange)">{{rooms[0][userdata.currentRoom].name}}</a></li>
+		<li ng-class="{'selected': chattingWith==room_addons[0][userdata.currentRoom][0].roomName}"><a ng-click="chatWithRoom(userdata.currentRoom,userdata.lastRoomChange)">{{room_addons[0][userdata.currentRoom][0].roomName}}</a></li>
 
 		<hr />	
 		<br />
 		<h5>Room Chat</h5>
-		<li ng-class="{'selected': chattingWith==rooms[0][userdata.currentRoom].name}"><a ng-click="chatWithRoom(userdata.currentRoom,userdata.lastRoomChange)">{{rooms[0][userdata.currentRoom].name}}</a></li>
+		<li ng-class="{'selected': chattingWith==room_addons[0][userdata.currentRoom][0].roomName}"><a ng-click="chatWithRoom(userdata.currentRoom,userdata.lastRoomChange)">{{room_addons[0][userdata.currentRoom][0].roomName}}</a></li>
 
 		<hr />
 		<br />

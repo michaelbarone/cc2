@@ -39,7 +39,7 @@ app.chatController('chatCtrl', ['$scope','$timeout','$http','inform','Idle', fun
 	$scope.chatWithRoom = function(roomid) {
 		$scope.closeChatBox();
 		$scope.chatBoxOpen=true;
-		$scope.chattingWith=$scope.$parent.rooms[0][roomid]['name'];
+		$scope.chattingWith=$scope.$parent.room_addons[0][roomid][0]['roomName'];
 		$scope.$parent.chattingWith=$scope.chattingWith;
 		$scope.chattingWithSendTo=roomid;
 		$scope.chattingWithType='room';
