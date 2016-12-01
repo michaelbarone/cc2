@@ -11,15 +11,6 @@
 		try {
 			$roomArray = array();
 			$roomIds = '';
-			foreach ($configdb->query("SELECT roomGroupAccess,roomAccess FROM users WHERE userid = $userid LIMIT 1") as $row) {
-				if($row['roomGroupAccess'] != '') {
-					$thisRoomGroup = $row['roomGroupAccess'];
-					foreach ($configdb->query("SELECT roomAccess FROM roomgroups WHERE roomGroupId = $thisRoomGroup LIMIT 1") as $row2) {
-						$roomIds=$row2['roomAccess'] . ",";
-					}
-				}
-				$roomIds.=$row['roomAccess'];
-			}
 			foreach ($configdb->query("SELECT u.roomAccess,rg.roomAccess AS roomGroupAccess 
 										FROM users u LEFT JOIN roomgroups rg ON u.roomGroupAccess = rg.roomGroupId 
 										WHERE u.roomGroupAccess > 0 AND u.userid = $userid LIMIT 1"
