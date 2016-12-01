@@ -135,53 +135,58 @@ app.directive('onLongPress', function($timeout) {
 })
 
 app.controller('ModalController', function($scope, close, data, $http, Carousel, $timeout) {
-	//$scope.modaldata=data;
 	$scope.modalContent=[];
 	$scope.Carousel = Carousel;
 	$scope.initdata=data;
-	
-	if(data>=0){
-		$http.get('data/getRoomAddonDataExtended.php?data='+JSON.stringify(data))
-		.success(function(data) {
-			$scope.modalContent = data;
-		});	
-	} else {
-		$http.get('data/getRoomAddonDataExtended.php?data='+JSON.stringify(data))
-		.success(function(data) {
-			$scope.modalContent = data;
-		});
-	}
-	
-	$scope.modalOpen=1;
+	var returndata = [];
+
+
 	
 	
+	$http.get('data/getRoomAddonDataExtended.php?data='+JSON.stringify(data))
+	.success(function(returndata) {
+		$scope.modalContent = returndata;
 	
-	$scope.checkInitData = function(){
-		//  1   initdata == modalcontent ==>  timeout function
-		//  2   initdata != modalcontent ==>  refresh modalcontent?
-		//  3   initdata != parentscope
-		
-		
-		
-		if($scope.initdata.addontype==$scope.modalContent[0].addonType && $scope.initdata.info==$scope.modalContent[0].title){
-			$timeout(function() {
-				$scope.checkInitData();
-			}, 5000);
-		} else {
-			$scope.modalContent=[];
+		$scope.modalOpen=1;
+
+	
+	
+		$scope.checkInitData = function(){
+			//  1   initdata == modalcontent ==>  timeout function
+			//  2   initdata != modalcontent ==>  refresh modalcontent?
+			//  3   initdata != parentscope
+			
+			
+			
+			if($scope.modalOpen && $scope.modalContent[0] && $scope.initdata.addontype==$scope.modalContent[0].addonType && $scope.initdata.info==$scope.modalContent[0].title){
+				$timeout(function() {
+					$scope.checkInitData();
+				}, 5000);
+			} else {
+				$scope.modalContent=[];
+				if($scope.modalOpen) {
+					$scope.modalOpen=0;
+					console.log("Modal Closed: No Data");
+					close("Closed",250);
+				}
+			}
 		}
-	}
-	
-	$timeout(function() {
-		$scope.checkInitData();
-	}, 5000);
-	
-	
-	
-  	$scope.closeModal = function() {
-		if($scope.modalOpen) {
-			$scope.modalOpen=0;
-			close("Closed",250);
-		}
-	};
+		
+		$timeout(function() {
+			$scope.checkInitData();
+		}, 150);	
+
+	});
+
+		
+		
+		
+		$scope.closeModal = function() {
+			if($scope.modalOpen) {
+				$scope.modalContent=[];
+				$scope.modalOpen=0;
+				close("Closed",250);
+			}
+		};
+
 });
