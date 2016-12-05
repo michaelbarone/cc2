@@ -4,10 +4,10 @@
 		<h2 class="w50 left txtright">Control Center</h2>
 		<h2 class="w50 right txtleft">User Selection</h2>
 		<br /><br /><br />
-		<div ng-repeat="thisuser in users" class="loginTile" id="user{{thisuser.userid}}" data-ng-click="toggleLockedLogin.user = $index">
+		<div ng-repeat="thisuser in users" class="loginTile" id="user{{thisuser.userid}}" data-ng-click="toggleLockedLogin.user = thisuser.userid">
 			<input id="inputName{{thisuser.userid}}" name="username" value="{{thisuser.username}}" ng-model="thisuser.name" ng-if="thisuser.passwordset=='0'" type="hidden">
 			<input id="inputPass{{thisuser.userid}}" name="userpass" value="none" ng-model="thisuser.pass" ng-if="thisuser.passwordset=='0'" type="hidden">
-			<div id="login{{thisuser.userid}}" ng-if="thisuser.passwordset=='1'" class="lockedLogin transformable-vertical" data-ng-class="{'open' : toggleLockedLogin.user == $index}">
+			<div id="login{{thisuser.userid}}" ng-if="thisuser.passwordset=='1'" class="lockedLogin transformable-vertical" data-ng-class="{'open' : toggleLockedLogin.user == thisuser.userid}">
 				<form role="form" name="login_form{{thisuser.userid}}" class="userpick">
 					<br><br><br>
 					<table id="{{thisuser.userid}}">

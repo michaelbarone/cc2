@@ -1,11 +1,14 @@
 <table style="margin: 0px 0px 5px 10px;">
 	<tr>
 		<td><li>
-			<img ng-if="userdata.avatar==='0'" ng-src="img/Users/user-default.jpg"/>
-			<img ng-if="userdata.avatar==='1'" ng-src="img/Users/user{{userdata.userid}}.jpg"/>
+
 		</li></td>
 		<td>		
-			<li><a ng-cloak class="title">{{userdata.username}}</a></li>
+			<li>
+				<img ng-if="userdata.avatar==='0'" ng-src="img/Users/user-default.jpg" class="userProfileRound"/>
+				<img ng-if="userdata.avatar==='1'" ng-src="img/Users/user{{userdata.userid}}.jpg" class="userProfileRound" />
+				<a ng-cloak class="title">{{userdata.username}}</a>
+			</li>
 			<li href="" ng-click="showModal(userdata.userid,'userpref')"><a>Preferences</a></li>
 			<li ng-if="userdata.settingsAccess==='1' || userdata.currentpage==='settings'">
 				<a ng-if="userdata.currentpage==='dashboard'" href="./#/settings">Settings</a>

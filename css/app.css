@@ -226,6 +226,15 @@ img.infoType { height:30px; }
 }
 
 
+/*****************
+***  User and Image specific
+*****************/
+
+.userProfileRound {
+	width: 75px;
+	height: 75px;
+	border-radius: 50%;
+}
 
 /*****************
 ***  Login Page

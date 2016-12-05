@@ -10,6 +10,8 @@ app.controller('loginCtrl', ['$scope','loginService','$http', '$location', funct
 
 	$scope.msgtxt='';
 	$scope.users = [];
+	$scope.toggleLockedLogin = [];
+	$scope.toggleLockedLogin.user = 0;
 	
     $http.get('data/getUsers.php')
 		.success(function(data) {
@@ -29,4 +31,13 @@ app.controller('loginCtrl', ['$scope','loginService','$http', '$location', funct
 	$scope.login=function(data){
 		loginService.login(data,$scope);
 	};
+	
+	
+	$scope.$watch('toggleLockedLogin.user', function() {
+		console.log($scope.toggleLockedLogin.user);
+		if($scope.toggleLockedLogin.user>0){
+			document.getElementById('InputPassword'+$scope.toggleLockedLogin.user).focus();
+		}
+	});
+	
 }]);
