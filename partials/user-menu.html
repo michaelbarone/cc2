@@ -1,24 +1,26 @@
-<table style="margin: 0px 0px 5px 10px;">
+<table style="margin: 0px 10px 5px;">
 	<tr>
 		<td><li>
 
 		</li></td>
 		<td>		
 			<li>
+				<a ng-cloak class="title">{{userdata.username}}</a>
 				<img ng-if="userdata.avatar==='0'" ng-src="img/Users/user-default.jpg" class="userProfileRound"/>
 				<img ng-if="userdata.avatar==='1'" ng-src="img/Users/user{{userdata.userid}}.jpg" class="userProfileRound" />
-				<a ng-cloak class="title">{{userdata.username}}</a>
 			</li>
-			<li href="" ng-click="showModal(userdata.userid,'userpref')"><a>Preferences</a></li>
+			<li href="" ng-click="showModal(userdata.userid,'userpref')"><a>Preferences</a><span class="glyphicon glyphicon-user"></span></li>
 			<li ng-if="userdata.settingsAccess==='1' || userdata.currentpage==='settings'">
-				<a ng-if="userdata.currentpage==='dashboard'" href="./#/settings">Settings</a>
-				<a ng-if="userdata.currentpage==='settings'" href="./#/dashboard" class="orange">Dashboard</a>
+				<a ng-if="userdata.currentpage==='dashboard'" href="./#/settings">Settings</a><span ng-if="userdata.currentpage==='dashboard'" class="glyphicon glyphicon-cog"></span>
+				<a ng-if="userdata.currentpage==='settings'" href="./#/dashboard" class="orange">Dashboard</a><span ng-if="userdata.currentpage==='settings'" class="glyphicon glyphicon-dashboard"></span>
 			</li>
+			<!--
 			<li><a href="" ng-click="testmessage()">testmessage</a></li>
-			<li><a href=""  ng-click="$parent.chatOpen = $parent.chatOpen ? false : true">Chat</a></li>
-			<li><a href="" ng-if="FullscreenSupported" ng-click="toggleFullscreen()">Fullscreen Toggle</a></li>
+			-->
+			<li><a href=""  ng-click="$parent.chatOpen = $parent.chatOpen ? false : true">Chat</a><span class="glyphicon glyphicon-comment"></span></li>
+			<li><a href="" ng-if="FullscreenSupported" ng-click="toggleFullscreen()">Fullscreen</a><span class="glyphicon glyphicon-fullscreen"></span></li>
 			<li>&nbsp;</li>
-			<li><a href="" ng-click="logout()">Logout</a></li>
+			<li><a href="" ng-click="logout()">Logout</a><span class="glyphicon glyphicon-log-out"></span></li>
 		</td>
 	</tr>
 </table>
