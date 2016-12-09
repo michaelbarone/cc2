@@ -55,9 +55,9 @@
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="startMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Start</a>
-												<a ng-if="addon.info && (sendFromAddonLock==0 || sendFromAddonIP!=addon.ip)" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><img class="infoType" ng-src="img/send.png"/></a>
-												<a ng-if="addon.info && sendFromAddonLock==1 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><img class="infoType" ng-src="img/sendToggled.png"/></a>
-												<a ng-if="addon.info && sendFromAddonLock==2 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><img class="infoType" ng-src="img/sendToggleLocked.png"/></a>
+												<a ng-if="addon.info && (sendFromAddonLock==0 || sendFromAddonIP!=addon.ip)" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><span class="glyphicon glyphicon-share infoType gi-15x"></span></a>
+												<a ng-if="addon.info && sendFromAddonLock==1 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><span style="color:#0099ff" class="glyphicon glyphicon-share infoType gi-15x"></span></a>
+												<a ng-if="addon.info && sendFromAddonLock==2 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><span style="color:red" class="glyphicon glyphicon-share infoType gi-15x"></span></a>
 
 												<a ng-click="showModal(addon,'addon')" ng-if="addon.info" style="display:inline-block;">{{addon.info}}<span ng-if="addon.time.playerpercentage>0" class="timebar"><span class="elapsed" style="width:{{addon.time.playerpercentage}}%"></span></span></a>											
 												<img ng-if="addon.infoType" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
@@ -127,7 +127,7 @@
 									<br class="clear" />
 								</div>							
 								<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
-								<a ng-if="addon.info" ng-click="sendFromAddonSet(addon.ip,addon.addonid)" class="right"><img class="infoType" ng-src="img/send.png"/></a>
+								<a ng-if="addon.info" ng-click="sendFromAddonSet(addon.ip,addon.addonid)" class="right"><span class="glyphicon glyphicon-share infoType gi-15x"></span></a>
 								<a ng-if="addon.info" ng-click="showModal(addon,'addon')">{{addon.info}}</a>
 								<img ng-if="addon.thumbnail!='' && addon.infoType!='movie'" class="fanart" ng-src="{{addon.thumbnail}}" />
 								<img ng-if="addon.fanart!='' && addon.infoType=='movie'" class="fanart" ng-src="{{addon.fanart}}" />

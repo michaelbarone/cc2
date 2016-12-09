@@ -128,7 +128,7 @@ a img {border:0;}
 
 img.status { height:20px; }
 
-img.infoType { height:30px; }
+img.infoType, span.infoType { height:30px;line-height:30px; }
 
 .pointer,button { cursor:pointer;}
 
@@ -787,7 +787,13 @@ img.infoType { height:30px; }
 /*
  * Bootstrap code below
  */
- 
+
+.gi-15x{font-size: 1.5em;} 
+.gi-20x{font-size: 2em;}
+.gi-30x{font-size: 3em;}
+.gi-40x{font-size: 4em;}
+.gi-50x{font-size: 5em;}
+
  
 @font-face {
   font-family: 'Glyphicons Halflings';
