@@ -422,11 +422,11 @@ img.infoType, span.infoType { height:30px;line-height:30px; }
 	padding-top:10px;
 }
 
-#user-menu  img.options {
+#user-menu  span.options {
 	height: 50px;
 	right: 0;
 	position: absolute;
-	top: 0;
+	top: 5px;
 	margin-top: -40px;
 }
 

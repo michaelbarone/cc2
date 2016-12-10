@@ -9,18 +9,18 @@
 				<img ng-if="userdata.avatar==='0'" ng-src="img/Users/user-default.jpg" class="userProfileRound"/>
 				<img ng-if="userdata.avatar==='1'" ng-src="img/Users/user{{userdata.userid}}.jpg" class="userProfileRound" />
 			</li>
-			<li href="" ng-click="showModal(userdata.userid,'userpref')"><a>Preferences</a><span class="glyphicon glyphicon-user"></span></li>
+			<li href="" ng-click="showModal(userdata.userid,'userpref')"><a>Preferences  <span class="fa fa-id-card-o"></span></a></li>
 			<li ng-if="userdata.settingsAccess==='1' || userdata.currentpage==='settings'">
-				<a ng-if="userdata.currentpage==='dashboard'" href="./#/settings">Settings</a><span ng-if="userdata.currentpage==='dashboard'" class="glyphicon glyphicon-cog"></span>
-				<a ng-if="userdata.currentpage==='settings'" href="./#/dashboard" class="orange">Dashboard</a><span ng-if="userdata.currentpage==='settings'" class="glyphicon glyphicon-dashboard"></span>
+				<a ng-if="userdata.currentpage==='dashboard'" href="./#/settings">Settings  <span ng-if="userdata.currentpage==='dashboard'" class="fa fa-cog"></a></span>
+				<a ng-if="userdata.currentpage==='settings'" href="./#/dashboard" class="orange">Dashboard  <span ng-if="userdata.currentpage==='settings'" class="fa fa-tachometer"></a></span>
 			</li>
 			<!--
 			<li><a href="" ng-click="testmessage()">testmessage</a></li>
 			-->
-			<li><a href=""  ng-click="$parent.chatOpen = $parent.chatOpen ? false : true">Chat</a><span class="glyphicon glyphicon-comment"></span></li>
-			<li><a href="" ng-if="FullscreenSupported" ng-click="toggleFullscreen()">Fullscreen</a><span class="glyphicon glyphicon-fullscreen"></span></li>
+			<li><a href=""  ng-click="$parent.chatOpen = $parent.chatOpen ? false : true">Chat  <span class="fa fa-comments-o"></span></a></li>
+			<li><a href="" ng-if="FullscreenSupported" ng-click="toggleFullscreen()">Fullscreen  <span class="fa fa-arrows-alt"></span></a></li>
 			<li>&nbsp;</li>
-			<li><a href="" ng-click="logout()">Logout</a><span class="glyphicon glyphicon-log-out"></span></li>
+			<li><a href="" ng-click="logout()">Logout  <span class="fa fa-sign-out"></span></a></li>
 		</td>
 	</tr>
 </table>
