@@ -426,8 +426,9 @@ img.infoType, span.infoType { height:30px;line-height:30px; }
 	height: 50px;
 	right: 0;
 	position: absolute;
-	top: 7px;
+	top: 9px;
 	margin-top: -40px;
+	font-size: 2.5em;
 }
 
 .room-menu-items {
@@ -509,7 +510,7 @@ img.infoType, span.infoType { height:30px;line-height:30px; }
  */
 
 
-#user-menu a,#room-menu a { padding:8px 15px; }
+#user-menu a,#room-menu a { padding:8px 14px; }
 
 /****************
 *** Dashboard
