@@ -4,12 +4,12 @@
 
 		</li></td>
 		<td>		
-			<li>
+			<li ng-click="showModal(userdata.userid,'userpref')">
 				<a ng-cloak class="title">{{userdata.username}}</a>
 				<img ng-if="userdata.avatar==='0'" ng-src="img/Users/user-default.jpg" class="userProfileRound"/>
 				<img ng-if="userdata.avatar==='1'" ng-src="img/Users/user{{userdata.userid}}.jpg" class="userProfileRound" />
 			</li>
-			<li href="" ng-click="showModal(userdata.userid,'userpref')"><a>Preferences  <span class="fa fa-id-card-o"></span></a></li>
+			<li ng-click="showModal(userdata.userid,'userpref')"><a>Preferences  <span class="fa fa-id-card-o"></span></a></li>
 			<li ng-if="userdata.settingsAccess==='1' || userdata.currentpage==='settings'">
 				<a ng-if="userdata.currentpage==='dashboard'" href="./#/settings">Settings  <span ng-if="userdata.currentpage==='dashboard'" class="fa fa-cog"></a></span>
 				<a ng-if="userdata.currentpage==='settings'" href="./#/dashboard" class="orange">Dashboard  <span ng-if="userdata.currentpage==='settings'" class="fa fa-tachometer"></a></span>

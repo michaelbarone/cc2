@@ -25,6 +25,30 @@
   width: auto;
 }
 
+.alert-primary .inform-message-content:before,
+.alert-info .inform-message-content:before,
+.alert-default .inform-message-content:before {
+	content: "\f05a";
+    font-family: FontAwesome;
+    left:-5px;
+    top:0;
+}
+
+.alert-success .inform-message-content:before {
+	content: "\f058";
+    font-family: FontAwesome;
+    left:-5px;
+    top:0;
+}
+
+.alert-danger .inform-message-content:before,
+.alert-warning .inform-message-content:before {
+	content: "\f071";
+    font-family: FontAwesome;
+    left:-5px;
+    top:0;
+}
+
 @media all and (min-width: 480px) {
   .inform-fixed {
     left: auto;
