@@ -7,11 +7,14 @@
 			style="position:absolute;right:45px;top:10px;">
 			<img src="img/control-panel.png"  height="30px" width="30px" />
 		</a>
-		<div id="user-menu" class="right">
-			<img src="img/options.png" />
-			<ul id="user-menu-ul" ng-include src="'partials/user-menu.html'">
+		<div id="user-menu" class="right">	
+			<ul>
+				<li>
+					<span class="fa fa-bars fa-3x options" ></span>
+					<ul id="user-menu-ul" ng-include src="'partials/user-menu.html'"></ul>
+				</li>
 			</ul>
-		</div>
+		</div>		
 		<div id="link-menu">
 			<nav>
 				<ul class="sortable">
