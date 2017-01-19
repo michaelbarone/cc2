@@ -13,6 +13,7 @@ function GetUsers($configdb){
 			$userid = $row['userid'];
 			foreach($row as $item => $key) {
 				if(is_numeric($item)) { continue; }
+				if($item=="password") { continue; }
 				$usersArray[$userid][$item] = $key;
 			}
 		}
@@ -22,7 +23,7 @@ function GetUsers($configdb){
 	}
 	header('Content-Type: application/json');
 	$json=json_encode($result);
-	return $json;
+	return ")]}',\n".$json;
 }
 
 function GetRooms($configdb){
@@ -49,7 +50,7 @@ function GetRooms($configdb){
 	}
 	header('Content-Type: application/json');
 	$json=json_encode($result);
-	return $json;
+	return ")]}',\n".$json;
 }
 
 function GetNavigation($configdb){
@@ -76,7 +77,31 @@ function GetNavigation($configdb){
 	}
 	header('Content-Type: application/json');
 	$json=json_encode($result);
-	return $json;
+	return ")]}',\n".$json;
+}
+
+function GetAddons(){
+	if(!isset($ADDONDIR)) {
+		$found = false;
+		$ADDONDIR = './addons';
+		while(!$found){
+			if(file_exists($ADDONDIR)){ 
+				$found = true;
+			}
+			else{ $ADDONDIR = '../'.$ADDONDIR; }
+		}
+	}
+	// for each folder in $ADDONDIR loop to get addonfolders array
+	
+	// room addons global settings db table to create addons array, compare with addonfolders.
+	
+	// list of addonsfolders that are not in addons
+	
+	// list of addons with global settings and addon.info
+	
+	header('Content-Type: application/json');
+	$json=json_encode($result);
+	return ")]}',\n".$json;
 }
 
 if(isset($action)) {	

@@ -16,7 +16,6 @@
 					<th></th>
 					<th>ID</th>
 					<th>Name</th>
-					<th>password</th>
 					<th>wanAccess</th>
 					<th>settingsAccess</th>
 					<th>navgroupaccess</th>
@@ -30,7 +29,6 @@
 					<td><button type="button" ng-click="deleteUser(u.userid)" class="btn btn-danger custom-width">X</button></td>
 					<td><span ng-bind="u.userid"></span></td>
 					<td><input type="text" ng-model="u.username" required='required'  ng-change="usersChangedAdd()"/></td>
-					<td><input type="password" ng-model="u.password" /></td>
 					<td><select ng-model="u.wanAccess" ng-change="usersChangedAdd()">
 						<option value="1" ng-selected="u.wanAccess==1">Yes</option>
 						<option value="0" ng-selected="u.wanAccess!=1">No</option>
@@ -40,17 +38,34 @@
 						<option value="0" ng-selected="u.settingsAccess!=1">No</option>
 					</select></td>						
 					
-					<td><select ng-model="u.navgroupaccess" ng-change="usersChangedAdd()">
+					<td><select ng-model="u.navgroupaccess" ng-change="usersChangedAdd()">				
 					<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
 					</select></td>
-					<td><select ng-model="u.roomAccess" ng-change="usersChangedAdd()">
-					<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+					
+					
+					<td><select multiple ng-model="u.roomAccess" ng-change="usersChangedAdd()">
+						<option ng-repeat="room in Rooms"
+						ng-if="room.roomId > 0"
+						value="{{room.roomId}}"
+						>
+							{{room.roomName}}
+						</option>					
 					</select></td>
+					
+					
 					<td><select ng-model="u.roomGroupAccess" ng-change="usersChangedAdd()">
-					<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+					
 					</select></td>
+					
+					
+					
 					<td><select ng-model="u.homeRoom" ng-change="usersChangedAdd()">
-					<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+						<option ng-repeat="room in Rooms"
+								ng-if="room.roomId > 0"
+								value="{{room.roomId}}"
+								>
+							{{room.roomName}}
+						</option>
 					</select></td>
 				</tr>
 			</tbody>

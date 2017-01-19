@@ -68,5 +68,5 @@ if(extension_loaded('sockets')){
 
 header('Content-Type: application/json');
 $json=json_encode($result);
-echo "[".$json."]";
+echo ")]}',\n"."[".$json."]";
 ?>

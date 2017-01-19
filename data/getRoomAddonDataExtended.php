@@ -63,7 +63,7 @@
 			$nowPlayingInfo['addonType']=$addonType;
 			header('Content-Type: application/json');
 			$json=json_encode($nowPlayingInfo);
-			echo "[".$json."]";
+			echo ")]}',\n"."[".$json."]";
 		}
 	}
 ?>
