@@ -47,7 +47,7 @@
 			} else { 
 				$check=false;
 			}
-		} elseif($user['passwordset']=='0' && !isset($user['pass'])) {
+		} elseif($user['passwordset']=='0' && !isset($user['pass']) && $passwordv == 0) {
 			//no password set
 			$check=true;
 		} else {
