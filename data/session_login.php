@@ -26,22 +26,26 @@
 			exit;
 			}		
 		$check=false;
-		if($passwordv > 0 && $password != '' && isset($user['pass'])) {
-			$userpass=$user['pass'];
-			switch($passwordv) {
-				case "1":
-					if($password==$user['pass']) {
-						$check=true;						
-					}
-					break;				
-				case "2":
-					require "../lib/php/PasswordHash.php";
-					$hasher = new PasswordHash(8, false);
-					if (strlen($userpass) > 72) { $userpass = substr($userpass,0,72); }
-					$stored_hash = "*";
-					$stored_hash = "$password";
-					$check = $hasher->CheckPassword($userpass, $stored_hash);
-					break;
+		if($passwordv > 0 && $password != '') {
+			if(isset($user['pass'])) {
+				$userpass=$user['pass'];
+				switch($passwordv) {
+					case "1":
+						if($password==$userpass) {
+							$check=true;						
+						}
+						break;				
+					case "2":
+						require "../lib/php/PasswordHash.php";
+						$hasher = new PasswordHash(8, false);
+						if (strlen($userpass) > 72) { $userpass = substr($userpass,0,72); }
+						$stored_hash = "*";
+						$stored_hash = "$password";
+						$check = $hasher->CheckPassword($userpass, $stored_hash);
+						break;
+				}
+			} else { 
+				$check=false;
 			}
 		} elseif($user['passwordset']=='0' && !isset($user['pass'])) {
 			//no password set

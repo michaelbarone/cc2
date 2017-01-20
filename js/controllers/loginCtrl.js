@@ -34,7 +34,6 @@ app.controller('loginCtrl', ['$scope','loginService','$http', '$location', funct
 	
 	
 	$scope.$watch('toggleLockedLogin.user', function() {
-		console.log($scope.toggleLockedLogin.user);
 		if($scope.toggleLockedLogin.user>0){
 			document.getElementById('InputPassword'+$scope.toggleLockedLogin.user).focus();
 		}
