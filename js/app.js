@@ -6,7 +6,7 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 	app.settingsController = $controllerProvider.register;
 	app.dashboardController = $controllerProvider.register;
 	app.chatController = $controllerProvider.register;	
-	$routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'loginCtrl'});
+	$routeProvider.when('/login', {templateUrl: 'login.tpl', controller: 'loginCtrl'});
 	$routeProvider.when('/dashboard', {templateUrl: 'partials/dashboard.html'});
 	$routeProvider.when('/settings', {templateUrl: 'partials/settings.html'});
 	$routeProvider.when('/servercheck', {templateUrl: 'partials/servercheck.html'});

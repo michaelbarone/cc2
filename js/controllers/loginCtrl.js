@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('loginCtrl', ['$scope','loginService','$http', '$location', function ($scope,loginService,$http,$location) {
+app.controller('loginCtrl', ['$scope','loginService','$http', '$location', 'inform', 'spinnerService', function ($scope,loginService,$http,$location,inform,spinnerService) {
 	var connected=loginService.islogged();
 	connected.then(function(msg){
 		if(msg.data==="passedAuth") {
@@ -9,17 +9,38 @@ app.controller('loginCtrl', ['$scope','loginService','$http', '$location', funct
 	});
 
 	$scope.msgtxt='';
-	$scope.users = [];
+	if(!$scope.users){
+		$scope.users = [];
+	}
 	$scope.toggleLockedLogin = [];
 	$scope.toggleLockedLogin.user = 0;
+	$scope.usersError=0;
+
+
+	$scope.getUsers=function(){
+		$http.get('data/getUsers.php')
+			.success(function(data) {
+				$scope.users = data;
+			})
+			.error(function() {
+				$scope.usersError=1;  // check to make sure this doesnt break initial load when no users are set
+				if($scope.loaded>0){
+					inform.add('No Connection to Server', {
+						ttl: 4700, type: 'danger'
+					});
+				}
+			})
+			.finally(function() {
+				spinnerService.remove("getUsers");
+				$scope.loaded=1;
+			});		
+	}
+	$scope.getUsers();
 	
-    $http.get('data/getUsers.php')
-		.success(function(data) {
-			$scope.users = data;
-		})
-		.finally(function() {
-			$scope.loaded=1;
-		});
+	$scope.getUsersCheck=function(){
+		spinnerService.add("getUsers");
+		$scope.getUsers();
+	}
 
 	$scope.closeLockedTile=function(toggleLockedLogin=null) {
 		$scope.loginMsg = '';
