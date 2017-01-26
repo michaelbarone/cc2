@@ -327,6 +327,25 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 					
 					// new return from getRoomAddonsData.php
 					else if(data == "noRoomAccess"){
+						if(updateAddonsFirstRun===1){
+							updateAddonsFirstRun=0;
+
+							$timeout(function() {
+								//load first left side menu item if exists
+								if($scope.links.length>0){
+									for(var linkg in $scope.links[0]){
+										break;
+									}
+									for(var linkid in $scope.links[0][linkg]){
+										break;
+									}
+									var linkname = $scope.links[0][linkg][linkid]['navname'];
+									linkname = "#"+linkname+"L";
+									angular.element(linkname).triggerHandler('click');
+								}
+							}, 1500);							
+							
+						}
 						// do nothing
 					} else {
 						// everything below here
@@ -385,6 +404,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 					if($scope.testrun==1){ return; }
 					$timeout(function() {
 						updateAddonsRunning = 0;
+						spinnerService.remove("updateAddons");
 						$scope.updateAddons();
 					}, 1500);
 				});
@@ -406,6 +426,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			if(idleResumee===1){
 				spinnerService.add("idleResume"); 
 			}
+			if($scope.testrun==1){ return; }
 			$http.get('data/cron.php')
 				.success(function(data) {
 					if(data == "failed") {
@@ -452,7 +473,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	*/
 
 /***/
-
 
 	$scope.testmessage = function($scope) {
 		inform.add('test');

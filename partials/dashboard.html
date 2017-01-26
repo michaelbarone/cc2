@@ -12,7 +12,7 @@
 				</li>
 			</ul>
 		</div>
-		<div id="room-menu">
+		<div ng-cloak ng-if="room_addons[0].length!=0" id="room-menu">
 			<nav>
 				<ul class="room-menu-items">
 					<li ng-repeat="addon in room_addons[0][userdata.currentRoom] track by addon.rooms_addonsid" ng-if="$index > 0 && addon.controlWindow == '1'" class="topmenu">
@@ -72,10 +72,9 @@
 				</ul>
 			</nav>
 		</div>
-		<div id="link-menu">
-			<!--<img ng-cloak ng-if="userdata.mobile==='1' && links[0].length != 0" src="img/3dots.png" style="float: left; height: 50px;" />-->
-			<span ng-cloak ng-if="userdata.mobile==='1' && links[0].length != 0" style="float: left; padding: 9px 15px 0; font-size: 2.5em;" class="fa fa-ellipsis-v"></span>
-			<nav ng-cloak ng-if="userdata.mobile==='1' && links[0].length != 0" style="margin-top: 50px;">
+		<div ng-if="links[0].length!=0" id="link-menu">
+			<span ng-cloak ng-if="userdata.mobile==='1'" style="float: left; padding: 9px 15px 0; font-size: 2.5em;" class="fa fa-ellipsis-v"></span>
+			<nav ng-cloak ng-if="userdata.mobile==='1'" style="margin-top: 50px;">
 				<ul class="mobile">
 					<span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
 						<li id="{{thislink['navname']+'L'}}" class="main persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);" ng-class="{'selected': userdata.linkSelected==thislink.navname}" ng-repeat="thislink in linkgrouparray">
