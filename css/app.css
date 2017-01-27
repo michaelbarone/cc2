@@ -241,9 +241,10 @@ img.infoType, span.infoType { height:30px;line-height:30px; }
 *****************/
 
 #loginTiles {
-    overflow: hidden;
+    overflow: auto;
     margin: 0px auto;
-    width: 90%;
+    width: 96%;
+	height:100%;
     text-align: center;
     padding-bottom: 20px;
 }
