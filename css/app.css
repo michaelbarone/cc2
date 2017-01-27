@@ -243,10 +243,10 @@ img.infoType, span.infoType { height:30px;line-height:30px; }
 #loginTiles {
     overflow: auto;
     margin: 0px auto;
-    width: 96%;
+    width: 100%;
 	height:100%;
     text-align: center;
-    padding-bottom: 20px;
+    padding: 0 10% 10%;
 }
 
 #loginTiles .userpick > table { width:100%; }
@@ -279,9 +279,9 @@ img.infoType, span.infoType { height:30px;line-height:30px; }
 
 .loginTile {
 	display: inline-block;
-	height: 250px;
-	width: 200px;
-	max-width: 80%;
+	height: 275px;
+	width: 250px;
+	max-width: 95%;
 	margin: 5px;
 	position: relative;
 	cursor:pointer;
