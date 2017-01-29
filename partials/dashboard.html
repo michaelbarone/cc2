@@ -72,7 +72,7 @@
 				</ul>
 			</nav>
 		</div>
-		<div ng-if="links[0].length!=0" id="link-menu">
+		<div ng-cloak ng-if="links[0].length!=0" id="link-menu">
 			<span ng-cloak ng-if="userdata.mobile==='1'" style="float: left; padding: 9px 15px 0; font-size: 2.5em;" class="fa fa-ellipsis-v"></span>
 			<nav ng-cloak ng-if="userdata.mobile==='1'" style="margin-top: 50px;">
 				<ul class="mobile">

@@ -3,6 +3,7 @@
 app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService','Fullscreen', function ($rootScope, $scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService, Fullscreen){
 	spinnerService.clear();
 	$scope.links = [];
+	$scope.links['0'] = [];
 	$scope.userdata = [];
 	$scope.room_addons = [];
 	$scope.room_addons['0'] = [];
