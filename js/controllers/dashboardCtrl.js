@@ -53,6 +53,11 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *  Load Initial Data
  */	
  
+	$scope.showAddonPing=false;
+	$scope.toggleshowAddonPing = function(){
+		$scope.showAddonPing = !$scope.showAddonPing;
+	} 
+ 
 	$scope.loadLinks = function(){
 		$http.get('data/getLinks.php?mobile='+$scope.userdata.mobile)
 			.success(function(data) {
@@ -187,8 +192,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *  move into services? or directive?
  *
  */
- 
- 
 	$scope.powerOnAddon = function(addonid){
 		spinnerService.add("powerOnAddon");
 		$http.post('data/power.php?type=addon&option=on&addonid='+addonid);

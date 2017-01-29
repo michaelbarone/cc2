@@ -37,6 +37,46 @@ class kodi {
 		return $output;
 	}	
 	
+	
+	function Ping($ip='',$pingApp=0) {
+		if($ip==''){
+			$pingurl = $this->IP;
+		}else{
+			$pingurl = $ip;
+		}
+		$disallowed = array('http://', 'https://');
+		foreach($disallowed as $d) {
+			if(strpos($pingurl, $d) === 0) {
+			   $thisip = strtok(str_replace($d, '', $pingurl),':');
+			}
+		}
+		if(!isset($thisip)){ $thisip = $pingurl; }
+		if(strpos($thisip, "/") != false) {
+			$thisip = substr($thisip, 0, strpos($thisip, "/"));
+		}
+		if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
+			$pingresult = exec("ping -n 2 -w 2 $thisip", $output, $status);
+			// echo 'This is a server using Windows!';
+		} else {
+			$pingresult = exec("/bin/ping -c2 -w2 $thisip", $output, $status);
+			// echo 'This is a server not using Windows!';
+		}
+		$returnArray=Array();
+		$json = json_encode($output);
+		$result = "[".preg_replace('/\[.*?\,"",/', '', $json);
+		$returnArray['data']=$result;
+		$returnArray['pingApp']=$pingApp;
+		if ($status == "0") {
+			//$status = "alive";
+			$returnArray['status']="alive";
+		} else {
+			//$status = "dead";
+			$returnArray['status']="dead";
+		}
+		$return = $this->returnJSON($returnArray);
+		return $return;
+	}	
+	/*
 	function Ping($ip='',$pingApp=0) {
 		if($ip==''){
 			$pingurl = $this->IP;
@@ -58,6 +98,8 @@ class kodi {
 			$pingresult = exec("/bin/ping -c1 -w1 $thisip", $outcome, $status);
 		}
 		$returnArray=array();
+		$json = json_encode($output);
+		$result = "[".preg_replace('/\[.*?\,"",/', '', $json);		
 		$returnArray['data']=$output;
 		$returnArray['pingApp']=$pingApp;
 		if ($status == "0") {
@@ -69,13 +111,14 @@ class kodi {
 		}
 		$return = $this->returnJSON($returnArray);
 		return $return;
-		/*
-		if ($status == "0") {
-			return "alive";	
-		} else {
-			return "dead";
-		}*/
+		
+		//if ($status == "0") {
+		//	return "alive";	
+		//} else {
+		//	return "dead";
+		//}
 	}
+	*/
 	
 	
 	function PingApp($ip) {

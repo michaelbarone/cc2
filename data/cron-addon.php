@@ -10,6 +10,7 @@ $addonType=$addonparts[0];
 $ip=$_POST['ip'];
 $mac=$_POST['mac'];
 $statusorig=$_POST['device_alive'];
+$statusorig=0;
 if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	if(!isset(${$addonid})) {
 		include "../addons/$addonid/$addonType.$addonName.php";
@@ -44,18 +45,18 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 			$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 0 WHERE rooms_addonsid = '$rooms_addonsid';");
 		}
 	}
-	if($addonType=='service'){
-			$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, infoType, ping) VALUES (:rooms_addonsid,:type,:ping)");
-			try {
-				$statement->execute(array(':rooms_addonsid'=>$rooms_addonsid,
-				':type'=>$addonName,
-				':ping'=>$devicealive['data']
-				));
-			} catch(PDOException $e) {
-				$log->LogError("$e->getMessage()" . basename(__FILE__));
-				return "Statement failed: " . $e->getMessage();
-			}
-
+	//if($addonType=='service'||$addonType=='receiver'){
+	if($addonType!='mediaplayer'){	
+		$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, infoType, ping) VALUES (:rooms_addonsid,:type,:ping)");
+		try {
+			$statement->execute(array(':rooms_addonsid'=>$rooms_addonsid,
+			':type'=>$addonName,
+			':ping'=>$devicealive['data']
+			));
+		} catch(PDOException $e) {
+			$log->LogError("$e->getMessage()" . basename(__FILE__));
+			return "Statement failed: " . $e->getMessage();
+		}
 	} elseif($addonType=='mediaplayer'){
 		// need to standardize nowplayinginfo response in class files
 		$nowPlayingInfo = ${$addonid}->GetPlayingItemInfo();
@@ -95,8 +96,9 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 				$log->LogError("$e->getMessage()" . basename(__FILE__));
 				return "Statement failed: " . $e->getMessage();
 			}
-		} elseif($_POST['info']!='') {
-			$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart, time, ping) VALUES ('$rooms_addonsid','','','','','','')");
+		} elseif($_POST['info']!='' || (!isset($nowPlayingInfo['title']) || $nowPlayingInfo['title']=='')) {
+			$pingdata=$devicealive['data'];
+			$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart, time, ping) VALUES ('$rooms_addonsid','','','','','','$pingdata')");
 		}
 	}
 }

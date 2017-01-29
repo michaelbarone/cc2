@@ -134,8 +134,12 @@
 								<img ng-if="addon.fanart!='' && addon.infoType=='movie'" class="fanart" ng-src="{{addon.fanart}}" />
 								<div ng-if="addon.time.playerpercentage>0" class="timebar"><div class="elapsed" style="width:{{addon.time.playerpercentage}}%"></div></div>
 								<span ng-if="addon.time.timenow" class="left">Now: {{addon.time.timenow}}</span><span ng-if="addon.time.endtime" class="right">Ending: {{addon.time.endtime}}</span>
+								<Br class="clear" />
+								<Br class="clear" />
 								
-								<p ng-if="addon.infoType=='ping'" ng-repeat="pingpart in addon.ping">{{pingpart}}</p>
+								<a ng-if="addon.infoType!='ping'" ng-click="toggleshowAddonPing();" class="right"><span class="right fa fa-exchange fa-2x"></span><span class="right fa fa-clock-o fa-2x"></span></a>
+								<Br ng-if="addon.infoType!='ping'" class="clear" />
+								<p class="clear" ng-show="addon.infoType=='ping' || showAddonPing==true" ng-repeat="pingpart in addon.ping">{{pingpart}}</p>
 								
 								<br />
 							</div>
