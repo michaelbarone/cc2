@@ -7,6 +7,8 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.userdata = [];
 	$scope.room_addons = [];
 	$scope.room_addons['0'] = [];
+	$scope.room_addons_ping = {};
+	$scope.room_addons_ping['0'] = {};
 	$scope.userdata.currentpage = "dashboard";
 	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
 	
@@ -405,12 +407,41 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 						idleResumee=0;
 						idleResumeWait = 0;
 					}
-					if($scope.testrun==1){ return; }
-					$timeout(function() {
-						updateAddonsRunning = 0;
-						spinnerService.remove("updateAddons");
-						$scope.updateAddons();
-					}, 1500);
+					if($scope.testrun!=1){ 
+						$timeout(function() {
+							updateAddonsRunning = 0;
+							spinnerService.remove("updateAddons");
+							$scope.updateAddons();
+						}, 1500);
+					}
+					var ping = '';
+					var timenow = new Date() / 1000;
+					timenow = Math.round(timenow);
+					var theaddonid = '';
+					angular.forEach($scope.room_addons[0], function(value, key) {
+						angular.forEach(value, function(value2, key2) {
+							angular.forEach(value2, function(value3, key3) {
+								if(key3=='rooms_addonsid'){
+									theaddonid = value3;
+								}
+								if(key3=='ping'){
+									ping = value3;
+								}
+							});
+							if(theaddonid==''){  } else {
+								if(!angular.isObject($scope.room_addons_ping[0][theaddonid])) {
+									$scope.room_addons_ping[0][theaddonid] = {};
+								}
+								$scope.room_addons_ping[0][theaddonid][timenow] = {};
+								$scope.room_addons_ping[0][theaddonid][timenow] = ping;
+							}
+							angular.forEach($scope.room_addons_ping[0][theaddonid], function(value, key) {
+								if(key<=timenow-20){
+									delete $scope.room_addons_ping[0][theaddonid][key];
+								}		
+							});
+						});
+					});
 				});
 		}
 	};

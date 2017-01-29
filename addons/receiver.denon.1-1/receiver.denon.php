@@ -86,10 +86,10 @@ class denon {
 		}
 		$return = $this->returnJSON($returnArray);
 		return $return;
-	}	
+	}
 	
-	/*
-	function Ping($ip='',$pingApp=0) {
+
+	function PingApp($ip) {
 		if($ip==''){
 			$thisip = $this->stripIp($this->IP);
 		}else{
@@ -104,6 +104,7 @@ class denon {
 		$returnArray=array();
 		$returnArray['data']=$json;
 		$returnArray['pingApp']=$pingApp;
+		$returnArray['status']="dead";
 		if($items['Power']['value']==="ON"){
 			//$status = "alive";
 			$returnArray['status']="alive";
@@ -112,20 +113,13 @@ class denon {
 			$returnArray['status']="dead";
 		}
 		$return = $this->returnJSON($returnArray);
-		return $return;	
-		
+		return $return;
+	}
 
-		//if($items['Power']['value']==="ON"){
-		//	return "alive";	
-		//} else {
-		//	return "dead";
-		//}
-	}
-	*/
 	
-	function PingApp($ip){
-		return $this->Ping($ip,1);
-	}
+	//function PingApp($ip){
+	//	return $this->Ping($ip,1);
+	//}
 
 	function PowerOn(){
 		$thisip = $this->stripIp($this->IP);

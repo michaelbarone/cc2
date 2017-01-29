@@ -86,14 +86,14 @@
 						}
 						$addonArray[$x][$i]['id']=$i;
 					}
-					if($row['device_alive']==="0" && $row['roomRequiresAlive']==="1") {
+					if($row['device_alive']<"2" && $row['roomRequiresAlive']==="1") {
 						$allAddonsAlive="0";
 						$addonArray[$x]['0']['allAddonsAlive']=$allAddonsAlive;
 						if($row['mac']!==''||$row['mac']!=='null') {
 							$addonArray[$x]['0']['allAddonsMacs']=$row['mac'] . "," . $addonArray[$x]['0']['allAddonsMacs'];
 						}
 					}
-					if($row['device_alive']==="1"){
+					if($row['device_alive']>0){
 						$addonArray[$x]['0']['addonsAlive']++;
 					}
 					if($row['PowerOptions']==="1") {

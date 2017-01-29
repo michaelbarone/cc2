@@ -68,7 +68,8 @@ class ping {
 	}
 	
 	function PingApp($ip){
-		return $this->Ping($ip,1);
+		//return $this->Ping($ip,1);
+		return;
 	}	
 
 	function PowerOn(){

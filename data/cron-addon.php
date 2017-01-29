@@ -10,7 +10,6 @@ $addonType=$addonparts[0];
 $ip=$_POST['ip'];
 $mac=$_POST['mac'];
 $statusorig=$_POST['device_alive'];
-$statusorig=0;
 if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	if(!isset(${$addonid})) {
 		include "../addons/$addonid/$addonType.$addonName.php";
@@ -22,31 +21,56 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	$vars['mac']=$mac;
 	${$addonid}->SetVariables($vars);
 	$devicealive=array();
-	if($statusorig==1) {
+	$alivevalue = 0;
+	
+	// need to move addon specific stuff up here, if fail, then app not on, but device may be on
+	//if($statusorig==1 && $addonName!='ping') {
+	if($addonName!='ping') {
 		$devicealive=json_decode(${$addonid}->PingApp($ip), true);
 	}
-	if($statusorig==0 || (isset($devicealive['status']) && $devicealive['status']!='alive')) {
-		if(isset($devicealive['pingApp']) && $devicealive['pingApp']==1){
-		} else {
-			checkfalseneg:
-			$devicealive=json_decode(${$addonid}->Ping($ip), true);
-		}
+	if(isset($devicealive['status']) && $devicealive['status']=='alive') {
+		$alivevalue = $alivevalue+1;
 	}
-	if (isset($devicealive['status']) && $devicealive['status'] == "alive") {
-		if($statusorig==0) {
-			$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 1 WHERE rooms_addonsid = '$rooms_addonsid';");
-		}
-	} else {
-		if($statusorig==1) {
+	
+	
+	
+	
+	checkfalseneg:
+	$devicealive=json_decode(${$addonid}->Ping($ip), true);
+
+	if(isset($devicealive['status']) && $devicealive['status']=='alive') {
+		if($alivevalue<2) { $alivevalue = $alivevalue+1; }
+		if($addonName=='ping' && $alivevalue<2) { $alivevalue = $alivevalue+1; }
+	}else{
+		$alivevalue=0;
+	}
+	
+
+	if ($alivevalue>0){
+		if($statusorig==0 ) {
 			if($count==0){
 				$count++;
 				goto checkfalseneg;
 			}
+		}
+		if($alivevalue!=$statusorig){
+			$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = ".$alivevalue." WHERE rooms_addonsid = '$rooms_addonsid';");
+		}
+	} else {
+		if($statusorig>0) {
+			if($count==0){
+				$count++;
+				goto checkfalseneg;
+			}
+		}
+		if($alivevalue!=$statusorig){
 			$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 0 WHERE rooms_addonsid = '$rooms_addonsid';");
 		}
 	}
+	
+	
 	//if($addonType=='service'||$addonType=='receiver'){
-	if($addonType!='mediaplayer'){	
+	if($addonType!='mediaplayer'){
 		$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, infoType, ping) VALUES (:rooms_addonsid,:type,:ping)");
 		try {
 			$statement->execute(array(':rooms_addonsid'=>$rooms_addonsid,
