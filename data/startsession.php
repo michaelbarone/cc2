@@ -24,8 +24,11 @@ $log = new KLogger ( $PRIVATE_DATA."/logs/log-$date.log" , KLogger::INFO );
  
 // Print out the value of some variables
 //$log->LogDebug("Loaded Somethings from " . $_SERVER['SCRIPT_FILENAME']);
+if(!isset($cronaddon)) {
+	$cronaddon=0;
+}
 
-if(!isset($_SESSION) && !isset($cronaddon)){
+if(!isset($_SESSION) && $cronaddon==0){
 	//disable top 3 for production
 	ini_set('display_errors', 'On');
 	ini_set('display_startup_errors', 'On');
@@ -40,16 +43,13 @@ if(!isset($_SESSION) && !isset($cronaddon)){
 	session_start();
 }
 
-
-
-// first run/no db found
-$filename = $PRIVATE_DATA . '/db/config.db';
-if(!file_exists($filename)) {
-    // echo "No Db found";
-	require("$PRIVATE_DATA/db/dbcreate.php");
-}
-
 if(!isset($configdb)) {
+	// first run/no db found
+	$filename = $PRIVATE_DATA . '/db/config.db';
+	if(!file_exists($filename)) {
+		// echo "No Db found";
+		require("$PRIVATE_DATA/db/dbcreate.php");
+	}
 	try {
 		$configdb = new PDO('sqlite:' . $PRIVATE_DATA . '/db/config.db');
 		$configdb->exec("pragma synchronous = off;");

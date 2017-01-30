@@ -36,7 +36,7 @@
 		${$addonid}->SetVariables($vars);	
 	
 	
-		$nowPlayingInfo = ${$addonid}->GetPlayingItemInfo();
+		$nowPlayingInfo = ${$addonid}->GetAddonInfo();
 		//print_r($nowPlayingInfo);
 		if(isset($nowPlayingInfo['title']) && $nowPlayingInfo['title']!='') {
 			$title = $nowPlayingInfo['title'];

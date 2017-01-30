@@ -89,7 +89,13 @@ class denon {
 	}
 	
 
-	function PingApp($ip) {
+	function GetAddonInfo() {
+		// get current channel assignment (game/media/etc and zone info) to return as addonInfo
+		// this should be in PingApp()..  should be pulled out like in mediaplayer.kodi.php
+		return $this->PingApp();
+	}
+
+	function PingApp($ip='') {
 		if($ip==''){
 			$thisip = $this->stripIp($this->IP);
 		}else{
@@ -103,7 +109,10 @@ class denon {
 
 		$returnArray=array();
 		$returnArray['data']=$json;
-		$returnArray['pingApp']=$pingApp;
+		$returnArray['pingApp']=0;
+		$returnArray['title']=$items['InputFuncSelect']['value'];
+		//$returnArray['info']='receiver';
+		
 		$returnArray['status']="dead";
 		if($items['Power']['value']==="ON"){
 			//$status = "alive";
@@ -112,14 +121,10 @@ class denon {
 			//$status = "dead";
 			$returnArray['status']="dead";
 		}
-		$return = $this->returnJSON($returnArray);
-		return $return;
+		//$returnArray = $this->returnJSON($returnArray);
+		return $returnArray;
 	}
 
-	
-	//function PingApp($ip){
-	//	return $this->Ping($ip,1);
-	//}
 
 	function PowerOn(){
 		$thisip = $this->stripIp($this->IP);
@@ -158,5 +163,19 @@ class denon {
 		$curlThis = "$thisip/MainZone/index.put.asp?cmd0=PutVolumeMute/on";
 		$output = $this->Curl($curlThis);		
 	}
+	
+	/*
+	//todo:
+	function SetVideoInput(){
+		
+	}
+	
+	function SetZone(zoneid,setto) {
+		
+	}
+	
+	
+	
+	*/
 }	
 ?>

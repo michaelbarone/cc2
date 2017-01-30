@@ -1,4 +1,5 @@
 <?php
+$testing = 0;
 require_once "startsession.php";
 	if(isset($_SESSION['userid'])) {
 		$userid=$_SESSION['userid'];
@@ -37,31 +38,39 @@ if($lastcron < ($time - 30)) {
 }
 //////   Cron items
 
-function curl_post_async($url, $params)
+function curl_post_async($url, $params, $testing)
 {
 	foreach ($params as $key => &$val) {
 		if (is_array($val)) $val = implode(‘,’, $val);
 		$post_params[] = $key . "=" . urlencode($val);
+		if($testing==1){
+			$_POST[$key]=$val;
+		}
 	}
-	$post_string = implode("&", $post_params);
-	
-	$parts=parse_url($url);
-	
-	$fp = fsockopen($parts['host'],
-	isset($parts['port'])?$parts['port']:80,
-	$errno, $errstr, 30);
-	
-	//pete_assert(($fp!=0), "Couldn’t open a socket to ".$url." (".$errstr.")");
-	
-	$out = "POST ".$parts['path']." HTTP/1.1\r\n";
-	$out.= "Host: ".$parts['host']."\r\n";
-	$out.= "Content-Type: application/x-www-form-urlencoded\r\n";
-	$out.= "Content-Length: ".strlen($post_string)."\r\n";
-	$out.= "Connection: Close\r\n\r\n";
-	if (isset($post_string)) $out.= $post_string;
-	
-	fwrite($fp, $out);
-	fclose($fp);
+	if($testing==1) {
+		include "./cron-addon.php";
+		
+	} else {
+		$post_string = implode("&", $post_params);
+		
+		$parts=parse_url($url);
+		
+		$fp = fsockopen($parts['host'],
+		isset($parts['port'])?$parts['port']:80,
+		$errno, $errstr, 30);
+		
+		//pete_assert(($fp!=0), "Couldn’t open a socket to ".$url." (".$errstr.")");
+		
+		$out = "POST ".$parts['path']." HTTP/1.1\r\n";
+		$out.= "Host: ".$parts['host']."\r\n";
+		$out.= "Content-Type: application/x-www-form-urlencoded\r\n";
+		$out.= "Content-Length: ".strlen($post_string)."\r\n";
+		$out.= "Connection: Close\r\n\r\n";
+		if (isset($post_string)) $out.= $post_string;
+		
+		fwrite($fp, $out);
+		fclose($fp);
+	}
 }
 
 
@@ -71,13 +80,12 @@ $URL = "http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
 $URL = $URL."/cron-addon.php";
 try {
 	$addons=array();
-	$sql = "SELECT addons.*,settings.globalDisable,settings.controlWindow,info.* FROM rooms_addons as addons 
-			LEFT JOIN rooms_addons_global_settings as settings ON addons.addonid = settings.addonid 
-			LEFT JOIN rooms_addons_info as info ON addons.rooms_addonsid = info.rooms_addonsid
+	$sql = "SELECT addons.*,settings.globalDisable,settings.controlWindow FROM rooms_addons as addons 
+			LEFT JOIN rooms_addons_global_settings as settings ON addons.addonid = settings.addonid
 			WHERE addons.enabled ='1' AND settings.globalDisable='0';";
 	foreach ($configdb->query($sql) as $row) {
 		if(($row['lastCheck']+60) < $time && $row['lastCheck']!='') { continue; }
-		curl_post_async($URL, $row);
+		curl_post_async($URL, $row, $testing);
 	}
 } catch(PDOException $e)
 	{

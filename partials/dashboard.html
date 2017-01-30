@@ -52,7 +52,7 @@
 										</td>
 										
 										<td ng-if="addon.info || (sendFromAddonIP && addon.device_alive==2 && addon.addontype=='mediaplayer')" ng-repeat="addon in room_addons[0][room].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
-											<div>
+											<div ng-if="addon.addontype=='mediaplayer'">
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="startMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Start</a>
@@ -61,7 +61,13 @@
 												<a ng-if="addon.info && sendFromAddonLock==2 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><span style="color:red" class="fa fa-share-square-o infoType fa-2x"></span></a>
 
 												<a ng-click="showModal(addon,'addon')" ng-if="addon.info" style="display:inline-block;">{{addon.info}}<span ng-if="addon.time.playerpercentage>0" class="timebar"><span class="elapsed" style="width:{{addon.time.playerpercentage}}%"></span></span></a>											
+
 												<img ng-if="addon.infoType" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
+												<!-- change info-img to glyph -->
+											</div>
+											<div ng-if="addon.addontype!='mediaplayer'">
+												<a ng-if="addon.info" style="display:inline-block;">{{addon.info}}</a>
+												<span class="infoType fa fa-gear fa-2x"></span>
 											</div>
 										</td>
 									</tr>
@@ -127,20 +133,26 @@
 									<p ng-if="addon.addonTitle !='' || addon.addonTitle !=null" class="left">{{addon.addonTitle}}</p>
 									<p ng-if="addon.addonTitle =='' || addon.addonTitle ==null" class="left">{{addon.addon}}</p>
 									<br class="clear" />
-								</div>							
-								<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
-								<a ng-if="addon.info" ng-click="sendFromAddonSet(addon.ip,addon.addonid)" class="right"><span class="fa fa-share-square-o infoType fa-2x"></span></a>
-								<a ng-if="addon.info" ng-click="showModal(addon,'addon')">{{addon.info}}</a>
-								<img ng-if="addon.thumbnail!='' && addon.infoType!='movie'" class="fanart" ng-src="{{addon.thumbnail}}" />
-								<img ng-if="addon.fanart!='' && addon.infoType=='movie'" class="fanart" ng-src="{{addon.fanart}}" />
-								<div ng-if="addon.time.playerpercentage>0" class="timebar"><div class="elapsed" style="width:{{addon.time.playerpercentage}}%"></div></div>
-								<span ng-if="addon.time.timenow" class="left">Now: {{addon.time.timenow}}</span><span ng-if="addon.time.endtime" class="right">Ending: {{addon.time.endtime}}</span>
+								</div>
+								<!-- need to update the visual for these addon areas -->
+								<div ng-if="addon.addontype=='mediaplayer'">								
+									<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
+									<a ng-if="addon.info" ng-click="sendFromAddonSet(addon.ip,addon.addonid)" class="right"><span class="fa fa-share-square-o infoType fa-2x"></span></a>
+									<a ng-if="addon.info" ng-click="showModal(addon,'addon')">{{addon.info}}</a>
+									<img ng-if="addon.thumbnail!='' && addon.infoType!='movie'" class="fanart" ng-src="{{addon.thumbnail}}" />
+									<img ng-if="addon.fanart!='' && addon.infoType=='movie'" class="fanart" ng-src="{{addon.fanart}}" />
+									<div ng-if="addon.time.playerpercentage>0" class="timebar"><div class="elapsed" style="width:{{addon.time.playerpercentage}}%"></div></div>
+									<span ng-if="addon.time.timenow" class="left">Now: {{addon.time.timenow}}</span><span ng-if="addon.time.endtime" class="right">Ending: {{addon.time.endtime}}</span>
+								</div>
+								<div ng-if="addon.addontype!='mediaplayer'">
+									<a ng-if="addon.info" style="display:inline-block;">{{addon.info}}</a>
+								</div>
 								<Br class="clear" />
 								<Br class="clear" />
 								
-								<a ng-if="addon.infoType!='ping'" ng-click="toggleshowAddonPing();" class="right"><span class="right fa fa-exchange fa-2x"></span><span class="right fa fa-clock-o fa-2x"></span></a>
-								<Br ng-if="addon.infoType!='ping'" class="clear" />
-								<p class="clear" ng-show="addon.infoType=='ping' || showAddonPing==true" ng-repeat="pingpart in addon.ping">{{pingpart}}</p>
+								<a ng-if="addon.addon!='ping'" ng-click="toggleshowAddonPing();" class="right"><span class="right fa fa-exchange fa-2x"></span><span class="right fa fa-clock-o fa-2x"></span></a>
+								<Br ng-if="addon.addon!='ping'" class="clear" />
+								<p class="clear" ng-show="addon.addon=='ping' || showAddonPing==true" ng-repeat="pingpart in addon.ping">{{pingpart}}</p>
 								
 								<br />
 							</div>

@@ -1,10 +1,12 @@
 <?php
 //if(!isset($_POST['rooms_addonsid']){ exit; }
 $cronaddon=1;
-require_once "startsession.php";
+if(!isset($configdb)) {
+	require "startsession.php";
+}
 $rooms_addonsid=$_POST['rooms_addonsid'];
 $addonid=$_POST['addonid'];
-$addonparts = explode(".",$_POST['addonid']);
+$addonparts = explode(".",$addonid);
 $addonName=$addonparts[1];
 $addonType=$addonparts[0];
 $ip=$_POST['ip'];
@@ -21,27 +23,99 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	$vars['mac']=$mac;
 	${$addonid}->SetVariables($vars);
 	$devicealive=array();
+	$addoninfo=array();
 	$alivevalue = 0;
+	
+
+
+	$addoninfo = ${$addonid}->GetAddonInfo();
+	//$addoninfodecoded = json_decode($addoninfo, true);
+	if($addoninfo=="failed" || $addoninfo=='' || (isset($addoninfo['status']) && $addoninfo['status']!='alive')){
+		// no return from addon
+		
+	} else {
+		$alivevalue = $alivevalue+1;
+	}
+	
+	checkfalseneg:
+	$devicealive=json_decode(${$addonid}->Ping($ip), true);
+	if(isset($devicealive['status']) && $devicealive['status']=='alive') {
+		if($alivevalue<2) { $alivevalue = $alivevalue+1; }
+		if($addonName=='ping' && $alivevalue<2) { $alivevalue = $alivevalue+1; }
+	} else {
+		$alivevalue=0;
+	}
+
+	
+	
+	// need to update this section for error checking
+	goto skipme;
+	
+	if ($alivevalue>0){
+		if($statusorig==0 ) {
+			if($count==0){
+				$count++;
+				goto checkfalseneg;
+			}
+		}
+		if($alivevalue!=$statusorig){
+			//$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = ".$alivevalue." WHERE rooms_addonsid = '$rooms_addonsid';");
+		}
+	} else {
+		if($statusorig>0) {
+			if($count==0){
+				$count++;
+				goto checkfalseneg;
+			}
+		}
+		if($alivevalue!=$statusorig){
+			//$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 0 WHERE rooms_addonsid = '$rooms_addonsid';");
+		}
+	}	
+	skipme:
+
+	$thumbnail="";
+	$fanart="";
+	$title="";
+	$thumbnail="";
+	$time="";
+	$type="";
+	if(isset($addoninfo['title']) && $addoninfo['title']!='') {
+		$title = $addoninfo['title'];
+		if(isset($addoninfo['showtitle']) && $addoninfo['showtitle']!='') {
+			$episode = "";
+			if(isset($addoninfo['season']) && $addoninfo['season']!='' && isset($addoninfo['episode']) && $addoninfo['episode']!='') {
+				$episode = " " . $addoninfo['season'] . "x" . $addoninfo['episode'];
+			}
+			$title = $addoninfo['showtitle'] . $episode . " - " . $addoninfo['title'];
+		} elseif(isset($addoninfo['year']) && $addoninfo['year']!='') {
+			$title = $addoninfo['title'] . " (" . $addoninfo['year'] . ")";
+		}
+		if(isset($addoninfo['thumbnail']) && $addoninfo['thumbnail']!='') {
+			$thumbnail = $addoninfo['thumbnail'];
+		}
+		if(isset($addoninfo['fanart']) && $addoninfo['fanart']!='') {
+			$fanart = $addoninfo['fanart'];
+		}
+	}
+	if(isset($addoninfo['type'])){ $type = $addoninfo['type']; }
+	if(isset($addoninfo['time'])){ $time = $addoninfo['time']; }
+
+	$statement = $configdb->prepare("UPDATE rooms_addons SET info = ?, infoType = ?, thumbnail = ?, fanart = ?, time = ?, ping = ?, device_alive = ?
+			WHERE rooms_addonsid = ?");
+	try {
+		$statement->execute([$title, $type, $thumbnail, $fanart, $time, $devicealive['data'], $alivevalue, $rooms_addonsid]);
+	} catch(PDOException $e) {
+		return "Statement failed: " . $e->getMessage();
+	}
+	
+} exit;
+
+	
 	
 	
 	/*
-	getaddoninfo
-	return > info/alive (normal response) ((+1 to alivevalue)) or no response ((nothing))
-	
-	addon->ping for ping info
-	
-	write to db 1x -- combine addon info and addon tables
-	
-	
-	
-	
-	
-	*/
-	
-	
-	
-	
-	
+	$devicealive='';
 	// need to move addon specific stuff up here, if fail, then app not on, but device may be on
 	//if($statusorig==1 && $addonName!='ping') {
 	if($addonName!='ping') {
@@ -54,7 +128,7 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	
 	
 	
-	checkfalseneg:
+	checkfalseneg2:
 	$devicealive=json_decode(${$addonid}->Ping($ip), true);
 
 	if(isset($devicealive['status']) && $devicealive['status']=='alive') {
@@ -69,7 +143,7 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 		if($statusorig==0 ) {
 			if($count==0){
 				$count++;
-				goto checkfalseneg;
+				goto checkfalseneg2;
 			}
 		}
 		if($alivevalue!=$statusorig){
@@ -79,7 +153,7 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 		if($statusorig>0) {
 			if($count==0){
 				$count++;
-				goto checkfalseneg;
+				goto checkfalseneg2;
 			}
 		}
 		if($alivevalue!=$statusorig){
@@ -144,7 +218,6 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 			$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart, time, ping) VALUES ('$rooms_addonsid','','','','','','$pingdata')");
 		}
 	}
-}
-
+	*/
 
 ?>

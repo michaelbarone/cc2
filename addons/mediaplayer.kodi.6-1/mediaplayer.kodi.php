@@ -62,8 +62,33 @@ class kodi {
 			// echo 'This is a server not using Windows!';
 		}
 		$returnArray=Array();
-		$json = json_encode($output);
-		$result = "[".preg_replace('/\[.*?\,"",/', '', $json);
+		
+		$newping = array();
+		$exoutput = explode(',',$output[6]);
+		$sent = substr($exoutput[0], -1);
+		$received = substr($exoutput[1], -1);
+		$maxtime = '';
+		$avetime = '';
+		if(isset($output[8])){
+			$exoutput = explode(',',$output[8]);
+			$maxtime = substr($exoutput[1], -4);
+			$avetime = substr($exoutput[2], -4);
+		}
+		$newping['sent']=$sent;
+		$newping['received']=$received;
+		$newping['maxtime']=$maxtime;
+		$newping['avetime']=$avetime;
+		$json = json_encode($newping);		
+		
+		
+		
+		
+		
+		
+		//$json = json_encode($output);
+		//$result = "[".preg_replace('/\[.*?\,"",/', '', $json);
+		
+		$result = $json;
 		$returnArray['data']=$result;
 		$returnArray['pingApp']=$pingApp;
 		if ($status == "0") {
@@ -162,6 +187,10 @@ class kodi {
 			}
 			return $activeplayerid;
 		}	
+	}
+
+	function GetAddonInfo() {
+		return $this->GetPlayingItemInfo();
 	}
 	
 	function GetPlayingItemInfo() {
@@ -293,6 +322,11 @@ class kodi {
 		} elseif($activeplayerid=="2") {
 			echo "pics";
 			//return $jsonnowplaying;
+		} elseif($activeplayerid=="none" || $activeplayerid==-1) {
+			return "noInfo";
+			//return $jsonnowplaying;
+		} else {
+			return "failed";
 		}
 	}
 

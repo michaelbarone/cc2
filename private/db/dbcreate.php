@@ -33,19 +33,6 @@ $query = "CREATE TABLE IF NOT EXISTS settings (settingid integer PRIMARY KEY AUT
 $statement = $configdbcreate->prepare($query);
 $statement->execute();
 
-$query = "CREATE TABLE IF NOT EXISTS rooms_addons_info (
-`rooms_addonsid`	INTEGER NOT NULL,
-`info`	TEXT,
-`infoType`	TEXT,
-`thumbnail`	TEXT,
-`fanart`	TEXT,
-`time`	TEXT,
-`ping`	TEXT,
-PRIMARY KEY(rooms_addonsid)
-)";
-$statement = $configdbcreate->prepare($query);
-$statement->execute();
-
 $query = "CREATE TABLE IF NOT EXISTS rooms_addons_global_settings (
 `id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 `addonid`	TEXT NOT NULL,
@@ -67,7 +54,13 @@ $query = "CREATE TABLE IF NOT EXISTS rooms_addons (
 `enabled`	INTEGER NOT NULL DEFAULT 1,
 `lastCheck`	INTEGER,
 `roomRequiresAlive`	INTEGER DEFAULT 0,
-`PowerOptions`	INTEGER DEFAULT 0
+`PowerOptions`	INTEGER DEFAULT 0,
+`info`	TEXT,
+`infoType`	TEXT,
+`thumbnail`	TEXT,
+`fanart`	TEXT,
+`time`	TEXT,
+`ping`	TEXT
 )";
 $statement = $configdbcreate->prepare($query);
 $statement->execute();

@@ -52,10 +52,9 @@ class ping {
 		$returnArray=Array();
 		$json = json_encode($output);
 		$result = "[".preg_replace('/\[.*?\,"",/', '', $json);
-		//$expStr=explode(',"",',$json);
-		//$result="[".$expStr[1];
 		$returnArray['data']=$result;
 		$returnArray['pingApp']=$pingApp;
+		$returnArray['type']="ping";
 		if ($status == "0") {
 			//$status = "alive";
 			$returnArray['status']="alive";
@@ -65,6 +64,10 @@ class ping {
 		}
 		$return = $this->returnJSON($returnArray);
 		return $return;
+	}
+
+	function GetAddonInfo() {
+		return $this->Ping();
 	}
 	
 	function PingApp($ip){
