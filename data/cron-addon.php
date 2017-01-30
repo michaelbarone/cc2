@@ -23,6 +23,25 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	$devicealive=array();
 	$alivevalue = 0;
 	
+	
+	/*
+	getaddoninfo
+	return > info/alive (normal response) ((+1 to alivevalue)) or no response ((nothing))
+	
+	addon->ping for ping info
+	
+	write to db 1x -- combine addon info and addon tables
+	
+	
+	
+	
+	
+	*/
+	
+	
+	
+	
+	
 	// need to move addon specific stuff up here, if fail, then app not on, but device may be on
 	//if($statusorig==1 && $addonName!='ping') {
 	if($addonName!='ping') {
