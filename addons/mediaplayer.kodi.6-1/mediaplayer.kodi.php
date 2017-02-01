@@ -202,6 +202,7 @@ class kodi {
 			$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
 			$output = $this->Curl($jsoncontents);
 			$jsonnowplaying = json_decode($output,true);
+			$jsonnowplaying['status']='alive';
 			return $jsonnowplaying;
 		} elseif($activeplayerid=="1") {
 			$playingTime = $this->GetPlayingTimeInfo($activeplayerid);
@@ -315,16 +316,16 @@ class kodi {
 					}
 				}
 				
-
+				$nowplayingarray['status']="alive";
 				return $nowplayingarray;
 			}
 
 		} elseif($activeplayerid=="2") {
 			echo "pics";
 			//return $jsonnowplaying;
-		} elseif($activeplayerid=="none" || $activeplayerid==-1) {
-			return "noInfo";
-			//return $jsonnowplaying;
+		} elseif($activeplayerid=="none" || $activeplayerid=="-1") {
+			$nowplayingarray['status']="alive";
+			return $nowplayingarray;
 		} else {
 			return "failed";
 		}
