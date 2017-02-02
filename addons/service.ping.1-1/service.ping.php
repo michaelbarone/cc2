@@ -50,8 +50,28 @@ class ping {
 			// echo 'This is a server not using Windows!';
 		}
 		$returnArray=Array();
-		$json = json_encode($output);
-		$result = "[".preg_replace('/\[.*?\,"",/', '', $json);
+		$newping = array();
+		$exoutput = explode(',',$output[6]);
+		$sent = substr($exoutput[0], -1);
+		$lost = $sent - substr($exoutput[1], -1);
+		$timeMax = 0;
+		$timeAve = 0;
+		if(isset($output[8])){
+			$exoutput = explode(',',$output[8]);
+			//$timeMax = substr($exoutput[1], -4, 2);
+			//$timeAve = substr($exoutput[2], -4, 2);
+			$timeMax = preg_replace('/\D/', '', $exoutput[1]);
+			$timeAve = preg_replace('/\D/', '', $exoutput[2]);
+		}
+		$newping['sent']=$sent;
+		$newping['lost']=$lost;
+		$newping['timeMax']=$timeMax;
+		$newping['timeAve']=$timeAve;
+		$json = json_encode($newping);		
+		$result = $json;
+		
+		//$json = json_encode($output);
+		//$result = "[".preg_replace('/\[.*?\,"",/', '', $json);
 		$returnArray['data']=$result;
 		$returnArray['pingApp']=$pingApp;
 		$returnArray['type']="ping";

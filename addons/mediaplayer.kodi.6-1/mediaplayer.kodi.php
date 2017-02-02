@@ -66,20 +66,22 @@ class kodi {
 		$newping = array();
 		$exoutput = explode(',',$output[6]);
 		$sent = substr($exoutput[0], -1);
-		$received = substr($exoutput[1], -1);
-		$maxtime = '';
-		$avetime = '';
+		$lost = $sent - substr($exoutput[1], -1);
+		$timeMax = 0;
+		$timeAve = 0;
 		if(isset($output[8])){
 			$exoutput = explode(',',$output[8]);
-			$maxtime = substr($exoutput[1], -4);
-			$avetime = substr($exoutput[2], -4);
+			//$timeMax = substr($exoutput[1], -4, 2);
+			//$timeAve = substr($exoutput[2], -4, 2);
+			$timeMax = preg_replace('/\D/', '', $exoutput[1]);
+			$timeAve = preg_replace('/\D/', '', $exoutput[2]);
 		}
 		$newping['sent']=$sent;
-		$newping['received']=$received;
-		$newping['maxtime']=$maxtime;
-		$newping['avetime']=$avetime;
+		$newping['lost']=$lost;
+		$newping['timeMax']=$timeMax;
+		$newping['timeAve']=$timeAve;
 		$json = json_encode($newping);		
-		
+		$result = $json;		
 		
 		
 		
@@ -87,8 +89,6 @@ class kodi {
 		
 		//$json = json_encode($output);
 		//$result = "[".preg_replace('/\[.*?\,"",/', '', $json);
-		
-		$result = $json;
 		$returnArray['data']=$result;
 		$returnArray['pingApp']=$pingApp;
 		if ($status == "0") {

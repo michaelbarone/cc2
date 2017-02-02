@@ -95,7 +95,7 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 		if(isset($addoninfo['time'])){ $time = $addoninfo['time']; }
 		
 		
-		
+		// place some checks for known fails before goto writeme;
 		goto writeme;
 		
 		
