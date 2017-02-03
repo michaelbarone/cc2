@@ -80,6 +80,8 @@ class kodi {
 		$newping['lost']=$lost;
 		$newping['timeMax']=$timeMax;
 		$newping['timeAve']=$timeAve;
+		$lastUpdate = time();
+		$newping['lastUpdate']=$lastUpdate;
 		$json = json_encode($newping);		
 		$result = $json;		
 		

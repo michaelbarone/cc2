@@ -261,16 +261,21 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	}
 
 	
+/***/
+
+
+
+/**
+ *  Chart.js service
+ *
+ */
+
+	
 	$scope.chart=[];
 	$scope.chart.ping=[];
-	$scope.chart.ping.labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-	$scope.chart.ping.series = ['Packets Sent', 'Packets Lost', 'Highest Time', 'Average Time'];
-	$scope.chart.ping.data = [
-		[65, 59, 80, 81, 56, 55, 40],
-		[28, 48, 40, 19, 86, 27, 90]
-	];
 	$scope.chart.ping.datasetOverride = [
 		{ yAxisID: 'y-axis-1',
+		  backgroundColor: "rgba(0,0,0,0)",
 		  type: 'line'
 		},
 		{ yAxisID: 'y-axis-1',
@@ -285,13 +290,17 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	];
 	$scope.chart.ping.options = {
 		animation: {
-			duration: 0
+			duration: 10000,
 		},
 		scales: {
+			//xAxes: [{
+			//	stacked: true
+			//}],
 			yAxes: [
 			{
 			  id: 'y-axis-1',
 			  type: 'linear',
+			  // stacked: true,
 			  display: true,
 			  position: 'left',
 			  ticks: {
@@ -312,15 +321,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			]
 		}
 	};
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 /***/
 	
@@ -481,8 +481,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 					
 					
 					var ping = [];
-					//var timenow = new Date() / 1000;
-					//timenow = Math.round(timenow);
 					var theaddonid = '';
 					angular.forEach($scope.room_addons[0], function(value, key) {
 						angular.forEach(value, function(value2, key2) {
@@ -498,55 +496,40 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 								if(!angular.isObject($scope.room_addons_ping[0][theaddonid])) {
 									$scope.room_addons_ping[0][theaddonid] = [];
 								}
-								//$scope.room_addons_ping[0].push(theaddonid);
-								
-								angular.forEach(ping, function(pingitem, pingkey) {
-									//if(!angular.isArray($scope.room_addons_ping[0][theaddonid][pingkey])) {
-									//	$scope.room_addons_ping[0][theaddonid][pingkey] = [];
-									//}
+								if(!$scope.room_addons_ping[0][theaddonid+'LastUpdate']) {
+									$scope.room_addons_ping[0][theaddonid+'LastUpdate'] = "";
+								}								
+								if(ping['lastUpdate']>$scope.room_addons_ping[0][theaddonid+'LastUpdate']) {
+
+									angular.forEach(ping, function(pingitem, pingkey) {										
+										if(pingkey=='sent'){
+											pingkey=0;
+										}else if(pingkey=='lost'){
+											pingkey=1;
+										}else if(pingkey=='timeMax'){
+											pingkey=2;
+										}else if(pingkey=='timeAve'){
+											pingkey=3;
+										}else if(pingkey=='lastUpdate'){
+											pingkey=-1;
+										}
+										if(!angular.isArray($scope.room_addons_ping[0][theaddonid][pingkey]) && pingkey>-1) {
+											$scope.room_addons_ping[0][theaddonid][pingkey] = [0,0,0,0,0,0,0,0,0,0];
+										}
+										if(pingkey>-1){
+											$scope.room_addons_ping[0][theaddonid][pingkey].push(pingitem);
 									
-									if(pingkey=='sent'){
-										pingkey=0;
-									}else if(pingkey=='lost'){
-										pingkey=1;
-									}else if(pingkey=='timeMax'){
-										pingkey=2;
-									}else if(pingkey=='timeAve'){
-										pingkey=3;
-									}
-									if(!angular.isArray($scope.room_addons_ping[0][theaddonid][pingkey])) {
-										$scope.room_addons_ping[0][theaddonid][pingkey] = [];
-									}									
-									
-									//if($scope.room_addons_ping[0].indexOf(theaddonid) == -1){
-									//	$scope.room_addons_ping[0].push(theaddonid);
-									//}
-									//if($scope.room_addons_ping[0][theaddonid].indexOf(pingkey) == -1){
-									//	$scope.room_addons_ping[0][theaddonid][pingkey]= [];
-									//}									
-									//console.log(pingitem+" --- "+pingkey);
-									$scope.room_addons_ping[0][theaddonid][pingkey].push(pingitem);
-								
-									if($scope.room_addons_ping[0][theaddonid][pingkey].length>10){
-										$scope.room_addons_ping[0][theaddonid][pingkey].shift();
-									}
-								});
-								
-								//$scope.room_addons_ping[0][theaddonid][timenow] = {};
-								//$scope.room_addons_ping[0][theaddonid][timenow] = ping;
+											if($scope.room_addons_ping[0][theaddonid][pingkey].length>10){
+												$scope.room_addons_ping[0][theaddonid][pingkey].shift();
+											}
+										} else {
+											$scope.room_addons_ping[0][theaddonid+'LastUpdate'] = pingitem;
+										}
+									});
+								}
 							}
-	
-							//angular.forEach($scope.room_addons_ping[0][theaddonid], function(value, key) {
-							//	if(key<=timenow-20){
-							//		delete $scope.room_addons_ping[0][theaddonid][key];
-							//	}		
-							//});
 						});
 					});
-					
-					
-					
-					
 				});
 		}
 	};

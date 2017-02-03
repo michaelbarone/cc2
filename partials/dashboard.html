@@ -151,32 +151,17 @@
 								<Br class="clear" />
 								
 								<a ng-if="addon.addon!='ping'" ng-click="toggleshowAddonPing();" class="right"><span class="right fa fa-exchange fa-2x"></span><span class="right fa fa-clock-o fa-2x"></span></a>
-
-								<!--
-								<Br ng-if="addon.addon!='ping'" class="clear" />
-								<p class="clear" ng-show="addon.addon=='ping' || showAddonPing==true" ng-repeat="pingpart in addon.ping">{{pingpart}}</p>
-								
-								<p>{{room_addons_ping[0][addon.rooms_addonsid]}}</p>
-
-								<canvas ng-show="addon.addon=='ping' || showAddonPing==true"
-								id="{{addon.rooms_addonsid}}" class="clear chart chart-line" chart-data="chart.ping.data"
-								chart-labels="chart.ping.labels" chart-series="chart.ping.series" chart-options="chart.ping.options"
-								chart-dataset-override="chart.ping.datasetOverride">
-								</canvas>
-								-->
 								<Br class="clear" />
-								<canvas ng-if="addon.addon=='ping' || showAddonPing==true"
-								id="{{addon.rooms_addonsid}}"
-								class="clear chart chart-bar"
-								chart-data="room_addons_ping[0][addon.rooms_addonsid]"
-								chart-series="['Packets Sent', 'Packets Lost', 'Highest Time', 'Average Time']"
-								chart-labels="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']"
-								chart-options="chart.ping.options"
-								chart-dataset-override="chart.ping.datasetOverride"
-								chart-colors="[ '#FFFFFF', '#FF0000', '#0000FF',  '#99CCFF', '#FDB45C', '#949FB1', '#4D5360']"
-								>
-								</canvas>
-								
+								<canvas ng-if="userdata.linkSelected=='room'+room[0].roomId && (addon.addon=='ping' || showAddonPing==true)"
+									id="{{addon.rooms_addonsid}}"
+									class="clear chart chart-bar"
+									chart-data="room_addons_ping[0][addon.rooms_addonsid]"
+									chart-series="['Packets Sent', 'Packets Lost', 'Highest Time', 'Average Time']"
+									chart-labels="['', '', '', '', '', '', '', '', '', '']"
+									chart-options="chart.ping.options"
+									chart-dataset-override="chart.ping.datasetOverride"
+									chart-colors="[ '#FFFFFF', '#FF0000', '#0000FF',  '#99CCFF']"
+								></canvas>
 								<br />
 							</div>
 						</span>
