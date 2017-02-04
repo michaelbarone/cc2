@@ -55,7 +55,7 @@
 										
 										
 										<td>
-											<div ng-if="addon.device_alive=='2' && addon.addontype=='mediaplayer' && (addon.info || sendFromAddonIP)" ng-repeat="addon in room_addons[0][room].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
+											<div ng-if="addon.device_alive=='3' && addon.addontype=='mediaplayer' && (addon.info || sendFromAddonIP)" ng-repeat="addon in room_addons[0][room].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="startMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Start</a>
@@ -68,7 +68,7 @@
 												<img ng-if="addon.infoType" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
 												<!-- change info-img to glyph -->
 											</div>
-											<div ng-if="addon.device_alive=='2' && addon.info && addon.addontype!='mediaplayer'" ng-repeat="addon in room_addons[0][room].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
+											<div ng-if="addon.device_alive=='3' && addon.info && addon.addontype!='mediaplayer'" ng-repeat="addon in room_addons[0][room].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 												<a ng-if="addon.info" style="display:inline-block;">{{addon.info}}</a>
 												<span class="infoType fa fa-gear fa-2x"></span>
 											</div>
@@ -134,7 +134,7 @@
 									</div>
 									<img ng-if="addon.device_alive==='0'" ng-click="powerOnAddon(addon.rooms_addonsid)" class="status pointer left" src="img/led-red.png"/>
 									<img ng-if="addon.device_alive==='1'" class="status left" src="img/led-orange.png"/>
-									<img ng-if="addon.device_alive==='2'" class="status left" src="img/led-green.png"/>
+									<img ng-if="addon.device_alive==='3'" class="status left" src="img/led-green.png"/>
 									<p ng-if="addon.addonTitle !='' || addon.addonTitle !=null" class="left">{{addon.addonTitle}}</p>
 									<p ng-if="addon.addonTitle =='' || addon.addonTitle ==null" class="left">{{addon.addon}}</p>
 									<br class="clear" />
@@ -197,9 +197,9 @@
 								height="100%" 
 								width="100%"
 								style="z-index:1;"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
-						<div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] == '2'" ng-init="refreshLink(addon.addon+$index)">
+						<div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] == '3'" ng-init="refreshLink(addon.addon+$index)">
 						</div>
-						<div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] != '2'"
+						<div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] != '3'"
 							 class="content"
 							 style="z-index: 10;position: absolute;height: 100%;width: 100%;background: black;">
 							<span class="col-3" style="min-height:10px;">

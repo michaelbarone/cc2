@@ -24,33 +24,25 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	$vars['ip']=$ip;
 	$vars['mac']=$mac;
 	${$addonid}->SetVariables($vars);
-	$devicealive=array();
-	$addoninfo=array();
-	$alivevalue = 0;
-	
+
 
 	
+
+	checkfalseneg3:
+	$addoninfo=array();
+	$alivevalue = 0;
 	$addoninfo = ${$addonid}->GetAddonInfo();
 	if((isset($addoninfo['status']) && $addoninfo['status']=='alive')){
-		$alivevalue = 1;
+		$alivevalue = 2;
 	}
-	
-	
-	/*
-	//$addoninfodecoded = json_decode($addoninfo, true);
-	if($addoninfo=="failed" || $addoninfo=='' || (isset($addoninfo['status']) && $addoninfo['status']!='alive')){
-		// no return from addon
-		
-	} else {
-		$alivevalue = $alivevalue+1;
-	}
-	*/
+
 	
 	checkfalseneg:
+	$devicealive=array();	
 	$devicealive=json_decode(${$addonid}->Ping($ip), true);
 	if(isset($devicealive['status']) && $devicealive['status']=='alive') {
-		if($alivevalue<2) { $alivevalue = $alivevalue+1; }
-		if($addonName=='ping' && $alivevalue<2) { $alivevalue = $alivevalue+1; }
+		if($alivevalue==2) { $alivevalue = 3; } else { $alivevalue = 1; }
+		if($addonName=='ping' && $alivevalue<3) { $alivevalue = 3; }
 	} else {
 		$alivevalue=0;
 	}
@@ -65,13 +57,16 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	$time="";
 	$type="";	
 	if ($alivevalue>0){
-		if($alivevalue!=$statusorig) {
-			if($count==0){
-				$count++;
-				goto checkfalseneg;
+		if($count==0){
+			$count++;		
+			if($alivevalue!=$statusorig) {
+				if($alivevalue>2 && $statusorig>0){
+					goto checkfalseneg3;
+				}else{
+					goto checkfalseneg;
+				}
 			}
 		}
-		
 		
 		if(isset($addoninfo['title']) && $addoninfo['title']!='') {
 			$title = $addoninfo['title'];

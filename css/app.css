@@ -440,6 +440,7 @@ img.infoType, span.infoType { height:30px;line-height:35px; }
 	right:30px;
 	white-space: nowrap;
 	height:50px;
+	z-index:12;
 }
 .room-menu-items li {
 	height:50px;
@@ -484,6 +485,7 @@ img.infoType, span.infoType { height:30px;line-height:35px; }
 #room-menu table {
 	direction: rtl;
 	border-spacing:5px;
+	padding:5px;
 }
 #room-menu-ul table tr {
 	padding:5px 2.5px;
@@ -491,6 +493,9 @@ img.infoType, span.infoType { height:30px;line-height:35px; }
 #room-menu-ul table tr td {
 	padding:8px 4px;
 	text-align:right;
+}
+#room-menu-ul table tr td:not(:first-child) {
+	padding:0;
 }
 #room-menu-ul table tr td:nth-child(2) {
 	padding:8px 0;

@@ -519,7 +519,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 										if(pingkey>-1){
 											if($scope.room_addons_ping[0][theaddonid][pingkey].length>9){
 												$scope.room_addons_ping[0][theaddonid][pingkey].shift();
-											}											
+											}
 											$scope.room_addons_ping[0][theaddonid][pingkey].push(pingitem);
 										} else {
 											$scope.room_addons_ping[0][theaddonid+'LastUpdate'] = pingitem;
