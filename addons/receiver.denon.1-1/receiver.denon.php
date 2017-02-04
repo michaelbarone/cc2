@@ -95,6 +95,10 @@ class denon {
 				$exoutput = explode(',',$output[5]);
 				$sent = preg_replace('/\D/', '', $exoutput[0]);
 				$lost = $sent - preg_replace('/\D/', '', $exoutput[1]);
+			}elseif(isset($output[3])){
+				$exoutput = explode(',',$output[3]);
+				$sent = preg_replace('/\D/', '', $exoutput[0]);
+				$lost = $sent - preg_replace('/\D/', '', $exoutput[1]);
 			}			
 			if(isset($output[6])){
 				$exoutput = explode('=',$output[6]);
