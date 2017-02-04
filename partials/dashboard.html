@@ -51,8 +51,11 @@
 											<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
 										</td>
 										
-										<td ng-if="addon.device_alive=='2' && (addon.info || (sendFromAddonIP && addon.addontype=='mediaplayer'))" ng-repeat="addon in room_addons[0][room].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
-											<div ng-if="addon.addontype=='mediaplayer'">
+
+										
+										
+										<td>
+											<div ng-if="addon.device_alive=='2' && addon.addontype=='mediaplayer' && (addon.info || sendFromAddonIP)" ng-repeat="addon in room_addons[0][room].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="startMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Start</a>
@@ -65,11 +68,13 @@
 												<img ng-if="addon.infoType" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
 												<!-- change info-img to glyph -->
 											</div>
-											<div ng-if="addon.addontype!='mediaplayer'">
+											<div ng-if="addon.device_alive=='2' && addon.info && addon.addontype!='mediaplayer'" ng-repeat="addon in room_addons[0][room].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 												<a ng-if="addon.info" style="display:inline-block;">{{addon.info}}</a>
 												<span class="infoType fa fa-gear fa-2x"></span>
 											</div>
-										</td>
+										</td>										
+										
+										
 									</tr>
 								</table>
 							</li>

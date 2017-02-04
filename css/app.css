@@ -128,7 +128,7 @@ a img {border:0;}
 
 img.status { height:20px; }
 
-img.infoType, span.infoType { height:30px;line-height:30px; }
+img.infoType, span.infoType { height:30px;line-height:35px; }
 
 .pointer,button { cursor:pointer;}
 
@@ -489,11 +489,19 @@ img.infoType, span.infoType { height:30px;line-height:30px; }
 	padding:5px 2.5px;
 }
 #room-menu-ul table tr td {
-	padding:8px;
+	padding:8px 4px;
 	text-align:right;
+}
+#room-menu-ul table tr td:nth-child(2) {
+	padding:8px 0;
 }
 #room-menu-ul table tr td div {
 	display:inline;
+	padding: 6px 0 10px;
+}
+
+#room-menu-ul table tr td div .infoType {
+	padding: 0 0 0 10px;
 }
 
 #room-menu table.result_table caption, #room-menu table.result_table th, #room-menu table.result_table td {
