@@ -51,24 +51,41 @@ class ping {
 		}
 		$returnArray=Array();
 		$newping = array();
-		$exoutput = explode(',',$output[6]);
-		$sent = substr($exoutput[0], -1);
-		$lost = $sent - substr($exoutput[1], -1);
+		$sent = 0;
+		$lost = 0;
 		$timeMax = 0;
 		$timeAve = 0;
-		if(isset($output[8])){
-			$exoutput = explode(',',$output[8]);
-			//$timeMax = substr($exoutput[1], -4, 2);
-			//$timeAve = substr($exoutput[2], -4, 2);
-			$timeMax = preg_replace('/\D/', '', $exoutput[1]);
-			$timeAve = preg_replace('/\D/', '', $exoutput[2]);
+		if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
+			if(isset($output[6])){
+				$exoutput = explode(',',$output[6]);
+				$sent = preg_replace('/\D/', '', $exoutput[0]);
+				$lost = $sent - preg_replace('/\D/', '', $exoutput[1]);
+			}
+			if(isset($output[8])){
+				$exoutput = explode(',',$output[8]);
+				$timeMax = preg_replace('/\D/', '', $exoutput[1]);
+				$timeAve = preg_replace('/\D/', '', $exoutput[2]);
+			}
+		} else {
+			echo "linux";
+			if(isset($output[5])){
+				$exoutput = explode(',',$output[5]);
+				$sent = preg_replace('/\D/', '', $exoutput[0]);
+				$lost = $sent - preg_replace('/\D/', '', $exoutput[1]);
+			}			
+			if(isset($output[6])){
+				$exoutput = explode('=',$output[6]);
+				$exoutput = explode('/',$exoutput[1]);
+				$timeMax = round($exoutput[2]);
+				$timeAve = round($exoutput[1]);
+			}			
 		}
 		$newping['sent']=$sent;
 		$newping['lost']=$lost;
 		$newping['timeMax']=$timeMax;
 		$newping['timeAve']=$timeAve;
 		$lastUpdate = time();
-		$newping['lastUpdate']=$lastUpdate;		
+		$newping['lastUpdate']=$lastUpdate;	
 		$json = json_encode($newping);		
 		$result = $json;
 		
