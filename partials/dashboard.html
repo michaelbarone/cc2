@@ -6,7 +6,6 @@
 			
 			<ul>
 				<li>
-					<!--<img src="img/options.png" class="options" />-->
 					<span class="fa fa-bars fa-3x options" ></span>
 					<ul id="user-menu-ul" ng-include src="'partials/user-menu.html'"></ul>
 				</li>
@@ -224,5 +223,5 @@
 			</span>			
 		</div>
 	</div>
-	<div id="chatContainer" ng-class="{'open' : chatOpen == true}" class="transformable-horizontal" chat></div>
+	<div ng-if="loaded==1" id="chatContainer" ng-class="{'open' : chatOpen == true}" class="transformable-horizontal" chat></div>
 </div>

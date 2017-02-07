@@ -6,6 +6,7 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginSe
 	$scope.userdata.currentpage = "settings";
 	$scope.Users = [];
 	$scope.Rooms = [];
+	$scope.loaded=0;
 	$scope.userdata.username=sessionStorage.getItem('username');
 	$scope.userdata.userid=sessionStorage.getItem('userid');
 	$scope.userdata.mobile=sessionStorage.getItem('mobile');
@@ -61,6 +62,7 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginSe
 		$scope.usersChanged=0;
 		$scope.roomsChanged=0;
 		$scope.navChanged=0;
+		$scope.loaded=1;
 	}
 
 	
