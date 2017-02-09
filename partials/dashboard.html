@@ -3,7 +3,6 @@
 	<div ng-show="spinnerCount" class="spinner"></div>
 	<div id="header">
 		<div id="user-menu" class="right">
-			
 			<ul>
 				<li>
 					<span class="fa fa-bars fa-3x options" ></span>
@@ -37,7 +36,7 @@
 					</li>
 					<li class="rooms" style="padding:20px 0;">
 						<a ng-cloak class="ng-cloak title">{{room_addons[0][userdata.currentRoom][0]['roomName']}}</a>
-						<ul id="room-menu-ul">
+						<ul ng-if="roomcount > 1" id="room-menu-ul">
 							<li class="rooms">
 								<table ng-class="{showme: sendFromAddonLock>0}" style="max-width: 100vw; overflow-x: auto;">
 									<tr ng-if="!$first || !$last" ng-repeat="(room,roomArray) in room_addons[0]" ng-class="{'selected': userdata.currentRoom==room}">

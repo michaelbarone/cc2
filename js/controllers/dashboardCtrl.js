@@ -10,7 +10,9 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.room_addons_ping = {};
 	$scope.room_addons_ping['0'] = {};
 	$scope.userdata.currentpage = "dashboard";
+	$scope.roomcount=0;
 	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
+	
 	
 	$scope.testrun = 0;
 	if($location.search()['command']=="test"){
@@ -529,6 +531,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							}
 						});
 					});
+					$scope.roomcount=Object.keys($scope.room_addons[0]).length;
 				});
 		}
 	};
