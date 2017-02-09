@@ -11,15 +11,30 @@
 		try {
 			$roomArray = array();
 			$roomIds = '';
-			foreach ($configdb->query("SELECT u.roomAccess,rg.roomAccess AS roomGroupAccess 
+			foreach ($configdb->query("SELECT u.roomAccess,u.forceLogout,u.disabled,rg.roomAccess AS roomGroupAccess  
 										FROM users u LEFT JOIN roomgroups rg ON u.roomGroupAccess = rg.roomGroupId 
-										WHERE u.roomGroupAccess > 0 AND u.userid = $userid LIMIT 1"
+										WHERE u.userid = $userid LIMIT 1"
 										) as $row) {
-				if($row['roomGroupAccess'] != '') {
+				/* force logout user */
+				if($row['forceLogout'] == '1') {
+					$execquery = $configdb->exec("UPDATE users SET forceLogout=0 WHERE userid = '$userid';");
+					print 'failedAuth';
+					$log->LogWarn("FORCED LOGOUT: userid: " . $userid . "  " . basename(__FILE__));		
+					exit;
+				}
+				if($row['disabled'] == '1') {
+					print 'failedAuth';
+					$log->LogWarn("DISABLED USER ATTEMPTED ACCESS: userid: " . $userid . "  " . basename(__FILE__));		
+					exit;
+				}
+				if($row['roomGroupAccess'] != '' && $row['roomGroupAccess'] != null) {
 					$roomIds=$row['roomGroupAccess'] . ",";
 				}
-				$roomIds.=$row['roomAccess'];
+				if($row['roomAccess'] != '' && $row['roomAccess'] != null) {
+					$roomIds.=$row['roomAccess'];
+				}
 			}
+
 			// strip duplicates
 			$roomIds = implode(',', array_keys(array_flip(explode(',', $roomIds))));
 			$roomIds = explode(',', $roomIds);

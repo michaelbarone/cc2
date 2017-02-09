@@ -22,7 +22,7 @@ $query = "CREATE TABLE IF NOT EXISTS users (
 `settingsAccess`	INTEGER NOT NULL DEFAULT 0,
 `wanAccess`	INTEGER NOT NULL DEFAULT 0,
 `userlevel`	INTEGER NOT NULL DEFAULT 0,
-`passwordreset`	INTEGER NOT NULL DEFAULT 0,
+`forceLogout`	INTEGER NOT NULL DEFAULT 0,
 `lastaccess`	INTEGER DEFAULT 0,
 `disabled`	INTEGER DEFAULT 0
 )";

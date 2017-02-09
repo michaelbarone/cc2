@@ -6,7 +6,7 @@
 	}
 	try {
 		$usersArray = array();
-		foreach ($configdb->query("SELECT userid,username,password,passwordreset,avatar,lastaccess,disabled FROM users") as $row) {
+		foreach ($configdb->query("SELECT userid,username,password,forceLogout,avatar,lastaccess,disabled FROM users") as $row) {
 			if(($type==='' || $type==="chat") && $row['disabled']==1) {
 				continue;
 			}			
@@ -21,7 +21,7 @@
 				'userid' => $userid, 
 				'username' => $row['username'],
 				'passwordset' => "$passwordset",
-				'passwordreset' => $row['passwordreset'],
+				'forceLogout' => $row['forceLogout'],
 				'avatar' => $row['avatar']
 			);
 			if($type==="chat" || $type==="settings"){
