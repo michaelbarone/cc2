@@ -61,6 +61,14 @@
 			exit;			
 		}
 		if($check){
+			$userid = $user['userid'];
+			$statement = $configdb->prepare("UPDATE users SET forceLogout = ?
+					WHERE forceLogout = 1 AND userid = ?");
+			try {
+				$statement->execute([0, $userid]);
+			} catch(PDOException $e) {
+				return "Statement failed: " . $e->getMessage();
+			}
 			$_SESSION['uid']=uniqid('cc_');
 			$_SESSION['username']=$user['username'];
 			$_SESSION['userid']=$user['userid'];
