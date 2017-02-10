@@ -10,7 +10,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.room_addons_ping = {};
 	$scope.room_addons_ping['0'] = {};
 	$scope.userdata.currentpage = "dashboard";
-	$scope.roomcount=0;
+	$scope.userdata.roomcount=0;
 	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
 	
 	
@@ -363,7 +363,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *  Logout service
  *  update and cron loops
  */ 	
-	
+ 
 	$scope.logout=function(){
 		loginService.logout();
 	};
@@ -379,7 +379,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			$timeout(function() {
 				updateAddonsRunning = 0;
 				$scope.updateAddons();
-			}, 5000)
+			}, 5000);
 		} else {
 			$http.get('data/getRoomAddonsData.php')
 				.success(function(data) {
@@ -531,7 +531,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							}
 						});
 					});
-					$scope.roomcount=Object.keys($scope.room_addons[0]).length;
+					$scope.userdata.roomcount=Object.keys($scope.room_addons[0]).length;
 				});
 		}
 	};
