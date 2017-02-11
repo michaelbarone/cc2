@@ -1,5 +1,5 @@
 <?php 
-	require 'startsession.php';
+	require_once 'startsession.php';
 	if(isset($_SESSION['username'])) {
 		$log->LogInfo("User " . $_SESSION['username'] . " LOGGED OUT");
 	} else {

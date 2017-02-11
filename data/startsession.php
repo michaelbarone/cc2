@@ -27,7 +27,6 @@ $log = new KLogger ( $PRIVATE_DATA."/logs/log-$date.log" , KLogger::INFO );
 if(!isset($cronaddon)) {
 	$cronaddon=0;
 }
-
 if(!isset($_SESSION) && $cronaddon==0){
 	//disable top 3 for production
 	ini_set('display_errors', 'On');
@@ -48,6 +47,11 @@ if(!isset($configdb)) {
 	$filename = $PRIVATE_DATA . '/db/config.db';
 	if(!file_exists($filename)) {
 		// echo "No Db found";
+		// kill current session if exist
+		if(isset($_SESSION['username'])){
+			session_unset();	
+			session_destroy();
+		}
 		require("$PRIVATE_DATA/db/dbcreate.php");
 	}
 	try {
