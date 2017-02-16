@@ -13,6 +13,79 @@ $ip=$_POST['ip'];
 $mac=$_POST['mac'];
 $statusorig=$_POST['device_alive'];
 $infoorig=$_POST['info'];
+
+function Ping($ip) {
+	$pingurl = $ip;
+	$disallowed = array('http://', 'https://');
+	foreach($disallowed as $d) {
+		if(strpos($pingurl, $d) === 0) {
+		   $thisip = strtok(str_replace($d, '', $pingurl),':');
+		}
+	}
+	if(!isset($thisip)){ $thisip = $pingurl; }
+	if(strpos($thisip, "/") != false) {
+		$thisip = substr($thisip, 0, strpos($thisip, "/"));
+	}
+	if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
+		$pingresult = exec("ping -n 2 -w 2 $thisip", $output, $status);
+		// echo 'This is a server using Windows!';
+	} else {
+		$pingresult = exec("/bin/ping -c2 -w2 $thisip", $output, $status);
+		// echo 'This is a server not using Windows!';
+	}
+	$returnArray=Array();
+	$newping = array();
+	$sent = 0;
+	$lost = 0;
+	$timeMax = 0;
+	$timeAve = 0;
+	if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
+		if(isset($output[6])){
+			$exoutput = explode(',',$output[6]);
+			$sent = preg_replace('/\D/', '', $exoutput[0]);
+			$lost = $sent - preg_replace('/\D/', '', $exoutput[1]);
+		}
+		if(isset($output[8])){
+			$exoutput = explode(',',$output[8]);
+			$timeMax = preg_replace('/\D/', '', $exoutput[1]);
+			$timeAve = preg_replace('/\D/', '', $exoutput[2]);
+		}
+	} else {
+		if(isset($output[5])){
+			$exoutput = explode(',',$output[5]);
+			$sent = preg_replace('/\D/', '', $exoutput[0]);
+			$lost = $sent - preg_replace('/\D/', '', $exoutput[1]);
+		}elseif(isset($output[3])){
+			$exoutput = explode(',',$output[3]);
+			$sent = preg_replace('/\D/', '', $exoutput[0]);
+			$lost = $sent - preg_replace('/\D/', '', $exoutput[1]);
+		}			
+		if(isset($output[6])){
+			$exoutput = explode('=',$output[6]);
+			$exoutput = explode('/',$exoutput[1]);
+			$timeMax = round($exoutput[2]);
+			$timeAve = round($exoutput[1]);
+		}			
+	}
+	$newping['sent']=$sent;
+	$newping['lost']=$lost;
+	$newping['timeMax']=$timeMax;
+	$newping['timeAve']=$timeAve;
+	$lastUpdate = time();
+	$newping['lastUpdate']=$lastUpdate;
+	$json = json_encode($newping);
+	$result = $json;		
+	$returnArray['data']=$result;
+	if ($status == "0") {
+		$returnArray['status']="alive";
+	} else {
+		$returnArray['status']="dead";
+	}
+	header('Content-Type: application/json');
+	$return=json_encode($returnArray);	
+	return $return;
+}
+
 if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	if(!isset(${$addonid})) {
 		include "../addons/$addonid/$addonType.$addonName.php";
@@ -29,17 +102,18 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	
 
 	checkfalseneg3:
-	$addoninfo=array();
-	$alivevalue = 0;
-	$addoninfo = ${$addonid}->GetAddonInfo();
-	if((isset($addoninfo['status']) && $addoninfo['status']=='alive')){
-		$alivevalue = 2;
+	if($addonName!='ping'){
+		$addoninfo=array();
+		$alivevalue = 0;
+		$addoninfo = ${$addonid}->GetAddonInfo();
+		if((isset($addoninfo['status']) && $addoninfo['status']=='alive')){
+			$alivevalue = 2;
+		}
 	}
 
-	
 	checkfalseneg:
-	$devicealive=array();	
-	$devicealive=json_decode(${$addonid}->Ping($ip), true);
+	$devicealive=array();
+	$devicealive=json_decode(Ping($ip), true);
 	if(isset($devicealive['status']) && $devicealive['status']=='alive') {
 		if($alivevalue==2) { $alivevalue = 3; } else { $alivevalue = 1; }
 		if($addonName=='ping' && $alivevalue<3) { $alivevalue = 3; }
@@ -129,121 +203,5 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	}
 	
 	skipme:
-
-
-
-
-
-	
-} exit;
-
-	
-	
-	
-	/*
-	$devicealive='';
-	// need to move addon specific stuff up here, if fail, then app not on, but device may be on
-	//if($statusorig==1 && $addonName!='ping') {
-	if($addonName!='ping') {
-		$devicealive=json_decode(${$addonid}->PingApp($ip), true);
-	}
-	if(isset($devicealive['status']) && $devicealive['status']=='alive') {
-		$alivevalue = $alivevalue+1;
-	}
-	
-	
-	
-	
-	checkfalseneg2:
-	$devicealive=json_decode(${$addonid}->Ping($ip), true);
-
-	if(isset($devicealive['status']) && $devicealive['status']=='alive') {
-		if($alivevalue<2) { $alivevalue = $alivevalue+1; }
-		if($addonName=='ping' && $alivevalue<2) { $alivevalue = $alivevalue+1; }
-	}else{
-		$alivevalue=0;
-	}
-	
-
-	if ($alivevalue>0){
-		if($statusorig==0 ) {
-			if($count==0){
-				$count++;
-				goto checkfalseneg2;
-			}
-		}
-		if($alivevalue!=$statusorig){
-			$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = ".$alivevalue." WHERE rooms_addonsid = '$rooms_addonsid';");
-		}
-	} else {
-		if($statusorig>0) {
-			if($count==0){
-				$count++;
-				goto checkfalseneg2;
-			}
-		}
-		if($alivevalue!=$statusorig){
-			$execquery = $configdb->exec("UPDATE rooms_addons SET device_alive = 0 WHERE rooms_addonsid = '$rooms_addonsid';");
-		}
-	}
-	
-	
-	//if($addonType=='service'||$addonType=='receiver'){
-	if($addonType!='mediaplayer'){
-		$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, infoType, ping) VALUES (:rooms_addonsid,:type,:ping)");
-		try {
-			$statement->execute(array(':rooms_addonsid'=>$rooms_addonsid,
-			':type'=>$addonName,
-			':ping'=>$devicealive['data']
-			));
-		} catch(PDOException $e) {
-			$log->LogError("$e->getMessage()" . basename(__FILE__));
-			return "Statement failed: " . $e->getMessage();
-		}
-	} elseif($addonType=='mediaplayer'){
-		// need to standardize nowplayinginfo response in class files
-		$nowPlayingInfo = ${$addonid}->GetPlayingItemInfo();
-		//print_r($nowPlayingInfo);
-		if(isset($nowPlayingInfo['title']) && $nowPlayingInfo['title']!='') {
-			$title = $nowPlayingInfo['title'];
-			if(isset($nowPlayingInfo['showtitle']) && $nowPlayingInfo['showtitle']!='') {
-				$episode = "";
-				if(isset($nowPlayingInfo['season']) && $nowPlayingInfo['season']!='' && isset($nowPlayingInfo['episode']) && $nowPlayingInfo['episode']!='') {
-					$episode = " " . $nowPlayingInfo['season'] . "x" . $nowPlayingInfo['episode'];
-				}
-				$title = $nowPlayingInfo['showtitle'] . $episode . " - " . $nowPlayingInfo['title'];
-			} elseif(isset($nowPlayingInfo['year']) && $nowPlayingInfo['year']!='') {
-				$title = $nowPlayingInfo['title'] . " (" . $nowPlayingInfo['year'] . ")";
-			}
-			$thumbnail="";
-			$fanart="";
-			if(isset($nowPlayingInfo['thumbnail']) && $nowPlayingInfo['thumbnail']!='') {
-				$thumbnail = $nowPlayingInfo['thumbnail'];
-			}
-			if(isset($nowPlayingInfo['fanart']) && $nowPlayingInfo['fanart']!='') {
-				$fanart = $nowPlayingInfo['fanart'];
-			}
-			$type = $nowPlayingInfo['type'];
-			$time = $nowPlayingInfo['time'];
-			$statement = $configdb->prepare("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart, time, ping) VALUES (:rooms_addonsid,:title,:type,:thumbnail,:fanart,:time,:ping)");
-			try {
-				$statement->execute(array(':rooms_addonsid'=>$rooms_addonsid,
-				':title'=>$title,
-				':type'=>$type,
-				':thumbnail'=>$thumbnail,
-				':fanart'=>$fanart,
-				':time'=>$time,
-				':ping'=>$devicealive['data']
-				));
-			} catch(PDOException $e) {
-				$log->LogError("$e->getMessage()" . basename(__FILE__));
-				return "Statement failed: " . $e->getMessage();
-			}
-		} elseif($_POST['info']!='' || (!isset($nowPlayingInfo['title']) || $nowPlayingInfo['title']=='')) {
-			$pingdata=$devicealive['data'];
-			$execquery = $configdb->exec("INSERT OR REPLACE INTO rooms_addons_info (rooms_addonsid, info, infoType, thumbnail, fanart, time, ping) VALUES ('$rooms_addonsid','','','','','','$pingdata')");
-		}
-	}
-	*/
-
+}
 ?>
