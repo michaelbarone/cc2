@@ -138,18 +138,28 @@
 									<br class="clear" />
 								</div>
 								<!-- need to update the visual for these addon areas -->
-								<div ng-if="addon.addontype=='mediaplayer'">								
-									<img ng-if="addon.infoType && addon.info" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
-									<a ng-if="addon.info" ng-click="sendFromAddonSet(addon.ip,addon.addonid)" class="right"><span class="fa fa-share-square-o infoType fa-2x"></span></a>
-									<a ng-if="addon.info" ng-click="showModal(addon,'addon')">{{addon.info}}</a>
+								<div ng-if="addon.addontype=='mediaplayer' && addon.info">								
+									<img ng-if="addon.infoType" class="infoType" ng-src="img/info-{{addon.infoType}}.png"/>
+									<a ng-click="sendFromAddonSet(addon.ip,addon.addonid)" class="right"><span class="fa fa-share-square-o infoType fa-2x"></span></a>
+									<a ng-click="showModal(addon,'addon')">{{addon.info}}</a>
 									<img ng-if="addon.thumbnail!='' && addon.infoType!='movie'" class="fanart" ng-src="{{addon.thumbnail}}" />
 									<img ng-if="addon.fanart!='' && addon.infoType=='movie'" class="fanart" ng-src="{{addon.fanart}}" />
 									<div ng-if="addon.time.playerpercentage>0" class="timebar"><div class="elapsed" style="width:{{addon.time.playerpercentage}}%"></div></div>
 									<span ng-if="addon.time.timenow" class="left">Now: {{addon.time.timenow}}</span><span ng-if="addon.time.endtime" class="right">Ending: {{addon.time.endtime}}</span>
 								</div>
-								<div ng-if="addon.addontype!='mediaplayer'">
-									<a ng-if="addon.info" style="display:inline-block;">{{addon.info}}</a>
+								<div ng-if="addon.addontype!='mediaplayer' && addon.info">
+									<a style="display:inline-block;">{{addon.info}}</a>
 								</div>
+								<div ng-if="addon.addontype=='security' && addon.addon=='camera' && userdata.linkSelected=='room'+room[0].roomId">
+									<div class="iframeContainer">
+										<iframe ng-src="{{addon.ip | trustUrl }}"
+												scrolling="false" 
+												height="100%" 
+												width="100%"
+												frameborder="0" marginwidth="0" marginheight="0"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
+										<div class="iframeCover"></div>
+									</div>
+								</div>								
 								<Br class="clear" />
 								<Br class="clear" />
 								
