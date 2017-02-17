@@ -26,13 +26,6 @@ function Ping($ip) {
 	if(strpos($thisip, "/") != false) {
 		$thisip = substr($thisip, 0, strpos($thisip, "/"));
 	}
-	if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
-		$pingresult = exec("ping -n 2 -w 2 $thisip", $output, $status);
-		// echo 'This is a server using Windows!';
-	} else {
-		$pingresult = exec("/bin/ping -c2 -w2 $thisip", $output, $status);
-		// echo 'This is a server not using Windows!';
-	}
 	$returnArray=Array();
 	$newping = array();
 	$sent = 0;
@@ -40,6 +33,7 @@ function Ping($ip) {
 	$timeMax = 0;
 	$timeAve = 0;
 	if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
+		$pingresult = exec("ping -n 2 -w 2 $thisip", $output, $status);
 		if(isset($output[6])){
 			$exoutput = explode(',',$output[6]);
 			$sent = preg_replace('/\D/', '', $exoutput[0]);
@@ -51,6 +45,7 @@ function Ping($ip) {
 			$timeAve = preg_replace('/\D/', '', $exoutput[2]);
 		}
 	} else {
+		$pingresult = exec("/bin/ping -c2 -w2 $thisip", $output, $status);
 		if(isset($output[5])){
 			$exoutput = explode(',',$output[5]);
 			$sent = preg_replace('/\D/', '', $exoutput[0]);
@@ -142,6 +137,7 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 			}
 		}
 		
+		/* need to put this section in addon.class files */
 		if(isset($addoninfo['title']) && $addoninfo['title']!='') {
 			$title = $addoninfo['title'];
 			if(isset($addoninfo['showtitle']) && $addoninfo['showtitle']!='') {
@@ -160,6 +156,9 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 				$fanart = $addoninfo['fanart'];
 			}
 		}
+		
+		
+		
 		if(isset($addoninfo['type'])){ $type = $addoninfo['type']; }
 		if(isset($addoninfo['time'])){ $time = $addoninfo['time']; }
 		
