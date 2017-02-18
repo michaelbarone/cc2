@@ -15,55 +15,61 @@
 	$addonArray = array();
 	$addonArray = $_GET['data'];
 	$addonArray=json_decode($addonArray, true);
-	//print_r($addonArray);
-	
-	
 	$rooms_addonsid=$addonArray['rooms_addonsid'];
 	$addonid=$addonArray['addonid'];
 	$addonparts = explode(".",$addonArray['addonid']);
 	$addonName=$addonparts[1];
-	$addonType=$addonparts[0];
-	$ip=$addonArray['ip'];
-	$mac=$addonArray['mac'];	
-	if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
-		if(!isset(${$addonid})) {
-			include "../addons/$addonid/$addonType.$addonName.php";
-			${$addonid} = new $addonName();
-		}
-		$vars = array();
-		$vars['ip']=$ip;
-		$vars['mac']=$mac;
-		${$addonid}->SetVariables($vars);	
+	$addontype=$addonparts[0];
 	
-	
-		$nowPlayingInfo = ${$addonid}->GetAddonInfo();
-		//print_r($nowPlayingInfo);
-		if(isset($nowPlayingInfo['title']) && $nowPlayingInfo['title']!='') {
-			$title = $nowPlayingInfo['title'];
-			if(isset($nowPlayingInfo['showtitle']) && $nowPlayingInfo['showtitle']!='') {
-				$episode = "";
-				if(isset($nowPlayingInfo['season']) && $nowPlayingInfo['season']!='' && isset($nowPlayingInfo['episode']) && $nowPlayingInfo['episode']!='') {
-					$episode = " " . $nowPlayingInfo['season'] . "x" . $nowPlayingInfo['episode'];
-				}
-				$nowPlayingInfo['title'] = $nowPlayingInfo['showtitle'] . $episode . " - " . $nowPlayingInfo['title'];
-			} elseif(isset($nowPlayingInfo['year']) && $nowPlayingInfo['year']!='') {
-				$nowPlayingInfo['title'] = $nowPlayingInfo['title'] . " (" . $nowPlayingInfo['year'] . ")";
+	if($addontype!="mediaplayer"){
+		header('Content-Type: application/json');
+		$json=json_encode($addonArray);
+		echo ")]}',\n"."[".$json."]";		
+		
+	} else {
+		
+		$ip=$addonArray['ip'];
+		$mac=$addonArray['mac'];	
+		if(file_exists("../addons/$addonid/$addontype.$addonName.php") && $ip !='') {
+			if(!isset(${$addonid})) {
+				include "../addons/$addonid/$addontype.$addonName.php";
+				${$addonid} = new $addonName();
 			}
-			if(isset($nowPlayingInfo['time']) && $nowPlayingInfo['time']!=''){
-				$temparray = json_decode($nowPlayingInfo['time'], true);
-				unset($nowPlayingInfo['time']);
-				foreach($temparray as $temp => $item) {
-					if(!isset($item)||!isset($temp)){continue;}
-					$nowPlayingInfo['time'][$temp]=$item;
+			$vars = array();
+			$vars['ip']=$ip;
+			$vars['mac']=$mac;
+			${$addonid}->SetVariables($vars);	
+		
+		
+			$nowPlayingInfo = ${$addonid}->GetAddonInfo();
+			//print_r($nowPlayingInfo);
+			if(isset($nowPlayingInfo['title']) && $nowPlayingInfo['title']!='') {
+				$title = $nowPlayingInfo['title'];
+				if(isset($nowPlayingInfo['showtitle']) && $nowPlayingInfo['showtitle']!='') {
+					$episode = "";
+					if(isset($nowPlayingInfo['season']) && $nowPlayingInfo['season']!='' && isset($nowPlayingInfo['episode']) && $nowPlayingInfo['episode']!='') {
+						$episode = " " . $nowPlayingInfo['season'] . "x" . $nowPlayingInfo['episode'];
+					}
+					$nowPlayingInfo['title'] = $nowPlayingInfo['showtitle'] . $episode . " - " . $nowPlayingInfo['title'];
+				} elseif(isset($nowPlayingInfo['year']) && $nowPlayingInfo['year']!='') {
+					$nowPlayingInfo['title'] = $nowPlayingInfo['title'] . " (" . $nowPlayingInfo['year'] . ")";
 				}
-			}			
-			
-			
-			
-			$nowPlayingInfo['addonType']=$addonType;
-			header('Content-Type: application/json');
-			$json=json_encode($nowPlayingInfo);
-			echo ")]}',\n"."[".$json."]";
+				if(isset($nowPlayingInfo['time']) && $nowPlayingInfo['time']!=''){
+					$temparray = json_decode($nowPlayingInfo['time'], true);
+					unset($nowPlayingInfo['time']);
+					foreach($temparray as $temp => $item) {
+						if(!isset($item)||!isset($temp)){continue;}
+						$nowPlayingInfo['time'][$temp]=$item;
+					}
+				}			
+				
+				
+				
+				$nowPlayingInfo['addontype']=$addontype;
+				header('Content-Type: application/json');
+				$json=json_encode($nowPlayingInfo);
+				echo ")]}',\n"."[".$json."]";
+			}
 		}
 	}
 ?>

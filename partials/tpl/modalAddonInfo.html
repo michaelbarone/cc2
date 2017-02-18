@@ -4,14 +4,24 @@
 		  <div class="header">
 			<ul><li>
 				<button type="button" class="btn btn-danger close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<a class="title main panel">{{modalContent[0]['title']}}</a>
+				<a ng-if="modalContent[0]['title']!=''" class="title main panel">{{modalContent[0]['title']}}</a>
+				<a ng-if="modalContent[0]['title']!=''" class="title main panel">{{modalContent[0]['addonTitle']}}</a>
 			</li></ul>
 		  </div>
 		  <div class="modal-body">
-			<div ng-if="modalContent[0]['addonType']=='mediaplayer'">
+			<div ng-if="modalContent[0]['addontype']=='security'">
+				<div class="iframeContainer">
+					<iframe ng-src="{{modalContent[0]['ip'] | trustUrl }}"
+							scrolling="false" 
+							height="100%" 
+							width="100%"
+							frameborder="0" marginwidth="0" marginheight="0"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
+				</div>
+			</div>
+			<div ng-if="modalContent[0]['addontype']=='mediaplayer'">
 				<div class="col-6">
-					<div ng-if="$parent.room_addons[0][$parent.userdata.currentRoom][initdata.id]['time']['playerpercentage']>0" class="timebar left"><div class="elapsed" style="width:{{$parent.room_addons[0][$parent.userdata.currentRoom][initdata.id]['time']['playerpercentage']}}%"></div></div>
-					<span ng-if="$parent.room_addons[0][$parent.userdata.currentRoom][initdata.id]['time']['timenow']" class="left">Now: {{$parent.room_addons[0][$parent.userdata.currentRoom][initdata.id]['time']['timenow']}}</span><span ng-if="$parent.room_addons[0][$parent.userdata.currentRoom][initdata.id]['time']['endtime']" class="right">Ending: {{$parent.room_addons[0][$parent.userdata.currentRoom][initdata.id]['time']['endtime']}}</span>
+					<div ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['time']['playerpercentage']>0" class="timebar left"><div class="elapsed" style="width:{{$parent.room_addons[0][initdata.roomid][initdata.id]['time']['playerpercentage']}}%"></div></div>
+					<span ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['time']['timenow']" class="left">Now: {{$parent.room_addons[0][initdata.roomid][initdata.id]['time']['timenow']}}</span><span ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['time']['endtime']" class="right">Ending: {{$parent.room_addons[0][initdata.roomid][initdata.id]['time']['endtime']}}</span>
 					<br />
 					<p ng-if="modalContent[0]['tagline']">{{modalContent[0]['tagline']}}</p>
 					<p ng-if="modalContent[0]['runtime']">Runtime: {{modalContent[0]['runtime']}}</p>

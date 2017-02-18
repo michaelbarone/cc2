@@ -150,14 +150,14 @@
 								<div ng-if="addon.addontype!='mediaplayer' && addon.info">
 									<a style="display:inline-block;">{{addon.info}}</a>
 								</div>
-								<div ng-if="addon.addontype=='security' && addon.addon=='camera' && userdata.linkSelected=='room'+room[0].roomId">
+								<div ng-if="addon.addontype=='security' && addon.addon=='camera' && userdata.linkSelected=='room'+room[0].roomId && modalOpen==0">
 									<div class="iframeContainer">
 										<iframe ng-src="{{addon.ip | trustUrl }}"
 												scrolling="false" 
 												height="100%" 
 												width="100%"
 												frameborder="0" marginwidth="0" marginheight="0"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
-										<div class="iframeCover"></div>
+										<div ng-click="showModal(addon,'addon')" class="iframeCover"></div>
 									</div>
 								</div>								
 								<Br class="clear" />

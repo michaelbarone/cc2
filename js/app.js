@@ -138,12 +138,13 @@ app.controller('ModalController', function($scope, close, data, $http, Carousel,
 	$scope.modalContent=[];
 	$scope.Carousel = Carousel;
 	$scope.initdata=data;
+	//console.log(data);
 	var returndata = [];
 
 
 	
 	
-	$http.get('data/getRoomAddonDataExtended.php?data='+JSON.stringify(data))
+	$http.get('data/getRoomAddonDataExtended.php?data='+encodeURIComponent(JSON.stringify(data)))
 	.success(function(returndata) {
 		$scope.modalContent = returndata;
 	
@@ -158,7 +159,11 @@ app.controller('ModalController', function($scope, close, data, $http, Carousel,
 			
 			
 			
-			if($scope.modalOpen && $scope.modalContent[0] && $scope.initdata.addontype==$scope.modalContent[0].addonType && $scope.initdata.info==$scope.modalContent[0].title){
+			if($scope.modalOpen 
+				&& $scope.modalContent[0] 
+				&& $scope.initdata.addontype==$scope.modalContent[0].addontype 
+				&& ($scope.modalContent[0].addonType!='mediaplayer' || ($scope.modalContent[0].addonType=='mediaplayer' && $scope.initdata.info==$scope.modalContent[0].title))
+			){
 				$timeout(function() {
 					$scope.checkInitData();
 				}, 5000);

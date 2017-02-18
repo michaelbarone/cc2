@@ -11,6 +11,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.room_addons_ping['0'] = {};
 	$scope.userdata.currentpage = "dashboard";
 	$scope.userdata.roomcount=0;
+	$scope.modalOpen=0;
 	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
 	
 	
@@ -292,7 +293,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	];
 	$scope.chart.ping.options = {
 		animation: {
-			duration: 10000,
+			duration: 7000,
 		},
 		scales: {
 			//xAxes: [{
