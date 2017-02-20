@@ -58,11 +58,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *  Load Initial Data
  */	
  
-	$scope.showAddonPing=false;
-	$scope.toggleshowAddonPing = function(){
-		$scope.showAddonPing = !$scope.showAddonPing;
-	} 
- 
 	$scope.loadLinks = function(){
 		$http.get('data/getLinks.php?mobile='+$scope.userdata.mobile)
 			.success(function(data) {
@@ -110,7 +105,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  */
  
 	$scope.changeRoom = function(room) {
-		$scope.showAddonPing=false;
 		var unix = Math.round(+new Date()/1000);
 		$scope.userdata.currentRoom=room;
 		$scope.userdata.lastRoomChange=unix;

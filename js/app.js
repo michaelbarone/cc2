@@ -1,6 +1,6 @@
 'use strict';
 
-var app= angular.module('ControlCenter', ['ngRoute','ngResource','ngIdle','ngScrollTo','inform','ngAnimate','NgModel','angularModalService','ngDraggable','FBAngular','angular-carousel','chart.js']);
+var app= angular.module('ControlCenter', ['ngSanitize','ngRoute','ngResource','ngIdle','ngScrollTo','inform','ngAnimate','NgModel','angularModalService','ngDraggable','FBAngular','angular-carousel','chart.js','toggle-switch']);
 app.config(['$routeProvider','$controllerProvider','informProvider','KeepaliveProvider', 'IdleProvider', function($routeProvider,$controllerProvider,informProvider,KeepaliveProvider, IdleProvider) {
 	// routes
 	app.settingsController = $controllerProvider.register;

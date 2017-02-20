@@ -150,7 +150,21 @@
 								<div ng-if="addon.addontype!='mediaplayer' && addon.info">
 									<a style="display:inline-block;">{{addon.info}}</a>
 								</div>
-								<div ng-if="addon.addontype=='security' && addon.addon=='camera' && userdata.linkSelected=='room'+room[0].roomId && modalOpen==0">
+								
+								
+								<toggle-switch
+									ng-show="addon.addontype=='security' && addon.addon=='camera'"
+									class="right"
+									ng-model="showiFrame[addon.rooms_addonsid]"
+									class="switch-success"
+									html="true"
+									knob-label="<i class='fa fa-window-maximize'></i>"
+									on-label="Hide"
+									off-label="Show"
+									>
+								</toggle-switch>
+								<Br class="clear" />								
+								<div ng-if="addon.addontype=='security' && addon.addon=='camera' && userdata.linkSelected=='room'+room[0].roomId && modalOpen==0 && showiFrame[addon.rooms_addonsid]">
 									<div class="iframeContainer">
 										<iframe ng-src="{{addon.ip | trustUrl }}"
 												scrolling="false" 
@@ -161,11 +175,20 @@
 									</div>
 								</div>								
 								<Br class="clear" />
+
+								<toggle-switch
+									class="right"
+									ng-model="showPing[addon.rooms_addonsid]"
+									class="switch-success"
+									html="true"
+									knob-label="<i class='fa fa-bar-chart'></i>"
+									on-label="Hide"
+									off-label="Show"
+									>
+								</toggle-switch>
+								<span ng-if="$parent.addon.addon=='ping'" ng-init="$parent.showPing[addon.rooms_addonsid] = true"></span>
 								<Br class="clear" />
-								
-								<a ng-if="addon.addon!='ping'" ng-click="toggleshowAddonPing();" class="right"><span class="right fa fa-exchange fa-2x"></span><span class="right fa fa-clock-o fa-2x"></span></a>
-								<Br class="clear" />
-								<canvas ng-if="userdata.linkSelected=='room'+room[0].roomId && (addon.addon=='ping' || showAddonPing==true)"
+								<canvas ng-if="userdata.linkSelected=='room'+room[0].roomId && showPing[addon.rooms_addonsid]"
 									id="{{addon.rooms_addonsid}}"
 									class="clear chart chart-bar"
 									chart-data="room_addons_ping[0][addon.rooms_addonsid]"
