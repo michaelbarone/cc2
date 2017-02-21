@@ -534,6 +534,8 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	var idleResumeWait = 0;
 	var cronKeeper = 0;
 	var cronRunning = 0;
+	$scope.systemInfo={};
+	$scope.systemInfo[0]={};
 	$scope.runCron = function(){
 		if(cronRunning===1 || $location.path()!="/dashboard") { return; }
 		if( Idle.idling() === true) {
@@ -552,10 +554,18 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 					if(data == "failed") {
 						return;
 					}
-					if(data == "takeover") {
+					if(data[0]['status'] == "takeover") {
 						cronKeeper = "1";
-					}else if(data == "release") {
+					} else if(data[0]['status'] == "release") {
 						cronKeeper = "0";
+					}
+					if($scope.systemInfo[0]['ccversion'] && data[0]['ccversion']!=$scope.systemInfo[0]['ccversion']){
+						/* system version is different from browser cache, refresh browser  */
+						inform.add("System has been updated. <a href'#' class='btn btn-danger' onclick='location.reload(true);return false;'>Refresh</a>", {
+							ttl: 9800, type: 'danger', "html": true
+						});
+					} else {
+						$scope.systemInfo = data;
 					}
 				}).error(function(){
 					cronRunning = 0;

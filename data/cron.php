@@ -10,10 +10,12 @@ require_once "startsession.php";
 	}
 $log->LogDebug("User " . $_SESSION['username'] . " loaded " . basename(__FILE__) . " from " . $_SERVER['SCRIPT_FILENAME']);
 $time = time();
+$cron = array();
 try {
-	$sql = "SELECT CCvalue FROM controlcenter WHERE CCsetting = 'lastcrontime' LIMIT 1";
-	foreach ($configdb->query($sql) as $lastcrontime) {
-		$lastcron = $lastcrontime['CCvalue'];
+	$sql = "select CCsetting,CCvalue from controlcenter";
+	foreach ($configdb->query($sql) as $c) {
+		$s = $c['CCsetting'];
+		$cron[$s] = $c['CCvalue'];
 	}
 } catch(PDOException $e)
 	{
@@ -28,13 +30,13 @@ try {
 	$log->LogError("$e->getMessage()" . basename(__FILE__));
 }
 $echoTakeover=0;
-if($lastcron < ($time - 30)) {
-	echo "takeover";
+if($cron['lastcrontime'] < ($time - 30)) {
+	$cron['status']="takeover";
 	$echoTakeover=1;
 	$log->LogInfo("Cron taken over by user " . $_SESSION['username']);
-} else if(($lastcron + 4) > $time) {
-	echo "release";
-	exit;
+} else if(($cron['lastcrontime'] + 4) > $time) {
+	$cron['status']="release";
+	goto writeme;
 }
 //////   Cron items
 
@@ -102,6 +104,10 @@ try {
 	}
 
 if($echoTakeover===0) {
-	echo "completed";
-}
+	$cron['status']="completed";
+}	
+writeme:
+header('Content-Type: application/json');
+$json=json_encode($cron);
+echo ")]}',\n"."[".$json."]";
 ?>
