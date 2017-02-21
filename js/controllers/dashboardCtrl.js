@@ -1,6 +1,6 @@
 'use strict';
 
-app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService','Fullscreen', function ($rootScope, $scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService, Fullscreen){
+app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService','Fullscreen','cron', function ($rootScope, $scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService, Fullscreen, cron){
 	spinnerService.clear();
 	$scope.links = [];
 	$scope.links['0'] = [];
@@ -14,13 +14,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.modalOpen=0;
 	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
 	
-	
-	$scope.testrun = 0;
-	if($location.search()['command']=="test"){
-		$scope.testrun = 1;
-	}
-	
-	
+
 	/*
 	some security could be to match userid and username in db
 	*/
@@ -78,24 +72,19 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	}, 100);	
 	$timeout(function() {
 		$scope.loaded=1;
-		cronRunning = 0;
-		$scope.runCron();
+		cron.start();
 	}, 300);	
 	$scope.FullscreenSupported = Fullscreen.isSupported();
+
 	
 /***/
 
 
    $rootScope.toggleFullscreen = function () {
-
       if (Fullscreen.isEnabled())
          Fullscreen.cancel();
       else
          Fullscreen.all();
-
-      // Set Fullscreen to a specific element (bad practice)
-      // Fullscreen.enable( document.getElementById('img') )
-
    }	
 
 	
@@ -263,7 +252,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 
 
 /**
- *  Chart.js service
+ *  Services
  *
  */
 
@@ -318,15 +307,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			]
 		}
 	};
-	
-/***/
-	
-	
-	
-/**
- *  Modal service
- *
- */
+
 	$scope.showModal = function(data,type) {
 		spinnerService.add("showModal");
 		
@@ -352,16 +333,17 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		});
 	};
 
-
-
-/**
- *  Logout service
- *  update and cron loops
- */ 	
- 
 	$scope.logout=function(){
 		loginService.logout();
 	};
+
+
+/***/	
+	
+
+/**
+ *  update addon loop
+ */ 	
 
 	var idleResumee = 0;
 	var updateAddonsFirstRun=1;
@@ -462,12 +444,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 						}
 					}
 				}).finally(function(){
-					if(idleResumee===1 && idleResumeWait===1){
-						spinnerService.clear();
-						idleResumee=0;
-						idleResumeWait = 0;
-					}
-					if($scope.testrun!=1){ 
+					if($rootScope.testrun!=1){
 						$timeout(function() {
 							updateAddonsRunning = 0;
 							spinnerService.remove("updateAddons");
@@ -531,76 +508,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		}
 	};
 
-	var idleResumeWait = 0;
-	var cronKeeper = 0;
-	var cronRunning = 0;
-	$scope.systemInfo={};
-	$scope.systemInfo[0]={};
-	$scope.runCron = function(){
-		if(cronRunning===1 || $location.path()!="/dashboard") { return; }
-		if( Idle.idling() === true) {
-			$timeout(function() {
-				idleResumee = 1;
-				$scope.runCron();
-			}, 5000);
-		} else {
-			cronRunning = 1;
-			if(idleResumee===1){
-				spinnerService.add("idleResume"); 
-			}
-			if($scope.testrun==1){ return; }
-			$http.get('data/cron.php')
-				.success(function(data) {
-					if(data == "failed") {
-						return;
-					}
-					if(data[0]['status'] == "takeover") {
-						cronKeeper = "1";
-					} else if(data[0]['status'] == "release") {
-						cronKeeper = "0";
-					}
-					if($scope.systemInfo[0]['ccversion'] && data[0]['ccversion']!=$scope.systemInfo[0]['ccversion']){
-						/* system version is different from browser cache, refresh browser  */
-						inform.add("System has been updated. <a href'#' class='btn btn-danger' onclick='location.reload(true);return false;'>Refresh</a>", {
-							ttl: 9800, type: 'danger', "html": true
-						});
-					} else {
-						$scope.systemInfo = data;
-					}
-				}).error(function(){
-					cronRunning = 0;
-					inform.add('No Connection to Server', {
-						ttl: 4700, type: 'danger'
-					});
-				}).finally(function(){
-					if(idleResumee===1){
-						idleResumeWait = 1;
-					}
-					if($scope.testrun==1){ return; }
-					if (cronKeeper == '1') {
-						$timeout(function() {
-							cronRunning = 0;
-							$scope.runCron();
-						}, 2500);
-					} else {
-						$timeout(function() {
-							cronRunning = 0;
-							$scope.runCron();
-						}, 5000);
-					}
-				});
-		}
-	};	
-	
-	
-	
-	
-	/*  not working, need to figure out why cannot call functions from these
-	inform.add("Go Full Screen <a ng-click='$rootScope.toggleFullscreen();remove(msg)' class='btn btn-default'>Full Screen</a>", {
-		  ttl: 60000, type: 'success', "html": true
-	});
-	console.log("load");
-	*/
 
 /***/
 

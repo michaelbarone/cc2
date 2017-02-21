@@ -84,8 +84,10 @@
 						if($item == "lastCheck"){ continue; }
 						if($item==='time' && $value!=''){
 							$temparray = json_decode($value, true);
-							foreach($temparray as $temp => $item) {
-								$addonArray[$x][$i]['time'][$temp]=$item;
+							if(is_array($temparray)){
+								foreach($temparray as $temp => $item) {
+									$addonArray[$x][$i]['time'][$temp]=$item;
+								}
 							}
 						}
 						if($item==='ping' && $value!=''){

@@ -38,6 +38,7 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 
 app.run(function($rootScope, $location, loginService, Idle){
 	var routespermission=['/dashboard','/settings'];  //route that require login
+	$rootScope.testrun = 0;
 	$rootScope.$on('$routeChangeStart', function(){
 		if( routespermission.indexOf($location.path()) !=-1)
 		{
@@ -45,6 +46,10 @@ app.run(function($rootScope, $location, loginService, Idle){
 			connected.then(function(msg){
 				if(msg.data==="failedAuth" || !msg.data) $location.path('/login');
 			});
+		}
+		if($location.search()['command']=="test"){
+			console.log('Test Mode Enabled');
+			$rootScope.testrun = 1;
 		}
 	});
 	
@@ -182,16 +187,12 @@ app.controller('ModalController', function($scope, close, data, $http, Carousel,
 		}, 150);	
 
 	});
-
-		
-		
-		
-		$scope.closeModal = function() {
-			if($scope.modalOpen) {
-				$scope.modalContent=[];
-				$scope.modalOpen=0;
-				close("Closed",250);
-			}
-		};
-
+	
+	$scope.closeModal = function() {
+		if($scope.modalOpen) {
+			$scope.modalContent=[];
+			$scope.modalOpen=0;
+			close("Closed",250);
+		}
+	};
 });
