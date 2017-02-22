@@ -1,6 +1,6 @@
 'use strict';
 
-app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService','Fullscreen', function ($rootScope, $scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService, Fullscreen){
+app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService','Fullscreen','addonFunctions', function ($rootScope, $scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService, Fullscreen, addonFunctions){
 	spinnerService.clear();
 	$scope.links = [];
 	$scope.links['0'] = [];
@@ -181,21 +181,19 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *
  */
 	$scope.powerOnAddon = function(addonid){
-		spinnerService.add("powerOnAddon");
-		$http.post('data/power.php?type=addon&option=on&addonid='+addonid);
+		addonFunctions.powerOnAddon(addonid);
 	};
 
 	$scope.powerOffAddon = function(addonid){
-		$http.post('data/power.php?type=addon&option=off&addonid='+addonid);
+		addonFunctions.powerOffAddon(addonid);
 	};
 	
 	$scope.powerOnRoom = function(room){
-		spinnerService.add("powerOnRoom");
-		$http.post('data/power.php?type=room&option=on&room='+room);
+		addonFunctions.powerOnRoom(room);
 	};
 
 	$scope.powerOffRoom = function(room){
-		$http.post('data/power.php?type=room&option=off&room='+room);
+		addonFunctions.powerOffRoom(room);
 	};
 
 	
@@ -227,21 +225,21 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	};
 	
 	$scope.sendMedia = function (sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
-		$http.post('data/mediaSend.php?fromip='+sendFromAddonIP+'&fromaddon='+sendFromAddonID+'&toip='+sendToAddonIP+'&toaddon='+sendToAddonID);
+		addonFunctions.sendMedia(sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID);
 		if($scope.sendFromAddonLock!=2){
 			$scope.sendFromAddonReSet();
 		}
 	}
 
 	$scope.cloneMedia = function (sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
-		$http.post('data/mediaSend.php?fromip='+sendFromAddonIP+'&fromaddon='+sendFromAddonID+'&toip='+sendToAddonIP+'&toaddon='+sendToAddonID+'&type=clone');
+		addonFunctions.cloneMedia(sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID);
 		if($scope.sendFromAddonLock!=2){
 			$scope.sendFromAddonReSet();
 		}
 	}
 	
 	$scope.startMedia = function (sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
-		$http.post('data/mediaSend.php?fromip='+sendFromAddonIP+'&fromaddon='+sendFromAddonID+'&toip='+sendToAddonIP+'&toaddon='+sendToAddonID+'&type=start');
+		addonFunctions.startMedia(sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID);
 		$scope.sendFromAddonReSet();
 	}
 
@@ -344,7 +342,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *  update addon loop
  */ 	
 
-	var idleResumee = 0;
 	var updateAddonsFirstRun=1;
 	var updateAddonsRunning = 0;
 	$scope.updateAddons = function(){
@@ -359,24 +356,14 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		} else {
 			$http.get('data/getRoomAddonsData.php')
 				.success(function(data) {
-					// maybe use switch instead of if/else
-					
-					
 					if(data == "failedAuth"){
 						loginService.logout();
 						return;
-					}
-					else if(data == "failed") {
-						// need to differentiate failed vs server not responding/not found.  if server not responding, dont return.  only if fail (as fail currently means there is no room data set in db)
+					} else if(data == "failed") {
 						return;
-					}
-					
-					
-					// new return from getRoomAddonsData.php
-					else if(data == "noRoomAccess"){
+					} else if(data == "noRoomAccess"){
 						if(updateAddonsFirstRun===1){
 							updateAddonsFirstRun=0;
-
 							$timeout(function() {
 								//load first left side menu item if exists
 								if($scope.links.length>0){
@@ -393,42 +380,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							}, 1500);							
 							
 						}
-						// do nothing
 					} else {
-						// everything below here
-						
-						
-					
-					
-					
-					
-						/*				
-							dont know if overhead of forEach is better than just overwriting the whole variable below
-						
-						var arrayEqual = '';
-						angular.forEach(data[0], function(value, key) {
-							if(!$scope.room_addons[0][key]) {
-								$scope.room_addons[0][key]=data[0][key];
-							} else {
-								arrayEqual = angular.equals($scope.room_addons[0][key], data[0][key]);
-								//console.log(key + "  " + arrayEqual);
-								if(arrayEqual===false){
-									$scope.room_addons[0][key]=data[0][key];
-								}
-							}
-							
-							
-						});	
-						*/
-						
-						/*  option 2
-						var arrayEqual = angular.equals($scope.room_addons, data);						
-						//if($scope.room_addons != data) {
-						if(arrayEqual===false || !$scope.room_addons){
-							$scope.room_addons=data;
-						}
-						*/
-						
 						$scope.room_addons=data;
 						if(updateAddonsFirstRun===1){
 							if($scope.userdata.currentRoom<1) {
@@ -541,3 +493,30 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		});
 	};
 }])
+
+						/*				
+							dont know if overhead of forEach is better than just overwriting the whole variable below
+						
+						var arrayEqual = '';
+						angular.forEach(data[0], function(value, key) {
+							if(!$scope.room_addons[0][key]) {
+								$scope.room_addons[0][key]=data[0][key];
+							} else {
+								arrayEqual = angular.equals($scope.room_addons[0][key], data[0][key]);
+								//console.log(key + "  " + arrayEqual);
+								if(arrayEqual===false){
+									$scope.room_addons[0][key]=data[0][key];
+								}
+							}
+							
+							
+						});	
+						*/
+						
+						/*  option 2
+						var arrayEqual = angular.equals($scope.room_addons, data);						
+						//if($scope.room_addons != data) {
+						if(arrayEqual===false || !$scope.room_addons){
+							$scope.room_addons=data;
+						}
+						*/
