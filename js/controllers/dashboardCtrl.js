@@ -450,13 +450,15 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							$scope.updateAddons();
 						}, 1500);
 					}
-					var time = Math.round((new Date).getTime()/1000);
-					if($rootScope.systemInfo[0]['lastcrontime']<(time-40)){
+					
+					//  need to control when this gets thrown
+					//var time = Math.round((new Date).getTime()/1000);
+					//if($rootScope.systemInfo[0]['lastcrontime']<(time-40)){
 						/* lastcrontime past threshold, cron may have stopped for some reason  */
-						inform.add("Browser data needs to be refreshed. <a href'#' class='btn btn-danger' onclick='location.reload(true);return false;'>Refresh</a>", {
-							ttl: 9800, type: 'danger', "html": true
-						});					
-					}
+					//	inform.add("Browser data needs to be refreshed. <a href'#' class='btn btn-danger' onclick='location.reload(true);return false;'>Refresh</a>", {
+					//		ttl: 9800, type: 'danger', "html": true
+					//	});					
+					//}
 					var ping = [];
 					var theaddonid = '';
 					angular.forEach($scope.room_addons[0], function(value, key) {
