@@ -1,6 +1,6 @@
 'use strict';
 
-app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService','Fullscreen','cron', function ($rootScope, $scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService, Fullscreen, cron){
+app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService','Fullscreen', function ($rootScope, $scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService, Fullscreen){
 	spinnerService.clear();
 	$scope.links = [];
 	$scope.links['0'] = [];
@@ -72,7 +72,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	}, 100);	
 	$timeout(function() {
 		$scope.loaded=1;
-		cron.start();
 	}, 300);	
 	$scope.FullscreenSupported = Fullscreen.isSupported();
 
@@ -451,9 +450,13 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							$scope.updateAddons();
 						}, 1500);
 					}
-					
-					
-					
+					var time = Math.round((new Date).getTime()/1000);
+					if($rootScope.systemInfo[0]['lastcrontime']<(time-40)){
+						/* lastcrontime past threshold, cron may have stopped for some reason  */
+						inform.add("Browser data needs to be refreshed. <a href'#' class='btn btn-danger' onclick='location.reload(true);return false;'>Refresh</a>", {
+							ttl: 9800, type: 'danger', "html": true
+						});					
+					}
 					var ping = [];
 					var theaddonid = '';
 					angular.forEach($scope.room_addons[0], function(value, key) {

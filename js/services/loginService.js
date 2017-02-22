@@ -1,5 +1,5 @@
 'use strict';
-app.factory('loginService',function($http, $location, sessionService, inform){
+app.factory('loginService',function($http, $location, sessionService, inform, cron){
 	return{
 		login:function(data,scope){
 			var $promise=$http.post('data/session_login.php',data);
@@ -26,6 +26,7 @@ app.factory('loginService',function($http, $location, sessionService, inform){
 						if(oldUID!=userid){
 							sessionService.set('currentRoom',homeRoom);
 						}
+						cron.start();
 						$location.path('/dashboard');
 					} else {
 						inform.add('Incorrect Information', {

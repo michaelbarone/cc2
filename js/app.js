@@ -36,7 +36,7 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 
 
 
-app.run(function($rootScope, $location, loginService, Idle){
+app.run(function($rootScope, $location, loginService, Idle, cron){
 	var routespermission=['/dashboard','/settings'];  //route that require login
 	$rootScope.testrun = 0;
 	$rootScope.$on('$routeChangeStart', function(){
@@ -53,6 +53,7 @@ app.run(function($rootScope, $location, loginService, Idle){
 		}
 	});
 	
+	cron.start();
 	Idle.watch();  // start idle check
 });
 

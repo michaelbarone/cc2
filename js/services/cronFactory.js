@@ -2,11 +2,11 @@
 
 app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootScope', function ($http,$timeout,inform,Idle,spinnerService,$rootScope) {
 	
-	function runCron(firstrun=0,cronStop=0){
+	function runCron(firstrun=0,cronStop=0,idleResume=0){
 		if(firstrun!=0){
 			var cronStop = 0;
 			var cronKeeper = 0;
-			var cronRunning = 0;
+			$rootScope.cronRunning = 0;
 			var idleResume = 0;
 			if(!$rootScope.systemInfo){
 				$rootScope.systemInfo={};
@@ -15,16 +15,18 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 				$rootScope.systemInfo[0]={};
 			}			
 		}
-		if(cronRunning && cronRunning==1) { return; }
+		if($rootScope.cronRunning && $rootScope.cronRunning==1) { return; }
 		if( Idle.idling() === true) {
+			//console.log("idle start");
 			$timeout(function() {
 				idleResume = 1;
-				runCron(0,cronStop);
+				runCron(0,cronStop,idleResume);
 			}, 5000);
 		} else {
-			if($rootScope.testrun==1 || cronStop>0){ return; }			
-			cronRunning = 1;
-			if(idleResume===1){
+			if($rootScope.testrun==1 || cronStop>0){ return; }
+			//console.log("cron running");			
+			$rootScope.cronRunning = 1;
+			if(idleResume==1){
 				spinnerService.add("idleResume");
 				$timeout(function() {
 					spinnerService.remove("idleResume");
@@ -51,19 +53,19 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 						$rootScope.systemInfo = data;
 					}
 				}).error(function(){
-					cronRunning = 0;
+					$rootScope.cronRunning = 0;
 					inform.add('No Connection to Server', {
 						ttl: 4700, type: 'danger'
 					});
 				}).finally(function(){
 					if (cronKeeper == '1') {
 						$timeout(function() {
-							cronRunning = 0;
+							$rootScope.cronRunning = 0;
 							runCron(0,cronStop);
 						}, 2500);
 					} else {
 						$timeout(function() {
-							cronRunning = 0;
+							$rootScope.cronRunning = 0;
 							runCron(0,cronStop);
 						}, 5000);
 					}
