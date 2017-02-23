@@ -103,10 +103,9 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	};
 
 	$scope.loadLinkLongPress = function(name) {
-		if (name.substring(0, 4) == "room") {
+		if (name.substring(0, 4) == "room" && name.substring(4,5)>0) {
 			document.getElementById(name+'L').attributes['class'].value += ' longpress';
 		} else if(document.getElementById(name+'L').classList.contains('loaded')) {
-			// console.log("longpress");
 			document.getElementById(name+'L').attributes['class'].value += ' longpress';
 			document.getElementById(name+'L').classList.remove('loaded');
 			document.getElementById(name).attributes['src'].value = '';
@@ -114,7 +113,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	};
 	
 	$scope.loadLink = function(name) {
-		if (name.substring(0, 4) == "room") {
+		if (name.substring(0, 4) == "room" && name.substring(4,5)>0) {
 			if(document.getElementById(name+'L').classList.contains('longpress')) {
 				document.getElementById(name+'L').classList.remove('longpress');
 				return;
