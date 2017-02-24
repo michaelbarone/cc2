@@ -14,6 +14,7 @@ app.factory('loginService',function($http, $location, sessionService, inform, cr
 					var settingsAccess=msg.data['settingsAccess'];
 					var avatar=msg.data['avatar'];
 					if(uid){
+						cron.start();
 						inform.clear();
 						inform.add('Welcome, ' + username);
 						sessionService.set('uid',uid);
@@ -26,7 +27,6 @@ app.factory('loginService',function($http, $location, sessionService, inform, cr
 						if(oldUID!=userid){
 							sessionService.set('currentRoom',homeRoom);
 						}
-						cron.start();
 						$location.path('/dashboard');
 					} else {
 						inform.add('Incorrect Information', {

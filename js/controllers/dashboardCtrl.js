@@ -359,7 +359,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 					if(updateAddonsFirstRun===1){
 						updateAddonsFirstRun=0;
 						$timeout(function() {
-							//load first left side menu item if exists
+							/* load first left side menu item if exists */
 							if($scope.links.length>0){
 								for(var linkg in $scope.links[0]){
 									break;
@@ -371,8 +371,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 								linkname = "#"+linkname+"L";
 								angular.element(linkname).triggerHandler('click');
 							}
-						}, 1500);							
-						
+						}, 1500);
 					}
 				} else {
 					updateAddonsRunningStartTime = Math.round((new Date).getTime()/1000);
@@ -388,6 +387,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 					} else {
 						cronStaleCount = 0;
 						$scope.room_addons=data;
+						$scope.userdata.roomcount=Object.keys($scope.room_addons[0]).length;
 						if(updateAddonsFirstRun===1){
 							if($scope.userdata.currentRoom<1) {
 								$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
@@ -449,7 +449,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 								}
 							});
 						});
-						$scope.userdata.roomcount=Object.keys($scope.room_addons[0]).length;
 					}
 				}
 			}).finally(function(){

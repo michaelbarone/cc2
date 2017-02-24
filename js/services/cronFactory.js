@@ -79,7 +79,7 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 			//console.log('start cron');
 			$timeout(function() {
 				runCron(1);
-			}, 2500);
+			}, 1500);
 		},
 		stop:function(func=null){
 			//console.log('stop cron');
