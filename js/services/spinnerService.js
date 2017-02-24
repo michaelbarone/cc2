@@ -1,25 +1,23 @@
 'use strict';
 
 app.factory('spinnerService', function($rootScope){
-	$rootScope.spinnerCount=0;
+	$rootScope.spinnerArray=[];
 	var spinnerTimout='';
 	function resetTimeout(){
 		clearTimeout(spinnerTimout);
-		var spinnerTimout = setTimeout(function(){ $rootScope.spinnerCount=0; }, 15000);
+		var spinnerTimout = setTimeout(function(){ $rootScope.spinnerArray=[]; }, 15000);
 	}
-	
-	
-	
 	return{
 		add:function(func=null){
 			console.log("Spinner: added "+func);
-			$rootScope.spinnerCount=$rootScope.spinnerCount+1;
+			$rootScope.spinnerArray.push(func);
 			resetTimeout();
 		},
 		remove:function(func=null){
-			if($rootScope.spinnerCount>0){
+			if($rootScope.spinnerArray.length>0){
 				console.log("Spinner: removed "+func);
-				$rootScope.spinnerCount=$rootScope.spinnerCount-1;
+				var index = $rootScope.spinnerArray.indexOf(func);
+				$rootScope.spinnerArray.splice(index, 1);
 				resetTimeout();
 			} else {
 				clearTimeout(spinnerTimout);
@@ -27,7 +25,7 @@ app.factory('spinnerService', function($rootScope){
 		},
 		clear:function(){
 			console.log("Spinner: clear all");
-			$rootScope.spinnerCount=0;
+			$rootScope.spinnerArray=[];
 		}
 	};
 });

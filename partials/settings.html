@@ -1,6 +1,6 @@
 <script src="./js/controllers/settingsCtrl.js"></script>
 <div ng-controller="settingsCtrl">
-	<div ng-show="spinnerCount" class="spinner"></div>
+	<div ng-cloak ng-show="spinnerArray.length>0" class="spinner"></div>
 	<div id="header">
 		<a class="main link persistent loaded" 
 			href="./#/dashboard"

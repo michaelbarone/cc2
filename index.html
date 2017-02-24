@@ -37,7 +37,7 @@
 		<div ng-view id="windowContainer" class="windowContainer"></div>
 		
 		<script id="login.tpl" type="text/ng-template">
-			<div ng-cloak ng-show="spinnerCount" class="spinner"></div>
+			<div ng-cloak ng-show="spinnerArray.length>0" class="spinner"></div>
 			<div id="loginTiles">
 				<br />
 				<div ng-cloak ng-if="users.length!=0">
