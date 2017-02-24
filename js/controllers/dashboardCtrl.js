@@ -394,9 +394,9 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							}
 							/* timeout added to allow dom to create the room divs, otherwise the first run gets a console error (cannot find div) */
 							spinnerService.remove("updateAddons");
+							updateAddonsFirstRun=0;
 							$timeout(function() {
-								$scope.changeRoom($scope.userdata.currentRoom);
-								updateAddonsFirstRun=0;
+								$scope.changeRoom($scope.userdata.currentRoom);								
 							}, 100);
 						}
 						
