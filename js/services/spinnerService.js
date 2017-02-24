@@ -17,7 +17,9 @@ app.factory('spinnerService', function($rootScope){
 			if($rootScope.spinnerArray.length>0){
 				console.log("Spinner: removed "+func);
 				var index = $rootScope.spinnerArray.indexOf(func);
-				$rootScope.spinnerArray.splice(index, 1);
+				if(index>-1){
+					$rootScope.spinnerArray.splice(index, 1);
+				}
 				resetTimeout();
 			} else {
 				clearTimeout(spinnerTimout);
