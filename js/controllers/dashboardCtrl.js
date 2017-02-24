@@ -399,8 +399,9 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							cronStaleCount++;			
 						} else {
 							cronStaleCount = 0;
-							inform.add("Browser data needs to be refreshed. <a href'#' class='btn btn-danger' onclick='location.reload(true);return false;'>Refresh</a>", {
-								ttl: 8000, type: 'danger', "html": true
+							inform.remove(informStaleData);
+							var informStaleData = inform.add("Browser data needs to be refreshed. <a href'#' class='btn btn-danger' onclick='location.reload(true);return false;'>Refresh</a>", {
+								ttl: 15000, type: 'danger', "html": true
 							});
 						}
 					} else {
