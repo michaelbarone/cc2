@@ -95,7 +95,7 @@ try {
 	}
 
 //////  Cron items end
-
+writeme:
 try {
 	$execquery = $configdb->exec("INSERT OR REPLACE INTO controlcenter (CCid, CCsetting, CCvalue) VALUES (3,'lastcrontime','$time')");
 } catch(PDOException $e)
@@ -105,8 +105,7 @@ try {
 
 if($echoTakeover===0) {
 	$cron['status']="completed";
-}	
-writeme:
+}
 header('Content-Type: application/json');
 $json=json_encode($cron);
 echo ")]}',\n"."[".$json."]";

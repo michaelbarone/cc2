@@ -17,6 +17,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 
 	/*
 	some security could be to match userid and username in db
+	may not need here, login check when querying for addons/rooms and in cron function
 	*/
 	if(sessionStorage.getItem('username')=='' || sessionStorage.getItem('username')==null){
 		loginService.logout();
@@ -176,7 +177,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 
 /**
  *  Addon functions
- *  move into services? or directive?
  *
  */
 	$scope.powerOnAddon = function(addonid){
@@ -195,10 +195,27 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		addonFunctions.powerOffRoom(room);
 	};
 
+	$scope.sendMedia = function (sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
+		addonFunctions.sendMedia(sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID);
+		if($scope.sendFromAddonLock!=2){
+			$scope.sendFromAddonReSet();
+		}
+	}
+
+	$scope.cloneMedia = function (sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
+		addonFunctions.cloneMedia(sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID);
+		if($scope.sendFromAddonLock!=2){
+			$scope.sendFromAddonReSet();
+		}
+	}
 	
-	
-	
-	
+	$scope.startMedia = function (sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
+		addonFunctions.startMedia(sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID);
+		$scope.sendFromAddonReSet();
+	}
+
+
+	/* this controls the room menu, and if it should stay open for multiple commands/inputs */
 	$scope.sendFromAddonReSet = function(){
 		$scope.sendFromAddonID = '';
 		$scope.sendFromAddonIP = '';
@@ -221,27 +238,8 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		if($scope.sendFromAddonLock==3){
 			$scope.sendFromAddonReSet();
 		}
-	};
+	};	
 	
-	$scope.sendMedia = function (sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
-		addonFunctions.sendMedia(sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID);
-		if($scope.sendFromAddonLock!=2){
-			$scope.sendFromAddonReSet();
-		}
-	}
-
-	$scope.cloneMedia = function (sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
-		addonFunctions.cloneMedia(sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID);
-		if($scope.sendFromAddonLock!=2){
-			$scope.sendFromAddonReSet();
-		}
-	}
-	
-	$scope.startMedia = function (sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
-		addonFunctions.startMedia(sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID);
-		$scope.sendFromAddonReSet();
-	}
-
 	
 /***/
 
@@ -252,7 +250,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *
  */
 
-	
 	$scope.chart=[];
 	$scope.chart.ping=[];
 	$scope.chart.ping.datasetOverride = [
@@ -275,14 +272,10 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			duration: 7000,
 		},
 		scales: {
-			//xAxes: [{
-			//	stacked: true
-			//}],
 			yAxes: [
 			{
 			  id: 'y-axis-1',
 			  type: 'linear',
-			  // stacked: true,
 			  display: true,
 			  position: 'left',
 			  ticks: {
@@ -343,6 +336,8 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 
 	var updateAddonsFirstRun=1;
 	var updateAddonsRunning = 0;
+	var cronStaleCount = 0;
+	var updateAddonsRunningStartTime = 0;
 	$scope.updateAddons = function(){
 		if(updateAddonsRunning===1 || $location.path()!="/dashboard") { return; }
 		updateAddonsRunning = 1;	
@@ -354,113 +349,120 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 			}, 5000);
 		} else {
 			$http.get('data/getRoomAddonsData.php')
-				.success(function(data) {
-					if(data == "failedAuth"){
-						loginService.logout();
-						return;
-					} else if(data == "failed") {
-						return;
-					} else if(data == "noRoomAccess"){
-						if(updateAddonsFirstRun===1){
-							updateAddonsFirstRun=0;
-							$timeout(function() {
-								//load first left side menu item if exists
-								if($scope.links.length>0){
-									for(var linkg in $scope.links[0]){
-										break;
-									}
-									for(var linkid in $scope.links[0][linkg]){
-										break;
-									}
-									var linkname = $scope.links[0][linkg][linkid]['navname'];
-									linkname = "#"+linkname+"L";
-									angular.element(linkname).triggerHandler('click');
+			.success(function(data) {
+				if(data == "failedAuth"){
+					loginService.logout();
+					return;
+				} else if(data == "failed") {
+					return;
+				} else if(data == "noRoomAccess"){
+					if(updateAddonsFirstRun===1){
+						updateAddonsFirstRun=0;
+						$timeout(function() {
+							//load first left side menu item if exists
+							if($scope.links.length>0){
+								for(var linkg in $scope.links[0]){
+									break;
 								}
-							}, 1500);							
-							
+								for(var linkid in $scope.links[0][linkg]){
+									break;
+								}
+								var linkname = $scope.links[0][linkg][linkid]['navname'];
+								linkname = "#"+linkname+"L";
+								angular.element(linkname).triggerHandler('click');
+							}
+						}, 1500);							
+						
+					}
+				} else {
+					updateAddonsRunningStartTime = Math.round((new Date).getTime()/1000);
+					if($rootScope.systemInfo[0]['lastcrontime']<(updateAddonsRunningStartTime-30)){
+						if(cronStaleCount<6){
+							cronStaleCount++;			
+						} else {
+							cronStaleCount = 0;
+							inform.add("Browser data needs to be refreshed. <a href'#' class='btn btn-danger' onclick='location.reload(true);return false;'>Refresh</a>", {
+								ttl: 8000, type: 'danger', "html": true
+							});
 						}
 					} else {
+						cronStaleCount = 0;
 						$scope.room_addons=data;
 						if(updateAddonsFirstRun===1){
 							if($scope.userdata.currentRoom<1) {
 								$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
 							}
 							/* timeout added to allow dom to create the room divs, otherwise the first run gets a console error (cannot find div) */
+							spinnerService.remove("updateAddons");
 							$timeout(function() {
 								$scope.changeRoom($scope.userdata.currentRoom);
 								updateAddonsFirstRun=0;
-								spinnerService.remove("updateAddons");
 							}, 100);
 						}
-					}
-				}).finally(function(){
-					if($rootScope.testrun!=1){
-						$timeout(function() {
-							updateAddonsRunning = 0;
-							spinnerService.remove("updateAddons");
-							$scope.updateAddons();
-						}, 1500);
-					}
-					
-					//  need to control when this gets thrown
-					//var time = Math.round((new Date).getTime()/1000);
-					//if($rootScope.systemInfo[0]['lastcrontime']<(time-40)){
-						/* lastcrontime past threshold, cron may have stopped for some reason  */
-					//	inform.add("Browser data needs to be refreshed. <a href'#' class='btn btn-danger' onclick='location.reload(true);return false;'>Refresh</a>", {
-					//		ttl: 9800, type: 'danger', "html": true
-					//	});					
-					//}
-					var ping = [];
-					var theaddonid = '';
-					angular.forEach($scope.room_addons[0], function(value, key) {
-						angular.forEach(value, function(value2, key2) {
-							angular.forEach(value2, function(value3, key3) {
-								if(key3=='rooms_addonsid'){
-									theaddonid = value3;
-								}
-								if(key3=='ping'){
-									ping = value3;
+						
+						var ping = [];
+						var theaddonid = '';
+						angular.forEach($scope.room_addons[0], function(value, key) {
+							angular.forEach(value, function(value2, key2) {
+								angular.forEach(value2, function(value3, key3) {
+									if(key3=='rooms_addonsid'){
+										theaddonid = value3;
+									}
+									if(key3=='ping'){
+										ping = value3;
+									}
+								});
+								if(theaddonid==''){  } else {
+									if(!angular.isObject($scope.room_addons_ping[0][theaddonid])) {
+										$scope.room_addons_ping[0][theaddonid] = [];
+									}
+									if(!$scope.room_addons_ping[0][theaddonid+'LastUpdate']) {
+										$scope.room_addons_ping[0][theaddonid+'LastUpdate'] = "";
+									}								
+									if(ping['lastUpdate']>$scope.room_addons_ping[0][theaddonid+'LastUpdate']) {
+
+										angular.forEach(ping, function(pingitem, pingkey) {										
+											if(pingkey=='sent'){
+												pingkey=0;
+											}else if(pingkey=='lost'){
+												pingkey=1;
+											}else if(pingkey=='timeMax'){
+												pingkey=2;
+											}else if(pingkey=='timeAve'){
+												pingkey=3;
+											}else if(pingkey=='lastUpdate'){
+												pingkey=-1;
+											}
+											if(!angular.isArray($scope.room_addons_ping[0][theaddonid][pingkey]) && pingkey>-1) {
+												$scope.room_addons_ping[0][theaddonid][pingkey] = [0,0,0,0,0,0,0,0,0,0];
+											}
+											if(pingkey>-1){
+												if($scope.room_addons_ping[0][theaddonid][pingkey].length>9){
+													$scope.room_addons_ping[0][theaddonid][pingkey].shift();
+												}
+												$scope.room_addons_ping[0][theaddonid][pingkey].push(pingitem);
+											} else {
+												$scope.room_addons_ping[0][theaddonid+'LastUpdate'] = pingitem;
+											}
+										});
+									}
 								}
 							});
-							if(theaddonid==''){  } else {
-								if(!angular.isObject($scope.room_addons_ping[0][theaddonid])) {
-									$scope.room_addons_ping[0][theaddonid] = [];
-								}
-								if(!$scope.room_addons_ping[0][theaddonid+'LastUpdate']) {
-									$scope.room_addons_ping[0][theaddonid+'LastUpdate'] = "";
-								}								
-								if(ping['lastUpdate']>$scope.room_addons_ping[0][theaddonid+'LastUpdate']) {
-
-									angular.forEach(ping, function(pingitem, pingkey) {										
-										if(pingkey=='sent'){
-											pingkey=0;
-										}else if(pingkey=='lost'){
-											pingkey=1;
-										}else if(pingkey=='timeMax'){
-											pingkey=2;
-										}else if(pingkey=='timeAve'){
-											pingkey=3;
-										}else if(pingkey=='lastUpdate'){
-											pingkey=-1;
-										}
-										if(!angular.isArray($scope.room_addons_ping[0][theaddonid][pingkey]) && pingkey>-1) {
-											$scope.room_addons_ping[0][theaddonid][pingkey] = [0,0,0,0,0,0,0,0,0,0];
-										}
-										if(pingkey>-1){
-											if($scope.room_addons_ping[0][theaddonid][pingkey].length>9){
-												$scope.room_addons_ping[0][theaddonid][pingkey].shift();
-											}
-											$scope.room_addons_ping[0][theaddonid][pingkey].push(pingitem);
-										} else {
-											$scope.room_addons_ping[0][theaddonid+'LastUpdate'] = pingitem;
-										}
-									});
-								}
-							}
 						});
-					});
-					$scope.userdata.roomcount=Object.keys($scope.room_addons[0]).length;
-				});
+						$scope.userdata.roomcount=Object.keys($scope.room_addons[0]).length;
+					}
+				}
+			}).finally(function(){
+				if($rootScope.testrun!=1){
+					$timeout(function() {
+						updateAddonsRunning = 0;
+						if(updateAddonsFirstRun<1){
+							spinnerService.remove("updateAddons");
+						}
+						$scope.updateAddons();
+					}, 1500);
+				}
+			});
 		}
 	};
 
