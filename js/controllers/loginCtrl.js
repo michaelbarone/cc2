@@ -24,6 +24,7 @@ app.controller('loginCtrl', ['$scope','loginService','$http', '$location', 'info
 			.error(function() {
 				$scope.usersError=1;  // check to make sure this doesnt break initial load when no users are set
 				if($scope.loaded>0){
+					inform.clear();
 					inform.add('No Connection to Server', {
 						ttl: 4700, type: 'danger'
 					});

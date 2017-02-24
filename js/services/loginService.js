@@ -29,6 +29,7 @@ app.factory('loginService',function($http, $location, sessionService, inform, cr
 						}
 						$location.path('/dashboard');
 					} else {
+						inform.clear();
 						inform.add('Incorrect Information', {
 						  ttl: 5000, type: 'warning'
 						});
@@ -36,6 +37,7 @@ app.factory('loginService',function($http, $location, sessionService, inform, cr
 						return "failed";
 					}
 				} else {
+					inform.clear();
 					inform.add('Incorrect Information', {
 					  ttl: 5000, type: 'warning'
 					});
