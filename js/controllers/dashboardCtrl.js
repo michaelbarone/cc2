@@ -179,6 +179,25 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *  Addon functions
  *
  */
+ 
+	
+	/*
+	this may need to go in dashboardCtrl so it has access to scope.room_addons
+	function checkAlive(deadoralive,addonid=null,room=null){
+		if(addonid!=null){
+			check if addonid is alive
+			if alive, remove("powerOnAddon");
+		}elseif(room!=null){
+			check if roomalive>0
+			if alive, remove("powerOnRoom");
+		}
+		some repeat to checkAlive for either certain time or number of retries
+		can also use this to check when powered off..  
+	}
+	*/ 
+ 
+ 
+ 
 	$scope.powerOnAddon = function(addonid){
 		addonFunctions.powerOnAddon(addonid);
 	};

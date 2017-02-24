@@ -7,8 +7,14 @@
 		exit;
 	}
 	if($user['username'] && $user['userid']) {
-		$username = $user['username'];
-		$userid = $user['userid'];
+		$username = preg_replace('/[^a-zA-Z0-9]/', '', $user['username']);
+		if(is_numeric($user['userid']) && $user['userid']>0){
+			$userid = $user['userid'];
+		} else {
+			print "failed";
+			exit;			
+		}
+		$disabled = -1;
 		try {
 			$sql = "SELECT password,passwordv,homeRoom,settingsAccess,wanAccess,avatar,disabled FROM users WHERE username = '$username' AND userid = '$userid' LIMIT 1";
 			foreach ($configdb->query($sql) as $row) {
@@ -23,7 +29,7 @@
 		} catch(PDOException $e)
 			{
 			$log->LogFatal("User $username could not open DB: $e->getMessage().  from " . basename(__FILE__));
-			print "failed2";
+			print "failed";
 			exit;
 			}		
 		$check=false;
@@ -57,11 +63,10 @@
 			}
 		} else {
 			$log->LogWARN("Login FAILED account:$username - is disabled " . basename(__FILE__));
-			print "failed3";
+			print "failed";
 			exit;			
 		}
 		if($check){
-			$userid = $user['userid'];
 			$statement = $configdb->prepare("UPDATE users SET forceLogout = ?
 					WHERE forceLogout = 1 AND userid = ?");
 			try {
@@ -70,8 +75,8 @@
 				return "Statement failed: " . $e->getMessage();
 			}
 			$_SESSION['uid']=uniqid('cc_');
-			$_SESSION['username']=$user['username'];
-			$_SESSION['userid']=$user['userid'];
+			$_SESSION['username']=$username;
+			$_SESSION['userid']=$userid;
 			$_SESSION['homeRoom']=$homeRoom;
 			$_SESSION['settingsAccess']=$settingsAccess;
 			$_SESSION['wanAccess']=$wanAccess;
@@ -79,21 +84,21 @@
 			require_once "../lib/php/mobile_device_detect.php";
 			if(mobile_device_detect(true,false,true,true,true,true,true,false,false) ) {
 				$_SESSION['mobile']='1';
-				$log->LogInfo("Login Success in mobile mode by " . $user['username'] . " from " . basename(__FILE__));
+				$log->LogInfo("Login Success in mobile mode by " . $username . " from " . basename(__FILE__));
 			} else {
 				$_SESSION['mobile']='0';
-				$log->LogInfo("Login Success in full mode by " . $user['username'] . " from " . basename(__FILE__));
+				$log->LogInfo("Login Success in full mode by " . $username . " from " . basename(__FILE__));
 			}
 			$json=json_encode($_SESSION);
 			print_r($json);
 		} else {
-			$log->LogWARN("Login FAILED bad credentials for " . $user['username'] . " from " . basename(__FILE__));
-			print "failed4";
+			$log->LogWARN("Login FAILED bad credentials for " . $username . " from " . basename(__FILE__));
+			print "failed";
 			exit;
 		}
 	} else {
 		$log->LogWARN("Login FAILED no credentials from " . basename(__FILE__));
-		print "failed5";
+		print "failed";
 		exit;		
 	}
 ?>

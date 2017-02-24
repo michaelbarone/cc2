@@ -173,6 +173,10 @@ if(isset($action)) {
 			// see update query below 
 			$query = "INSERT INTO `users` (";
 			
+			// "sanitize" username by stripping all non alpha/numeric characters
+			// this is also done in session_login.php to make sure no usernames have sql injection stuff
+			//$username = preg_replace('/[^a-zA-Z0-9]/', '', $user['username']);
+			
 			foreach($user as $setting => $setas){
 				if($setting==='userid'){ continue; }
 				if($setting==='password'){ continue; }

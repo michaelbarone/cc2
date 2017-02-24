@@ -1,9 +1,9 @@
 'use strict';
 app.factory('loginService',function($http, $location, sessionService, inform, cron){
 	return{
-		login:function(data,scope){
-			var $promise=$http.post('data/session_login.php',data);
+		login:function(data){
 			var oldUID=sessionService.get('userid');
+			var $promise=$http.post('data/session_login.php',data);
 			$promise.then(function(msg){
 				if(!msg.data['failed']) {
 					var uid=msg.data['uid'];
@@ -32,7 +32,6 @@ app.factory('loginService',function($http, $location, sessionService, inform, cr
 						inform.add('Incorrect Information', {
 						  ttl: 5000, type: 'warning'
 						});
-						scope.loginMsg='Incorrect Information';
 						$location.path('/login');
 						return "failed";
 					}
@@ -40,7 +39,6 @@ app.factory('loginService',function($http, $location, sessionService, inform, cr
 					inform.add('Incorrect Information', {
 					  ttl: 5000, type: 'warning'
 					});
-					scope.loginMsg='Incorrect Information';
 					$location.path('/login');
 					return "failed";					
 				}

@@ -8,7 +8,6 @@ app.controller('loginCtrl', ['$scope','loginService','$http', '$location', 'info
 			$location.path('/dashboard');
 		}
 	});
-	$scope.msgtxt='';
 	if(!$scope.users){
 		$scope.users = [];
 	}
