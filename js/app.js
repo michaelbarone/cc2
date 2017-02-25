@@ -38,7 +38,6 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 
 app.run(function($rootScope, $location, loginService, Idle, cron){
 	var routespermission=['/dashboard','/settings'];  //route that require login
-	$rootScope.testrun = 0;
 	$rootScope.$on('$routeChangeStart', function(){
 		if( routespermission.indexOf($location.path()) !=-1)
 		{
@@ -47,13 +46,25 @@ app.run(function($rootScope, $location, loginService, Idle, cron){
 				if(msg.data==="failedAuth" || !msg.data) $location.path('/login');
 			});
 		}
-		if($location.search()['command']=="test"){
-			console.log('Test Mode Enabled');
-			$rootScope.testrun = 1;
+		$rootScope.testrun = 0;
+		$rootScope.debug = 0;		
+		if($location.search()['command']){
+			switch($location.search()['command']){
+				case 'test':
+					console.log('Test Mode Enabled');
+					$rootScope.testrun = 1;
+					break;
+				case 'debug':
+				case 'verbose':
+					console.log('Debug Mode Enabled');
+					$rootScope.debug = 1;				
+					break;
+			}
 		}
 	});
-	
-	cron.start();
+	if($location.path()!="/login"){
+		cron.start();
+	}
 	Idle.watch();  // start idle check
 });
 
@@ -139,61 +150,3 @@ app.directive('onLongPress', function($timeout) {
 		}
 	};
 })
-
-app.controller('ModalController', function($scope, close, data, $http, Carousel, $timeout) {
-	$scope.modalContent=[];
-	$scope.Carousel = Carousel;
-	$scope.initdata=data;
-	//console.log(data);
-	var returndata = [];
-
-
-	
-	
-	$http.get('data/getRoomAddonDataExtended.php?data='+encodeURIComponent(JSON.stringify(data)))
-	.success(function(returndata) {
-		$scope.modalContent = returndata;
-	
-		$scope.modalOpen=1;
-
-	
-	
-		$scope.checkInitData = function(){
-			//  1   initdata == modalcontent ==>  timeout function
-			//  2   initdata != modalcontent ==>  refresh modalcontent?
-			//  3   initdata != parentscope
-			
-			
-			
-			if($scope.modalOpen 
-				&& $scope.modalContent[0] 
-				&& $scope.initdata.addontype==$scope.modalContent[0].addontype 
-				&& ($scope.modalContent[0].addonType!='mediaplayer' || ($scope.modalContent[0].addonType=='mediaplayer' && $scope.initdata.info==$scope.modalContent[0].title))
-			){
-				$timeout(function() {
-					$scope.checkInitData();
-				}, 5000);
-			} else {
-				$scope.modalContent=[];
-				if($scope.modalOpen) {
-					$scope.modalOpen=0;
-					console.log("Modal Closed: No Data");
-					close("Closed",250);
-				}
-			}
-		}
-		
-		$timeout(function() {
-			$scope.checkInitData();
-		}, 150);	
-
-	});
-	
-	$scope.closeModal = function() {
-		if($scope.modalOpen) {
-			$scope.modalContent=[];
-			$scope.modalOpen=0;
-			close("Closed",250);
-		}
-	};
-});
