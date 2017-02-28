@@ -96,27 +96,24 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 
 	
 
-	checkfalseneg3:
-	if($addonName!='ping'){
-		$addoninfo=array();
-		$alivevalue = 0;
-		$addoninfo = ${$addonid}->GetAddonInfo();
-		if((isset($addoninfo['status']) && $addoninfo['status']=='alive')){
-			$alivevalue = 2;
-		}
+	checkfalsenegaddon:
+	$addoninfo=array();
+	$alivevalue = 0;
+	$addoninfo = ${$addonid}->GetAddonInfo();
+	if((isset($addoninfo['status']) && ($addoninfo['status']=='alive' || $addoninfo['status']=='ping'))){
+		$alivevalue = 2;
 	}
 
-	checkfalseneg:
-	$devicealive=array();
-	$devicealive=json_decode(Ping($ip), true);
-	if(isset($devicealive['status']) && $devicealive['status']=='alive') {
-		if($alivevalue==2) { $alivevalue = 3; } else { $alivevalue = 1; }
-		if($addonName=='ping' && $alivevalue<3) { $alivevalue = 3; }
+	checkfalsenegdevice:
+	$deviceinfo=array();
+	$deviceinfo=json_decode(Ping($ip), true);
+	if(isset($deviceinfo['status']) && $deviceinfo['status']=='alive') {
+		$alivevalue++;
 	} else {
-		$alivevalue=0;
+		$alivevalue = 0;
 	}
 	
-	
+	//$alivevalue = json_encode($addoninfo['status']);
 	
 	// need to update this section for error checking
 
@@ -129,10 +126,10 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 		if($count==0){
 			$count++;		
 			if($alivevalue!=$statusorig) {
-				if($alivevalue>2 && $statusorig>0){
-					goto checkfalseneg3;
+				if($alivevalue > 2 && $statusorig > 0){
+					goto checkfalsenegaddon;
 				}else{
-					goto checkfalseneg;
+					goto checkfalsenegdevice;
 				}
 			}
 		}
@@ -179,7 +176,7 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 		if($statusorig>0) {
 			if($countneg==0){
 				$countneg++;
-				goto checkfalseneg;
+				goto checkfalsenegdevice;
 			}
 		}
 		//if($alivevalue!=$statusorig){
@@ -190,13 +187,13 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	
 	
 	
-	goto skipme;	
+	goto skipme;
 	writeme:
 	
 	$statement = $configdb->prepare("UPDATE rooms_addons SET info = ?, infoType = ?, thumbnail = ?, fanart = ?, time = ?, ping = ?, device_alive = ?
 			WHERE rooms_addonsid = ?");
 	try {
-		$statement->execute([$title, $type, $thumbnail, $fanart, $time, $devicealive['data'], $alivevalue, $rooms_addonsid]);
+		$statement->execute([$title, $type, $thumbnail, $fanart, $time, $deviceinfo['data'], $alivevalue, $rooms_addonsid]);
 	} catch(PDOException $e) {
 		return "Statement failed: " . $e->getMessage();
 	}

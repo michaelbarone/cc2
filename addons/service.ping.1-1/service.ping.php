@@ -27,8 +27,9 @@ class ping {
 	}
 
 	function GetAddonInfo() {
-		//return $this->Ping();
-		return;
+		$returnArray=array();
+		$returnArray['status']="ping";
+		return $returnArray;		/* if returns ['status']=ping, count +2 as online check in cron-addon */
 	}
 	
 	function PingApp($ip){
