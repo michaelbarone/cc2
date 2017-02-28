@@ -43,6 +43,9 @@
 		
 			$nowPlayingInfo = ${$addonid}->GetAddonInfo();
 			//print_r($nowPlayingInfo);
+			
+			
+			// this should get pushed into the class files
 			if(isset($nowPlayingInfo['title']) && $nowPlayingInfo['title']!='') {
 				$title = $nowPlayingInfo['title'];
 				if(isset($nowPlayingInfo['showtitle']) && $nowPlayingInfo['showtitle']!='') {

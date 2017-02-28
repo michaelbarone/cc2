@@ -1,8 +1,5 @@
 'use strict';
 
-//app.controller('loginCtrl', ['$scope','loginService','$http', '$location', 'inform', 'spinnerService', function ($scope,loginService,$http,$location,inform,spinnerService) {
-
-
 app.controller('ModalController', ['$scope','close','$http', 'Carousel', '$timeout', 'data', 'spinnerService', function($scope,close,$http,Carousel,$timeout,data,spinnerService) {
 	$scope.modalContent=[];
 	$scope.Carousel = Carousel;

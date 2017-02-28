@@ -1,6 +1,8 @@
 <?php 
 	require 'startsession.php';
 	
+	// need some better auth handling/checking here
+	
 	if(isset($_SESSION['uid']) && isset($_SESSION['userid'])) {
 		$userid = $_SESSION['userid'];
 		foreach ($configdb->query("SELECT forceLogout,disabled FROM users WHERE userid = $userid LIMIT 1") as $row) {
