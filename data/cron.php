@@ -30,13 +30,14 @@ try {
 	$log->LogError("$e->getMessage()" . basename(__FILE__));
 }
 $echoTakeover=0;
-if($cron['lastcrontime'] < ($time - 30)) {
+if($cron['lastcrontime'] < ($time - 5)) {
 	$cron['status']="takeover";
 	$echoTakeover=1;
 	$log->LogInfo("Cron taken over by user " . $_SESSION['username']);
-} else if(($cron['lastcrontime'] + 4) > $time) {
+} else if(($cron['lastcrontime'] + 3) > $time) {
 	$cron['status']="release";
-	goto writeme;
+	//goto writeme;
+	goto skiptoend;
 }
 //////   Cron items
 
@@ -95,7 +96,7 @@ try {
 	}
 
 //////  Cron items end
-writeme:
+//writeme:
 try {
 	$execquery = $configdb->exec("INSERT OR REPLACE INTO controlcenter (CCid, CCsetting, CCvalue) VALUES (3,'lastcrontime','$time')");
 } catch(PDOException $e)
@@ -106,6 +107,7 @@ try {
 if($echoTakeover===0) {
 	$cron['status']="completed";
 }
+skiptoend:
 header('Content-Type: application/json');
 $json=json_encode($cron);
 echo ")]}',\n"."[".$json."]";
