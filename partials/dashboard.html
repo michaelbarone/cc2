@@ -131,7 +131,7 @@
 										<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnAddon(addon.rooms_addonsid)">On</button>
 									</div>
 									<img ng-if="addon.device_alive==='0'" ng-click="powerOnAddon(addon.rooms_addonsid)" class="status pointer left" src="img/led-red.png"/>
-									<img ng-if="addon.device_alive==='1'" class="status left" src="img/led-orange.png"/>
+									<img ng-if="addon.device_alive<3 && addon.device_alive>0" class="status left" src="img/led-orange.png"/>
 									<img ng-if="addon.device_alive==='3'" class="status left" src="img/led-green.png"/>
 									<p ng-if="addon.addonTitle !='' || addon.addonTitle !=null" class="left">{{addon.addonTitle}}</p>
 									<p ng-if="addon.addonTitle =='' || addon.addonTitle ==null" class="left">{{addon.addon}}</p>
