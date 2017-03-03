@@ -69,7 +69,8 @@ class denon {
 
 		$returnArray=array();
 		$returnArray['data']=$json;
-		$returnArray['title']=$items['InputFuncSelect']['value'];
+		$returnArray['displayInfo']['info']=$items['InputFuncSelect']['value'];
+		$returnArray['displayInfo']=json_encode($returnArray['displayInfo']);
 		//$returnArray['info']='receiver';
 		
 		$returnArray['status']="dead";

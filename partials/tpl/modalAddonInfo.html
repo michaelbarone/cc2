@@ -4,56 +4,55 @@
 		  <div class="header">
 			<ul><li>
 				<button type="button" class="btn btn-danger close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<a ng-if="modalContent[0]['title']!=''" class="title main panel">{{modalContent[0]['title']}}</a>
-				<a ng-if="modalContent[0]['title']!=''" class="title main panel">{{modalContent[0]['addonTitle']}}</a>
+				<a ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['info']!=''" class="title main panel">{{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['info']}}</a>
 			</li></ul>
 		  </div>
 		  <div class="modal-body">
-			<div ng-if="modalContent[0]['addontype']=='security'">
+			<div ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['addontype']=='security'">
 				<div class="iframeContainer">
-					<iframe ng-src="{{modalContent[0]['ip'] | trustUrl }}"
+					<iframe ng-src="{{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['ip'] | trustUrl }}"
 							scrolling="false" 
 							height="100%" 
 							width="100%"
 							frameborder="0" marginwidth="0" marginheight="0"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
 				</div>
 			</div>
-			<div ng-if="modalContent[0]['addontype']=='mediaplayer'">
+			<div ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['addontype']=='mediaplayer'">
 				<div class="col-6">
 					<div ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['time']['playerpercentage']>0" class="timebar left"><div class="elapsed" style="width:{{$parent.room_addons[0][initdata.roomid][initdata.id]['time']['playerpercentage']}}%"></div></div>
 					<span ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['time']['timenow']" class="left">Now: {{$parent.room_addons[0][initdata.roomid][initdata.id]['time']['timenow']}}</span><span ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['time']['endtime']" class="right">Ending: {{$parent.room_addons[0][initdata.roomid][initdata.id]['time']['endtime']}}</span>
 					<br />
-					<p ng-if="modalContent[0]['tagline']">{{modalContent[0]['tagline']}}</p>
-					<p ng-if="modalContent[0]['runtime']">Runtime: {{modalContent[0]['runtime']}}</p>
-					<p ng-if="modalContent[0]['year']">Year: {{modalContent[0]['year']}}</p>
-					<p ng-if="modalContent[0]['firstaired']">First Aired: {{modalContent[0]['firstaired']}}</p>
-					<p ng-if="modalContent[0]['genre']">Genre: {{modalContent[0]['genre']}}</p>
-					<p ng-if="modalContent[0]['plot']">Plot: {{modalContent[0]['plot']}}</p>
+					<p ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['tagline']">{{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['tagline']}}</p>
+					<p ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['runtime']">Runtime: {{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['runtime']}}</p>
+					<p ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['year']">Year: {{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['year']}}</p>
+					<p ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['firstaired']">First Aired: {{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['firstaired']}}</p>
+					<p ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['genre']">Genre: {{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['genre']}}</p>
+					<p ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['plot']">Plot: {{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['plot']}}</p>
 				</div>
 				<div class="right col-5">
-					<img class="left col-12" ng-if="modalContent[0]['type']=='episode'" ng-src="{{modalContent[0]['images']['thumb']}}" onerror="this.style.display='none';"></img>
-					<img class="left col-12" ng-if="modalContent[0]['type']!='episode'" ng-src="{{modalContent[0]['fanart']}}" onerror="this.style.display='none';"></img>
-					<img class="left col-12" ng-src="{{modalContent[0]['images']['banner']}}"></img>
+					<img class="left col-12" ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['type']=='episode'" ng-src="{{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['images']['thumb']}}" onerror="this.style.display='none';"></img>
+					<img class="left col-12" ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['type']!='episode'" ng-src="{{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['fanart']}}" onerror="this.style.display='none';"></img>
+					<img class="left col-12" ng-src="{{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['images']['banner']}}"></img>
 				</div>
 
-				<img class="left col-3" ng-src="{{modalContent[0]['images']['discart']}}"></img>
-				<img class="left col-6" ng-src="{{modalContent[0]['images']['clearlogo']}}"></img>
+				<img class="left col-3" ng-src="{{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['images']['discart']}}"></img>
+				<img class="left col-6" ng-src="{{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['images']['clearlogo']}}"></img>
 				<br class="clear" />
 				<br class="clear" />
 				
 				<div class="col-3">
 					<!--cleanup below in addon file to standardize-->
-					<img class="left col-12" ng-if="modalContent[0]['type']=='episode'" ng-src="{{modalContent[0]['images']['poster']}}"></img>
-					<img class="left col-12" ng-if="modalContent[0]['type']!='episode'" ng-src="{{modalContent[0]['images']['thumb']}}"></img>
+					<img class="left col-12" ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['type']=='episode'" ng-src="{{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['images']['poster']}}"></img>
+					<img class="left col-12" ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['type']!='episode'" ng-src="{{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['images']['thumb']}}"></img>
 				</div>
 				
 				<div class="col-9">
-					<div ng-if="modalContent[0]['images']['fanart']" ng-carousel ng-carousel-name="fanart-carousel" ng-carousel-timer="10000">
+					<div ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['images']['fanart']" ng-carousel ng-carousel-name="fanart-carousel" ng-carousel-timer="10000">
 						<slidecontainer>
-							<slide ng-if="modalContent[0]['images']['landscape']">
-								<img ng-src="{{modalContent[0]['images']['landscape']}}">
+							<slide ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['images']['landscape']">
+								<img ng-src="{{$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['images']['landscape']}}">
 							</slide>
-							<slide ng-repeat="fanart in modalContent[0]['images']['fanart']">
+							<slide ng-repeat="fanart in $parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['images']['fanart']">
 								<img ng-src="{{fanart}}">
 							</slide>
 						</slidecontainer>
@@ -66,8 +65,8 @@
 				<br class="clear" />
 				
 				<div class="col-12">
-					<div ng-if="modalContent[0]['cast'][0]" class="imageslider nowrap">
-						<div ng-repeat="cast in modalContent[0]['cast']" class="col-2 floatnone" style="display:inline-block;">
+					<div ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['cast'][0]" class="imageslider nowrap">
+						<div ng-repeat="cast in $parent.room_addons[0][initdata.roomid][initdata.id]['displayInfo']['cast']" class="col-2 floatnone" style="display:inline-block;">
 							<p class="title">{{cast.name}} <br /> <span class="subtitle">as {{cast.role}}</span></p>
 							<img ng-src="{{cast.thumbnail}}">
 						</div>

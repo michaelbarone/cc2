@@ -41,10 +41,10 @@
 			${$addonid}->SetVariables($vars);	
 		
 		
-			$nowPlayingInfo = ${$addonid}->GetAddonInfo();
+			$addonInfo = ${$addonid}->GetAddonInfo();
 			//print_r($nowPlayingInfo);
 			
-			
+			/*
 			// this should get pushed into the class files
 			if(isset($nowPlayingInfo['title']) && $nowPlayingInfo['title']!='') {
 				$title = $nowPlayingInfo['title'];
@@ -65,14 +65,14 @@
 						$nowPlayingInfo['time'][$temp]=$item;
 					}
 				}			
+			*/	
 				
 				
-				
-				$nowPlayingInfo['addontype']=$addontype;
+				$addonInfo['displayInfo']['addontype']=$addontype;
 				header('Content-Type: application/json');
-				$json=json_encode($nowPlayingInfo);
+				$json=json_encode($addonInfo);
 				echo ")]}',\n"."[".$json."]";
-			}
+			//}
 		}
 	}
 ?>

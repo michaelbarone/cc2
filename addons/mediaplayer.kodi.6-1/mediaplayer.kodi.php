@@ -101,9 +101,9 @@ class kodi {
 				
 			// $therequest = urlencode("\"jsonrpc\": \"2.0\", \"method\": \"Player.GetItem\", \"params\": { \"properties\": [\"art\",\"director\",\"writer\",\"tagline\",\"episode\",\"file\",\"title\",\"showtitle\",\"season\",\"genre\",\"year\",\"rating\",\"runtime\",\"firstaired\",\"plot\",\"fanart\",\"thumbnail\",\"tvshowid\"], \"playerid\": 1 }, \"id\": \"1\"");
 			
+			// 			$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.GetItem", "params": { "properties": ["title","artist","albumartist","genre","year","rating","album","track","duration","comment","lyrics","musicbrainztrackid","musicbrainzartistid","musicbrainzalbumid","musicbrainzalbumartistid","playcount","fanart","director","trailer","tagline","plot","plotoutline","originaltitle","lastplayed","writer","studio","mpaa","cast","country","imdbnumber","premiered","productioncode","runtime","set","showlink","streamdetails","top250","votes","firstaired","season","episode","showtitle","thumbnail","file","resume","artistid","albumid","tvshowid","setid","watchedepisodes","disc","tag","art","genreid","displayartist","albumartistid","description","theme","mood","style","albumlabel","sorttitle","episodeguide","uniqueid","dateadded","channel","channeltype","hidden","locked","channelnumber","starttime","endtime"], "playerid": 1 }, "id": "1"');
 			
-			
-			$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.GetItem", "params": { "properties": ["title","artist","albumartist","genre","year","rating","album","track","duration","comment","lyrics","musicbrainztrackid","musicbrainzartistid","musicbrainzalbumid","musicbrainzalbumartistid","playcount","fanart","director","trailer","tagline","plot","plotoutline","originaltitle","lastplayed","writer","studio","mpaa","cast","country","imdbnumber","premiered","productioncode","runtime","set","showlink","streamdetails","top250","votes","firstaired","season","episode","showtitle","thumbnail","file","resume","artistid","albumid","tvshowid","setid","watchedepisodes","disc","tag","art","genreid","displayartist","albumartistid","description","theme","mood","style","albumlabel","sorttitle","episodeguide","uniqueid","dateadded","channel","channeltype","hidden","locked","channelnumber","starttime","endtime"], "playerid": 1 }, "id": "1"');
+			$therequest = urlencode('"jsonrpc": "2.0", "method": "Player.GetItem", "params": { "properties": ["title","genre","year","rating","duration","comment","playcount","fanart","director","trailer","tagline","plot","plotoutline","lastplayed","writer","studio","mpaa","cast","country","imdbnumber","premiered","runtime","set","showlink","streamdetails","firstaired","season","episode","showtitle","thumbnail","file","resume","tvshowid","watchedepisodes","disc","tag","art","genreid","albumartistid","description","theme","sorttitle","episodeguide","dateadded","channel","channeltype","channelnumber","starttime","endtime"], "playerid": 1 }, "id": "1"');
 			
 			$jsoncontents = "$this->IP/jsonrpc?request={".$therequest."}";
 			$output = $this->Curl($jsoncontents);
@@ -122,16 +122,16 @@ class kodi {
 								$item="thumbnail";
 							}
 						}*/
-						$nowplayingarray[$item] = "$this->IP/image/".urlencode($value);
+						$nowplayingarray['displayInfo'][$item] = "$this->IP/image/".urlencode($value);
 					} elseif($item == "cast"){
 						if(empty($value)) { continue; }
 						foreach($value as $key => $item){
 		
 							foreach($item as $thiskey => $thisitem){
 								if (!is_array($thisitem) && substr($thisitem, 0, 8) == 'image://') {
-									$nowplayingarray['cast'][$key][$thiskey] = "$this->IP/image/".urlencode($thisitem);
+									$nowplayingarray['displayInfo']['cast'][$key][$thiskey] = "$this->IP/image/".urlencode($thisitem);
 								} else {
-									$nowplayingarray['cast'][$key][$thiskey] = $thisitem;
+									$nowplayingarray['displayInfo']['cast'][$key][$thiskey] = $thisitem;
 								}	
 							}
 		
@@ -154,12 +154,12 @@ class kodi {
 									//$item = urldecode($item);
 								//}
 								if(substr($key, 0, 6) === 'fanart') {
-									$nowplayingarray['images']['fanart'][$key] = "$this->IP/image/".urlencode($item);
+									$nowplayingarray['displayInfo']['images']['fanart'][$key] = "$this->IP/image/".urlencode($item);
 								} else {
-									$nowplayingarray['images'][$key] = "$this->IP/image/".urlencode($item);
+									$nowplayingarray['displayInfo']['images'][$key] = "$this->IP/image/".urlencode($item);
 								}
 							} else {
-								$nowplayingarray[$key] = $item;
+								$nowplayingarray['displayInfo'][$key] = $item;
 							}
 						}
 						
@@ -168,7 +168,7 @@ class kodi {
 						*/
 						
 					} else {  // normal cases, everything else
-						$nowplayingarray[$item] = $value;
+						$nowplayingarray['displayInfo'][$item] = $value;
 					}
 				}
 		
@@ -179,8 +179,8 @@ class kodi {
 					$needles = $tvshowneedles;
 					foreach($needles as $needle) {
 						if (strpos($file,$needle) !== false) {
-							$nowplayingarray['type'] = "tv";
-							$nowplayingarray['title'] = "$file";							
+							$nowplayingarray['displayInfo']['type'] = "tv";
+							$nowplayingarray['displayInfo']['title'] = "$file";							
 							break;
 						}
 					}
@@ -188,8 +188,8 @@ class kodi {
 					$needles = $movieneedles;
 					foreach($needles as $needle) {
 						if (strpos($file,$needle) !== false) {
-							$nowplayingarray['type'] = "movie";
-							$nowplayingarray['title'] = "$file";
+							$nowplayingarray['displayInfo']['type'] = "movie";
+							$nowplayingarray['displayInfo']['title'] = "$file";
 							break;
 						}
 					}
@@ -197,14 +197,33 @@ class kodi {
 					
 					
 				if($jsonnowplaying['result']['item']['type'] == "channel") {
-					$nowplayingarray['type'] = "tv";
-					$nowplayingarray['channel'] = $jsonnowplaying['result']['item']['label'];
-					$nowplayingarray['runtime'] = $nowplayingarray['runtime'] . " minutes";
+					$nowplayingarray['displayInfo']['type'] = "tv";
+					$nowplayingarray['displayInfo']['channel'] = $jsonnowplaying['result']['item']['label'];
+					$nowplayingarray['displayInfo']['runtime'] = $nowplayingarray['displayInfo']['runtime'] . " minutes";
 				} else {
-					if(isset($nowplayingarray['runtime']) && $nowplayingarray['runtime'] != '') {
-						$nowplayingarray['runtime'] = round($nowplayingarray['runtime']/60) . " minutes";
+					if(isset($nowplayingarray['displayInfo']['runtime']) && $nowplayingarray['displayInfo']['runtime'] != '') {
+						$nowplayingarray['displayInfo']['runtime'] = round($nowplayingarray['displayInfo']['runtime']/60) . " minutes";
 					}
 				}
+				
+				
+				if(isset($nowplayingarray['displayInfo']['title']) && $nowplayingarray['displayInfo']['title']!='') {
+					if(isset($nowplayingarray['displayInfo']['showtitle']) && $nowplayingarray['displayInfo']['showtitle']!='') {
+						$episode = "";
+						if(isset($nowplayingarray['displayInfo']['season']) && $nowplayingarray['displayInfo']['season']!='' && isset($nowplayingarray['displayInfo']['episode']) && $nowplayingarray['displayInfo']['episode']!='') {
+							$episode = " " . $nowplayingarray['displayInfo']['season'] . "x" . $nowplayingarray['displayInfo']['episode'];
+						}
+						$nowplayingarray['displayInfo']['info'] = $nowplayingarray['displayInfo']['showtitle'] . $episode . " - " . $nowplayingarray['displayInfo']['title'];
+					} elseif(isset($nowplayingarray['displayInfo']['year']) && $nowplayingarray['displayInfo']['year']!='') {
+						$nowplayingarray['displayInfo']['info'] = $nowplayingarray['displayInfo']['title'] . " (" . $nowplayingarray['displayInfo']['year'] . ")";
+					}
+				}				
+				
+				
+				
+				
+				$nowplayingarray['displayInfo']=json_encode($nowplayingarray['displayInfo']);
+				
 				
 				$nowplayingarray['status']="alive";
 				return $nowplayingarray;

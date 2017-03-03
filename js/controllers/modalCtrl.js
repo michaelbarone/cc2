@@ -1,15 +1,51 @@
 'use strict';
 
 app.controller('ModalController', ['$scope','close','$http', 'Carousel', '$timeout', 'data', 'spinnerService', function($scope,close,$http,Carousel,$timeout,data,spinnerService) {
-	$scope.modalContent=[];
-	$scope.Carousel = Carousel;
+	$scope.closeModal = function() {
+		if($scope.modalOpen) {
+			//$scope.modalContent=[];
+			$scope.modalOpen=0;
+			close("Closed",250);
+		}
+	};
+
 	$scope.initdata=data;
-	//console.log(data);
+	$scope.Carousel = Carousel;
+	$scope.modalOpen=1;
+/*	
+	$scope.modalContent=[];
 	var modalReturnData = [];
+	var roomid = initdata.roomid;
+	var id = initdata.id;
+	$scope.checkInitData = function(){
+			
+			if($scope.modalOpen 
+				&& $scope.$parent.room_addons[0][roomid][id]['displayInfo']['info'] 
+			){
+				$timeout(function() {
+					$scope.checkInitData();
+				}, 5000);
+			} else {
+				if($scope.modalOpen) {
+					$scope.modalOpen=0;
+					console.log("Modal Closed: No Data");
+					close("Closed",250);
+				}
+			}
 
+	};
+	
+	$timeout(function() {
+		$scope.checkInitData();
+	}, 150);
+	
+	*/
 
 	
 	
+	
+	/*
+	delete this below file if this code gets removed
 	$http.get('data/getRoomAddonDataExtended.php?data='+encodeURIComponent(JSON.stringify(data)))
 	.success(function(modalReturnData) {
 		$scope.modalContent = modalReturnData;
@@ -45,12 +81,5 @@ app.controller('ModalController', ['$scope','close','$http', 'Carousel', '$timeo
 			$scope.checkInitData();
 		}, 150);	
 	});
-	
-	$scope.closeModal = function() {
-		if($scope.modalOpen) {
-			$scope.modalContent=[];
-			$scope.modalOpen=0;
-			close("Closed",250);
-		}
-	};
+	*/
 }]);

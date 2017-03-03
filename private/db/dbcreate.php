@@ -55,10 +55,7 @@ $query = "CREATE TABLE IF NOT EXISTS rooms_addons (
 `lastCheck`	INTEGER,
 `roomRequiresAlive`	INTEGER DEFAULT 0,
 `PowerOptions`	INTEGER DEFAULT 0,
-`info`	TEXT,
-`infoType`	TEXT,
-`thumbnail`	TEXT,
-`fanart`	TEXT,
+`displayInfo`	TEXT,
 `time`	TEXT,
 `ping`	TEXT
 )";

@@ -117,11 +117,8 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	
 	// need to update this section for error checking
 
-	$fanart="";
-	$title="";
-	$thumbnail="";
+
 	$time="";
-	$type="";	
 	if ($alivevalue>0){
 		if($count==0){
 			$count++;		
@@ -133,32 +130,8 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 				}
 			}
 		}
-		
-		/* need to put this section in addon.class files */
-		if(isset($addoninfo['title']) && $addoninfo['title']!='') {
-			$title = $addoninfo['title'];
-			if(isset($addoninfo['showtitle']) && $addoninfo['showtitle']!='') {
-				$episode = "";
-				if(isset($addoninfo['season']) && $addoninfo['season']!='' && isset($addoninfo['episode']) && $addoninfo['episode']!='') {
-					$episode = " " . $addoninfo['season'] . "x" . $addoninfo['episode'];
-				}
-				$title = $addoninfo['showtitle'] . $episode . " - " . $addoninfo['title'];
-			} elseif(isset($addoninfo['year']) && $addoninfo['year']!='') {
-				$title = $addoninfo['title'] . " (" . $addoninfo['year'] . ")";
-			}
-			if(isset($addoninfo['thumbnail']) && $addoninfo['thumbnail']!='') {
-				$thumbnail = $addoninfo['thumbnail'];
-			}
-			if(isset($addoninfo['fanart']) && $addoninfo['fanart']!='') {
-				$fanart = $addoninfo['fanart'];
-			}
-		}
-		
-		
-		
-		if(isset($addoninfo['type'])){ $type = $addoninfo['type']; }
 		if(isset($addoninfo['time'])){ $time = $addoninfo['time']; }
-		
+	
 		
 		// place some checks for known fails before goto writeme;
 		goto writeme;
@@ -190,10 +163,10 @@ if(file_exists("../addons/$addonid/$addonType.$addonName.php") && $ip !='') {
 	goto skipme;
 	writeme:
 	
-	$statement = $configdb->prepare("UPDATE rooms_addons SET info = ?, infoType = ?, thumbnail = ?, fanart = ?, time = ?, ping = ?, device_alive = ?
+	$statement = $configdb->prepare("UPDATE rooms_addons SET displayInfo = ?, time = ?, ping = ?, device_alive = ?
 			WHERE rooms_addonsid = ?");
 	try {
-		$statement->execute([$title, $type, $thumbnail, $fanart, $time, $deviceinfo['data'], $alivevalue, $rooms_addonsid]);
+		$statement->execute([$addoninfo['displayInfo'], $time, $deviceinfo['data'], $alivevalue, $rooms_addonsid]);
 	} catch(PDOException $e) {
 		return "Statement failed: " . $e->getMessage();
 	}

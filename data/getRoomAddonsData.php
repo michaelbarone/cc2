@@ -97,7 +97,15 @@
 									$addonArray[$x][$i]['ping'][$temp]=$item;
 								}
 							}
-						}					
+						}
+						if($item==='displayInfo' && $value!=''){
+							$temparray = json_decode($value, true);
+							if(is_array($temparray)){
+								foreach($temparray as $temp => $item) {
+									$addonArray[$x][$i]['displayInfo'][$temp]=$item;
+								}
+							}
+						}
 						if(is_numeric($item)===false){
 							$addonArray[$x][$i][$item]=$value;
 						}
