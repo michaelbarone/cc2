@@ -19,21 +19,18 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 		cronVars['informNoServerConnectionCron']='';
 		$rootScope.cronRunning = 0;
 		if($rootScope.debug==1){
-			console.log("reset cronVars:");
+			console.log("cronFactory - reset cronVars:");
 			console.log(cronVars);
 		}
 	}
 	
-	
-
-	//function runCron(firstrun=0,cronStop=0,idleResume=0,informSystemVersionDifferentCron='',informNoServerConnectionCron=''){
 	function runCron(firstrun=0,cronVars){
 		if(firstrun!=0){
 			resetCronVars();
 		}
 		if($rootScope.cronRunning && $rootScope.cronRunning==1) { return; }
 		if( Idle.idling() === true) {
-			if($rootScope.debug==1){ console.log("Cron Start Idle"); }
+			if($rootScope.debug==1){ console.log("cronFactory - Cron Start Idle"); }
 			$timeout(function() {
 				cronVars['cronKeeper']=0;
 				cronVars['idleResume']=1;
@@ -44,7 +41,7 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 				console.log("Cron Stopped");
 				return;
 			}
-			if($rootScope.debug==1){ console.log("Cron Start"); }		
+			if($rootScope.debug==1){ console.log("cronFactory - Cron Start"); }		
 			$rootScope.cronRunning = 1;
 			if(cronVars['idleResume']==1){
 				spinnerService.add("idleResume");
@@ -56,7 +53,7 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 			$http.get('data/cron.php')
 				.success(function(data) {
 					if(data == "failed") {
-						if($rootScope.debug==1){ console.log("Cron Stopped data Failed"); }
+						if($rootScope.debug==1){ console.log("cronFactory - Cron Stopped data Failed"); }
 						cronVars['cronStop']=1;
 						return;
 					}
@@ -67,7 +64,7 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 					}
 					if($rootScope.systemInfo[0]['ccversion'] && data[0]['ccversion']!=$rootScope.systemInfo[0]['ccversion']){
 						/* system version is different from browser cache, refresh browser  */
-						if($rootScope.debug==1){ console.log("Cron System Version Different from Browser Cache"); }
+						if($rootScope.debug==1){ console.log("cronFactory - Cron System Version Different from Browser Cache"); }
 						inform.remove(cronVars['informSystemVersionDifferentCron']);
 						cronVars['informSystemVersionDifferentCron'] = inform.add("System has been updated. <a href'#' class='btn btn-danger' onclick='location.reload(true);return false;'>Refresh</a>", {
 							ttl: 15000, type: 'danger', "html": true
@@ -77,7 +74,7 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 						inform.remove(cronVars['informNoServerConnectionCron']);
 					}
 				}).error(function(){
-					if($rootScope.debug==1){ console.log("Cron data return error"); }
+					if($rootScope.debug==1){ console.log("cronFactory - Cron data return error"); }
 					cronVars['cronKeeper'] = "0";
 					$rootScope.cronRunning = 0;
 					inform.remove(cronVars['informNoServerConnectionCron']);
@@ -86,7 +83,7 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 					});
 				}).finally(function(){
 					if($rootScope.debug==1){
-						console.log("Cron Complete");
+						console.log("cronFactory - Cron Complete");
 						console.log(cronVars);
 					}
 					if (cronVars['cronKeeper'] == '1') {
@@ -95,7 +92,6 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 						$timeout(function() {
 							$rootScope.cronRunning = 0;
 							runCron(0,cronVars);
-							//runCron(0,cronStop,0,informSystemVersionDifferentCron,informNoServerConnectionCron);
 						}, 3000);
 					} else if($location.path()=="/login"){
 						resetCronVars();
@@ -104,7 +100,6 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 						$timeout(function() {
 							$rootScope.cronRunning = 0;
 							runCron(0,cronVars);
-							//runCron(0,cronStop,0,informSystemVersionDifferentCron,informNoServerConnectionCron);
 						}, 6000);
 					}
 				});
