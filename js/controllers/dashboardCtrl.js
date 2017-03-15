@@ -369,6 +369,8 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		} else {
 			$http.get('data/getRoomAddonsData.php')
 			.success(function(data) {
+				updateAddonsRunningStartTime = Math.round((new Date).getTime()/1000);				
+				var lastupdated = 0;
 				if(data == "failedAuth"){
 					loginService.logout();
 					return;
@@ -393,14 +395,13 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 						}, 1500);
 					}
 				} else {
-					updateAddonsRunningStartTime = Math.round((new Date).getTime()/1000);
 					if($rootScope.systemInfo[0]['lastcrontime']<(updateAddonsRunningStartTime-45)){
 						if(cronStaleCount<6){
 							cronStaleCount = cronStaleCount + 1;
 						} else {
 							cronStaleCount = 0;
 							inform.remove(informStaleData);
-							var informStaleData = inform.add("Browser data needs to be refreshed.$rootScope.systemInfo[0]['lastcrontime'] <a href'#' class='btn btn-danger' onclick='location.reload(true);return false;'>Refresh</a>", {
+							var informStaleData = inform.add("Browser data needs to be refreshed. <a href'#' class='btn btn-danger' onclick='location.reload(true);return false;'>Refresh</a>", {
 								ttl: 15000, type: 'danger', "html": true
 							});
 						}
@@ -422,7 +423,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 						
 						var ping = [];
 						var theaddonid = '';
-						var lastupdated = 0;
 						angular.forEach($scope.room_addons[0], function(value, key) {
 							angular.forEach(value, function(value2, key2) {
 								angular.forEach(value2, function(value3, key3) {
@@ -438,10 +438,13 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 										$scope.room_addons_ping[0][theaddonid] = [];
 									}
 									if(!$scope.room_addons_ping[0][theaddonid+'LastUpdate']) {
-										$scope.room_addons_ping[0][theaddonid+'LastUpdate'] = "";
-									}								
+										$scope.room_addons_ping[0][theaddonid+'LastUpdate'] = 0;
+									}
+									//console.log(ping['lastUpdate']);
+									//console.log($scope.room_addons_ping[0][theaddonid+'LastUpdate']);
+									//console.log("top greater than bottom");
+									
 									if(ping['lastUpdate']>$scope.room_addons_ping[0][theaddonid+'LastUpdate']) {
-
 										angular.forEach(ping, function(pingitem, pingkey) {										
 											if(pingkey=='sent'){
 												pingkey=0;
@@ -464,18 +467,25 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 												$scope.room_addons_ping[0][theaddonid][pingkey].push(pingitem);
 											} else {
 												$scope.room_addons_ping[0][theaddonid+'LastUpdate'] = pingitem;
-												//lastupdated = pingitem;
 											}
 										});
+										lastupdated = ping['lastUpdate'];
+									} else {
+										lastupdated = -1;
 									}
 								}
 							});
 						});
-						//console.log(lastupdated);
-						//spinnerService.add("idleResume");
-						//spinnerService.remove("idleResume");						
-						
 					}
+					// /*
+					console.log(lastupdated+"   "+updateAddonsRunningStartTime);
+					if(lastupdated>-1 && lastupdated<(updateAddonsRunningStartTime-30)){
+						console.log(lastupdated+" more than 30 less than "+updateAddonsRunningStartTime);
+						spinnerService.add("staleAddonData",1);
+					} else {
+						spinnerService.remove("staleAddonData");
+					}
+					// */
 				}
 			}).finally(function(){
 				if($rootScope.testrun!=1){

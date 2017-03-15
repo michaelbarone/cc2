@@ -43,12 +43,13 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 			}
 			if($rootScope.debug==1){ console.log("cronFactory - Cron Start"); }		
 			$rootScope.cronRunning = 1;
+			/* evaluate the need for idleResume here */
 			if(cronVars['idleResume']==1){
 				spinnerService.add("idleResume");
 				$timeout(function() {
 					spinnerService.remove("idleResume");
 					cronVars['idleResume']=0;
-				}, 4500);				
+				}, 4500);
 			}
 			$http.get('data/cron.php')
 				.success(function(data) {
