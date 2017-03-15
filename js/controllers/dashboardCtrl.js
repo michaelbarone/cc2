@@ -475,9 +475,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 				if($rootScope.testrun!=1){
 					$timeout(function() {
 						updateAddonsRunning = 0;
-						if(updateAddonsFirstRun<1){
-							spinnerService.remove("updateAddons");
-						}
 						$scope.updateAddons();
 					}, 1500);
 				}

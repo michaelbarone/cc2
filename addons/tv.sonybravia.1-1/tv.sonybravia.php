@@ -101,8 +101,8 @@ class sonybravia {
 
 	function PowerOff(){
 		$therequest = urlencode('\\"id\\":2,\\"method\\":\\"setPowerStatus\\",\\"version\\":\\"1.0\\",\\"params\\":[{ \\"status\\" : false}]');
-		$jsoncontents = "$this->IP/sony/system?request={".$therequest."}";
-		$this->Curl($jsoncontents);		
+		$jsoncontents = "$this->IP/sony/system?{".$therequest."}";
+		$this->Curl($jsoncontents);
 		
 		
 		/*

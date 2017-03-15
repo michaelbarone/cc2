@@ -138,10 +138,12 @@
 									<br class="clear" />
 								</div>
 								<!-- need to update the visual for these addon areas -->
-								<div ng-if="addon.addontype=='mediaplayer' && addon.displayInfo.file">
+								<div ng-if="addon.addontype=='mediaplayer' && addon.displayInfo.info">
 									<img ng-if="addon.displayInfo.type" class="infoType" ng-src="img/info-{{addon.displayInfo.type}}.png"/>
 									<a ng-click="sendFromAddonSet(addon.ip,addon.addonid)" class="right"><span class="fa fa-share-square-o infoType fa-2x"></span></a>
 									<a ng-click="showModal(addon,'addon')">{{addon.displayInfo.info}}</a>
+									<br ng-if="!addon.displayInfo.thumbnail && !addon.displayInfo.fanart" />
+									<br ng-if="!addon.displayInfo.thumbnail && !addon.displayInfo.fanart" />
 									<img ng-if="addon.displayInfo.thumbnail!='' && addon.displayInfo.type!='movie'" class="fanart" ng-src="{{addon.displayInfo.thumbnail}}" />
 									<img ng-if="addon.displayInfo.fanart!='' && addon.displayInfo.type=='movie'" class="fanart" ng-src="{{addon.displayInfo.fanart}}" />
 									<div ng-if="addon.time.playerpercentage>0" class="timebar"><div class="elapsed" style="width:{{addon.time.playerpercentage}}%"></div></div>

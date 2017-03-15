@@ -200,6 +200,7 @@ class kodi {
 					$nowplayingarray['displayInfo']['type'] = "tv";
 					$nowplayingarray['displayInfo']['channel'] = $jsonnowplaying['result']['item']['label'];
 					$nowplayingarray['displayInfo']['runtime'] = $nowplayingarray['displayInfo']['runtime'] . " minutes";
+					$nowplayingarray['displayInfo']['info'] = $jsonnowplaying['result']['item']['title'];
 				} else {
 					if(isset($nowplayingarray['displayInfo']['runtime']) && $nowplayingarray['displayInfo']['runtime'] != '') {
 						$nowplayingarray['displayInfo']['runtime'] = round($nowplayingarray['displayInfo']['runtime']/60) . " minutes";
