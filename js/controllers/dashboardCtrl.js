@@ -357,6 +357,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	var updateAddonsRunning = 0;
 	var cronStaleCount = 0;
 	var updateAddonsRunningStartTime = 0;
+	var staleAddonData = 0;
 	$scope.updateAddons = function(){
 		if(updateAddonsRunning===1 || $location.path()!="/dashboard") { return; }
 		updateAddonsRunning = 1;	
@@ -477,15 +478,13 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							});
 						});
 					}
-					// /*
-					console.log(lastupdated+"   "+updateAddonsRunningStartTime);
 					if(lastupdated>-1 && lastupdated<(updateAddonsRunningStartTime-30)){
-						console.log(lastupdated+" more than 30 less than "+updateAddonsRunningStartTime);
 						spinnerService.add("staleAddonData",1);
-					} else {
+						staleAddonData = 1;
+					} else if(staleAddonData>0) {
+						staleAddonData = 0;
 						spinnerService.remove("staleAddonData");
 					}
-					// */
 				}
 			}).finally(function(){
 				if($rootScope.testrun!=1){
