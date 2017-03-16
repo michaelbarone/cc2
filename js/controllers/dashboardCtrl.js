@@ -441,10 +441,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 									if(!$scope.room_addons_ping[0][theaddonid+'LastUpdate']) {
 										$scope.room_addons_ping[0][theaddonid+'LastUpdate'] = 0;
 									}
-									//console.log(ping['lastUpdate']);
-									//console.log($scope.room_addons_ping[0][theaddonid+'LastUpdate']);
-									//console.log("top greater than bottom");
-									
 									if(ping['lastUpdate']>$scope.room_addons_ping[0][theaddonid+'LastUpdate']) {
 										angular.forEach(ping, function(pingitem, pingkey) {										
 											if(pingkey=='sent'){

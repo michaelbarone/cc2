@@ -14,7 +14,6 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 	function resetCronVars(){
 		cronVars['cronStop']=0;
 		cronVars['cronKeeper']=0;
-		cronVars['idleResume']=0;
 		cronVars['informSystemVersionDifferentCron']='';
 		cronVars['informNoServerConnectionCron']='';
 		$rootScope.cronRunning = 0;
@@ -33,7 +32,6 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 			if($rootScope.debug==1){ console.log("cronFactory - Cron Start Idle"); }
 			$timeout(function() {
 				cronVars['cronKeeper']=0;
-				cronVars['idleResume']=1;
 				runCron(0,cronVars);
 			}, 5000);
 		} else {
@@ -43,14 +41,6 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 			}
 			if($rootScope.debug==1){ console.log("cronFactory - Cron Start"); }		
 			$rootScope.cronRunning = 1;
-			/* evaluate the need for idleResume here */
-			if(cronVars['idleResume']==1){
-				spinnerService.add("idleResume");
-				$timeout(function() {
-					spinnerService.remove("idleResume");
-					cronVars['idleResume']=0;
-				}, 4500);
-			}
 			$http.get('data/cron.php')
 				.success(function(data) {
 					if(data == "failed") {
@@ -109,13 +99,11 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 
 	return{
 		start:function(){
-			//console.log('start cron');
 			$timeout(function() {
 				runCron(1,cronVars);
 			}, 1500);
 		},
 		stop:function(){
-			//console.log('stop cron');
 			cronVars['cronStop']=1;
 		}
 	};
