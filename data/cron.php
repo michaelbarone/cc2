@@ -30,12 +30,12 @@ try {
 	$log->LogError("$e->getMessage()" . basename(__FILE__));
 }
 $echoTakeover=0;
-if($cron['lastcrontime'] < ($time - 5)) {
+if($cron['lastcrontime'] < ($time - 15)) {
 	$cron['status']="takeover";
 	$echoTakeover=1;
 	$log->LogInfo("Cron taken over by user " . $_SESSION['username']);
 } else if(($cron['lastcrontime'] + 3) > $time) {
-	$cron['status']="release";
+	$cron['status']="completed";
 	//goto writeme;
 	goto skiptoend;
 }
@@ -105,7 +105,7 @@ try {
 	}
 
 if($echoTakeover===0) {
-	$cron['status']="completed";
+	$cron['status']="Cron Master";
 }
 skiptoend:
 header('Content-Type: application/json');

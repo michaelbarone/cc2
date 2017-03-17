@@ -50,7 +50,7 @@ app.factory('cron', ['$http','$timeout','inform','Idle','spinnerService','$rootS
 					}
 					if(data[0]['status'] == "takeover") {
 						cronVars['cronKeeper'] = "1";
-					} else if(data[0]['status'] == "release") {
+					} else if(data[0]['status'] == "completed") {
 						cronVars['cronKeeper'] = "0";
 					}
 					if($rootScope.systemInfo[0]['ccversion'] && data[0]['ccversion']!=$rootScope.systemInfo[0]['ccversion']){
