@@ -137,14 +137,15 @@ if(isset($action)) {
 			$log->LogWarn("Create First User attempt failed: users already present in system. " . basename(__FILE__));
 			echo "error";
 		}
-		
-
-		
 		return;
+
+
+
+
 	} elseif($action === "saveUsers"){
-		$users=json_decode(GetUsers($configdb),true);
+		$users=json_decode(ltrim(GetUsers($configdb),")]}',\n"),true);
 		//print_r($users);
-		//echo "<br /><br />";
+		//echo "3333<br /><br />";
 		$updatedusers = json_decode($_GET['users'], true);
 		//print_r($updatedusers);
 		foreach($updatedusers as $user){
@@ -157,9 +158,11 @@ if(isset($action)) {
 		$result = array_diff_key($users, $updatedusers);
 		// delete these
 		foreach($result as $user){
-			$query = "DELETE FROM `users` WHERE userid = ".$user['userid']." AND username = ".$user['username'];
-			$statement = $configdb->prepare($query);
-			$statement->execute();
+			if(isset($user['userid']) && is_numeric($user['userid']) && $user['userid']>0) {  
+				$query = "DELETE FROM `users` WHERE userid = ".$user['userid']." AND username = '".$user['username']."'";
+				$statement = $configdb->prepare($query);
+				$statement->execute();
+			}
 		}
 
 		
@@ -212,7 +215,7 @@ if(isset($action)) {
 		
 		//else update remaining $updatedusers
 		//echo "update these entries:";
-		foreach($updatedusers as $user){			
+		foreach($updatedusers as $user){
 			// show changed item column(s)
 			$result2 = array_diff($user, $users[$user['userid']]);
 			//print_r($result2);

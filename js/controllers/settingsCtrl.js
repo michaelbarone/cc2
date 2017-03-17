@@ -1,6 +1,6 @@
 'use strict';
 
-app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginService','$http','inform','Idle','$route','spinnerService', function ($scope, $timeout, $location, loginService, $http, inform, Idle, $route, spinnerService){
+app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginService','$http','inform','Idle','$route','spinnerService','ModalService', function ($scope, $timeout, $location, loginService, $http, inform, Idle, $route, spinnerService, ModalService){
 	spinnerService.clear();
 	$scope.userdata = [];
 	$scope.userdata.currentpage = "settings";
@@ -81,13 +81,30 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginSe
 	}
 	 
 	$scope.saveUsers = function(users){
+		console.log(users);
 		$scope.CheckLogged();
 		$http.get('data/settings.php?action=saveUsers&users='+JSON.stringify(users))
 			.success(function(data) {
-				$scope.usersChanged=0;
 			});
 	}
-	 
+
+	$scope.editUser = function(user,scope=$scope){
+		ModalService.showModal({
+			templateUrl: "./partials/tpl/modalSettingsUsers.html"
+			, controller: "ModalController"
+			,inputs: {
+				data: user,
+		    }
+			, scope: scope
+		}).then(function(modal) {
+			$scope.modalOpen=1;
+            modal.close.then(function() {
+				$scope.modalOpen=0;
+				$scope.init();
+            });
+		});
+	}
+	
 	$scope.addUser = function(){
 		var lastuserid = 0;
 		var userid = 0;
@@ -97,11 +114,37 @@ app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginSe
 		var nextuserid = parseInt(lastuserid) + 1;
 		$scope.Users[nextuserid]={'userid': nextuserid.toString()};
 		$scope.usersChanged++;
+		$scope.editUser(nextuserid);
+
+		
+		
+		/*
+		ModalService.showModal({
+			templateUrl: "./partials/tpl/modalSettingsUsers.html"
+			, controller: "ModalController"
+			,inputs: {
+				data: "",
+		    }
+			, scope: $scope
+		}).then(function(modal) {
+			$scope.modalOpen=1;
+            modal.close.then(function() {
+				$scope.modalOpen=0;
+            });
+		});
+		*/
 	}
 	 
-	$scope.deleteUser = function(index){
-		delete $scope.Users[index];
-		$scope.usersChanged++;
+	$scope.deleteUser = function(item){
+		console.log(item);
+		//console.log("try to delete userid "+item);
+		//var index = $scope.Users.indexOf(item);
+		//$rootScope.spinnerArray.splice(index, 1);
+
+		//	$scope.Users.splice(item, 1);
+
+		delete $scope.Users[item];
+		//$scope.usersChanged++;
 	}
 	
 	$scope.usersChangedAdd = function(){

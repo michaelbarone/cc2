@@ -1,5 +1,36 @@
 <div id="Users">
-  <div class="panel panel-default loginTiles">
+	<div class="dashboardPage RoomPage">
+		<div class="content">
+			<span class="col-12">
+				<div class="addonTitle addonWidget">
+					<button type="button" ng-click="addUser()" class="btn btn-success btn-sm">New User</button>
+				
+				</div>
+			</span>		
+			<span class="col-3" ng-repeat="user in Users">
+				<div class="addonWidget">
+					<div>
+						<h2 class="center">{{user.username}}</h2><br />
+						<button class="btn btn-primary right" ng-click="editUser(user.userid)">Edit</button>
+					</div>
+					<span ng-if="user.settingsAccess!=1" class="fa fa-square-o"> Settings Access</span>
+					<span ng-if="user.settingsAccess==1" class="fa fa-check-square-o"> Settings Access</span>
+					
+					<span ng-if="user.disabled!=1" class="fa fa-square-o"> Account Disabled</span>
+					<span ng-if="user.disabled==1" class="fa fa-check-square-o"> Account Disabled</span>
+					
+					<span ng-if="user.lastaccess>0" class="left">Last Online: {{user.lastaccess*1000 | date : "medium"}}</span>
+					<span ng-if="user.lastaccess==0" class="left">Last Online: Never</span>
+					<br /><br />
+				</div>
+			</span>
+		</div>
+	</div>
+	
+	
+	<br /><br /><br /><br /><br />
+
+  <div class="panel panel-default">
 	<br><br>
 	  <div class="panel-heading"><span class="lead">List of Users </span></div>
 		<div class="row">
@@ -72,6 +103,8 @@
 		</table>
 	  </div>
 	</div>
+
+
 
 
 

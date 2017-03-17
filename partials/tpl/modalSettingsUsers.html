@@ -1,0 +1,36 @@
+<div class="modal fade in">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="header">
+			<ul><li>
+				<span class="right">
+					<button type="button" ng-click="saveUsers($parent.Users);closeModal('close');" class="btn btn-success btn-sm" ng-class="usersChanged > 0 ? 'greenPulse' : ''" ng-disabled="usersChanged < 1">Save User</button>
+					<button type="button" ng-click="cancelChanges(currentTab);closeModal('close');" class="btn btn-warning btn-sm">Cancel Changes</button>
+					<span class="margin:0 15px;">&nbsp;</span>
+					<button type="button" ng-click="deleteUser(initdata);saveUsers($parent.Users);closeModal('close');" class="btn btn-danger btn-sm">DELETE USER</button>
+					<span class="margin:0 15px;">&nbsp;</span>
+					<button type="button" class="btn btn-danger close" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</span>
+				<a class="title main panel">User Settings</a>
+			</li></ul>
+		  </div>
+		  <div class="modal-body">
+			<div>
+				edit userid {{initdata}}
+				
+				<input type="text" required='required' ng-model="$parent.Users[initdata].username" ng-change="usersChangedAdd()"/>
+				
+				
+				
+			</div>
+
+
+			
+			
+			
+			
+		  </div>
+		</div>
+	</div>
+	<div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
+</div>
