@@ -1,6 +1,6 @@
 'use strict';
 
-app.settingsController('settingsCtrl', ['$scope','$timeout','$location','loginService','$http','inform','Idle','$route','spinnerService','ModalService', function ($scope, $timeout, $location, loginService, $http, inform, Idle, $route, spinnerService, ModalService){
+app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$location','loginService','$http','inform','Idle','$route','spinnerService','ModalService', function ($rootScope, $scope, $timeout, $location, loginService, $http, inform, Idle, $route, spinnerService, ModalService){
 	spinnerService.clear();
 	$scope.userdata = [];
 	$scope.userdata.currentpage = "settings";

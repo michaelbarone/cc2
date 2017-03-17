@@ -16,10 +16,50 @@
 		  </div>
 		  <div class="modal-body">
 			<div>
-				edit userid {{initdata}}
 				
-				<input type="text" required='required' ng-model="$parent.Users[initdata].username" ng-change="usersChangedAdd()"/>
+				Username: <input type="text" required='required' ng-model="$parent.Users[initdata].username" ng-change="usersChangedAdd()"/>
+				<br><br>
+
+				Wan Access: 
+				<select ng-model="$parent.Users[initdata].wanAccess" ng-change="usersChangedAdd()">
+					<option value="1" ng-selected="$parent.Users[initdata].wanAccess==1">Yes</option>
+					<option value="0" ng-selected="$parent.Users[initdata].wanAccess!=1">No</option>
+				</select>
+				<br><br>
+
+				Settings Access: 				
+				<select ng-model="$parent.Users[initdata].settingsAccess" ng-change="usersChangedAdd()">
+					<option value="1" ng-selected="$parent.Users[initdata].settingsAccess==1">Yes</option>
+					<option value="0" ng-selected="$parent.Users[initdata].settingsAccess!=1">No</option>
+				</select>						
+				<br><br>
+
+				Navigation Group Access: 				
+				<select ng-model="$parent.Users[initdata].navgroupaccess" ng-change="usersChangedAdd()">				
+				<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+				</select>
+				<br><br>
+
+				Room Access:		
+				<select multiple ng-model="$parent.Users[initdata].roomAccess" ng-change="usersChangedAdd()">
+					<option ng-repeat="room in $parent.Rooms"
+					ng-if="room.roomId > 0"
+					value="{{room.roomId}}"
+					>
+						{{room.roomName}}
+					</option>					
+				</select>
+				<br><br>
 				
+				HomeRoom:
+				<select ng-model="$parent.Users[initdata].homeRoom" ng-change="usersChangedAdd()">
+						<option ng-repeat="room in $parent.Rooms"
+								ng-if="room.roomId > 0"
+								value="{{room.roomId}}"
+								>
+							{{room.roomName}}
+						</option>
+					</select>
 				
 				
 			</div>

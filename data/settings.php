@@ -216,6 +216,7 @@ if(isset($action)) {
 		//else update remaining $updatedusers
 		//echo "update these entries:";
 		foreach($updatedusers as $user){
+			//print_r($user);
 			// show changed item column(s)
 			$result2 = array_diff($user, $users[$user['userid']]);
 			//print_r($result2);
