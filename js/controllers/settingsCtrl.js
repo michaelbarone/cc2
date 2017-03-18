@@ -79,9 +79,15 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 				$scope.Users = data;
 			});
 	}
-	 
+
+	$scope.saveUser = function(user){
+		$scope.CheckLogged();
+		$http.get('data/settings.php?action=saveUser&user='+JSON.stringify(user))
+			.success(function(data) {
+			});
+	}
+	
 	$scope.saveUsers = function(users){
-		console.log(users);
 		$scope.CheckLogged();
 		$http.get('data/settings.php?action=saveUsers&users='+JSON.stringify(users))
 			.success(function(data) {
@@ -143,8 +149,12 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 
 		//	$scope.Users.splice(item, 1);
 
-		delete $scope.Users[item];
-		//$scope.usersChanged++;
+		//delete $scope.Users[item];
+		var user = $scope.Users[item];
+		$scope.CheckLogged();
+		$http.get('data/settings.php?action=deleteUser&user='+JSON.stringify(user))
+			.success(function(data) {
+			});
 	}
 	
 	$scope.usersChangedAdd = function(){

@@ -1,75 +1,78 @@
 <div class="modal fade in">
 	<div class="modal-dialog">
 		<div class="modal-content">
-		  <div class="header">
-			<ul><li>
-				<span class="right">
-					<button type="button" ng-click="saveUsers($parent.Users);closeModal('close');" class="btn btn-success btn-sm" ng-class="usersChanged > 0 ? 'greenPulse' : ''" ng-disabled="usersChanged < 1">Save User</button>
-					<button type="button" ng-click="cancelChanges(currentTab);closeModal('close');" class="btn btn-warning btn-sm">Cancel Changes</button>
-					<span class="margin:0 15px;">&nbsp;</span>
-					<button type="button" ng-click="deleteUser(initdata);saveUsers($parent.Users);closeModal('close');" class="btn btn-danger btn-sm">DELETE USER</button>
-					<span class="margin:0 15px;">&nbsp;</span>
-					<button type="button" class="btn btn-danger close" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
-				</span>
-				<a class="title main panel">User Settings</a>
-			</li></ul>
-		  </div>
-		  <div class="modal-body">
-			<div>
-				
-				Username: <input type="text" required='required' ng-model="$parent.Users[initdata].username" ng-change="usersChangedAdd()"/>
-				<br><br>
-
-				Wan Access: 
-				<select ng-model="$parent.Users[initdata].wanAccess" ng-change="usersChangedAdd()">
-					<option value="1" ng-selected="$parent.Users[initdata].wanAccess==1">Yes</option>
-					<option value="0" ng-selected="$parent.Users[initdata].wanAccess!=1">No</option>
-				</select>
-				<br><br>
-
-				Settings Access: 				
-				<select ng-model="$parent.Users[initdata].settingsAccess" ng-change="usersChangedAdd()">
-					<option value="1" ng-selected="$parent.Users[initdata].settingsAccess==1">Yes</option>
-					<option value="0" ng-selected="$parent.Users[initdata].settingsAccess!=1">No</option>
-				</select>						
-				<br><br>
-
-				Navigation Group Access: 				
-				<select ng-model="$parent.Users[initdata].navgroupaccess" ng-change="usersChangedAdd()">				
-				<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
-				</select>
-				<br><br>
-
-				Room Access:		
-				<select multiple ng-model="$parent.Users[initdata].roomAccess" ng-change="usersChangedAdd()">
-					<option ng-repeat="room in $parent.Rooms"
-					ng-if="room.roomId > 0"
-					value="{{room.roomId}}"
-					>
-						{{room.roomName}}
-					</option>					
-				</select>
-				<br><br>
-				
-				HomeRoom:
-				<select ng-model="$parent.Users[initdata].homeRoom" ng-change="usersChangedAdd()">
-						<option ng-repeat="room in $parent.Rooms"
-								ng-if="room.roomId > 0"
-								value="{{room.roomId}}"
-								>
-							{{room.roomName}}
-						</option>
-					</select>
-				
-				
+			<div class="header">
+				<ul><li>
+					<span class="right">
+						<button type="button" ng-click="saveUser($parent.Users[initdata]);closeModal('close');" class="btn btn-success btn-sm" ng-class="usersChanged > 0 ? 'greenPulse' : ''" ng-disabled="usersChanged < 1">Save User</button>
+						<button type="button" ng-click="cancelChanges(currentTab);closeModal('close');" class="btn btn-warning btn-sm">Cancel Changes</button>
+						<span class="margin:0 15px;">&nbsp;</span>
+						<button type="button" ng-click="confirmDelete = !confirmDelete;" class="btn btn-danger btn-sm">DELETE USER</button>
+						<span class="margin:0 15px;">&nbsp;</span>
+						<button type="button" class="btn btn-danger close" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</span>
+					<a class="title main panel">User Settings</a>
+				</li></ul>
 			</div>
+			<div ng-show="confirmDelete" class="transformable-vertical" style="top: 50px;position: relative;margin: 0 auto;width: 350px;">
+				<span class="center">
+				<h1>This action is final</h1>
+				<button type="button" ng-click="deleteUser(initdata);closeModal('close');" class="btn btn-danger btn-sm left">Confirm Delete</button>
 
+				<button type="button" ng-click="confirmDelete = false;" class="btn btn-warning btn-sm right">Cancel User Delete</button>
+				</span>
+				<br class="clear" />
+			</div>		  
+			<div class="modal-body">
+				<div>
+					
+					Username: <input type="text" required='required' ng-model="$parent.Users[initdata].username" ng-change="usersChangedAdd()"/>
+					<br><br>
 
-			
-			
-			
-			
-		  </div>
+					Wan Access: 
+					<select ng-model="$parent.Users[initdata].wanAccess" ng-change="usersChangedAdd()">
+						<option value="1" ng-selected="$parent.Users[initdata].wanAccess==1">Yes</option>
+						<option value="0" ng-selected="$parent.Users[initdata].wanAccess!=1">No</option>
+					</select>
+					<br><br>
+
+					Settings Access: 				
+					<select ng-model="$parent.Users[initdata].settingsAccess" ng-change="usersChangedAdd()">
+						<option value="1" ng-selected="$parent.Users[initdata].settingsAccess==1">Yes</option>
+						<option value="0" ng-selected="$parent.Users[initdata].settingsAccess!=1">No</option>
+					</select>						
+					<br><br>
+
+					Navigation Group Access: 				
+					<select ng-model="$parent.Users[initdata].navgroupaccess" ng-change="usersChangedAdd()">				
+					<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+					</select>
+					<br><br>
+
+					Room Access:		
+					<select multiple="multiple" ng-model="$parent.Users[initdata].roomAccess" ng-change="usersChangedAdd()">
+						<option ng-repeat="room in $parent.Rooms"
+						ng-if="room.roomId > 0"
+						value="{{room.roomId}}"
+						>
+							{{room.roomName}}
+						</option>					
+					</select>
+					<br><br>
+					
+					HomeRoom:
+					<select ng-model="$parent.Users[initdata].homeRoom" ng-change="usersChangedAdd()">
+							<option ng-repeat="room in $parent.Rooms"
+									ng-if="room.roomId > 0"
+									value="{{room.roomId}}"
+									>
+								{{room.roomName}}
+							</option>
+						</select>
+					
+					
+				</div>
+			</div>
 		</div>
 	</div>
 	<div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>

@@ -3,7 +3,17 @@
 	require 'startsession.php';
 	$action = $_GET['action'];
 
+	
+	
+	
+	
+	
+	/* make sure user has access to settings before continuing */
 
+	
+	
+	
+	
 
 
 function GetUsers($configdb){
@@ -206,7 +216,7 @@ if(isset($action)) {
 			$query.= ")";
 
 			$statement = $configdb->prepare($query);
-			$statement->execute();				
+			$statement->execute();
 			unset($updatedusers[$user['userid']]);
 		}		
 		//print_r($result);
@@ -243,6 +253,85 @@ if(isset($action)) {
 			}
 		}		
 		return;
+		
+	} elseif($action === "saveUser"){
+		$user = json_decode($_GET['user'], true);
+		$userarray[$user['userid']] = $user;
+		$users=json_decode(ltrim(GetUsers($configdb),")]}',\n"),true);
+		
+		$result = array_diff_key($userarray, $users);		
+		// new user add		
+		foreach($result as $newuser){
+			$query = "INSERT INTO `users` (";
+			
+			foreach($newuser as $setting => $setas){
+				if($setting==='userid'){ continue; }
+				if($setting==='password'){ continue; }
+				if($setting==='passwordv'){ continue; }
+				if($setting==='lastaccess'){ continue; }
+				if($setting!='username') {
+					$query .= ",";
+				}
+				$query .= $setting;
+			}
+			
+			$query .= ") VALUES (";
+			
+			foreach($newuser as $setting => $setas){
+				if($setting==='userid'){ continue; }
+				if($setting==='password'){ continue; }
+				if($setting==='passwordv'){ continue; }
+				if($setting==='lastaccess'){ continue; }
+				if($setting!='username') {
+					$query .= ",";
+				} else {
+					// username sanitize here
+					$setas = preg_replace('/[^a-zA-Z0-9]/', '', $setas);
+				}
+				$query .= "'$setas'";
+			}			
+			$query.= ")";
+
+			$statement = $configdb->prepare($query);
+			$statement->execute();
+			
+			return;
+			// end if new user, continue if existing
+		}
+		
+		
+		$query = "UPDATE `users` SET ";
+
+		foreach($user as $setting => $setas){
+			if($setting==='userid'){ continue; }
+			if($setting==='password'){ continue; }
+			if($setting==='passwordv'){ continue; }
+			if($setting==='lastaccess'){ continue; }
+			if($setting!='username') {
+				$query .= ", ";
+			}
+			$query .= "$setting = '$setas'";
+		}
+
+		$query .= " WHERE userid = ".$user['userid'];
+		$statement = $configdb->prepare($query);
+		$statement->execute();		
+
+
+	} elseif($action === "deleteUser"){
+			$user = json_decode($_GET['user'], true);
+
+
+
+			if(isset($user['userid']) && is_numeric($user['userid']) && $user['userid']>0) {  
+				$query = "DELETE FROM `users` WHERE userid = ".$user['userid']." AND username = '".$user['username']."'";
+				$statement = $configdb->prepare($query);
+				$statement->execute();
+			}		
+		
+
+		
+		
 	} elseif($action === "saveRooms"){
 		//$users=json_decode(GetUsers($configdb),true);
 		//print_r($users);

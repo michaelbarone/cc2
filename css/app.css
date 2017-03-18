@@ -1312,6 +1312,7 @@ input[type="submit"].btn.btn-mini {
 	top: 50px;
 	height: 100%;
 	overflow: auto;
+	width: 100%;
 }
 .modal-footer {
   padding: 15px;

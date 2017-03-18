@@ -18,31 +18,31 @@
 					</div>
 					<br class="clear" />
 					
-					<span ng-if="user.settingsAccess!=1" class="fa fa-square-o"> Settings Access</span>
-					<span ng-if="user.settingsAccess==1" class="fa fa-check-square-o"> Settings Access</span>
-					<br class="clear" />
+					<p ng-if="user.settingsAccess!=1"><i class="fa fa-square-o"></i> Settings Access</p>
+					<p ng-if="user.settingsAccess==1"><i class="fa fa-check-square-o"></i> Settings Access</p>
 					
-					<span ng-if="user.disabled!=1" class="fa fa-square-o"> Account Disabled</span>
-					<span ng-if="user.disabled==1" class="fa fa-check-square-o"> Account Disabled</span>
-					<br class="clear" />
 					
-					<span ng-if="user.homeRoom!=0 && user.homeRoom!='' && user.homeRoom!=null" class="left">{{Rooms[user.homeRoom].roomName}}: HomeRoom</span>
-					<span ng-if="user.homeRoom==0 || user.homeRoom=='' || user.homeRoom==null" class="left">None: HomeRoom</span>
-					<br class="clear" />
+					<p ng-if="user.disabled!=1"><i class="fa fa-square-o"></i>  Account Disabled</p>
+					<p ng-if="user.disabled==1"><i class="fa fa-check-square-o"></i> Account Disabled</p>
 					
-					<span ng-if="user.roomAccess!=0 && user.roomAccess!=null" class="left">{{user.roomAccess.length}}: Rooms with Access</span>
-					<span ng-if="user.roomAccess==0 || user.roomAccess==null" class="left">0: Rooms with Access</span>
-					<span ng-if="user.roomGroupAccess.length>0" class="left">{{user.roomGroupAccess.length}}: RoomGroups with Access</span>
-					<span ng-if="!user.roomGroupAccess" class="left">0: RoomGroups with Access</span>
-					<br class="clear" />
 					
-					<span ng-if="user.navgroupaccess.length>0" class="left">{{user.navgroupaccess.length}}: NavGroup Access</span>
-					<span ng-if="!user.navgroupaccess" class="left">0: NavGroup Access</span>
-					<br class="clear" />
+					<p ng-if="user.homeRoom!=0 && user.homeRoom!='' && user.homeRoom!=null">{{Rooms[user.homeRoom].roomName}}: Home Room</p>
+					<p ng-if="user.homeRoom==0 || user.homeRoom=='' || user.homeRoom==null">None: Home Room</p>
 					
-					<span ng-if="user.lastaccess>0" class="left">Last Online: {{user.lastaccess*1000 | date : "medium"}}</span>
-					<span ng-if="user.lastaccess==0 || user.lastaccess==null" class="left">Last Online: Never</span>					
-					<br class="clear" />
+					
+					<p ng-if="user.roomAccess!=0 && user.roomAccess!=null">{{user.roomAccess.length}}: Rooms with Access</p>
+					<p ng-if="user.roomAccess==0 || user.roomAccess==null">0: Rooms with Access</p>
+					<p ng-if="user.roomGroupAccess.length>0">{{user.roomGroupAccess.length}}: RoomGroups with Access</p>
+					<p ng-if="!user.roomGroupAccess">0: RoomGroups with Access</p>
+					
+					
+					<p ng-if="user.navgroupaccess.length>0">{{user.navgroupaccess.length}}: NavGroup Access</p>
+					<p ng-if="!user.navgroupaccess">0: NavGroup Access</p>
+					
+					
+					<p ng-if="user.lastaccess>0">Last Online: {{user.lastaccess*1000 | date : "medium"}}</p>
+					<p ng-if="user.lastaccess==0 || user.lastaccess==null">Last Online: Never</p>					
+					
 					
 					<button ng-if="user.passwordv>0" class="btn btn-success" ng-click="changePassword(user.userid)">Change Password</button>
 					<button ng-if="user.passwordv==0" class="btn btn-warning" ng-click="changePassword(user.userid)">Set Password</button>

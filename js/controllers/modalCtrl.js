@@ -12,6 +12,7 @@ app.controller('ModalController', ['$scope','close','$http', 'Carousel', '$timeo
 	$scope.initdata=data;
 	$scope.Carousel = Carousel;
 	$scope.modalOpen=1;
+	$scope.confirmDelete=false;
 /*	
 	$scope.modalContent=[];
 	var modalReturnData = [];
