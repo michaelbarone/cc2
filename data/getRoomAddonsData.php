@@ -71,7 +71,7 @@
 			$addonArray[$x]['0']['allAddonsMacs']='';
 			$i=0;
 			try {
-				$sql = "SELECT * FROM rooms_addons,rooms_addons_global_settings WHERE rooms_addons_global_settings.addonid = rooms_addons.addonid AND rooms_addons.roomid = $x AND rooms_addons.enabled = '1' AND rooms_addons_global_settings.globalDisable='0'";
+				$sql = "SELECT * FROM rooms_addons,addons WHERE addons.addonid = rooms_addons.addonid AND rooms_addons.roomid = $x AND rooms_addons.enabled = '1' AND addons.globalDisable='0'";
 				foreach ($configdb->query($sql) as $row) {
 					$i++;
 					foreach($row as $item => $value){

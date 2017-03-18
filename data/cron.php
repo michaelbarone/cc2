@@ -84,7 +84,7 @@ $URL = $URL."/cron-addon.php";
 try {
 	$addons=array();
 	$sql = "SELECT addons.*,settings.globalDisable,settings.controlWindow FROM rooms_addons as addons 
-			LEFT JOIN rooms_addons_global_settings as settings ON addons.addonid = settings.addonid
+			LEFT JOIN addons as settings ON addons.addonid = settings.addonid
 			WHERE addons.enabled ='1' AND settings.globalDisable='0';";
 	foreach ($configdb->query($sql) as $row) {
 		if(($row['lastCheck']+60) < $time && $row['lastCheck']!='') { continue; }

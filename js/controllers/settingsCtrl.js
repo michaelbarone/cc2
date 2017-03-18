@@ -5,6 +5,7 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	$scope.userdata = [];
 	$scope.userdata.currentpage = "settings";
 	$scope.Users = [];
+	$scope.Addons = [];
 	$scope.Rooms = [];
 	$scope.loaded=0;
 	$scope.userdata.username=sessionStorage.getItem('username');
@@ -57,9 +58,11 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 
 	$scope.init = function(){
 		$scope.getAllUsers();
+		$scope.getAddons();
 		$scope.getRooms();
 		$scope.getNavigation();
 		$scope.usersChanged=0;
+		$scope.addonsChanged=0;
 		$scope.roomsChanged=0;
 		$scope.navChanged=0;
 		$scope.loaded=1;
@@ -163,7 +166,77 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	
 	
 	/* end users section  */
+
+
+	/* addons section */
+
+	$scope.getAddons = function() {
+		$http.get('data/settings.php?action=getAddons')
+			.success(function(data) {
+				$scope.Addons = data;
+			});
+	}	
 	
+	$scope.scanAddons = function(){
+		$http.get('data/settings.php?action=scanAddons')
+			.success(function(data) {
+			});		
+	}
+	
+	$scope.saveAddon = function(addon){
+		$scope.CheckLogged();
+		$http.get('data/settings.php?action=saveAddon&addon='+JSON.stringify(addon))
+			.success(function(data) {
+			});		
+	}
+
+	$scope.editAddon = function(addon,scope=$scope){
+		$scope.CheckLogged();
+		ModalService.showModal({
+			templateUrl: "./partials/tpl/modalSettingsAddons.html"
+			, controller: "ModalController"
+			,inputs: {
+				data: addon,
+		    }
+			, scope: scope
+		}).then(function(modal) {
+			$scope.modalOpen=1;
+            modal.close.then(function() {
+				$scope.modalOpen=0;
+				$scope.init();
+            });
+		});
+	}
+
+	$scope.addonsChangedAdd = function(){
+		$scope.addonsChanged++;
+	}
+	
+	$scope.uploadAddon = function(){
+		$scope.CheckLogged();
+		
+	}
+	
+	/*
+	
+	addons:
+	
+	need scan addon folder for new addons (add)
+	
+	save addons
+	
+	delete addons?  remove folder from dir?
+	
+need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addonname.version-subversion-subversion   classname in {addon}.php remains addonname
+	
+	
+	
+	*/
+
+
+
+
+	/* end addons section  */	
 	
 	
 	/* rooms section */
@@ -226,21 +299,7 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	
 	
 	
-	/*
-	
-	addons:
-	
-	need scan addon folder for new addons (add)
-	
-	save addons
-	
-	delete addons?  remove folder from dir?
-	
-need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addonname.version-subversion-subversion   classname in {addon}.php remains addonname
-	
-	
-	
-	*/
+
 	
 	
 	

@@ -36,6 +36,49 @@ function GetUsers($configdb){
 	return ")]}',\n".$json;
 }
 
+function GetAddons($configdb){
+	try {
+		$addonsArray = array();
+		foreach ($configdb->query("SELECT * FROM addons") as $row) {
+			$id = $row['id'];
+			foreach($row as $item => $key) {
+				if(is_numeric($item)) { continue; }
+				$addonsArray[$id][$item] = $key;
+			}
+		}
+		$result = $addonsArray;
+	} catch(PDOException $e) {
+		$log->LogFatal("User could not open DB: $e->getMessage().  from " . basename(__FILE__));
+	}
+	header('Content-Type: application/json');
+	$json=json_encode($result);
+	return ")]}',\n".$json;
+}
+
+function ScanAddons(){
+	if(!isset($ADDONDIR)) {
+		$found = false;
+		$ADDONDIR = './addons';
+		while(!$found){
+			if(file_exists($ADDONDIR)){ 
+				$found = true;
+			}
+			else{ $ADDONDIR = '../'.$ADDONDIR; }
+		}
+	}
+	// for each folder in $ADDONDIR loop to get addonfolders array
+	
+	// room addons global settings db table to create addons array, compare with addonfolders.
+	
+	// list of addonsfolders that are not in addons
+	
+	// list of addons with global settings and addon.info
+	
+	header('Content-Type: application/json');
+	$json=json_encode($result);
+	return ")]}',\n".$json;
+}
+
 function GetRooms($configdb){
 	try {
 		$roomsArray = array();
@@ -90,29 +133,7 @@ function GetNavigation($configdb){
 	return ")]}',\n".$json;
 }
 
-function GetAddons(){
-	if(!isset($ADDONDIR)) {
-		$found = false;
-		$ADDONDIR = './addons';
-		while(!$found){
-			if(file_exists($ADDONDIR)){ 
-				$found = true;
-			}
-			else{ $ADDONDIR = '../'.$ADDONDIR; }
-		}
-	}
-	// for each folder in $ADDONDIR loop to get addonfolders array
-	
-	// room addons global settings db table to create addons array, compare with addonfolders.
-	
-	// list of addonsfolders that are not in addons
-	
-	// list of addons with global settings and addon.info
-	
-	header('Content-Type: application/json');
-	$json=json_encode($result);
-	return ")]}',\n".$json;
-}
+
 
 if(isset($action)) {	
 	if($action === "getNavigation") {
@@ -124,6 +145,9 @@ if(isset($action)) {
 	} elseif($action === "getUsers") {
 		$users=GetUsers($configdb);
 		echo $users;
+	} elseif($action === "getAddons") {
+		$addons=getAddons($configdb);
+		echo $addons;		
 	} elseif($action === "createFirstUser") {
 		$users=json_decode(GetUsers($configdb),true);	
 		//print_r($users);
@@ -150,7 +174,7 @@ if(isset($action)) {
 		return;
 
 
-
+	/*
 
 	} elseif($action === "saveUsers"){
 		$users=json_decode(ltrim(GetUsers($configdb),")]}',\n"),true);
@@ -253,6 +277,8 @@ if(isset($action)) {
 			}
 		}		
 		return;
+	*/	
+		
 		
 	} elseif($action === "saveUser"){
 		$user = json_decode($_GET['user'], true);
@@ -328,7 +354,107 @@ if(isset($action)) {
 				$statement = $configdb->prepare($query);
 				$statement->execute();
 			}		
+
+
+			
+			
+	} elseif($action === "scanAddons"){
+
+		$addonFolders = scandir("../addons");
+		$addonArray = array();
 		
+		//print_r($addonFolders);
+		
+		$i=0;
+		foreach($addonFolders as $key => $item){
+			if($item=='.' || $item=='..') { 
+				unset($addonFolders[$key]);
+				continue;
+			}
+			$i++;
+			$addonArray[$i]['addonid']=$item;
+			$addonArray[$i]['id']=$i;
+			
+		}
+		$addons=json_decode(ltrim(GetAddons($configdb),")]}',\n"),true);
+		foreach($addonArray as $addonFolder){
+			$inarray=0;
+			$notinarray=0;
+			foreach($addons as $addon){
+				if(in_array($addonFolder['addonid'], $addon)){
+					$inarray++;
+				} else {
+					$notinarray++;
+				}
+			}
+			if($inarray>0){
+				unset($addonArray[$addonFolder['id']]);
+			}
+		
+			
+		}		
+		
+		
+		echo "add these addons";
+		print_r($addonArray);
+		
+		return;
+		
+		
+		
+	
+		foreach($result as $newaddon){
+			$query = "INSERT INTO `addons` (";
+			
+			foreach($newaddon as $setting => $setas){
+				if($setting==='id'){ continue; }
+				if($setting!='addonid') {
+					$query .= ",";
+				}
+				$query .= $setting;
+			}
+			
+			$query .= ") VALUES (";
+			
+			foreach($newaddon as $setting => $setas){
+				if($setting==='id'){ continue; }
+				if($setting!='addonid') {
+					$query .= ",";
+				}
+				$query .= "'$setas'";
+			}			
+			$query.= ")";
+
+			$statement = $configdb->prepare($query);
+			$statement->execute();
+			
+			return;
+		}			
+			
+			
+			
+
+	} elseif($action === "saveAddon"){
+		$addon = json_decode($_GET['addon'], true);
+		
+		$query = "UPDATE `addons` SET ";
+
+		foreach($addon as $setting => $setas){
+			if($setting==='id'){ continue; }
+			if($setting==='addonid'){ continue; }
+			if($setting==='info'){ continue; }
+			if($setting!='globalDisable') {
+				$query .= ", ";
+			}
+			$query .= "$setting = '$setas'";
+		}
+
+		$query .= " WHERE id = ".$addon['id'];
+		$statement = $configdb->prepare($query);
+		$statement->execute();		
+
+
+
 
 		
 		

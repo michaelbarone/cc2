@@ -1,0 +1,120 @@
+<div id="Addons">
+	<div class="dashboardPage RoomPage">
+		<div class="content">
+			<span class="col-12">
+				<div class="addonTitle addonWidget">
+					<button type="button" ng-click="scanAddons()" class="btn btn-success btn-sm">Scan Addon Dir</button>
+					<button type="button" ng-click="uploadAddons()" class="btn btn-success btn-sm">Upload Addon Zip</button>
+					<button type="button" ng-click="getAddons()" class="btn btn-primary btn-sm right">Refresh Addons</button>
+				</div>
+			</span>		
+			<span class="col-3" ng-repeat="addon in Addons">
+				<div class="addonWidget">
+					<div>
+						<button class="btn btn-primary right" ng-click="editAddon(addon.id)">Edit</button>
+						<img ng-src="addons/{{addon.addonid}}/icon.png"  height="27px" width="27px" class="left" />
+						<h2 class="center">{{addon.addonid}}</h2>
+					</div>
+					<br class="clear" />
+					
+					<p>{{addon.info}}</p>
+					
+					<p ng-if="addon.globalDisable!=1"><i class="fa fa-square-o"></i> Global Disable</p>
+					<p ng-if="addon.globalDisable==1"><i class="fa fa-check-square-o"></i> Global Disable</p>
+					
+					
+					<p ng-if="addon.controlWindow!=1"><i class="fa fa-square-o"></i>  Control Window</p>
+					<p ng-if="addon.controlWindow==1"><i class="fa fa-check-square-o"></i> Control Window</p>
+
+					<br class="clear" /><br />
+				</div>
+			</span>
+		</div>
+	</div>
+	
+	
+	<br /><br /><br /><br /><br />
+
+	
+	
+	
+<!--
+  <div class="panel panel-default">
+	<br><br>
+	  <div class="panel-heading"><span class="lead">List of Users </span></div>
+		<div class="row">
+			<div class="right">
+				<button type="button" ng-click="addUser()" class="btn btn-primary btn-sm">Add User</button>
+				<button type="button" ng-click="cancelChanges(currentTab)" class="btn btn-warning btn-sm" ng-disabled="addonsChanged < 1">Cancel Changes</button>
+				<button type="button" ng-click="saveUsers(Users)" class="btn btn-success btn-sm" ng-class="addonsChanged > 0 ? 'greenPulse' : ''" ng-disabled="addonsChanged < 1">Save Users</button>
+			</div>
+		</div>
+	  <div class="tablecontainer">
+		<table class="table table-hover addonWidget">
+			<thead>
+				<tr>
+					<th></th>
+					<th>ID</th>
+					<th>Name</th>
+					<th>wanAccess</th>
+					<th>settingsAccess</th>
+					<th>navgroupaccess</th>
+					<th>roomAccess</th>
+					<th>roomGroupAccess</th>
+					<th>homeRoom</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="u in Users">
+					<td><button type="button" ng-click="deleteUser(u.addonid)" class="btn btn-danger custom-width">X</button></td>
+					<td><span ng-bind="u.addonid"></span></td>
+					<td><input type="text" ng-model="u.addonname" required='required'  ng-change="addonsChangedAdd()"/></td>
+					<td><select ng-model="u.wanAccess" ng-change="addonsChangedAdd()">
+						<option value="1" ng-selected="u.wanAccess==1">Yes</option>
+						<option value="0" ng-selected="u.wanAccess!=1">No</option>
+					</select></td>					
+					<td><select ng-model="u.settingsAccess" ng-change="addonsChangedAdd()">
+						<option value="1" ng-selected="u.settingsAccess==1">Yes</option>
+						<option value="0" ng-selected="u.settingsAccess!=1">No</option>
+					</select></td>						
+					
+					<td><select ng-model="u.navgroupaccess" ng-change="addonsChangedAdd()">				
+					<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+					</select></td>
+					
+					
+					<td><select multiple ng-model="u.roomAccess" ng-change="addonsChangedAdd()">
+						<option ng-repeat="room in Rooms"
+						ng-if="room.roomId > 0"
+						value="{{room.roomId}}"
+						>
+							{{room.roomName}}
+						</option>					
+					</select></td>
+					
+					
+					<td><select ng-model="u.roomGroupAccess" ng-change="addonsChangedAdd()">
+					
+					</select></td>
+					
+					
+					
+					<td><select ng-model="u.homeRoom" ng-change="addonsChangedAdd()">
+						<option ng-repeat="room in Rooms"
+								ng-if="room.roomId > 0"
+								value="{{room.roomId}}"
+								>
+							{{room.roomName}}
+						</option>
+					</select></td>
+				</tr>
+			</tbody>
+		</table>
+	  </div>
+	</div>
+	-->
+
+
+
+
+</div>

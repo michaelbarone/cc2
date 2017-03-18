@@ -1,0 +1,51 @@
+<div class="modal fade in">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="header">
+				<ul><li>
+					<span class="right">
+						<button type="button" ng-click="saveAddon($parent.Addons[initdata]);closeModal('close');" class="btn btn-success btn-sm" ng-class="addonsChanged > 0 ? 'greenPulse' : ''" ng-disabled="addonsChanged < 1">Save Addon</button>
+						<button type="button" ng-click="cancelChanges(currentTab);closeModal('close');" class="btn btn-warning btn-sm">Cancel Changes</button>
+						<span class="margin:0 15px;">&nbsp;</span>
+						<button type="button" ng-click="confirmDelete = !confirmDelete;" class="btn btn-danger btn-sm">DELETE ADDON</button>
+						<span class="margin:0 15px;">&nbsp;</span>
+						<button type="button" class="btn btn-danger close" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</span>
+					<a class="title main panel">User Settings</a>
+				</li></ul>
+			</div>
+			<div ng-show="confirmDelete" class="transformable-vertical" style="top: 50px;position: relative;margin: 0 auto;width: 350px;">
+				<span class="center">
+				<h1>This action is final</h1>
+				<button type="button" ng-click="deleteAddon(initdata);closeModal('close');" class="btn btn-danger btn-sm left">Confirm Delete</button>
+
+				<button type="button" ng-click="confirmDelete = false;" class="btn btn-warning btn-sm right">Cancel User Delete</button>
+				</span>
+				<br class="clear" />
+			</div>		  
+			<div class="modal-body">
+				<div>
+					
+					Addon: <span>{{$parent.Addons[initdata].addonid}}</span>
+					<br><br>
+
+					Global Disable: 
+					<select ng-model="$parent.Addons[initdata].globalDisable" ng-change="addonsChangedAdd()">
+						<option value="1" ng-selected="$parent.Addons[initdata].globalDisable==1">Yes</option>
+						<option value="0" ng-selected="$parent.Addons[initdata].globalDisable!=1">No</option>
+					</select>
+					<br><br>
+
+					Control Window: 				
+					<select ng-model="$parent.Addons[initdata].controlWindow" ng-change="addonsChangedAdd()">
+						<option value="1" ng-selected="$parent.Addons[initdata].controlWindow==1">Yes</option>
+						<option value="0" ng-selected="$parent.Addons[initdata].controlWindow!=1">No</option>
+					</select>						
+					<br><br>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
+</div>
