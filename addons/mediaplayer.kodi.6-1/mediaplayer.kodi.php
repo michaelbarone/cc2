@@ -402,4 +402,10 @@ class kodi {
 	}
 
 }
+$included_files = get_included_files();
+if($included_files[0]==__FILE__){
+	$thisclass = new kodi();
+	$addoninfo = $thisclass->AddonInfo();
+	echo $addoninfo;
+}
 ?>

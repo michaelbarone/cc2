@@ -11,10 +11,30 @@
 	/* make sure user has access to settings before continuing */
 
 	
-	
-	
-	
+function pathUrl($dir=__DIR__){
 
+    $root = "";
+    $dir = str_replace('\\', '/', realpath($dir));
+
+    //HTTPS or HTTP
+    $root .= !empty($_SERVER['HTTPS']) ? 'https' : 'http';
+
+    //HOST
+    $root .= '://' . $_SERVER['HTTP_HOST'];
+
+    //ALIAS
+    if(!empty($_SERVER['CONTEXT_PREFIX'])) {
+        $root .= $_SERVER['CONTEXT_PREFIX'];
+        $root .= substr($dir, strlen($_SERVER[ 'CONTEXT_DOCUMENT_ROOT' ]));
+    } else {
+        $root .= substr($dir, strlen($_SERVER[ 'DOCUMENT_ROOT' ]));
+    }
+
+    $root .= '/';
+
+    return $root;
+}	
+	
 
 function GetUsers($configdb){
 	try {
@@ -39,12 +59,13 @@ function GetUsers($configdb){
 function GetAddons($configdb){
 	try {
 		$addonsArray = array();
-		foreach ($configdb->query("SELECT * FROM addons") as $row) {
-			$id = $row['id'];
+		$i=0;
+		foreach ($configdb->query("SELECT * FROM addons order by addonid asc") as $row) {
 			foreach($row as $item => $key) {
 				if(is_numeric($item)) { continue; }
-				$addonsArray[$id][$item] = $key;
+				$addonsArray[$i][$item] = $key;
 			}
+			$i++;
 		}
 		$result = $addonsArray;
 	} catch(PDOException $e) {
@@ -55,6 +76,27 @@ function GetAddons($configdb){
 	return ")]}',\n".$json;
 }
 
+function GetAddonInfo($addonid){
+	//$addonid = $newaddon['addonid'];
+	$addonidpart = explode(".",$addonid);
+	$addonType=$addonidpart[0];
+	$addonName=$addonidpart[1];
+	$addoninfo="none";
+
+	//$url = pathUrl(__DIR__ . '/../');
+	$url = "http".( (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on")?'s':'' )."://".$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
+	$url = rtrim($url,"/data");	
+	$ch = curl_init();
+	//curl_setopt($ch, CURLOPT_URL, "http".( (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on")?'s':'' )."://".$_SERVER['HTTP_HOST']."/e/cc2/addons/$addonid/$addonType.$addonName.php");
+	curl_setopt($ch, CURLOPT_URL, $url."/addons/$addonid/$addonType.$addonName.php");
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$addoninfo = curl_exec($ch);
+	curl_close($ch);
+	return $addoninfo;
+}
+
+/*
 function ScanAddons(){
 	if(!isset($ADDONDIR)) {
 		$found = false;
@@ -78,6 +120,7 @@ function ScanAddons(){
 	$json=json_encode($result);
 	return ")]}',\n".$json;
 }
+*/
 
 function GetRooms($configdb){
 	try {
@@ -362,9 +405,6 @@ if(isset($action)) {
 
 		$addonFolders = scandir("../addons");
 		$addonArray = array();
-		
-		//print_r($addonFolders);
-		
 		$i=0;
 		foreach($addonFolders as $key => $item){
 			if($item=='.' || $item=='..') { 
@@ -392,18 +432,20 @@ if(isset($action)) {
 			}
 		
 			
-		}		
-		
-		
-		echo "add these addons";
-		print_r($addonArray);
-		
-		return;
-		
-		
-		
+		}
+		//echo "add these addons";
+		//print_r($addonArray);
+		foreach($addonArray as $newaddon){
+			$addoninfo = GetAddonInfo($newaddon['addonid']);
+			$addoninfo = json_decode($addoninfo, true);
+			$addonArray[$newaddon['id']]['info']=$addoninfo['info'];
+			
+
+			
+			
+		}
 	
-		foreach($result as $newaddon){
+		foreach($addonArray as $newaddon){
 			$query = "INSERT INTO `addons` (";
 			
 			foreach($newaddon as $setting => $setas){
@@ -427,8 +469,6 @@ if(isset($action)) {
 
 			$statement = $configdb->prepare($query);
 			$statement->execute();
-			
-			return;
 		}			
 			
 			

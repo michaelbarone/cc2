@@ -180,7 +180,9 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	$scope.scanAddons = function(){
 		$http.get('data/settings.php?action=scanAddons')
 			.success(function(data) {
-			});		
+			}).finally(function(){
+				$scope.getAddons();
+			});
 	}
 	
 	$scope.saveAddon = function(addon){

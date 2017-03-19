@@ -137,5 +137,11 @@ class denon {
 	
 	
 	*/
-}	
+}
+$included_files = get_included_files();
+if($included_files[0]==__FILE__){
+	$thisclass = new denon();
+	$addoninfo = $thisclass->AddonInfo();
+	echo $addoninfo;
+}
 ?>
