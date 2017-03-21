@@ -1,5 +1,30 @@
-<div id="Users">
-  <div class="panel panel-default loginTiles">
+<div id="Navigation">
+	<div class="dashboardPage">
+		<div class="content">
+			<span class="col-12">
+				<div class="addonTitle widget">
+					<button type="button" ng-click="addNavigation()" class="btn btn-success btn-sm">New Nav Link</button>
+					<button type="button" ng-click="getNavigation()" class="btn btn-primary btn-sm right">Refresh Nav Links</button>
+				</div>
+			</span>		
+			<span class="col-2" ng-repeat="n in Navigation" ng-if="n.navid!='groups'">
+				<div class="widget settings navigation" ng-class="{globalDisable: n.globalDisable==1}">
+					<div>
+						<button class="btn btn-primary right" ng-click="editNavigation(n.navid)">Edit</button>
+						<img ng-drag="true" ng-drag-data="n" src="img/Programs/{{n.navname}}.png" height="50px" width="50px" class="left"/>
+						<br class="clear" /><br />
+						<h2 class="center">{{n.navname}}</h2>
+					</div>
+					<p>{{n.navip | noHTTP}}</p>
+
+				</div>
+			</span>
+  
+  
+  
+  
+  
+	<!--
 	<br><br>
 	  <div class="panel-heading"></div>
 		<div class="row">
@@ -9,7 +34,7 @@
 			</div>
 		</div>
 	  <div class="tablecontainer">
-		<table class="table table-hover addonWidget">
+		<table class="table table-hover widget settings">
 			<thead>
 				<tr>
 					<th><button type="button" ng-click="addNavigation()" class="btn btn-primary btn-sm">Add Link</button></th>
@@ -50,7 +75,7 @@
 	  <br><br><br>
 	   <div class="panel-heading"><span class="lead">Navigation Groups </span></div>
 	  <div class="tablecontainer">
-		  <table class="table table-hover addonWidget">
+		  <table class="table table-hover widget settings">
 			  <thead>
 				  <tr>
 					  <th><button type="button" ng-click="addNavigationGroup()" class="btn btn-primary btn-sm">Add Group</button></th>
@@ -81,9 +106,7 @@
 	  </div> 
 	   
 	  
-	  
+	  -->
+		</div>
 	</div>
-
-
-
 </div>

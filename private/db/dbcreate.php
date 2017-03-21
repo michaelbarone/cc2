@@ -110,8 +110,9 @@ $query = "CREATE TABLE IF NOT EXISTS navigation (
 `navipw`	text,
 `mobilew`	text DEFAULT 0,
 `mobile`	text DEFAULT 0,
-`persistent`	integer,
+`persistent`	integer NOT NULL DEFAULT '0',
 `autorefresh`	integer NOT NULL DEFAULT '0',
+`globalDisable`	integer NOT NULL DEFAULT '0',
 PRIMARY KEY(navid)
 )";
 $statement = $configdbcreate->prepare($query);

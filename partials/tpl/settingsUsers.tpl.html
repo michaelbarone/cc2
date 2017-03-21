@@ -1,14 +1,14 @@
 <div id="Users">
-	<div class="dashboardPage RoomPage">
+	<div class="dashboardPage">
 		<div class="content">
 			<span class="col-12">
-				<div class="addonTitle addonWidget">
+				<div class="addonTitle widget">
 					<button type="button" ng-click="addUser()" class="btn btn-success btn-sm">New User</button>
 					<button type="button" ng-click="getAllUsers()" class="btn btn-primary btn-sm right">Refresh Users</button>
 				</div>
 			</span>		
 			<span class="col-3" ng-repeat="user in Users">
-				<div class="addonWidget">
+				<div class="widget settings" ng-class="{disabled: user.disabled==1}">
 					<div>
 						<img ng-if="systemInfo[0]['lastcrontime'] && user.lastaccess<(systemInfo[0]['lastcrontime']-360)" title="User Offline" class="status left" src="img/led-red.png"/>
 						<img ng-if="systemInfo[0]['lastcrontime'] && user.lastaccess<(systemInfo[0]['lastcrontime']-60) && user.lastaccess>(systemInfo[0]['lastcrontime']-361)" title="User Away" class="status left" src="img/led-orange.png"/>
@@ -20,10 +20,6 @@
 					
 					<p ng-if="user.settingsAccess!=1"><i class="fa fa-square-o"></i> Settings Access</p>
 					<p ng-if="user.settingsAccess==1"><i class="fa fa-check-square-o"></i> Settings Access</p>
-					
-					
-					<p ng-if="user.disabled!=1"><i class="fa fa-square-o"></i>  Account Disabled</p>
-					<p ng-if="user.disabled==1"><i class="fa fa-check-square-o"></i> Account Disabled</p>
 					
 					
 					<p ng-if="user.homeRoom!=0 && user.homeRoom!='' && user.homeRoom!=null">{{Rooms[user.homeRoom].roomName}}: Home Room</p>
@@ -70,7 +66,7 @@
 			</div>
 		</div>
 	  <div class="tablecontainer">
-		<table class="table table-hover addonWidget">
+		<table class="table table-hover widget settings">
 			<thead>
 				<tr>
 					<th></th>

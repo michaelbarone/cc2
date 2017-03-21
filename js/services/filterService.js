@@ -2,9 +2,7 @@
 
 app.filter('abvTitle', function(){
 	return function (item) {
-		
-		
-		// var myStr = "John P White";
+
 		var myStr = item;
 		var matches ='';
 		
@@ -15,15 +13,20 @@ app.filter('abvTitle', function(){
 			matches = matches.join('');
 		} else {
 			matches = myStr.substring(0, 2).charAt(0).toUpperCase() + myStr.substring(0, 2).charAt(1).toLowerCase();
-		}
-		
-		
+		}	
 		
 		return matches;
 	}
-	
-	
 });
 
+app.filter('noHTTP', function(){
+	return function (item) {
 
+		var myStr = item;
+
+		var urlNoProtocol = myStr.replace(/^https?\:\/\//i, "");
+
+		return urlNoProtocol;
+	}
+});
 

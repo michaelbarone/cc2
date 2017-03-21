@@ -1,32 +1,27 @@
 <div id="Addons">
-	<div class="dashboardPage RoomPage">
+	<div class="dashboardPage">
 		<div class="content">
 			<span class="col-12">
-				<div class="addonTitle addonWidget">
+				<div class="addonTitle widget">
 					<button type="button" ng-click="scanAddons()" class="btn btn-success btn-sm">Scan Addon Dir</button>
 					<button type="button" ng-click="uploadAddons()" class="btn btn-success btn-sm">Upload Addon Zip</button>
 					<button type="button" ng-click="getAddons()" class="btn btn-primary btn-sm right">Refresh Addons</button>
 				</div>
 			</span>		
 			<span class="col-3" ng-repeat="addon in Addons">
-				<div class="addonWidget">
+				<div class="widget settings addons" ng-class="{globalDisable: addon.globalDisable==1}">
 					<div>
 						<button class="btn btn-primary right" ng-click="editAddon(addon.id)">Edit</button>
 						<img ng-src="addons/{{addon.addonid}}/icon.png"  height="27px" width="27px" class="left" />
-						<h2 class="center">{{addon.addonid}}</h2>
+						<h2 class="center clear">{{addon.addonid}}</h2>
 					</div>
 					<br class="clear" />
 					
-					<p>{{addon.info}}</p>
-					
-					<p ng-if="addon.globalDisable!=1"><i class="fa fa-square-o"></i> Global Disable</p>
-					<p ng-if="addon.globalDisable==1"><i class="fa fa-check-square-o"></i> Global Disable</p>
-					
+					<p>{{addon.info}}</p>					
 					
 					<p ng-if="addon.controlWindow!=1"><i class="fa fa-square-o"></i>  Control Window</p>
 					<p ng-if="addon.controlWindow==1"><i class="fa fa-check-square-o"></i> Control Window</p>
 
-					<br class="clear" /><br />
 				</div>
 			</span>
 		</div>
@@ -50,7 +45,7 @@
 			</div>
 		</div>
 	  <div class="tablecontainer">
-		<table class="table table-hover addonWidget">
+		<table class="table table-hover widget settings">
 			<thead>
 				<tr>
 					<th></th>

@@ -39,7 +39,7 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	$scope.CheckLogged = function() {
 		var connected=loginService.islogged();
 		connected.then(function(msg){
-			if(msg.data==="failedAuth" || !msg.data) {
+			if(msg.data!="passedAuth" || !msg.data) {
 				$location.path('/login');
 			} else {
 				return msg.data;
@@ -58,14 +58,22 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 
 	$scope.init = function(){
 		$scope.getAllUsers();
-		$scope.getAddons();
-		$scope.getRooms();
-		$scope.getNavigation();
+		$timeout(function() {
+			$scope.getAddons();
+		}, 10);
+		$timeout(function() {
+			$scope.getRooms();
+		}, 50);
+		$timeout(function() {
+			$scope.getNavigation();
+		}, 100);
 		$scope.usersChanged=0;
 		$scope.addonsChanged=0;
 		$scope.roomsChanged=0;
 		$scope.navChanged=0;
-		$scope.loaded=1;
+		$timeout(function() {
+			$scope.loaded=1;
+		}, 500);
 	}
 
 	
@@ -89,14 +97,16 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 			.success(function(data) {
 			});
 	}
-	
+
+	/*
 	$scope.saveUsers = function(users){
 		$scope.CheckLogged();
 		$http.get('data/settings.php?action=saveUsers&users='+JSON.stringify(users))
 			.success(function(data) {
 			});
 	}
-
+	*/
+	
 	$scope.editUser = function(user,scope=$scope){
 		ModalService.showModal({
 			templateUrl: "./partials/tpl/modalSettingsUsers.html"
@@ -122,7 +132,6 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 		}
 		var nextuserid = parseInt(lastuserid) + 1;
 		$scope.Users[nextuserid]={'userid': nextuserid.toString()};
-		$scope.usersChanged++;
 		$scope.editUser(nextuserid);
 
 		

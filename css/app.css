@@ -227,7 +227,7 @@ img.infoType, span.infoType { height:30px;line-height:35px; }
 
 
 /*****************
-***  User and Image specific
+***  User, Image, and Text specific
 *****************/
 
 .userProfileRound {
@@ -235,6 +235,19 @@ img.infoType, span.infoType { height:30px;line-height:35px; }
 	height: 75px;
 	border-radius: 50%;
 }
+
+.textRound {
+	background-color: darkgrey;
+	width: 40px;
+	text-align: center;
+	border-radius: 50%;
+	height: 40px;
+	vertical-align: middle;
+	padding: 10px 0;
+	color: black;	
+}
+
+
 
 /*****************
 ***  Login Page
@@ -608,22 +621,49 @@ img.infoType, span.infoType { height:30px;line-height:35px; }
 .wrap{ max-width:100%; width: 1100px; margin: 0 auto; padding-top:20px;overflow: auto;max-height: 100%; }
 .wrap.dashboard{ width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:hidden;position:absolute; }
 
-.addonWidget {
+.widget {
 	background-color: rgb(22,22,22);
 	position: relative;
     padding: 15px;
     margin: 15px 20px;
 }
 
-.addonWidget img {
+.widget.settings {
+	overflow: hidden;
+	white-space:nowrap;	
+}
+
+.widget.settings.navigation {
+	
+}
+
+.widget.settings.addons {
+	min-height: 210px;
+}
+.widget img {
 	vertical-align:middle;
 }
 
-.addonWidget .fanart {
+.widget.addon .fanart {
 	position:relative;
 	width:100%;
 	z-index: 10;
 }
+
+.widget.globalDisable, .widget.disabled {
+	box-shadow: inset 0 0 10px red;
+}
+.widget.globalDisable::after, .widget.disabled::after {
+	content: "Disabled";
+	text-align: center;
+	font-size: 2em;
+	font-weight: bold;
+	width: 90%;
+	color: red;
+	margin: -10px 0;
+	position: absolute;
+}
+
 .timebar {
 	height: 5px;
 	margin-top:-5px;
