@@ -133,24 +133,6 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 		var nextuserid = parseInt(lastuserid) + 1;
 		$scope.Users[nextuserid]={'userid': nextuserid.toString()};
 		$scope.editUser(nextuserid);
-
-		
-		
-		/*
-		ModalService.showModal({
-			templateUrl: "./partials/tpl/modalSettingsUsers.html"
-			, controller: "ModalController"
-			,inputs: {
-				data: "",
-		    }
-			, scope: $scope
-		}).then(function(modal) {
-			$scope.modalOpen=1;
-            modal.close.then(function() {
-				$scope.modalOpen=0;
-            });
-		});
-		*/
 	}
 	 
 	$scope.deleteUser = function(item){
@@ -331,7 +313,7 @@ need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addo
 			});
 	}	
 
-	$scope.addNavigation = function(){
+	$scope.addNavigation = function(){		
 		var lastnavid = 0;
 		var nav = 0;
 		for(nav in $scope.Navigation) {
@@ -341,9 +323,27 @@ need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addo
 		}
 		var nextnavid = parseInt(lastnavid) + 1;
 		$scope.Navigation[nextnavid]={'navid': nextnavid.toString()};
-		$scope.navChanged++;
+		$scope.editNavigation(nextnavid);
+		//$scope.navChanged++;
 	}
 
+	$scope.editNavigation = function(navigation,scope=$scope){
+		ModalService.showModal({
+			templateUrl: "./partials/tpl/modalSettingsNavigation.html"
+			, controller: "ModalController"
+			,inputs: {
+				data: navigation,
+		    }
+			, scope: scope
+		}).then(function(modal) {
+			$scope.modalOpen=1;
+            modal.close.then(function() {
+				$scope.modalOpen=0;
+				$scope.init();
+            });
+		});
+	}	
+	
 	$scope.addNavigationGroup = function(){
 		var lastnavid = 0;
 		var nav = 0;

@@ -3,8 +3,8 @@
 		<div class="content">
 			<span class="col-12">
 				<div class="addonTitle widget">
-					<button type="button" ng-click="addUser()" class="btn btn-success btn-sm">New User</button>
-					<button type="button" ng-click="getAllUsers()" class="btn btn-primary btn-sm right">Refresh Users</button>
+					<button type="button" ng-click="addUser()" class="btn btn-success btn-sm"><i class="fa fa-user-plus" aria-hidden="true"></i> New User</button>
+					<button type="button" ng-click="getAllUsers()" class="btn btn-primary btn-sm right"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh Users</button>
 				</div>
 			</span>		
 			<span class="col-3" ng-repeat="user in Users">
@@ -13,7 +13,7 @@
 						<img ng-if="systemInfo[0]['lastcrontime'] && user.lastaccess<(systemInfo[0]['lastcrontime']-360)" title="User Offline" class="status left" src="img/led-red.png"/>
 						<img ng-if="systemInfo[0]['lastcrontime'] && user.lastaccess<(systemInfo[0]['lastcrontime']-60) && user.lastaccess>(systemInfo[0]['lastcrontime']-361)" title="User Away" class="status left" src="img/led-orange.png"/>
 						<img ng-if="systemInfo[0]['lastcrontime'] && user.lastaccess>(systemInfo[0]['lastcrontime']-61)" title="User Online" class="status left" src="img/led-green.png"/>						
-						<button class="btn btn-primary right" ng-click="editUser(user.userid)">Edit</button>
+						<button class="btn btn-primary right" ng-click="editUser(user.userid)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
 						<h2 class="center">{{user.username}}</h2>
 					</div>
 					<br class="clear" />
@@ -40,8 +40,8 @@
 					<p ng-if="user.lastaccess==0 || user.lastaccess==null">Last Online: Never</p>					
 					
 					
-					<button ng-if="user.passwordv>0" class="btn btn-success" ng-click="changePassword(user.userid)">Change Password</button>
-					<button ng-if="user.passwordv==0" class="btn btn-warning" ng-click="changePassword(user.userid)">Set Password</button>
+					<button ng-if="user.passwordv>0" class="btn btn-success" ng-click="changePassword(user.userid)"><i class="fa fa-lock" aria-hidden="true"></i> Change Password</button>
+					<button ng-if="user.passwordv==0" class="btn btn-warning" ng-click="changePassword(user.userid)"><i class="fa fa-unlock" aria-hidden="true"></i> Set Password</button>
 					<br class="clear" /><br />
 				</div>
 			</span>

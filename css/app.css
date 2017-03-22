@@ -630,11 +630,10 @@ img.infoType, span.infoType { height:30px;line-height:35px; }
 
 .widget.settings {
 	overflow: hidden;
-	white-space:nowrap;	
 }
 
 .widget.settings.navigation {
-	
+	white-space:nowrap;
 }
 
 .widget.settings.addons {
@@ -1702,4 +1701,11 @@ input[type="submit"].btn.btn-mini {
 .ats-switch.switch-default span.switch-left {
   color: #000;
   background: #eeeeee;
+}
+
+
+/*  Font awesome modifiers  */
+
+.fa {
+    vertical-align: middle !important;
 }

@@ -505,14 +505,19 @@ if(isset($action)) {
 		$data = json_decode($_GET['data'], true);
 		print_r($data);
 		
+
 		
 		
 		
 		
 		
 		
+
+	} elseif($action === "saveNavigation"){
+		$data = json_decode($_GET['data'], true);
+		print_r($data);
 		
-		
+
 	}
 }
 ?>
