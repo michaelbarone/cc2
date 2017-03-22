@@ -8,7 +8,7 @@ class camera {
 		$info['type']="security";
 		$info['name']="camera";
 		$info['version']="1-1";  // version matches the 3rd section of the folder name. first number relates to compatibility with connecting api (will be updates when that app updates).  second number is the revision for this class.
-		$info['info']="Addon that connects to security ip cameras.";  // brief description and list compatible versions of the connecting app
+		$info['info']="Displays security ip cameras.";  // brief description and list compatible versions of the connecting app
 		$info=$this->returnJSON($info);
 		return $info;
 	}

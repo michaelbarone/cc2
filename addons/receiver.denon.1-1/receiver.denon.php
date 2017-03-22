@@ -8,7 +8,7 @@ class denon {
 		$info['type']="receiver";
 		$info['name']="denon";
 		$info['version']="1-1";  // version matches the 3rd section of the folder name. first number relates to compatibility with connecting api (will be updates when that app updates).  second number is the revision for this class.
-		$info['info']="Addon that supports Denon Receivers.";  // brief description and list compatible versions of the connecting app
+		$info['info']="Supports Denon Receivers.";  // brief description and list compatible versions of the connecting app
 		$info=$this->returnJSON($info);
 		return $info;
 	}
