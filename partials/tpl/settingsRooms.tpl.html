@@ -3,14 +3,38 @@
 		<div class="content">
 			<span class="col-12">
 				<div class="addonTitle widget">
+					<button type="button" ng-click="question(Rooms)" class="btn btn-primary btn-sm"><i class="fa fa-question" aria-hidden="true"></i></button>
 					<button type="button" ng-click="addRoom()" class="btn btn-success btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> New Room</button>
 					<button type="button" ng-click="getRooms()" class="btn btn-primary btn-sm right"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh Rooms</button>
 				</div>
-			</span>		
+			</span>
+			<span class="col-3 right">
+				<div class="widget settings noPadding">
+					<table class="right">
+						<tr><td class="addonTitle">
+							Room Menu 
+							<button type="button" ng-click="saveRooms()" class="btn btn-success btn-sm" ng-class="roomsChanged > 0 ? 'greenPulse' : ''" ng-disabled="roomsChanged < 1">Save Order</button>
+						</td></tr>
+						<tr><td>
+							Full Name | Mobile Name | Order Weight
+						</td></tr>
+						<tr ng-repeat="r in Rooms | orderObjectBy:'roomOrder':false" ng-if="r.roomId!='groups'">
+							<td class="addonTitle right">{{r.roomName}} | {{r.roomName | abvTitle}} | 
+								<i class="fa fa-arrow-circle-down pointer" ng-click="roomMenuOrderChange('down',r.roomId);roomsChangedAdd();" aria-hidden="true"></i>
+								<span ng-if="r.roomOrder>0">-{{r.roomOrder}}</span>
+								<span ng-if="r.roomOrder<1">{{r.roomOrder | positive}}</span>
+								<i class="fa fa-arrow-circle-up pointer" ng-click="roomMenuOrderChange('up',r.roomId);roomsChangedAdd();" aria-hidden="true"></i>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</span>
+			
+			</span>
 			<span class="col-2" ng-repeat="r in Rooms"  ng-if="r.roomId!='groups'">
 				<div class="widget settings">
 					<div>
-						<button class="btn btn-primary right" ng-click="editRoom(n.roomId)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
+						<button class="btn btn-primary right" ng-click="editRoom(r.roomId)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
 						<h2 class="left textRound">{{r.roomName | abvTitle}}</h2>
 						<br class="clear" /><br />
 						<h2 class="center">{{r.roomName}}</h2>
@@ -22,72 +46,4 @@
 		
 		</div>
 	</div>
-
-	<!--
-  <div class="panel panel-default loginTiles">
-	<br><br>
-	  <div class="panel-heading"><span class="lead">Rooms </span></div>
-		<div class="row">
-			<div class="right">
-				<button type="button" ng-click="cancelChanges()" class="btn btn-warning btn-sm" ng-disabled="roomsChanged < 1">Cancel Changes</button>
-				<button type="button" ng-click="saveRooms()" class="btn btn-success btn-sm" ng-class="roomsChanged > 0 ? 'greenPulse' : ''" ng-disabled="roomsChanged < 1">Save Rooms</button>
-			</div>
-		</div>
-		<br class="clear" />
-	  <div class="tablecontainer">
-		<table class="table table-hover left widget settings">
-			<thead>
-				<tr>
-					<th><button type="button" ng-click="addRoom()" class="btn btn-primary btn-sm">Add Room</button></th>
-					<th>ID</th>
-					<th>Room</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="r in Rooms"  ng-if="r.roomId!='groups'">
-					<td><button type="button" ng-click="deleteRoom(r.roomId)" class="btn btn-danger custom-width">X</button></td>
-					<td><span ng-bind="r.roomId"></span></td>
-					<td><input type="text" ng-model="r.roomName" required='required'  ng-change="roomsChangedAdd()"/></td>
-				</tr>
-			</tbody>
-		</table>
-		<table class="table table-hover left widget settings">
-		  <thead>
-			  <tr>
-				  <th><button type="button" ng-click="addRoomGroup()" class="btn btn-primary btn-sm">Add Group</button></th>
-				  <th>ID</th>
-				  <th>Group Name</th>
-				  <th>Room Access</th>
-			  </tr>
-		  </thead>
-		  <tbody>
-			  <tr ng-repeat="r in Rooms['groups']" ng-if="r!='groups'">
-				  <td><button type="button" ng-click="deleteRoomGroup(r.roomGroupId)" class="btn btn-danger custom-width">X</button></td>
-				  <td><span ng-bind="r.roomGroupId"></span></td>
-				  <td><input type="text" ng-model="r.roomGroupName" required='required'  ng-change="roomsChangedAdd()"/></td>
-				  <td><input type="text" ng-model="r.roomAccess" required='required'  ng-change="roomsChangedAdd()"/></td>
-			  </tr>
-		  </tbody>
-		</table>
-	  </div>
-
-
-
-  </div>
-	-->
-	<!--
-	
-	top left rooms
-	
-	top right addons (global settings)
-	
-	below full rooms_addons grouped by room  >>  maybe modules like on dashboard
-	
-	
-	
-	
-	
-	-->
-
-
 </div>

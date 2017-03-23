@@ -30,3 +30,25 @@ app.filter('noHTTP', function(){
 	}
 });
 
+app.filter('orderObjectBy', function() {
+  return function(items, field, reverse) {
+    var filtered = [];
+    angular.forEach(items, function(item) {
+      filtered.push(item);
+    });
+    filtered.sort(function (a, b) {
+      return (a[field] > b[field] ? 1 : -1);
+    });
+    if(reverse) filtered.reverse();
+    return filtered;
+  };
+});
+
+app.filter('positive', function() {
+	return function(input) {
+		if (!input) {
+			return 0;
+		}
+		return Math.abs(input);
+	};
+});

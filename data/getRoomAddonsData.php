@@ -37,14 +37,12 @@
 
 			// strip duplicates
 			$roomIds = implode(',', array_keys(array_flip(explode(',', $roomIds))));
-			$roomIds = explode(',', $roomIds);
-			foreach($roomIds as $x) {
-				if(!isset($x) || $x == '' || is_array($x)) { continue; }
-				$sql = "SELECT roomName FROM rooms WHERE roomId = $x LIMIT 1";
-				foreach ($configdb->query($sql) as $row) {
-					$roomArray[$x]['name']=$row['roomName'];
-				}
-			}			
+			$sql = "SELECT * FROM rooms WHERE roomId in ( $roomIds ) ORDER BY roomOrder";
+			foreach ($configdb->query($sql) as $row) {
+				$roomid=$row['roomId'];
+				$roomArray[$roomid]['name']=$row['roomName'];
+				$roomArray[$roomid]['order']=$row['roomOrder'];
+			}
 		} catch(PDOException $e) {
 			$log->LogFatal("User could not open DB: $e->getMessage().  from " . basename(__FILE__));
 			echo "failed";
@@ -60,11 +58,13 @@
 	}
 	try {
 		$addonArray = array();
+		$roomIds = explode(',', $roomIds);
 		foreach($roomIds as $x) {
 			if(!isset($x) || $x == '' || is_array($x)) { continue; }
 			$allAddonsAlive="1";
 			$allPowerOptions=0;
 			$addonArray[$x]['0']['roomName']=$roomArray[$x]['name'];
+			$addonArray[$x]['0']['roomOrder']=intval($roomArray[$x]['order']);
 			$addonArray[$x]['0']['roomId']=$x;
 			$addonArray[$x]['0']['addonsAlive']=0;
 			$addonArray[$x]['0']['allAddonsAlive']=$allAddonsAlive;

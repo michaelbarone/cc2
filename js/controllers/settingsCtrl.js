@@ -136,7 +136,7 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	}
 	 
 	$scope.deleteUser = function(item){
-		console.log(item);
+		//console.log(item);
 		//console.log("try to delete userid "+item);
 		//var index = $scope.Users.indexOf(item);
 		//$rootScope.spinnerArray.splice(index, 1);
@@ -251,9 +251,11 @@ need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addo
 		}
 		var nextroomid = parseInt(lastroomid) + 1;
 		$scope.Rooms[nextroomid]={'roomId': nextroomid.toString()};
-		$scope.roomsChanged++;
+		$scope.editRoom(nextroomid);
+		//$scope.roomsChanged++;
 	}
 
+	/*
 	$scope.addRoomGroup = function(){
 		var lastroomid = 0;
 		var room = 0;
@@ -264,33 +266,74 @@ need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addo
 		}
 		var nextroomid = parseInt(lastroomid) + 1;
 		$scope.Rooms['groups'][nextroomid]={'roomGroupId': nextroomid.toString()};
-		$scope.navChanged++;
+		$scope.roomsChanged++;
+	}
+	*/
+
+	$scope.editRoom = function(room,scope=$scope){
+		$scope.roomsChanged=0;
+		ModalService.showModal({
+			templateUrl: "./partials/tpl/modalSettingsRooms.html"
+			, controller: "ModalController"
+			,inputs: {
+				data: room,
+		    }
+			, scope: scope
+		}).then(function(modal) {
+			$scope.modalOpen=1;
+            modal.close.then(function() {
+				$scope.modalOpen=0;
+				$scope.init();
+            });
+		});
+	}	
+	
+	$scope.saveRoom = function(data){
+		$scope.CheckLogged();
+		$http.get('data/settings.php?action=saveRoom&data='+JSON.stringify(data))
+			.success(function(data) {
+				$scope.roomsChanged=0;
+			});
 	}
 
 	$scope.saveRooms = function(){
 		$scope.CheckLogged();
-		var thisdata = $scope.Rooms;
-		$http.get('data/settings.php?action=saveRooms&data='+JSON.stringify(thisdata))
-			.success(function() {
+		var data = $scope.Rooms;
+		$http.get('data/settings.php?action=saveRooms&data='+JSON.stringify(data))
+			.success(function(data) {
 				$scope.roomsChanged=0;
 			});
-	}	
+		
+	}
 	
-	$scope.deleteRoom = function(index){
-		delete $scope.Rooms[index];
-		$scope.roomsChanged++;
+	$scope.deleteRoom = function(data){
+		$scope.CheckLogged();
+		$http.get('data/settings.php?action=deleteRoom&data='+JSON.stringify(data))
+			.success(function(data) {
+			});
 	}
 
+	/*
 	$scope.deleteRoomGroup = function(index){
 		delete $scope.Rooms['groups'][index];
 		$scope.roomsChanged++;
 	}
+	*/
 	
 	$scope.roomsChangedAdd = function(){
 		$scope.roomsChanged++;
 	}
 	
-	
+	$scope.roomMenuOrderChange = function(func,roomId){
+		if(func=="up"){
+			$scope.Rooms[roomId]['roomOrder']=parseInt($scope.Rooms[roomId]['roomOrder'],10)-1;
+			
+		}else if(func=="down"){
+			$scope.Rooms[roomId]['roomOrder']=parseInt($scope.Rooms[roomId]['roomOrder'],10)+1;
+			
+		}
+		
+	}
 	
 
 	
@@ -324,7 +367,6 @@ need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addo
 		var nextnavid = parseInt(lastnavid) + 1;
 		$scope.Navigation[nextnavid]={'navid': nextnavid.toString()};
 		$scope.editNavigation(nextnavid);
-		//$scope.navChanged++;
 	}
 
 	$scope.editNavigation = function(navigation,scope=$scope){
@@ -357,21 +399,20 @@ need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addo
 		$scope.navChanged++;
 	}	
 	
-	$scope.saveNavigation = function(){
+	$scope.saveNavigation = function(Navigation){
 		$scope.CheckLogged();
-		// get room and addon info ready for saving
-		/*
-		$http.get('data/settings.php?action=saveRooms&data='+JSON.stringify(data))
+		$http.get('data/settings.php?action=saveNavigation&data='+JSON.stringify(Navigation))
 			.success(function(data) {
-				$scope.usersChanged=0;
+				$scope.navChanged=0;
 			});
-		*/
 	}	
 	
-	$scope.deleteNavigation = function(index){
-		delete $scope.Navigation[index];
-		$scope.navChanged++;
-	}
+	$scope.deleteNavigation = function(Navigation){
+		$scope.CheckLogged();
+		$http.get('data/settings.php?action=deleteNavigation&Navigation='+JSON.stringify(Navigation))
+			.success(function(data) {
+			});
+	}	
 
 	$scope.deleteNavigationGroup = function(index){
 		delete $scope.Navigation['groups'][index];

@@ -3,14 +3,6 @@
 	require 'startsession.php';
 	$action = $_GET['action'];
 
-	
-	
-	
-	
-	
-	/* make sure user has access to settings before continuing */
-
-	
 function pathUrl($dir=__DIR__){
 
     $root = "";
@@ -59,13 +51,15 @@ function GetUsers($configdb){
 function GetAddons($configdb){
 	try {
 		$addonsArray = array();
-		$i=0;
 		foreach ($configdb->query("SELECT * FROM addons order by addonid asc") as $row) {
 			foreach($row as $item => $key) {
-				if(is_numeric($item)) { continue; }
-				$addonsArray[$i][$item] = $key;
+				if($item!='addonid') { continue; }
+				$addonid=$key;
 			}
-			$i++;
+			foreach($row as $item => $key) {
+				if(is_numeric($item)) { continue; }
+				$addonsArray[$addonid][$item] = $key;
+			}
 		}
 		$result = $addonsArray;
 	} catch(PDOException $e) {
@@ -177,6 +171,15 @@ function GetNavigation($configdb){
 }
 
 
+/* check if user has access to settings before performing action */
+$users=json_decode(ltrim(GetUsers($configdb),")]}',\n"),true);
+$userid=$_SESSION['userid'];
+$username=$_SESSION['username'];
+
+if($users[$userid]['settingsAccess']!=1){
+	$log->LogAlert("ILLEGAL ACCESS TO SETTINGS.PHP by user: $username and userid: $userid.  from " . basename(__FILE__));
+	exit;
+}
 
 if(isset($action)) {	
 	if($action === "getNavigation") {
@@ -489,23 +492,103 @@ if(isset($action)) {
 			$query .= "$setting = '$setas'";
 		}
 
-		$query .= " WHERE id = ".$addon['id'];
+		$addonid = $addon['addonid'];
+		$query .= " WHERE addonid = '$addonid'";
 		$statement = $configdb->prepare($query);
 		$statement->execute();		
 
 
-
-
-		
-		
 	} elseif($action === "saveRooms"){
-		//$users=json_decode(GetUsers($configdb),true);
-		//print_r($users);
-		//echo "<br /><br />";
-		$data = json_decode($_GET['data'], true);
-		print_r($data);
-		
+		$Rooms = json_decode($_GET['data'], true);
 
+		foreach($Rooms as $room){
+			if($room['roomId']=="groups"){continue;}
+			$query = "UPDATE `rooms` SET ";
+
+			foreach($room as $setting => $setas){
+				if($setting==='roomId'){ continue; }
+				if($setting=='$$hashKey') { continue; }
+				if($setting!='roomName') {
+					$query .= ", ";
+				}
+				$query .= "$setting = '$setas'";
+			}
+
+			$roomId = $room['roomId'];
+			$query .= " WHERE roomId = '$roomId'";
+			$statement = $configdb->prepare($query);
+			$statement->execute();
+		}
+		
+		
+	} elseif($action === "saveRoom"){
+		
+		$Room = json_decode($_GET['data'], true);
+		
+		$roomarray[$Room['roomId']] = $Room;
+		$origrooms=json_decode(ltrim(GetRooms($configdb),")]}',\n"),true);
+		
+		$result = array_diff_key($roomarray, $origrooms);		
+		// new room add		
+		foreach($result as $newroom){
+			$query = "INSERT INTO `rooms` (";
+			
+			foreach($newroom as $setting => $setas){
+				if($setting==='roomId'){ continue; }
+				if($setting!='roomName') {
+					$query .= ",";
+				}
+				$query .= $setting;
+			}
+			
+			$query .= ") VALUES (";
+			
+			foreach($newroom as $setting => $setas){
+				if($setting==='roomId'){ continue; }
+				if($setting!='roomName') {
+					$query .= ",";
+				} else {
+					$setas = preg_replace('/[^a-zA-Z0-9]/', '', $setas);
+				}
+				$query .= "'$setas'";
+			}			
+			$query.= ")";
+
+			$statement = $configdb->prepare($query);
+
+			$statement->execute();
+			
+			return;
+			// end if new room, continue if existing
+		}
+		
+		
+		$query = "UPDATE `rooms` SET ";
+
+		foreach($Room as $setting => $setas){
+			if($setting==='roomId'){ continue; }
+			if($setting!='roomName') {
+				$query .= ", ";
+			}
+			$query .= "$setting = '$setas'";
+		}
+
+		$roomId = $Room['roomId'];
+		$query .= " WHERE roomId = '$roomId'";
+		$statement = $configdb->prepare($query);
+		$statement->execute();
+		
+		
+	} elseif($action === "deleteRoom"){
+			$Room = json_decode($_GET['data'], true);
+
+			if(isset($Room['roomId']) && is_numeric($Room['roomId']) && $Room['roomId']>0) {  
+				$query = "DELETE FROM `rooms` WHERE roomid = ".$Room['roomId']." AND roomName = '".$Room['roomName']."'";
+				$statement = $configdb->prepare($query);
+				$statement->execute();
+			}	
+			
+	
 		
 		
 		
@@ -514,10 +597,71 @@ if(isset($action)) {
 		
 
 	} elseif($action === "saveNavigation"){
-		$data = json_decode($_GET['data'], true);
-		print_r($data);
+		$Navigation = json_decode($_GET['data'], true);
 		
+		$navarray[$Navigation['navid']] = $Navigation;
+		$orignav=json_decode(ltrim(GetNavigation($configdb),")]}',\n"),true);
+		
+		$result = array_diff_key($navarray, $orignav);		
+		// new navigation add		
+		foreach($result as $newnav){
+			$query = "INSERT INTO `navigation` (";
+			
+			foreach($newnav as $setting => $setas){
+				if($setting==='navid'){ continue; }
+				if($setting!='navname') {
+					$query .= ",";
+				}
+				$query .= $setting;
+			}
+			
+			$query .= ") VALUES (";
+			
+			foreach($newnav as $setting => $setas){
+				if($setting==='navid'){ continue; }
+				if($setting!='navname') {
+					$query .= ",";
+				} else {
+					$setas = preg_replace('/[^a-zA-Z0-9]/', '', $setas);
+				}
+				$query .= "'$setas'";
+			}			
+			$query.= ")";
 
+			$statement = $configdb->prepare($query);
+
+			$statement->execute();
+			
+			return;
+			// end if new navigation, continue if existing
+		}
+		
+		
+		$query = "UPDATE `navigation` SET ";
+
+		foreach($Navigation as $setting => $setas){
+			if($setting==='navid'){ continue; }
+			if($setting!='navname') {
+				$query .= ", ";
+			}
+			$query .= "$setting = '$setas'";
+		}
+
+		$navid = $Navigation['navid'];
+		$query .= " WHERE navid = '$navid'";
+		$statement = $configdb->prepare($query);
+		$statement->execute();
+		
+		
+	} elseif($action === "deleteNavigation"){
+			$Navigation = json_decode($_GET['Navigation'], true);
+
+			if(isset($Navigation['navid']) && is_numeric($Navigation['navid']) && $Navigation['navid']>0) {  
+				$query = "DELETE FROM `navigation` WHERE navid = ".$Navigation['navid']." AND navname = '".$Navigation['navname']."'";
+				$statement = $configdb->prepare($query);
+				$statement->execute();
+			}	
+			
 	}
 }
 ?>
