@@ -92,12 +92,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 /**
  *  Top Menu
  */
-
-	$scope.getRoomOrderNumber = function(room){		
-		var number = $scope.room_addons[0][room][0].roomOrder;
-		console.log(number);
-		return number;
-	}
  
 	$scope.changeRoom = function(room) {
 		var unix = Math.round(+new Date()/1000);
