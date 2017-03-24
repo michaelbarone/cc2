@@ -125,14 +125,6 @@ function GetRooms($configdb){
 				if(is_numeric($item)) { continue; }
 				$roomsArray[$roomid][$item] = $key;
 			}
-		}
-		foreach ($configdb->query("SELECT * FROM roomgroups") as $row) {
-			$roomGroupId = $row['roomGroupId'];
-			$roomsArray["groups"]["roomId"]="groups";
-			foreach($row as $item => $key) {
-				if(is_numeric($item)) { continue; }
-				$roomsArray["groups"][$roomGroupId][$item] = $key;
-			}
 		}		
 		$result = $roomsArray;
 		} catch(PDOException $e) {

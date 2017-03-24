@@ -255,21 +255,6 @@ need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addo
 		//$scope.roomsChanged++;
 	}
 
-	/*
-	$scope.addRoomGroup = function(){
-		var lastroomid = 0;
-		var room = 0;
-		for(room in $scope.Rooms['groups']) {
-			if(!isNaN(parseFloat(room)) && isFinite(room)){
-				lastroomid = room;
-			}
-		}
-		var nextroomid = parseInt(lastroomid) + 1;
-		$scope.Rooms['groups'][nextroomid]={'roomGroupId': nextroomid.toString()};
-		$scope.roomsChanged++;
-	}
-	*/
-
 	$scope.editRoom = function(room,scope=$scope){
 		$scope.roomsChanged=0;
 		ModalService.showModal({
@@ -312,13 +297,6 @@ need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addo
 			.success(function(data) {
 			});
 	}
-
-	/*
-	$scope.deleteRoomGroup = function(index){
-		delete $scope.Rooms['groups'][index];
-		$scope.roomsChanged++;
-	}
-	*/
 	
 	$scope.roomsChangedAdd = function(){
 		$scope.roomsChanged++;

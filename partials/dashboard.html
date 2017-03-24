@@ -39,21 +39,17 @@
 						<ul ng-if="userdata.roomcount > 1" id="room-menu-ul">
 							<li class="rooms">
 								<table ng-class="{showme: sendFromAddonLock>0}" style="max-width: 100vw; overflow-x: auto;">
-									<tr ng-if="!$first || !$last" ng-repeat="(room,roomArray) in room_addons[0]" ng-class="{'selected': userdata.currentRoom==room}">
-										<td ng-if="userdata.mobile==='1'" ng-click="changeRoom(room)" class="addonTitle">{{room_addons[0][room][0].roomName | abvTitle}}</td>
-										<td ng-if="userdata.mobile!='1'" ng-click="changeRoom(room)" class="addonTitle">{{room_addons[0][room][0].roomName}}</td>
+									<tr ng-if="room.roomId" ng-repeat="room in Rooms | orderObjectBy: 'roomOrder' track by $index" ng-class="{'selected': userdata.currentRoom==room.roomId}">
+										<td ng-if="userdata.mobile==='1'" ng-click="changeRoom(room.roomId)" class="addonTitle">{{room.roomName | abvTitle}}</td>
+										<td ng-if="userdata.mobile!='1'" ng-click="changeRoom(room.roomId)" class="addonTitle">{{room.roomName}}</td>
 										<td>
-											<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Room Offline" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-red.png"/>
-											<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='0'" title="Some Addons Online" ng-click="powerOnRoom(room)" class="status pointer" src="img/led-orange.png"/>
-											<img ng-if="room_addons[0][room][0].addonsAlive===0 && room_addons[0][room][0].allAddonsAlive==='1'" title="No Addons Configured" class="status" src="img/led-cyan.png"/>
-											<img ng-if="room_addons[0][room][0].addonsAlive>0 && room_addons[0][room][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
+											<img ng-if="room_addons[0][room.roomId][0].addonsAlive===0 && room_addons[0][room.roomId][0].allAddonsAlive==='0'" title="Room Offline" ng-click="powerOnRoom(room.roomId)" class="status pointer" src="img/led-red.png"/>
+											<img ng-if="room_addons[0][room.roomId][0].addonsAlive>0 && room_addons[0][room.roomId][0].allAddonsAlive==='0'" title="Some Addons Online" ng-click="powerOnRoom(room.roomId)" class="status pointer" src="img/led-orange.png"/>
+											<img ng-if="room_addons[0][room.roomId][0].addonsAlive===0 && room_addons[0][room.roomId][0].allAddonsAlive==='1'" title="No Addons Configured" class="status" src="img/led-cyan.png"/>
+											<img ng-if="room_addons[0][room.roomId][0].addonsAlive>0 && room_addons[0][room.roomId][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
 										</td>
-										
-
-										
-										
 										<td>
-											<div ng-if="addon.device_alive=='3' && addon.addontype=='mediaplayer' && (addon.displayInfo.info || sendFromAddonIP)" ng-repeat="addon in room_addons[0][room].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
+											<div ng-if="addon.device_alive=='3' && addon.addontype=='mediaplayer' && (addon.displayInfo.info || sendFromAddonIP)" ng-repeat="addon in room_addons[0][room.roomId].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="startMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Start</a>
@@ -66,13 +62,11 @@
 												<img ng-if="addon.displayInfo.type" class="infoType" ng-src="img/info-{{addon.displayInfo.type}}.png"/>
 												<!-- change info-img to glyph -->
 											</div>
-											<div ng-if="addon.device_alive=='3' && addon.displayInfo.info && addon.addontype!='mediaplayer'" ng-repeat="addon in room_addons[0][room].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
+											<div ng-if="addon.device_alive=='3' && addon.displayInfo.info && addon.addontype!='mediaplayer'" ng-repeat="addon in room_addons[0][room.roomId].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 												<a ng-if="addon.displayInfo.info" style="display:inline-block;">{{addon.displayInfo.info}}</a>
 												<span class="infoType fa fa-gear fa-2x"></span>
 											</div>
-										</td>										
-										
-										
+										</td>
 									</tr>
 								</table>
 							</li>

@@ -17,7 +17,6 @@ $query = "CREATE TABLE IF NOT EXISTS users (
 `avatar`	INTEGER DEFAULT 0,
 `navgroupaccess`	string,
 `homeRoom`	integer,
-`roomGroupAccess`	INTEGER,
 `roomAccess`	string,
 `settingsAccess`	INTEGER NOT NULL DEFAULT 0,
 `wanAccess`	INTEGER NOT NULL DEFAULT 0,
@@ -66,14 +65,6 @@ $statement->execute();
 $query = "CREATE TABLE IF NOT EXISTS rooms (
 `roomId`	integer PRIMARY KEY AUTOINCREMENT,
 `roomName`	text NOT NULL UNIQUE
-)";
-$statement = $configdbcreate->prepare($query);
-$statement->execute();
-
-$query = "CREATE TABLE IF NOT EXISTS roomgroups (
-`roomGroupId`	integer PRIMARY KEY AUTOINCREMENT,
-`roomGroupName`	text UNIQUE,
-`roomAccess`	string
 )";
 $statement = $configdbcreate->prepare($query);
 $statement->execute();

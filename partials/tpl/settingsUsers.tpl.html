@@ -29,8 +29,6 @@
 					
 					<p ng-if="user.roomAccess!=0 && user.roomAccess!=null">{{user.roomAccess.length}}: Rooms with Access</p>
 					<p ng-if="user.roomAccess==0 || user.roomAccess==null">0: Rooms with Access</p>
-					<p ng-if="user.roomGroupAccess.length>0">{{user.roomGroupAccess.length}}: RoomGroups with Access</p>
-					<p ng-if="!user.roomGroupAccess">0: RoomGroups with Access</p>
 					
 					
 					<p ng-if="user.navgroupaccess.length>0">{{user.navgroupaccess.length}}: NavGroup Access</p>
@@ -77,7 +75,6 @@
 					<th>settingsAccess</th>
 					<th>navgroupaccess</th>
 					<th>roomAccess</th>
-					<th>roomGroupAccess</th>
 					<th>homeRoom</th>
 				</tr>
 			</thead>
@@ -109,10 +106,7 @@
 						</option>					
 					</select></td>
 					
-					
-					<td><select ng-model="u.roomGroupAccess" ng-change="usersChangedAdd()">
-					
-					</select></td>
+
 					
 					
 					

@@ -11,10 +11,7 @@
 		try {
 			$roomArray = array();
 			$roomIds = '';
-			foreach ($configdb->query("SELECT u.roomAccess,u.forceLogout,u.disabled,rg.roomAccess AS roomGroupAccess  
-										FROM users u LEFT JOIN roomgroups rg ON u.roomGroupAccess = rg.roomGroupId 
-										WHERE u.userid = $userid LIMIT 1"
-										) as $row) {
+			foreach ($configdb->query("SELECT roomAccess,forceLogout,disabled FROM users WHERE userid = $userid LIMIT 1") as $row) {
 				/* force logout user */
 				if($row['forceLogout'] == '1') {
 					$execquery = $configdb->exec("UPDATE users SET forceLogout=0 WHERE userid = '$userid';");
@@ -27,16 +24,13 @@
 					$log->LogWarn("DISABLED USER ATTEMPTED ACCESS: userid: " . $userid . "  " . basename(__FILE__));		
 					exit;
 				}
-				if($row['roomGroupAccess'] != '' && $row['roomGroupAccess'] != null) {
-					$roomIds=$row['roomGroupAccess'] . ",";
-				}
 				if($row['roomAccess'] != '' && $row['roomAccess'] != null) {
-					$roomIds.=$row['roomAccess'];
+					$roomIds=$row['roomAccess'];
 				}
 			}
 
 			// strip duplicates
-			$roomIds = implode(',', array_keys(array_flip(explode(',', $roomIds))));
+			//$roomIds = implode(',', array_keys(array_flip(explode(',', $roomIds))));
 			$sql = "SELECT * FROM rooms WHERE roomId in ( $roomIds ) ORDER BY roomOrder";
 			foreach ($configdb->query($sql) as $row) {
 				$roomid=$row['roomId'];
