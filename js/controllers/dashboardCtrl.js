@@ -1,40 +1,34 @@
 'use strict';
 
 app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService','Fullscreen','addonFunctions', function ($rootScope, $scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService, Fullscreen, addonFunctions){
-	spinnerService.clear();
+	spinnerService.clear();	
+	var connected=loginService.islogged();
+	connected.then(function(msg){
+		if(msg.data!=="passedAuth") {
+			$location.path('/login');
+		}
+	});
+	var sessionUN = sessionStorage.getItem('username');
+	if(sessionUN=='' || sessionUN==null || !sessionUN){
+		loginService.logout();
+	} else {
+		$scope.userdata = [];
+		$scope.userdata.username=sessionStorage.getItem('username');
+	}
 	$scope.links = [];
 	$scope.links['0'] = [];
-	$scope.userdata = [];
+	$scope.Rooms = [];
 	$scope.room_addons = [];
 	$scope.room_addons['0'] = [];
 	$scope.room_addons_ping = {};
 	$scope.room_addons_ping['0'] = {};
 	$scope.userdata.currentpage = "dashboard";
-	$scope.userdata.roomcount=0;
-	$scope.modalOpen=0;
+	$scope.userdata.roomcount = 0;
+	$scope.modalOpen = 0;
 	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
-	
-
-	/*
-	some security could be to match userid and username in db
-	may not need here, login check when querying for addons/rooms and in cron function
-	*/
-	if(sessionStorage.getItem('username')=='' || sessionStorage.getItem('username')==null){
-		loginService.logout();
-	} else {
-		$scope.userdata.username=sessionStorage.getItem('username');
-	}
-	$scope.userdata.userid=sessionStorage.getItem('userid');
-	$scope.userdata.mobile=sessionStorage.getItem('mobile');
-	$scope.userdata.avatar=sessionStorage.getItem('avatar');
-	if(window.innerWidth<850 && ($scope.userdata.mobile==='0' || $scope.userdata.mobile===null)){
-		$scope.userdata.mobile='1';
-		sessionStorage.setItem('mobile','1');
-	}
-	if(window.innerWidth>849 && ($scope.userdata.mobile==='1' || $scope.userdata.mobile===null)){
-		$scope.userdata.mobile='0';
-		sessionStorage.setItem('mobile','0');
-	}
+	$scope.userdata.userid = sessionStorage.getItem('userid');
+	$scope.userdata.mobile = sessionStorage.getItem('mobile');
+	$scope.userdata.avatar = sessionStorage.getItem('avatar');
 	$scope.userdata.linkGroupSelected = '';
 	$scope.userdata.linkSelected = '';
 	$scope.userdata.currentRoom = 'noRoom';
@@ -49,6 +43,21 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		$scope.userdata.linkSelected="room"+$scope.userdata.currentRoom;
 	}
 
+	
+	
+/*  testing stuff  */
+
+	if(window.innerWidth<850 && ($scope.userdata.mobile==='0' || $scope.userdata.mobile===null)){
+		$scope.userdata.mobile = '1';
+		sessionStorage.setItem('mobile','1');
+	}
+	if(window.innerWidth>849 && ($scope.userdata.mobile==='1' || $scope.userdata.mobile===null)){
+		$scope.userdata.mobile = '0';
+		sessionStorage.setItem('mobile','0');
+	}	
+	
+	
+	
 /**
  *  Load Initial Data
  */	
@@ -62,6 +71,15 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 				spinnerService.remove("loadLinks");
 			});
 	}
+	
+	$scope.loadRooms = function(){
+		$http.get('data/getRooms.php')
+			.success(function(data) {
+				$scope.Rooms = data;
+			})
+			.finally(function() {
+			});
+	}	
 
 	$timeout(function() {
 		spinnerService.add("updateAddons");
@@ -409,7 +427,11 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 					} else {
 						cronStaleCount = 0;
 						$scope.room_addons=data;
-						$scope.userdata.roomcount=Object.keys($scope.room_addons[0]).length;
+						var newCount=Object.keys($scope.room_addons[0]).length;
+						if(newCount!=$scope.userdata.roomcount){
+							$scope.loadRooms();
+							$scope.userdata.roomcount=newCount;
+						}
 						if(updateAddonsFirstRun===1){
 							if($scope.userdata.currentRoom<1) {
 								$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
@@ -426,6 +448,11 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 						var theaddonid = '';
 						angular.forEach($scope.room_addons[0], function(value, key) {
 							angular.forEach(value, function(value2, key2) {
+								/*
+								if(key2==0){
+									$scope.Rooms[value2.roomId]=value2;
+								}
+								*/
 								angular.forEach(value2, function(value3, key3) {
 									if(key3=='rooms_addonsid'){
 										theaddonid = value3;
