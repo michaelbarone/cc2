@@ -31,11 +31,6 @@ class ping {
 		$returnArray=array();
 		$returnArray['status']="ping";
 		return $returnArray;		/* if returns ['status']=ping, count +2 as online check in cron-addon */
-	}
-	
-	function PingApp($ip){
-		//return $this->Ping($ip,1);
-		return;
 	}	
 
 	function PowerOn(){

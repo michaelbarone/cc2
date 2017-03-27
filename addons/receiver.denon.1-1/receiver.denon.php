@@ -51,12 +51,6 @@ class denon {
 	}
 
 	function GetAddonInfo() {
-		// get current channel assignment (game/media/etc and zone info) to return as addonInfo
-		// this should be in PingApp()..  should be pulled out like in mediaplayer.kodi.php
-		return $this->PingApp();
-	}
-
-	function PingApp($ip='') {
 		if($ip==''){
 			$thisip = $this->stripIp($this->IP);
 		}else{

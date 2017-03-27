@@ -61,37 +61,6 @@ class sonybravia {
 		return $returnArray;
 	}
 
-	/*
-	function PingApp($ip='') {
-		if($ip==''){
-			$thisip = $this->stripIp($this->IP);
-		}else{
-			$thisip = $this->stripIp($ip);
-		}
-		$curlThis = "$thisip/goform/formMainZone_MainZoneXml.xml";
-		$output = $this->Curl($curlThis);
-		$items = simplexml_load_string($output);
-		$json = json_encode($items);
-		$items = json_decode($json, true);
-
-		$returnArray=array();
-		$returnArray['data']=$json;
-		$returnArray['title']=$items['InputFuncSelect']['value'];
-		//$returnArray['info']='receiver';
-		
-		$returnArray['status']="dead";
-		if($items['Power']['value']==="ON"){
-			//$status = "alive";
-			$returnArray['status']="alive";
-		} else {
-			//$status = "dead";
-			$returnArray['status']="dead";
-		}
-		//$returnArray = $this->returnJSON($returnArray);
-		return $returnArray;
-	}
-	*/
-
 
 	function PowerOn(){
 		return "wol";

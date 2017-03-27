@@ -36,21 +36,6 @@ class kodi {
 		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 1);
 		$output = curl_exec($ch);
 		return $output;
-	}	
-	
-	function PingApp($ip) {
-		$pingurl = "$this->IP/jsonrpc?request={%22jsonrpc%22%3A%20%222.0%22%2C%20%22method%22%3A%20%22JSONRPC.Ping%22%2C%22id%22%3A%201}";
-		$output = $this->Curl($pingurl);
-
-		$returnArray=array();
-		$returnArray['data']=$output;
-		if($output === FALSE) {
-			$returnArray['status']="dead";
-		} else {
-			$returnArray['status']="alive";
-		}
-		$return = $this->returnJSON($returnArray);
-		return $return;
 	}
 
 	function PowerOn(){

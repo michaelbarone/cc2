@@ -31,11 +31,6 @@ class camera {
 		$returnArray=array();
 		$returnArray['status']="alive";
 		return $returnArray;		
-	}
-	
-	function PingApp($ip){
-		//return $this->Ping($ip,1);
-		return;
 	}	
 
 	function PowerOn(){
