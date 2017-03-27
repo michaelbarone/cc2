@@ -122,9 +122,9 @@
 									<p class="center">{{addon.addontype}}</p>
 									<div ng-if="addon.PowerOptions > 0" class="right" style="margin:-5px;">
 										<button class="btn btn-danger right" ng-click="powerOffAddon(addon.rooms_addonsid)">Off</button>
-										<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnAddon(addon.rooms_addonsid)">On</button>
+										<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnAddon(addon.rooms_addonsid,$index,room[0].roomId)">On</button>
 									</div>
-									<img ng-if="addon.device_alive==='0'" ng-click="powerOnAddon(addon.rooms_addonsid)" class="status pointer left" src="img/led-red.png"/>
+									<img ng-if="addon.device_alive==='0'" ng-click="powerOnAddon(addon.rooms_addonsid,$index,room[0].roomId)" class="status pointer left" src="img/led-red.png"/>
 									<img ng-if="addon.device_alive<3 && addon.device_alive>0" class="status left" src="img/led-orange.png"/>
 									<img ng-if="addon.device_alive==='3'" class="status left" src="img/led-green.png"/>
 									<p ng-if="addon.addonTitle !='' || addon.addonTitle !=null" class="left">{{addon.addonTitle}}</p>
@@ -236,7 +236,7 @@
 								<h1 class="center">Power On</h1>
 								<br /><h1 class="center">{{room_addons[0][userdata.currentRoom][$index].addontype}} : {{room_addons[0][userdata.currentRoom][$index].addonTitle}}</h1>
 								<br /><h1 class="center">in the {{room_addons[0][userdata.currentRoom][0]['roomName']}}</h1>
-								<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons[0][userdata.currentRoom][$index].rooms_addonsid);" />
+								<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons[0][userdata.currentRoom][$index].rooms_addonsid,$index,userdata.currentRoom);" />
 							</span>
 						</div>
 					</div>

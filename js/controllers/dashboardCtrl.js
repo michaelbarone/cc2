@@ -198,26 +198,33 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
  *
  */
  
-	
-	/*
-	this may need to go in dashboardCtrl so it has access to scope.room_addons
-	function checkAlive(deadoralive,addonid=null,room=null){
-		if(addonid!=null){
-			check if addonid is alive
-			if alive, remove("powerOnAddon");
-		}elseif(room!=null){
-			check if roomalive>0
-			if alive, remove("powerOnRoom");
+	$scope.checkAlive = function(addonindex=null,room=null,count=0){
+		var recheck=0;
+		if(addonindex!=null && room!=null){
+			recheck=1;
+			if($scope.room_addons[0][room][addonindex]['device_alive']=="3" && count > 1){
+				spinnerService.remove("powerOnAddon");
+				return;
+			}
+		}else if(room!=null){
+			recheck=1;
+			if($scope.room_addons[0][room][0]['allAddonsAlive']=="1" && count > 1){
+				spinnerService.remove("powerOnRoom");
+				return;
+			}
 		}
-		some repeat to checkAlive for either certain time or number of retries
-		can also use this to check when powered off..  
+		if(count<30 && recheck==1){
+			$timeout(function() {
+				count++;
+				$scope.checkAlive(addonindex,room,count);
+			}, 1000);
+		}
 	}
-	*/ 
  
- 
- 
-	$scope.powerOnAddon = function(addonid){
+	$scope.powerOnAddon = function(addonid,addonindex,roomid){
+		spinnerService.add("powerOnAddon");
 		addonFunctions.powerOnAddon(addonid);
+		$scope.checkAlive(addonindex,roomid);
 	};
 
 	$scope.powerOffAddon = function(addonid){
@@ -225,7 +232,9 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	};
 	
 	$scope.powerOnRoom = function(room){
+		spinnerService.add("powerOnRoom");
 		addonFunctions.powerOnRoom(room);
+		$scope.checkAlive(null,room);
 	};
 
 	$scope.powerOffRoom = function(room){

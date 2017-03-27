@@ -3,14 +3,12 @@
 app.factory('addonFunctions', function($http,spinnerService){
 	return{
 		powerOnAddon:function(addonid){
-			spinnerService.add("powerOnAddon");
 			$http.post('data/power.php?type=addon&option=on&addonid='+addonid);
 		}
 		,powerOffAddon:function(addonid){
 			$http.post('data/power.php?type=addon&option=off&addonid='+addonid);
 		}
 		,powerOnRoom:function(room){
-			spinnerService.add("powerOnRoom");
 			$http.post('data/power.php?type=room&option=on&room='+room);
 		}
 		,powerOffRoom:function(room){
