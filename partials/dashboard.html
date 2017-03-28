@@ -59,8 +59,10 @@
 
 												<a ng-click="showModal(addon,'addon')" ng-if="addon.displayInfo.info" style="display:inline-block;">{{addon.displayInfo.info}}<span ng-if="addon.time.playerpercentage>0" class="timebar"><span class="elapsed" style="width:{{addon.time.playerpercentage}}%"></span></span></a>											
 
-												<img ng-if="addon.displayInfo.type" class="infoType" ng-src="img/info-{{addon.displayInfo.type}}.png"/>
-												<!-- change info-img to glyph -->
+												<i ng-if="addon.displayInfo.type=='tv' || addon.displayInfo.type=='episode'" class="fa fa-television infoType" aria-hidden="true"></i>
+												<i ng-if="addon.displayInfo.type=='movies' || addon.displayInfo.type=='movie'" class="fa fa-film infoType" aria-hidden="true"></i>
+												<i ng-if="addon.displayInfo.type=='music'" class="fa fa-headphones infoType" aria-hidden="true"></i>
+												<i ng-if="addon.displayInfo.type=='unknown'" class="fa fa-file-video-o infoType" aria-hidden="true"></i>
 											</div>
 											<div ng-if="addon.device_alive=='3' && addon.displayInfo.info && addon.addontype!='mediaplayer'" ng-repeat="addon in room_addons[0][room.roomId].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 												<a ng-if="addon.displayInfo.info" style="display:inline-block;">{{addon.displayInfo.info}}</a>
@@ -133,7 +135,10 @@
 								</div>
 								<!-- need to update the visual for these addon areas -->
 								<div ng-if="addon.addontype=='mediaplayer' && addon.displayInfo.info">
-									<img ng-if="addon.displayInfo.type" class="infoType" ng-src="img/info-{{addon.displayInfo.type}}.png"/>
+									<i ng-if="addon.displayInfo.type=='tv' || addon.displayInfo.type=='episode'" class="fa fa-2x fa-television infoType" aria-hidden="true"></i>
+									<i ng-if="addon.displayInfo.type=='movies' || addon.displayInfo.type=='movie'" class="fa fa-2x fa-film infoType" aria-hidden="true"></i>
+									<i ng-if="addon.displayInfo.type=='music'" class="fa fa-2x fa-headphones infoType" aria-hidden="true"></i>
+									<i ng-if="addon.displayInfo.type=='unknown'" class="fa fa-2x fa-file-video-o infoType" aria-hidden="true"></i>									
 									<a ng-click="sendFromAddonSet(addon.ip,addon.addonid)" class="right"><span class="fa fa-share-square-o infoType fa-2x"></span></a>
 									<a ng-click="showModal(addon,'addon')">{{addon.displayInfo.info}}</a>
 									<br ng-if="!addon.displayInfo.thumbnail && !addon.displayInfo.fanart" />
