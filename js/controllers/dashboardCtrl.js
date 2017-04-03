@@ -449,7 +449,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							spinnerService.remove("updateAddons");
 							updateAddonsFirstRun=0;
 							$timeout(function() {
-								$scope.changeRoom($scope.userdata.currentRoom);								
+								$scope.changeRoom($scope.userdata.currentRoom);
 							}, 100);
 						}
 						
@@ -457,11 +457,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 						var theaddonid = '';
 						angular.forEach($scope.room_addons[0], function(value, key) {
 							angular.forEach(value, function(value2, key2) {
-								/*
-								if(key2==0){
-									$scope.Rooms[value2.roomId]=value2;
-								}
-								*/
 								angular.forEach(value2, function(value3, key3) {
 									if(key3=='rooms_addonsid'){
 										theaddonid = value3;

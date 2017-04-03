@@ -559,12 +559,15 @@ if(isset($action)) {
 
 		foreach($Room as $setting => $setas){
 			if($setting==='roomId'){ continue; }
+			if($setting=='$$hashKey') { continue; }
 			if($setting!='roomName') {
 				$query .= ", ";
 			}
 			$query .= "$setting = '$setas'";
 		}
 
+		echo "$query";
+		
 		$roomId = $Room['roomId'];
 		$query .= " WHERE roomId = '$roomId'";
 		$statement = $configdb->prepare($query);

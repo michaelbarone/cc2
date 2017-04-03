@@ -18,7 +18,7 @@
 						<tr><td>
 							Full Name | Mobile Name | Order Weight
 						</td></tr>
-						<tr ng-repeat="r in Rooms | orderObjectBy:'roomOrder':false" ng-if="r.roomId!='groups'">
+						<tr ng-repeat="r in Rooms | orderObjectBy:'roomOrder':false" ng-if="r.globalDisable!=1">
 							<td class="addonTitle right">{{r.roomName}} | {{r.roomName | abvTitle}} | 
 								<i class="fa fa-arrow-circle-down pointer" ng-click="roomMenuOrderChange('down',r.roomId);roomsChangedAdd();" aria-hidden="true"></i>
 								<span ng-if="r.roomOrder>0">-{{r.roomOrder}}</span>
@@ -31,8 +31,8 @@
 			</span>
 			
 			</span>
-			<span class="col-2" ng-repeat="r in Rooms"  ng-if="r.roomId!='groups'">
-				<div class="widget settings">
+			<span class="col-2" ng-repeat="r in Rooms">
+				<div class="widget settings" ng-class="{globalDisable: r.globalDisable==1}">
 					<div>
 						<button class="btn btn-primary right" ng-click="editRoom(r.roomId)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
 						<h2 class="left textRound">{{r.roomName | abvTitle}}</h2>

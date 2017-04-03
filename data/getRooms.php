@@ -28,7 +28,7 @@
 
 			// strip duplicates
 			//$roomIds = implode(',', array_keys(array_flip(explode(',', $roomIds))));
-			$sql = "SELECT * FROM rooms WHERE roomId in ( $roomIds ) ORDER BY roomOrder";
+			$sql = "SELECT * FROM rooms WHERE roomId in ( $roomIds ) AND globalDisable != 1 ORDER BY roomOrder";
 			foreach ($configdb->query($sql) as $row) {
 				$roomId = $row['roomId'];
 				$roomArray[$roomId] = array(

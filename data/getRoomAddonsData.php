@@ -36,6 +36,7 @@
 				$roomid=$row['roomId'];
 				$roomArray[$roomid]['name']=$row['roomName'];
 				$roomArray[$roomid]['order']=$row['roomOrder'];
+				$roomArray[$roomid]['globalDisable']=$row['globalDisable'];
 			}
 		} catch(PDOException $e) {
 			$log->LogFatal("User could not open DB: $e->getMessage().  from " . basename(__FILE__));
@@ -55,6 +56,7 @@
 		$roomIds = explode(',', $roomIds);
 		foreach($roomIds as $x) {
 			if(!isset($x) || $x == '' || is_array($x)) { continue; }
+			if($roomArray[$x]['globalDisable']==1){ continue; }
 			$allAddonsAlive="1";
 			$allPowerOptions=0;
 			$addonArray[$x]['0']['roomName']=$roomArray[$x]['name'];
