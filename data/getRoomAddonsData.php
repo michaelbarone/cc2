@@ -28,15 +28,16 @@
 					$roomIds=$row['roomAccess'];
 				}
 			}
-
-			// strip duplicates
-			//$roomIds = implode(',', array_keys(array_flip(explode(',', $roomIds))));
-			$sql = "SELECT * FROM rooms WHERE roomId in ( $roomIds ) ORDER BY roomOrder";
-			foreach ($configdb->query($sql) as $row) {
-				$roomid=$row['roomId'];
-				$roomArray[$roomid]['name']=$row['roomName'];
-				$roomArray[$roomid]['order']=$row['roomOrder'];
-				$roomArray[$roomid]['globalDisable']=$row['globalDisable'];
+			if($roomIds!="deny"){
+				// strip duplicates
+				//$roomIds = implode(',', array_keys(array_flip(explode(',', $roomIds))));
+				$sql = "SELECT * FROM rooms WHERE roomId in ( $roomIds ) OR globalAccess == 1 ORDER BY roomOrder";
+				foreach ($configdb->query($sql) as $row) {
+					$roomid=$row['roomId'];
+					$roomArray[$roomid]['name']=$row['roomName'];
+					$roomArray[$roomid]['order']=$row['roomOrder'];
+					$roomArray[$roomid]['globalDisable']=$row['globalDisable'];
+				}
 			}
 		} catch(PDOException $e) {
 			$log->LogFatal("User could not open DB: $e->getMessage().  from " . basename(__FILE__));
@@ -53,8 +54,9 @@
 	}
 	try {
 		$addonArray = array();
-		$roomIds = explode(',', $roomIds);
-		foreach($roomIds as $x) {
+		//$roomIds = explode(',', $roomIds);
+		//foreach($roomIds as $x) {
+		foreach($roomArray as $x => $temp) {
 			if(!isset($x) || $x == '' || is_array($x)) { continue; }
 			if($roomArray[$x]['globalDisable']==1){ continue; }
 			$allAddonsAlive="1";

@@ -210,24 +210,8 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 		
 	}
 	
-	/*
-	
-	addons:
-	
-	need scan addon folder for new addons (add)
-	
-	save addons
-	
-	delete addons?  remove folder from dir?
-	
-need to add version to addons -->>   {addon}/{addon}.php  >>   {addon}=type.addonname.version-subversion-subversion   classname in {addon}.php remains addonname
 	
 	
-	
-	*/
-
-
-
 
 	/* end addons section  */	
 	

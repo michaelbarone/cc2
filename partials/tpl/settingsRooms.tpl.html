@@ -19,7 +19,7 @@
 							Full Name | Mobile Name | Order Weight
 						</td></tr>
 						<tr ng-repeat="r in Rooms | orderObjectBy:'roomOrder':false" ng-if="r.globalDisable!=1">
-							<td class="addonTitle right">{{r.roomName}} | {{r.roomName | abvTitle}} | 
+							<td class="addonTitle right"><i ng-if="r.globalAccess==1" class="left fa fa-globe" aria-hidden="true"></i> {{r.roomName}} | {{r.roomName | abvTitle}} | 
 								<i class="fa fa-arrow-circle-down pointer" ng-click="roomMenuOrderChange('down',r.roomId);roomsChangedAdd();" aria-hidden="true"></i>
 								<span ng-if="r.roomOrder>0">-{{r.roomOrder}}</span>
 								<span ng-if="r.roomOrder<1">{{r.roomOrder | positive}}</span>
@@ -28,9 +28,7 @@
 						</tr>
 					</table>
 				</div>
-			</span>
-			
-			</span>
+			</span>			
 			<span class="col-2" ng-repeat="r in Rooms">
 				<div class="widget settings" ng-class="{globalDisable: r.globalDisable==1}">
 					<div>
@@ -38,12 +36,15 @@
 						<h2 class="left textRound">{{r.roomName | abvTitle}}</h2>
 						<br class="clear" /><br />
 						<h2 class="center">{{r.roomName}}</h2>
+						
+						<p class="center">
+							<i ng-if="r.globalAccess!=1" class="fa fa-square-o"></i>
+							<i ng-if="r.globalAccess==1" class="fa fa-check-square-o"></i>
+							Global Access
+						</p>
 					</div>
-
 				</div>
 			</span>
-		
-		
 		</div>
 	</div>
 </div>

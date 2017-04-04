@@ -66,7 +66,8 @@ $query = "CREATE TABLE IF NOT EXISTS rooms (
 	`roomId`	integer PRIMARY KEY AUTOINCREMENT,
 	`roomName`	text NOT NULL UNIQUE,
 	`roomOrder`	INTEGER DEFAULT 0,
-	`globalDisable`	INTEGER DEFAULT 0
+	`globalDisable`	INTEGER DEFAULT 0,
+	`globalAccess`	INTEGER DEFAULT 0
 )";
 $statement = $configdbcreate->prepare($query);
 $statement->execute();

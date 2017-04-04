@@ -442,15 +442,15 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 							$scope.userdata.roomcount=newCount;
 						}
 						if(updateAddonsFirstRun===1){
-							if($scope.userdata.currentRoom<1) {
-								$scope.userdata.currentRoom=sessionStorage.getItem('currentRoom');
-							}
 							/* timeout added to allow dom to create the room divs, otherwise the first run gets a console error (cannot find div) */
 							spinnerService.remove("updateAddons");
 							updateAddonsFirstRun=0;
 							$timeout(function() {
+								if($scope.userdata.currentRoom=="null" || $scope.userdata.currentRoom < 1) {
+									$scope.userdata.currentRoom = Object.keys($scope.Rooms)[0];
+								}
 								$scope.changeRoom($scope.userdata.currentRoom);
-							}, 100);
+							}, 500);
 						}
 						
 						var ping = [];

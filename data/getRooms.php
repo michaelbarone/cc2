@@ -25,17 +25,17 @@
 					$roomIds=$row['roomAccess'];
 				}
 			}
-
-			// strip duplicates
-			//$roomIds = implode(',', array_keys(array_flip(explode(',', $roomIds))));
-			$sql = "SELECT * FROM rooms WHERE roomId in ( $roomIds ) AND globalDisable != 1 ORDER BY roomOrder";
-			foreach ($configdb->query($sql) as $row) {
-				$roomId = $row['roomId'];
-				$roomArray[$roomId] = array(
-					'roomId' => intval($roomId), 
-					'roomName' => $row['roomName'],
-					'roomOrder' => intval($row['roomOrder'])
-				);
+			
+			if($roomIds!="deny"){
+				$sql = "SELECT * FROM rooms WHERE roomId in ( $roomIds ) AND globalDisable != 1 OR globalAccess == 1 ORDER BY roomOrder";
+				foreach ($configdb->query($sql) as $row) {
+					$roomId = $row['roomId'];
+					$roomArray[$roomId] = array(
+						'roomId' => intval($roomId), 
+						'roomName' => $row['roomName'],
+						'roomOrder' => intval($row['roomOrder'])
+					);
+				}
 			}
 		} catch(PDOException $e) {
 			$log->LogFatal("User could not open DB: $e->getMessage().  from " . basename(__FILE__));
