@@ -45,7 +45,7 @@
 
 						<p>
 							Addons:
-							<p class="col-12" ng-repeat="a in r.addons">
+							<p class="col-12 widget" ng-repeat="a in r.addons" style="box-shadow: inset 0 0 10px {{colors[$index+1]}};margin:2.5px 0;" ng-class="{globalDisable: Addons[a.addonid]['globalDisable']==1}">
 								<img ng-if="a.device_alive==='0'" class="status left" src="img/led-red.png"/>
 								<img ng-if="a.device_alive<3 && a.device_alive>0" class="status left" src="img/led-orange.png"/>
 								<img ng-if="a.device_alive==='3'" class="status left" src="img/led-green.png"/>								

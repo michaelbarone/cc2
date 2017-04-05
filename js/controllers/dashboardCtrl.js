@@ -25,7 +25,6 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.userdata.currentpage = "dashboard";
 	$scope.userdata.roomcount = 0;
 	$scope.modalOpen = 0;
-	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
 	$scope.userdata.userid = sessionStorage.getItem('userid');
 	$scope.userdata.mobile = sessionStorage.getItem('mobile');
 	$scope.userdata.avatar = sessionStorage.getItem('avatar');
@@ -42,6 +41,12 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 		sessionStorage.setItem('currentRoom',sessionStorage.getItem('homeRoom'));
 		$scope.userdata.linkSelected="room"+$scope.userdata.currentRoom;
 	}
+
+
+
+/* also in other controller until this is pulled into the db  */
+$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
+
 
 	
 	

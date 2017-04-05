@@ -12,6 +12,14 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	$scope.userdata.userid=sessionStorage.getItem('userid');
 	$scope.userdata.mobile=sessionStorage.getItem('mobile');
 	$scope.userdata.avatar=sessionStorage.getItem('avatar');
+
+	
+	
+	/* also in other controller until this is pulled into the db  */
+	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
+
+
+
 	
     $scope.tabs = [{
 			title: 'Users',
