@@ -19,7 +19,7 @@
 							Full Name | Mobile Name | Order Weight
 						</td></tr>
 						<tr ng-repeat="r in Rooms | orderObjectBy:'roomOrder':false" ng-if="r.globalDisable!=1">
-							<td class="addonTitle right"><i ng-if="r.globalAccess==1" class="left fa fa-globe" aria-hidden="true"></i> {{r.roomName}} | {{r.roomName | abvTitle}} | 
+							<td class="addonTitle right"><i ng-if="r.globalAccess==1" class="left fa fa-globe" title="Global Access" aria-hidden="true"></i>&nbsp; {{r.roomName}} | {{r.roomName | abvTitle}} | 
 								<i class="fa fa-arrow-circle-down pointer" ng-click="roomMenuOrderChange('down',r.roomId);roomsChangedAdd();" aria-hidden="true"></i>
 								<span ng-if="r.roomOrder>0">-{{r.roomOrder}}</span>
 								<span ng-if="r.roomOrder<1">{{r.roomOrder | positive}}</span>
@@ -29,7 +29,7 @@
 					</table>
 				</div>
 			</span>			
-			<span class="col-2" ng-repeat="r in Rooms">
+			<span class="col-3" ng-repeat="r in Rooms">
 				<div class="widget settings" ng-class="{globalDisable: r.globalDisable==1}">
 					<div>
 						<button class="btn btn-primary right" ng-click="editRoom(r.roomId)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
@@ -41,6 +41,20 @@
 							<i ng-if="r.globalAccess!=1" class="fa fa-square-o"></i>
 							<i ng-if="r.globalAccess==1" class="fa fa-check-square-o"></i>
 							Global Access
+						</p>
+
+						<p>
+							Addons:
+							<p class="col-12" ng-repeat="a in r.addons">
+								<img ng-if="a.device_alive==='0'" class="status left" src="img/led-red.png"/>
+								<img ng-if="a.device_alive<3 && a.device_alive>0" class="status left" src="img/led-orange.png"/>
+								<img ng-if="a.device_alive==='3'" class="status left" src="img/led-green.png"/>								
+								<img ng-src="addons/{{a.addonid}}/icon.png"  height="50px" width="50px" class="left" style="margin-right:5px;" />
+								{{a.addonid}}
+								<span ng-if="a.addonTitle"><br />{{a.addonTitle}}</span>
+								<span ng-if="a.ip"><br />{{a.ip | noHTTP}}</span>
+							</p>
+						
 						</p>
 					</div>
 				</div>

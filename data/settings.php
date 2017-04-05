@@ -90,32 +90,6 @@ function GetAddonInfo($addonid){
 	return $addoninfo;
 }
 
-/*
-function ScanAddons(){
-	if(!isset($ADDONDIR)) {
-		$found = false;
-		$ADDONDIR = './addons';
-		while(!$found){
-			if(file_exists($ADDONDIR)){ 
-				$found = true;
-			}
-			else{ $ADDONDIR = '../'.$ADDONDIR; }
-		}
-	}
-	// for each folder in $ADDONDIR loop to get addonfolders array
-	
-	// room addons global settings db table to create addons array, compare with addonfolders.
-	
-	// list of addonsfolders that are not in addons
-	
-	// list of addons with global settings and addon.info
-	
-	header('Content-Type: application/json');
-	$json=json_encode($result);
-	return ")]}',\n".$json;
-}
-*/
-
 function GetRooms($configdb){
 	try {
 		$roomsArray = array();
@@ -124,6 +98,14 @@ function GetRooms($configdb){
 			foreach($row as $item => $key) {
 				if(is_numeric($item)) { continue; }
 				$roomsArray[$roomid][$item] = $key;
+			}
+			
+			foreach ($configdb->query("SELECT * FROM rooms_addons WHERE roomid = $roomid") as $row2) {
+				$rooms_addonsid = $row2['rooms_addonsid'];
+				foreach($row2 as $item2 => $key2) {
+					if(is_numeric($item2)) { continue; }
+					$roomsArray[$roomid]['addons'][$rooms_addonsid][$item2] = $key2;
+				}
 			}
 		}		
 		$result = $roomsArray;
@@ -209,115 +191,7 @@ if(isset($action)) {
 			$log->LogWarn("Create First User attempt failed: users already present in system. " . basename(__FILE__));
 			echo "error";
 		}
-		return;
-
-
-	/*
-
-	} elseif($action === "saveUsers"){
-		$users=json_decode(ltrim(GetUsers($configdb),")]}',\n"),true);
-		//print_r($users);
-		//echo "3333<br /><br />";
-		$updatedusers = json_decode($_GET['users'], true);
-		//print_r($updatedusers);
-		foreach($updatedusers as $user){
-			if(!isset($user['username']) || $user['username']===''){
-				echo "attempt to unload -- ".$user['userid'];
-				unset($updatedusers[$user['userid']]);
-			}
-		}
-		
-		$result = array_diff_key($users, $updatedusers);
-		// delete these
-		foreach($result as $user){
-			if(isset($user['userid']) && is_numeric($user['userid']) && $user['userid']>0) {  
-				$query = "DELETE FROM `users` WHERE userid = ".$user['userid']." AND username = '".$user['username']."'";
-				$statement = $configdb->prepare($query);
-				$statement->execute();
-			}
-		}
-
-		
-		
-		
-		$result = array_diff_key($updatedusers, $users);
-		// add these
-		//echo "add these:<br>";
-		foreach($result as $user){
-			// need to add all user options here... include password?  or leave blank and use general password reset modal
-			// see update query below 
-			$query = "INSERT INTO `users` (";
-			
-			// "sanitize" username by stripping all non alpha/numeric characters
-			// this is also done in session_login.php to make sure no usernames have sql injection stuff
-			//$username = preg_replace('/[^a-zA-Z0-9]/', '', $user['username']);
-			
-			foreach($user as $setting => $setas){
-				if($setting==='userid'){ continue; }
-				if($setting==='password'){ continue; }
-				if($setting==='passwordv'){ continue; }
-				if($setting==='lastaccess'){ continue; }
-				if($setting!='username') {
-					$query .= ",";
-				}
-				$query .= $setting;
-			}
-			
-			$query .= ") VALUES (";
-			
-			foreach($user as $setting => $setas){
-				if($setting==='userid'){ continue; }
-				if($setting==='password'){ continue; }
-				if($setting==='passwordv'){ continue; }
-				if($setting==='lastaccess'){ continue; }
-				if($setting!='username') {
-					$query .= ",";
-				}
-				$query .= "'$setas'";
-			}			
-			$query.= ")";
-
-			$statement = $configdb->prepare($query);
-			$statement->execute();
-			unset($updatedusers[$user['userid']]);
-		}		
-		//print_r($result);
-		//echo "<br><br>";
-		
-		
-		//else update remaining $updatedusers
-		//echo "update these entries:";
-		foreach($updatedusers as $user){
-			//print_r($user);
-			// show changed item column(s)
-			$result2 = array_diff($user, $users[$user['userid']]);
-			//print_r($result2);
-			
-			
-			// check if $result2 is an array, if so update this whole userid
-			if(is_array($result2) && count($result2)>0){
-				$query = "UPDATE `users` SET ";
-
-				foreach($user as $setting => $setas){
-					if($setting==='userid'){ continue; }
-					if($setting==='password'){ continue; }
-					if($setting==='passwordv'){ continue; }
-					if($setting==='lastaccess'){ continue; }
-					if($setting!='username') {
-						$query .= ", ";
-					}
-					$query .= "$setting = '$setas'";
-				}
-
-				$query .= " WHERE userid = ".$user['userid'];
-				$statement = $configdb->prepare($query);
-				$statement->execute();
-			}
-		}		
-		return;
-	*/	
-		
-		
+		return;		
 	} elseif($action === "saveUser"){
 		$user = json_decode($_GET['user'], true);
 		$userarray[$user['userid']] = $user;
@@ -526,7 +400,9 @@ if(isset($action)) {
 			$query = "INSERT INTO `rooms` (";
 			
 			foreach($newroom as $setting => $setas){
+				if($setting=='$$hashKey') { continue; }
 				if($setting==='roomId'){ continue; }
+				if($setting==='addons'){ continue; }
 				if($setting!='roomName') {
 					$query .= ",";
 				}
@@ -536,7 +412,9 @@ if(isset($action)) {
 			$query .= ") VALUES (";
 			
 			foreach($newroom as $setting => $setas){
+				if($setting=='$$hashKey') { continue; }
 				if($setting==='roomId'){ continue; }
+				if($setting==='addons'){ continue; }
 				if($setting!='roomName') {
 					$query .= ",";
 				} else {
@@ -560,14 +438,12 @@ if(isset($action)) {
 		foreach($Room as $setting => $setas){
 			if($setting==='roomId'){ continue; }
 			if($setting=='$$hashKey') { continue; }
+			if($setting==='addons'){ continue; }
 			if($setting!='roomName') {
 				$query .= ", ";
 			}
 			$query .= "$setting = '$setas'";
 		}
-
-		echo "$query";
-		
 		$roomId = $Room['roomId'];
 		$query .= " WHERE roomId = '$roomId'";
 		$statement = $configdb->prepare($query);

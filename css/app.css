@@ -661,10 +661,11 @@ img.infoType, span.infoType { height:30px;line-height:35px; }
 	text-align: center;
 	font-size: 2em;
 	font-weight: bold;
-	width: 90%;
+	width: 100%;
 	color: red;
-	margin: -10px 0;
 	position: absolute;
+	bottom: 10px;
+	left: 0;
 }
 
 .timebar {
