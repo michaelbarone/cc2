@@ -52,6 +52,9 @@ app.factory('loginService',function($http, $location, sessionService, inform, cr
 			sessionStorage.removeItem('uid');
 			sessionStorage.removeItem('username');
 			sessionStorage.removeItem('homeRoom');
+			sessionStorage.removeItem('avatar');
+			sessionStorage.removeItem('mobile');
+			sessionStorage.removeItem('settingsAccess');
 			$location.path('/login');
 		},
 		islogged:function(){

@@ -12,7 +12,15 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	$scope.userdata.userid=sessionStorage.getItem('userid');
 	$scope.userdata.mobile=sessionStorage.getItem('mobile');
 	$scope.userdata.avatar=sessionStorage.getItem('avatar');
+	$scope.userdata.settingsAccess=sessionStorage.getItem('settingsAccess');
 
+	if($scope.userdata.settingsAccess!='1'){
+		$location.path('/dashboard');
+		return;
+	} else if($scope.userdata.username=='' || $scope.userdata.username==null){
+		loginService.logout();
+		return;
+	}
 	
 	
 	/* also in other controller until this is pulled into the db  */
@@ -65,6 +73,7 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	
 
 	$scope.init = function(){
+		$scope.CheckLogged();
 		$scope.getAllUsers();
 		$timeout(function() {
 			$scope.getAddons();
@@ -91,10 +100,6 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	$scope.getAllUsers = function() {
 		$http.get('data/settings.php?action=getUsers')
 			.success(function(data) {
-				if(data[$scope.userdata.userid]['settingsAccess']==='0'){
-					$location.path('/dashboard');
-					return;
-				}
 				$scope.Users = data;
 			});
 	}
@@ -177,6 +182,7 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	}	
 	
 	$scope.scanAddons = function(){
+		$scope.CheckLogged();
 		$http.get('data/settings.php?action=scanAddons')
 			.success(function(data) {
 			}).finally(function(){

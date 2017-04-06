@@ -2,7 +2,7 @@
 
 var app= angular.module('ControlCenter', ['ngSanitize','ngRoute','ngResource','ngIdle','ngScrollTo','inform','ngAnimate','NgModel','angularModalService','ngDraggable','FBAngular','angular-carousel','chart.js','toggle-switch']);
 app.config(['$routeProvider','$controllerProvider','informProvider','KeepaliveProvider', 'IdleProvider', function($routeProvider,$controllerProvider,informProvider,KeepaliveProvider, IdleProvider) {
-	// routes
+	/* routes */
 	app.settingsController = $controllerProvider.register;
 	app.dashboardController = $controllerProvider.register;
 	app.chatController = $controllerProvider.register;	
@@ -12,7 +12,7 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 	$routeProvider.when('/servercheck', {templateUrl: 'partials/servercheck.html'});
 	$routeProvider.otherwise({redirectTo: '/login'});
 	
-	// notifications
+	/* notifications */
 	var informDefaults = {
 		/* default time to live for each notification */
 		ttl: 4000,
@@ -21,7 +21,7 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 	};
 	informProvider.defaults(informDefaults);
 	
-	// ngidle settings
+	/* ngidle settings */
 	IdleProvider.idle(360);
 	IdleProvider.timeout(0);
 	KeepaliveProvider.interval(10);
@@ -34,10 +34,9 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 	
 }]);
 
-
-
 app.run(function($rootScope, $location, loginService, Idle, cron){
-	var routespermission=['/dashboard','/settings'];  //route that require login
+	/* routes that require login */
+	var routespermission=['/dashboard','/settings'];
 	$rootScope.$on('$routeChangeStart', function(){
 		if( routespermission.indexOf($location.path()) !=-1)
 		{
@@ -65,88 +64,6 @@ app.run(function($rootScope, $location, loginService, Idle, cron){
 	if($location.path()!="/login"){
 		cron.start();
 	}
-	Idle.watch();  // start idle check
+	/* start idle check */
+	Idle.watch();
 });
-
-app.filter('trustUrl', function ($sce) {
-	return function(url) {
-		return $sce.trustAsResourceUrl(url);
-	};
-});
-
-app.directive('chat', function () {
-	return {
-		restrict: 'EAC', //E = element, A = attribute, C = class, M = comment         
-		//scope: {
-			//@ reads the attribute value, = provides two-way binding, & works with functions
-		//	title: '@'
-		//},
-		//template: '<div>{{ myVal }}</div>',
-		templateUrl: 'partials/chat.html',
-		//controller: chatCtrl   //Embed a custom controller in the directive
-		link: function ($scope) { } //DOM manipulation
-	}
-});
-
-app.directive('onLongPress', function($timeout) {
-	return {
-		restrict: 'A',
-		link: function($scope, $elm, $attrs) {
-			$elm.bind('touchstart', function(evt) {
-				// Locally scoped variable that will keep track of the long press
-				$scope.longPress = true;
-
-				// We'll set a timeout for 600 ms for a long press
-				$timeout(function() {
-					if ($scope.longPress) {
-						evt.preventDefault();
-						// If the touchend event hasn't fired,
-						// apply the function given in on the element's on-long-press attribute
-						$scope.$apply(function() {
-							$scope.$eval($attrs.onLongPress)
-						});
-					}
-				}, 600);
-			});
-
-			$elm.bind('touchend', function(evt) {
-				// Prevent the onLongPress event from firing
-				$scope.longPress = false;
-				// If there is an on-touch-end function attached to this element, apply it
-				if ($attrs.onTouchEnd) {
-					$scope.$apply(function() {
-						$scope.$eval($attrs.onTouchEnd)
-					});
-				}
-			});			
-			
-			$elm.bind('mousedown', function(evt) {
-				// Locally scoped variable that will keep track of the long press
-				$scope.longPress = true;
-
-				// We'll set a timeout for 600 ms for a long press
-				$timeout(function() {
-					if ($scope.longPress) {
-						evt.preventDefault();
-						// If the touchend event hasn't fired,
-						// apply the function given in on the element's on-long-press attribute
-						$scope.$apply(function() {
-							$scope.$eval($attrs.onLongPress)
-						});
-					}
-				}, 600);
-			});			
-			
-			$elm.bind('mouseup', function(evt) {
-				// Prevent the onLongPress event from firing
-				$scope.longPress = false;
-				// If there is an on-touch-end function attached to this element, apply it
-				if ($attrs.onTouchEnd) {
-					$scope.$apply(function() {
-						$scope.$eval($attrs.onTouchEnd)
-					});
-				}
-			});
-		}
-	};
-})
