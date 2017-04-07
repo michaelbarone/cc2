@@ -21,7 +21,32 @@
 				</div>
 			</span>
   
-  
+			<span class="col-12" ng-if="(Navigation | keylength)>1">
+				<div class="addonTitle widget">
+					<button type="button" ng-click="question(Navigation)" class="btn btn-primary btn-sm"><i class="fa fa-question" aria-hidden="true"></i></button>
+					<button type="button" ng-click="addNavigationGroup()" class="btn btn-success btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> New Nav Group</button>
+					<button type="button" ng-click="getNavigation()" class="btn btn-primary btn-sm right"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh Nav Links</button>
+				</div>
+			</span>		
+			<span class="col-12" ng-repeat="g in Navigation.groups" ng-if="g.navgroupname && (Navigation | keylength)>1">
+				<div class="widget settings navigation" ng-class="{globalDisable: n.globalDisable==1}">
+					<div>
+						<button class="btn btn-primary right" ng-click="editNavigation(n.navid)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
+						<!--<img ng-drag="true" ng-drag-data="n" src="img/Programs/{{n.navname}}.png" height="50px" width="50px" class="left"/>-->
+						<h2 class="center">{{g.navgroupname}}</h2>
+					</div>
+
+					<span class="col-1 	" ng-repeat="linkid in g.navitems.split(',') track by $index">
+						<div class="widget settings navigation" ng-class="{globalDisable: Navigation[linkid].globalDisable==1}">
+							<div>
+								<img src="img/Programs/{{Navigation[linkid].navname}}.png" height="50px" width="50px" class="center"/>
+								<br class="clear" /><br />
+								<h4 class="center">{{Navigation[linkid].navname}}</h4>
+							</div>
+						</div>
+					</span>
+				</div>
+			</span>
   
   
   
