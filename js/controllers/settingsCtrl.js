@@ -189,6 +189,16 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 				$scope.getAddons();
 			});
 	}
+
+	/*  direct link file for now, dont need this function
+	$scope.downloadAddon = function(addon){
+		$scope.CheckLogged();
+		$http.get('data/settings.php?action=downloadAddon&addon='+JSON.stringify(addon))
+			.success(function(data) {
+			}).finally(function(){
+			});
+	}
+	*/
 	
 	$scope.saveAddon = function(addon){
 		$scope.CheckLogged();

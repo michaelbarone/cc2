@@ -933,6 +933,10 @@ img.infoType, span.infoType { height:30px;line-height:35px; }
   *margin-left: 0;
 }
 
+.btn.right:first-child {
+  margin-left: .3em;
+}
+
 .btn:hover,
 .btn:focus {
   color: #333333;

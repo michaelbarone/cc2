@@ -271,20 +271,92 @@ if(isset($action)) {
 			
 			
 	} elseif($action === "scanAddons"){
+		/*  check existing addon zips  */
+		$addonZips = scandir("../addons/packages");
+		$addonZipArray = array();
+		$i=0;
+		foreach($addonZips as $key => $item){
+			if($item=='.' || $item=='..') {
+				unset($addonZips[$key]);
+				continue;
+			}
+			$i++;
+			$item = str_replace('.zip','',$item);
+			$addonZipArray[$i]['addonid']=$item;
+			$addonZipArray[$i]['id']=$i;
+		}
 
+	
+		/*  check existing addon folders (same as below)  */
 		$addonFolders = scandir("../addons");
 		$addonArray = array();
 		$i=0;
 		foreach($addonFolders as $key => $item){
-			if($item=='.' || $item=='..') { 
+			if($item=='.' || $item=='..' || $item=='packages') {
 				unset($addonFolders[$key]);
 				continue;
 			}
 			$i++;
 			$addonArray[$i]['addonid']=$item;
 			$addonArray[$i]['id']=$i;
-			
 		}
+		
+		
+		/*  check if addon zip has already been upzipped to addon directory, else unzip  */
+		foreach($addonZipArray as $addonZip){
+			$inarray=0;
+			$notinarray=0;
+			foreach($addonArray as $addonFolder){
+				if(in_array($addonZip['addonid'], $addonFolder)){
+					$inarray++;
+				} else {
+					$notinarray++;
+				}
+			}
+			if($inarray>0){
+				unset($addonZipArray[$addonZip['id']]);
+			}
+		}
+		
+
+		if(!empty($addonZipArray)){
+			/*  unzip any new addons into addon directory, then add to addonArray  */
+			foreach($addonZipArray as $addonZip){
+				$unzipme = $addonZip['addonid'].".zip";
+				$zip = zip_open("../addons/packages/$unzipme");
+				if ($zip) {
+					mkdir("../addons/".$addonZip['addonid']);
+					while ($zip_entry = zip_read($zip)) {
+						if(zip_entry_name($zip_entry) == $addonZip['addonid']."/") { continue; }
+						$fp = fopen("../addons/".zip_entry_name($zip_entry), "w");
+						if (zip_entry_open($zip, $zip_entry, "r")) {
+							$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+							fwrite($fp,"$buf");
+							zip_entry_close($zip_entry);
+							fclose($fp);
+						}
+					}
+					zip_close($zip);
+				}			
+			}
+
+			/*  re-check existing addon folders (same as above)  */
+			$addonFolders = scandir("../addons");
+			$addonArray = array();
+			$i=0;
+			foreach($addonFolders as $key => $item){
+				if($item=='.' || $item=='..' || $item=='packages') {
+					unset($addonFolders[$key]);
+					continue;
+				}
+				$i++;
+				$addonArray[$i]['addonid']=$item;
+				$addonArray[$i]['id']=$i;
+			}
+		}
+		
+		
+		/*  check if addon has already been added to DB, if in db, remove from list to import  */
 		$addons=json_decode(ltrim(GetAddons($configdb),")]}',\n"),true);
 		foreach($addonArray as $addonFolder){
 			$inarray=0;
@@ -299,24 +371,17 @@ if(isset($action)) {
 			if($inarray>0){
 				unset($addonArray[$addonFolder['id']]);
 			}
-		
-			
 		}
-		//echo "add these addons";
-		//print_r($addonArray);
+		
+		
+		/* add the addons not already in db  */
 		foreach($addonArray as $newaddon){
 			$addoninfo = GetAddonInfo($newaddon['addonid']);
 			$addoninfo = json_decode($addoninfo, true);
 			$addonArray[$newaddon['id']]['info']=$addoninfo['info'];
-			
-
-			
-			
 		}
-	
 		foreach($addonArray as $newaddon){
 			$query = "INSERT INTO `addons` (";
-			
 			foreach($newaddon as $setting => $setas){
 				if($setting==='id'){ continue; }
 				if($setting!='addonid') {
@@ -326,7 +391,6 @@ if(isset($action)) {
 			}
 			
 			$query .= ") VALUES (";
-			
 			foreach($newaddon as $setting => $setas){
 				if($setting==='id'){ continue; }
 				if($setting!='addonid') {
@@ -339,10 +403,6 @@ if(isset($action)) {
 			$statement = $configdb->prepare($query);
 			$statement->execute();
 		}			
-			
-			
-			
-
 	} elseif($action === "saveAddon"){
 		$addon = json_decode($_GET['addon'], true);
 		
@@ -363,6 +423,28 @@ if(isset($action)) {
 		$statement = $configdb->prepare($query);
 		$statement->execute();		
 
+		
+		
+	} elseif($action === "downloadAddon"){
+		/*  direct linking to files now, dont need this (couldnt get to work)
+		
+		$addon = json_decode($_GET['addon'], true);
+		
+		$file = '../addons/packages/'.$addon.'.zip';
+		
+		header("Cache-Control: public");
+		header("Content-Description: File Transfer");
+		header('Content-Disposition: attachment; filename="basename($file)"');
+		header('Expires: 0');
+		header('Pragma: public');
+		header('Content-Length: ' . filesize($file));
+		header("Content-Type: application/zip");
+		header("Content-Transfer-Encoding: binary");
+
+		// read the file from disk
+		readfile($file);		
+		
+		*/
 
 	} elseif($action === "saveRooms"){
 		$Rooms = json_decode($_GET['data'], true);

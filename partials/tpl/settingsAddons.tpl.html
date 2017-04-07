@@ -13,6 +13,7 @@
 				<div class="widget settings addons" ng-class="{globalDisable: addon.globalDisable==1}">
 					<div>
 						<button class="btn btn-primary right" ng-click="editAddon(addon.addonid)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
+						<a class="btn btn-info right" href="addons/packages/{{addon.addonid}}.zip"><i class="fa fa-download" aria-hidden="true"></i> Download</a>
 						<img ng-src="addons/{{addon.addonid}}/icon.png"  height="50px" width="50px" class="left" />
 						<h2 class="center clear">{{addon.addonid}}</h2>
 					</div>
