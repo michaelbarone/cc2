@@ -6,27 +6,16 @@ app.factory('loginService',function($http, $location, sessionService, inform, cr
 			var $promise=$http.post('data/session_login.php',data);
 			$promise.then(function(msg){
 				if(!msg.data['failed']) {
-					var uid=msg.data['uid'];
-					var username=msg.data['username'];
-					var userid=msg.data['userid'];
-					var homeRoom=msg.data['homeRoom'];
-					var mobile=msg.data['mobile'];
-					var settingsAccess=msg.data['settingsAccess'];
-					var avatar=msg.data['avatar'];
-					if(uid){
+					if(msg.data['uid']){
 						cron.start();
 						inform.clear();
-						inform.add('Welcome, ' + username);
-						sessionService.set('uid',uid);
-						sessionService.set('username',username);
-						sessionService.set('userid',userid);
-						sessionService.set('homeRoom',homeRoom);
-						sessionService.set('mobile',mobile);
-						sessionService.set('settingsAccess',settingsAccess);
-						sessionService.set('avatar',avatar);
-						if(oldUID!=userid){
-							sessionService.set('currentRoom',homeRoom);
-						}
+						inform.add('Welcome, ' + msg.data['username']);					
+						$.each(msg.data, function(k,i) {
+							sessionService.set(k,i);
+							if(k=="homeRoom" && oldUID!=msg.data['userid']){
+								sessionService.set('currentRoom',i);
+							}					
+						});
 						$location.path('/dashboard');
 					} else {
 						inform.clear();
