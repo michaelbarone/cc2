@@ -27,7 +27,30 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	/* also in other controller until this is pulled into the db  */
 	$scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red', 'silver', 'teal', 'white', 'lime', 'aqua', 'fuchsia', 'yellow'];
 
-
+	$scope.showModal = function(data,type) {
+		spinnerService.add("showModal");
+		
+		if(type==="addon"){
+			var turl = "./partials/tpl/modalAddonInfo.html";
+		}else if(type==="userpref"){
+			var turl = "./partials/tpl/modalUserPreferences.html";
+		}
+		
+		ModalService.showModal({
+			templateUrl: turl
+			, controller: "ModalController"
+			,inputs: {
+				data: data,
+		    }
+			, scope: $scope
+		}).then(function(modal) {
+			$scope.modalOpen=1;
+			spinnerService.remove("showModal");
+            modal.close.then(function() {
+				$scope.modalOpen=0;
+            });
+		});
+	};
 
 	
     $scope.tabs = [{
