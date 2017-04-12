@@ -1,5 +1,5 @@
 'use strict';
-app.factory('loginService',function($http, $location, sessionService, inform, cron){
+app.factory('userService',function($http, $location, sessionService, inform, cron){
 	return{
 		login:function(data){
 			var oldUID=sessionService.get('userid');
@@ -40,6 +40,7 @@ app.factory('loginService',function($http, $location, sessionService, inform, cr
 			sessionService.destroy('uid');
 			sessionStorage.removeItem('uid');
 			sessionStorage.removeItem('username');
+			sessionStorage.removeItem('passwordv');
 			sessionStorage.removeItem('homeRoom');
 			sessionStorage.removeItem('avatar');
 			sessionStorage.removeItem('mobile');
@@ -49,7 +50,33 @@ app.factory('loginService',function($http, $location, sessionService, inform, cr
 		islogged:function(){
 			var $checkSessionServer=$http.post('data/session_check.php');
 			return $checkSessionServer;
-		}	
+		},
+		setPassword:function(userid,password,currentPassword,activeUserid){
+			var data = {};
+			data['set']='password';
+			data['userid']=userid;
+			data['password']=password;
+			data['currentPassword']=currentPassword;
+			data['activeUserid']=activeUserid;
+			var $promise=$http.post('data/userSet.php',JSON.stringify(data));
+			$promise.then(function(msg){
+				if(msg.data=="badPass"){
+					inform.add("Current Password Didn't Match", {
+						ttl: 4000, type: 'warning'
+					});					
+					return "wrongPassword";
+				}else if(msg.data=="failed"){
+					inform.add('Failed to Set Password', {
+						ttl: 4000, type: 'danger'
+					});
+					return "failed";
+				}else if(msg.data=="success"){
+					inform.add('Set Password Successfully', {
+						ttl: 4000, type: 'success'
+					});
+					return "success";
+				}	
+			});
+		}
 	}
-
 });

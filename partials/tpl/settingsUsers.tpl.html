@@ -39,8 +39,8 @@
 					<p ng-if="user.lastaccess==0 || user.lastaccess==null">Last Online: Never</p>					
 					
 					
-					<button ng-if="user.passwordv>0" class="btn btn-success" ng-click="changePassword(user.userid)"><i class="fa fa-lock" aria-hidden="true"></i> Change Password</button>
-					<button ng-if="user.passwordv==0" class="btn btn-warning" ng-click="changePassword(user.userid)"><i class="fa fa-unlock" aria-hidden="true"></i> Set Password</button>
+					<button ng-if="user.passwordv>0" class="btn btn-success" ng-click="setPasswordModal(user.userid)"><i class="fa fa-lock" aria-hidden="true"></i> Change Password</button>
+					<button ng-if="user.passwordv==0" class="btn btn-warning" ng-click="setPasswordModal(user.userid)"><i class="fa fa-unlock" aria-hidden="true"></i> Set Password</button>
 					<br class="clear" /><br />
 				</div>
 			</span>

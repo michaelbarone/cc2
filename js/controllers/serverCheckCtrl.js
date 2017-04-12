@@ -1,6 +1,6 @@
 'use strict';
 
-app.settingsController('serverCheckCtrl', ['$scope','$timeout','$location','loginService','$http','inform','$route','spinnerService', function ($scope, $timeout, $location, loginService, $http, inform, $route, spinnerService){
+app.settingsController('serverCheckCtrl', ['$scope','$timeout','$location','userService','$http','inform','$route','spinnerService', function ($scope, $timeout, $location, userService, $http, inform, $route, spinnerService){
 	$scope.userdata = [];
 	$scope.userdata.currentpage = "Server Check";
 	$scope.Users = [];

@@ -98,6 +98,19 @@ a img {border:0;}
 .col-11 {width: 91.66%;}
 .col-12 {width: 100%;}
 
+.fixed-col-1 {width: 8.33%;}
+.fixed-col-2 {width: 16.66%;}
+.fixed-col-3 {width: 25%;}
+.fixed-col-4 {width: 33.33%;}
+.fixed-col-5 {width: 41.66%;}
+.fixed-col-6 {width: 50%;}
+.fixed-col-7 {width: 58.33%;}
+.fixed-col-8 {width: 66.66%;}
+.fixed-col-9 {width: 75%;}
+.fixed-col-10 {width: 83.33%;}
+.fixed-col-11 {width: 91.66%;}
+.fixed-col-12 {width: 100%;}
+
 .addonTitle {
 	font-size:15pt;
 }

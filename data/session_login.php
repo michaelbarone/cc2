@@ -77,6 +77,7 @@
 			$_SESSION['uid']=uniqid('cc_');
 			$_SESSION['username']=$username;
 			$_SESSION['userid']=$userid;
+			$_SESSION['passwordv']=$passwordv;
 			$_SESSION['homeRoom']=$homeRoom;
 			$_SESSION['settingsAccess']=$settingsAccess;
 			$_SESSION['wanAccess']=$wanAccess;

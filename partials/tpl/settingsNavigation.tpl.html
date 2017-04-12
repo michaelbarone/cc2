@@ -37,8 +37,8 @@
 						<h2 class="center">{{g.navgroupname}}</h2>
 					</div>
 
-					<span class="col-1 	" ng-repeat="linkid in g.navitems.split(',') track by $index">
-						<div class="widget settings navigation" ng-class="{globalDisable: Navigation[linkid].globalDisable==1}">
+					<span ng-repeat="linkid in g.navitems.split(',') track by $index">
+						<div style="width:80px;margin:0;" class="widget settings navigation left" ng-class="{globalDisable: Navigation[linkid].globalDisable==1}">
 							<div>
 								<img src="img/Programs/{{Navigation[linkid].navname}}.png" height="50px" width="50px" class="center"/>
 								<br class="clear" /><br />
@@ -48,92 +48,6 @@
 					</span>
 				</div>
 			</span>
-  
-  
-  
-	<!--
-	<br><br>
-	  <div class="panel-heading"></div>
-		<div class="row">
-			<div class="right">
-				<button type="button" ng-click="cancelChanges(currentTab)" class="btn btn-warning btn-sm" ng-disabled="navChanged < 1">Cancel Changes</button>
-				<button type="button" ng-click="saveNavigation(Navigation)" class="btn btn-success btn-sm" ng-class="navChanged > 0 ? 'greenPulse' : ''" ng-disabled="navChanged < 1">Save Links</button>
-			</div>
-		</div>
-	  <div class="tablecontainer">
-		<table class="table table-hover widget settings">
-			<thead>
-				<tr>
-					<th><button type="button" ng-click="addNavigation()" class="btn btn-primary btn-sm">Add Link</button></th>
-					<th>ID</th>
-					<th>Name</th>
-					<th>ip</th>
-					<th>wan ip</th>
-					<th>mobile</th>
-					<th>wan mobile</th>
-					<th>persistent</th>
-					<th>autorefresh</th>
-					<th>Remove</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="n in Navigation" ng-if="n.navid!='groups'">
-					<td><img width="50px"  ng-drag="true" ng-drag-data="n" src="img/Programs/{{n.navname}}.png"/></td>
-					<td><span ng-bind="n.navid"></span></td>
-					<td><input type="text" ng-model="n.navname" required='required'  ng-change="navChangedAdd()"/></td>
-					<td><input type="text" ng-model="n.navip" required='required'  ng-change="navChangedAdd()"/></td>
-					<td><input type="text" ng-model="n.navipw" ng-change="navChangedAdd()"/></td>
-					<td><input type="text" ng-model="n.mobile" ng-change="navChangedAdd()"/></td>
-					<td><input type="text" ng-model="n.mobilew" ng-change="navChangedAdd()"/></td>	
-					<td><select ng-model="n.persistent" ng-change="navChangedAdd()">
-						<option value="1" ng-selected="n.persistent==1">Yes</option>
-						<option value="0" ng-selected="n.persistent!=1">No</option>
-					</select></td>						
-					<td><select ng-model="n.autorefresh" ng-change="navChangedAdd()">
-						<option value="1" ng-selected="n.autorefresh==1">Yes</option>
-						<option value="0" ng-selected="n.autorefresh!=1">No</option>
-					</select></td>
-					<td><button type="button" ng-click="deleteNavigation(n.navid)" class="btn btn-danger custom-width">X</button></td>
-				</tr>
-			</tbody>
-		</table>
-	  </div>
-	  
-	  <br><br><br>
-	   <div class="panel-heading"><span class="lead">Navigation Groups </span></div>
-	  <div class="tablecontainer">
-		  <table class="table table-hover widget settings">
-			  <thead>
-				  <tr>
-					  <th><button type="button" ng-click="addNavigationGroup()" class="btn btn-primary btn-sm">Add Group</button></th>
-					  <th>ID</th>
-					  <th>Name</th>
-					  <th>Items</th>
-					  <th>Images</th>
-					  <th>Remove</th>
-				  </tr>
-			  </thead>
-			  <tbody>
-				  <tr ng-repeat="g in Navigation['groups']" ng-if="g!='groups'">
-					  <td></td>
-					  <td><span ng-bind="g.navgroupid"></span></td>
-					  <td><input type="text" ng-model="g.navgroupname" required='required' ng-change="navChangedAdd()"/></td>
-					<td><input type="text" ng-model="g.navitems" required='required' ng-change="navChangedAdd()"/></td>
-					  <td>
-						<div ng-drop="true" ng-drop-success="onDropComplete($data,$event)" >
-						  
-						  <img ng-repeat="gn in g.navitems.split(',')" width="50px" src="img/Programs/{{Navigation[gn]['navname']}}.png" randomvar="{{gn}}--{{g.navitems}}--{{$index}}" />
-						  
-					  </div>
-					  </td>
-				     <td><button type="button" ng-click="deleteNavigationGroup(g.navgroupid)" class="btn btn-danger custom-width">X</button></td>
-				</tr>
-			  </tbody>
-		  </table>
-	  </div> 
-	   
-	  
-	  -->
 		</div>
 	</div>
 </div>

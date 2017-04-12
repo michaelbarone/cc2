@@ -1,6 +1,6 @@
 'use strict';
 
-app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$location','loginService','$http','inform','Idle','$route','spinnerService','ModalService', function ($rootScope, $scope, $timeout, $location, loginService, $http, inform, Idle, $route, spinnerService, ModalService){
+app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$location','userService','$http','inform','Idle','$route','spinnerService','ModalService', function ($rootScope, $scope, $timeout, $location, userService, $http, inform, Idle, $route, spinnerService, ModalService){
 	spinnerService.clear();
 	$scope.userdata = [];
 	$scope.userdata.currentpage = "settings";
@@ -9,6 +9,7 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	$scope.Rooms = [];
 	$scope.loaded=0;
 	$scope.userdata.username=sessionStorage.getItem('username');
+	$scope.userdata.passwordv=sessionStorage.getItem('passwordv');
 	$scope.userdata.userid=sessionStorage.getItem('userid');
 	$scope.userdata.mobile=sessionStorage.getItem('mobile');
 	$scope.userdata.avatar=sessionStorage.getItem('avatar');
@@ -18,7 +19,7 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 		$location.path('/dashboard');
 		return;
 	} else if($scope.userdata.username=='' || $scope.userdata.username==null){
-		loginService.logout();
+		userService.logout();
 		return;
 	}
 	
@@ -53,7 +54,7 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
     }
     
 	$scope.CheckLogged = function() {
-		var connected=loginService.islogged();
+		var connected=userService.islogged();
 		connected.then(function(msg){
 			if(msg.data!="passedAuth" || !msg.data) {
 				$location.path('/login');
@@ -167,8 +168,44 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	$scope.usersChangedAdd = function(){
 		$scope.usersChanged++;
 	}
-	
-	
+
+
+
+
+	/* password reset modal 
+		also in dashboardCtrl
+	*/
+	$scope.setPassword = function(userid,password,currentPassword,activeUserid){
+		$scope.CheckLogged();
+		var setPass = userService.setPassword(userid,password,currentPassword,activeUserid);
+			$timeout(function() {
+				//console.log(setPass);
+				//if(setPass=='success'){
+					$scope.getAllUsers();
+				//}
+			}, 500);		
+
+	}
+
+	$scope.setPasswordModal = function(data) {
+		spinnerService.add("showModal");
+		ModalService.showModal({
+			templateUrl: "./partials/tpl/modalPasswordSet.html"
+			, controller: "ModalController"
+			,inputs: {
+				data: data,
+		    }
+			, scope: $scope
+		}).then(function(modal) {
+			$scope.modalOpen=1;
+			spinnerService.remove("showModal");
+            modal.close.then(function() {
+				$scope.modalOpen=0;
+            });
+		});
+	}
+
+
 	/* end users section  */
 
 
@@ -419,7 +456,7 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	$scope.init();	
 	
 	$scope.logout=function(){
-		loginService.logout();
+		userService.logout();
 	};
 
 	$scope.testmessage = function($scope) {

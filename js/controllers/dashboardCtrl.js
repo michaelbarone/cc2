@@ -1,18 +1,23 @@
 'use strict';
 
-app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','loginService','$http','inform','Idle','$location','ModalService','spinnerService','Fullscreen','addonFunctions', function ($rootScope, $scope, $timeout, loginService, $http, inform, Idle, $location, ModalService, spinnerService, Fullscreen, addonFunctions){
-	spinnerService.clear();	
-	var connected=loginService.islogged();
-	connected.then(function(msg){
-		if(msg.data!=="passedAuth") {
-			$location.path('/login');
-		}
-	});
+app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','userService','$http','inform','Idle','$location','ModalService','spinnerService','Fullscreen','addonFunctions', function ($rootScope, $scope, $timeout, userService, $http, inform, Idle, $location, ModalService, spinnerService, Fullscreen, addonFunctions){
+	spinnerService.clear();
+	$scope.CheckLogged = function() {
+		var connected=userService.islogged();
+		connected.then(function(msg){
+			if(msg.data!="passedAuth" || !msg.data) {
+				$location.path('/login');
+			} else {
+				return msg.data;
+			}
+		});		
+	}
+	$scope.CheckLogged();
+	$scope.userdata = [];
 	var sessionUN = sessionStorage.getItem('username');
 	if(sessionUN=='' || sessionUN==null || !sessionUN){
-		loginService.logout();
+		userService.logout();
 	} else {
-		$scope.userdata = [];
 		$scope.userdata.username=sessionStorage.getItem('username');
 	}
 	$scope.links = [];
@@ -26,6 +31,7 @@ app.dashboardController('dashboardCtrl', ['$rootScope','$scope','$timeout','logi
 	$scope.userdata.roomcount = 0;
 	$scope.modalOpen = 0;
 	$scope.userdata.userid = sessionStorage.getItem('userid');
+	$scope.userdata.passwordv = sessionStorage.getItem('passwordv');
 	$scope.userdata.mobile = sessionStorage.getItem('mobile');
 	$scope.userdata.avatar = sessionStorage.getItem('avatar');
 	$scope.userdata.linkGroupSelected = '';
@@ -300,6 +306,14 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
  *  Services
  *
  */
+ 
+	/* password reset modal 
+		also in dashboardCtrl
+	*/
+	$scope.setPassword = function(userid,password,currentPassword,activeUserid){
+		$scope.CheckLogged();
+		userService.setPassword(userid,password,currentPassword,activeUserid);
+	}
 
 	$scope.chart=[];
 	$scope.chart.ping=[];
@@ -374,7 +388,7 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
 	};
 
 	$scope.logout=function(){
-		loginService.logout();
+		userService.logout();
 	};
 
 
@@ -405,7 +419,7 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
 				updateAddonsRunningStartTime = Math.round((new Date).getTime()/1000);				
 				var lastupdated = 0;
 				if(data == "failedAuth"){
-					loginService.logout();
+					userService.logout();
 					return;
 				} else if(data == "failed") {
 					return;

@@ -34,13 +34,13 @@ app.config(['$routeProvider','$controllerProvider','informProvider','KeepalivePr
 	
 }]);
 
-app.run(function($rootScope, $location, loginService, Idle, cron){
+app.run(function($rootScope, $location, userService, Idle, cron){
 	/* routes that require login */
 	var routespermission=['/dashboard','/settings'];
 	$rootScope.$on('$routeChangeStart', function(){
 		if( routespermission.indexOf($location.path()) !=-1)
 		{
-			var connected=loginService.islogged();
+			var connected=userService.islogged();
 			connected.then(function(msg){
 				if(msg.data==="failedAuth" || !msg.data) $location.path('/login');
 			});

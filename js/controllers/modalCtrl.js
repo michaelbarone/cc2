@@ -13,4 +13,9 @@ app.controller('ModalController', ['$scope','close','$http', 'Carousel', '$timeo
 	$scope.Carousel = Carousel;
 	$scope.modalOpen=1;
 	$scope.confirmDelete=false;
+
+	$scope.password="";
+	$scope.passwordConfirm="";
+	$scope.currentPassword="";
+	
 }]);

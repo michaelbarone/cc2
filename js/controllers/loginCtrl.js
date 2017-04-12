@@ -1,8 +1,8 @@
 'use strict';
 
-app.controller('loginCtrl', ['$scope','loginService','$http', '$location', 'inform', 'spinnerService', function ($scope,loginService,$http,$location,inform,spinnerService) {
+app.controller('loginCtrl', ['$scope','userService','$http', '$location', 'inform', 'spinnerService', function ($scope,userService,$http,$location,inform,spinnerService) {
 	spinnerService.clear();
-	var connected=loginService.islogged();
+	var connected=userService.islogged();
 	connected.then(function(msg){
 		if(msg.data==="passedAuth") {
 			$location.path('/dashboard');
@@ -50,7 +50,7 @@ app.controller('loginCtrl', ['$scope','loginService','$http', '$location', 'info
 	};
 		
 	$scope.login=function(data){
-		loginService.login(data,$scope);
+		userService.login(data,$scope);
 	};
 	
 	
