@@ -1,5 +1,5 @@
 'use strict';
-app.factory('userService',function($http, $location, sessionService, inform, cron){
+app.factory('userService',function($http, $location, sessionService, inform, cron, $timeout){
 	return{
 		login:function(data){
 			var oldUID=sessionService.get('userid');
@@ -72,6 +72,26 @@ app.factory('userService',function($http, $location, sessionService, inform, cro
 					return "failed";
 				}else if(msg.data=="success"){
 					inform.add('Set Password Successfully', {
+						ttl: 4000, type: 'success'
+					});
+					return "success";
+				}	
+			});
+		},
+		removePassword:function(userid,activeUserid){
+			var data = {};
+			data['set']='removePassword';
+			data['userid']=userid;
+			data['activeUserid']=activeUserid;
+			var $promise=$http.post('data/userSet.php',JSON.stringify(data));
+			$promise.then(function(msg){
+				if(msg.data=="failed"){
+					inform.add('Failed to Remove Password', {
+						ttl: 4000, type: 'danger'
+					});
+					return "failed";
+				}else if(msg.data=="success"){
+					inform.add('Removed Password Successfully', {
 						ttl: 4000, type: 'success'
 					});
 					return "success";

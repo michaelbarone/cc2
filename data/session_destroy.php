@@ -5,6 +5,7 @@
 	} else {
 		$log->LogInfo("User LOGGED OUT");
 	}
-	session_unset();	
+	session_unset();
+	session_regenerate_id();
 	session_destroy();
 ?>

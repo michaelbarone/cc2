@@ -200,15 +200,24 @@ app.settingsController('settingsCtrl', ['$rootScope','$scope','$timeout','$locat
 	*/
 	$scope.setPassword = function(userid,password,currentPassword,activeUserid){
 		$scope.CheckLogged();
-		var setPass = userService.setPassword(userid,password,currentPassword,activeUserid);
-			$timeout(function() {
-				//console.log(setPass);
-				//if(setPass=='success'){
-					$scope.getAllUsers();
-				//}
-			}, 500);		
-
+		userService.setPassword(userid,password,currentPassword,activeUserid);
+		if(userid == activeUserid){
+			$scope.userdata.passwordv="2";
+		}		
+		$timeout(function() {
+			$scope.getAllUsers();
+		}, 500);
 	}
+	$scope.removePassword = function(userid,activeUserid){
+		$scope.CheckLogged();
+		userService.removePassword(userid,activeUserid);
+		if(userid == activeUserid){
+			$scope.userdata.passwordv="0";
+		}		
+		$timeout(function() {
+			$scope.getAllUsers();
+		}, 500);		
+	}	
 
 	$scope.setPasswordModal = function(data) {
 		spinnerService.add("showModal");

@@ -313,7 +313,17 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
 	$scope.setPassword = function(userid,password,currentPassword,activeUserid){
 		$scope.CheckLogged();
 		userService.setPassword(userid,password,currentPassword,activeUserid);
+		if(userid == activeUserid){
+			$scope.userdata.passwordv="2";
+		}		
 	}
+	$scope.removePassword = function(userid,activeUserid){
+		$scope.CheckLogged();
+		userService.removePassword(userid,activeUserid);
+		if(userid == activeUserid){
+			$scope.userdata.passwordv="0";
+		}
+	}	
 
 	$scope.chart=[];
 	$scope.chart.ping=[];

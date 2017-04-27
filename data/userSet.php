@@ -95,10 +95,30 @@
 		$newPassHash = $hasher->HashPassword($userpass);
 		$userid = $data['userid'];
 		
-		$query = "UPDATE `users` SET password = '".$newPassHash."', passwordv = '2' WHERE userid = '$userid'";
+		$query = "UPDATE `users` SET password = '".$newPassHash."', passwordv = '2' WHERE userid = '".$userid."'";
 		$statement = $configdb->prepare($query);
 		$statement->execute();
 		print "success";
 		exit;
+	} elseif($data['set']=='removePassword'){
+		if(!$data['userid'] || !$data['activeUserid']){
+			print "failed";
+			exit;
+		}		
+		$userid = $data['userid'];
+		$auserid = $data['activeUserid'];
+		
+		if($userid!=$auserid){
+			/* admin changing pass  */
+			$log->LogWARN("PASSWORD REMOVED: user $userid has no password set by an admin user $auserid from " . basename(__FILE__));
+		} else {
+			/*  user changing pass  */
+			$log->LogWARN("PASSWORD REMOVED: user $userid has no password set by themself from " . basename(__FILE__));
+		}
+		$query = "UPDATE `users` SET password = '', passwordv = '0' WHERE userid = '".$userid."'";
+		$statement = $configdb->prepare($query);
+		$statement->execute();
+		print "success";
+		exit;		
 	}
 ?>

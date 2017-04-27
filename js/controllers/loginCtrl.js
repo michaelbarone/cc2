@@ -1,13 +1,7 @@
 'use strict';
 
-app.controller('loginCtrl', ['$scope','userService','$http', '$location', 'inform', 'spinnerService', function ($scope,userService,$http,$location,inform,spinnerService) {
+app.controller('loginCtrl', ['$scope','userService','$http', '$location', 'inform', 'spinnerService', '$timeout', function ($scope,userService,$http,$location,inform,spinnerService,$timeout) {
 	spinnerService.clear();
-	var connected=userService.islogged();
-	connected.then(function(msg){
-		if(msg.data==="passedAuth") {
-			$location.path('/dashboard');
-		}
-	});
 	if(!$scope.users){
 		$scope.users = [];
 	}
@@ -59,5 +53,14 @@ app.controller('loginCtrl', ['$scope','userService','$http', '$location', 'infor
 			document.getElementById('InputPassword'+$scope.toggleLockedLogin.user).focus();
 		}
 	});
+
 	
+	$timeout(function() {
+		var connected=userService.islogged();
+		connected.then(function(msg){
+			if(msg.data==="passedAuth") {
+			$location.path('/dashboard');
+			}
+		});
+	}, 500);
 }]);
