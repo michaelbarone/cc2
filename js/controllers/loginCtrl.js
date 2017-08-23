@@ -58,9 +58,12 @@ app.controller('loginCtrl', ['$scope','userService','$http', '$location', 'infor
 	$timeout(function() {
 		var connected=userService.islogged();
 		connected.then(function(msg){
+			console.log(msg.data);
 			if(msg.data==="passedAuth") {
-			$location.path('/dashboard');
+				$location.path('/dashboard');
+			} else {
+				spinnerService.clear();
 			}
 		});
-	}, 500);
+	}, 1000);
 }]);
