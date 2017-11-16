@@ -452,7 +452,8 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
 						}, 1500);
 					}
 				} else {
-					if($rootScope.systemInfo[0]['lastcrontime']<(updateAddonsRunningStartTime-45)){
+					/* temp fix for linux server issue - 5==2 */
+					if(5==2 && $rootScope.systemInfo[0]['lastcrontime']<(updateAddonsRunningStartTime-45)){
 						if(cronStaleCount<6){
 							cronStaleCount = cronStaleCount + 1;
 						} else {
@@ -534,6 +535,7 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
 							});
 						});
 					}
+					/* temp fix for linux server issue
 					if(lastupdated>-1 && lastupdated<(updateAddonsRunningStartTime-30)){
 						spinnerService.add("staleAddonData",1);
 						staleAddonData = 1;
@@ -541,6 +543,7 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
 						staleAddonData = 0;
 						spinnerService.remove("staleAddonData");
 					}
+					*/
 				}
 			}).finally(function(){
 				if($rootScope.testrun!=1){
