@@ -296,10 +296,27 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
 			$scope.sendFromAddonReSet();
 		}
 	};	
-	
-	
-/***/
 
+
+
+
+	$scope.staleTimestamp = function(timestamp,length='short'){
+		var unix = Math.round(+new Date()/1000);
+		var stale = false;
+		var time = 20;
+		if(length=='long'){
+			time = 45;
+		}
+		if(timestamp < (unix - time)){
+			stale = true;
+		}else{
+			stale = false;
+		}
+		//console.log(timestamp+" less than "+unix+" - "+time+" == "+stale);
+		return stale;
+	};
+	
+/***/   
 
 
 /**
@@ -412,7 +429,7 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
 	var updateAddonsFirstRun=1;
 	var updateAddonsRunning = 0;
 	var cronStaleCount = 0;
-	var updateAddonsRunningStartTime = 0;
+	//var updateAddonsRunningStartTime = 0;
 	var staleAddonData = 0;
 	$scope.updateAddons = function(){
 		if(updateAddonsRunning===1 || $location.path()!="/dashboard") { return; }
@@ -426,7 +443,7 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
 		} else {
 			$http.get('data/getRoomAddonsData.php')
 			.success(function(data) {
-				updateAddonsRunningStartTime = Math.round((new Date).getTime()/1000);				
+				//updateAddonsRunningStartTime = Math.round((new Date).getTime()/1000);				
 				var lastupdated = 0;
 				if(data == "failedAuth"){
 					userService.logout();
@@ -453,7 +470,8 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
 					}
 				} else {
 					/* temp fix for linux server issue - 5==2 */
-					if(5==2 && $rootScope.systemInfo[0]['lastcrontime']<(updateAddonsRunningStartTime-45)){
+					//if(5==2 && $rootScope.systemInfo[0]['lastcrontime']<(updateAddonsRunningStartTime-45)){
+					if($scope.staleTimestamp($rootScope.systemInfo[0]['lastcrontime'],'long')){
 						if(cronStaleCount<6){
 							cronStaleCount = cronStaleCount + 1;
 						} else {
@@ -535,15 +553,16 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
 							});
 						});
 					}
-					/* temp fix for linux server issue
-					if(lastupdated>-1 && lastupdated<(updateAddonsRunningStartTime-30)){
+					/* temp fix for linux server issue*/
+					// if(lastupdated>-1 && lastupdated<(updateAddonsRunningStartTime-30)){
+					if(lastupdated>-1 && $scope.staleTimestamp($rootScope.systemInfo[0]['lastcrontime'],'long')){
 						spinnerService.add("staleAddonData",1);
 						staleAddonData = 1;
 					} else if(staleAddonData>0) {
 						staleAddonData = 0;
 						spinnerService.remove("staleAddonData");
 					}
-					*/
+					
 				}
 			}).finally(function(){
 				if($rootScope.testrun!=1){

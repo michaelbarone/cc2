@@ -49,7 +49,7 @@
 											<img ng-if="room_addons[0][room.roomId][0].addonsAlive>0 && room_addons[0][room.roomId][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
 										</td>
 										<td>
-											<div ng-if="addon.device_alive=='3' && addon.addontype=='mediaplayer' && (addon.displayInfo.info || sendFromAddonIP)" ng-repeat="addon in room_addons[0][room.roomId].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
+											<div ng-if="addon.device_alive=='3' && addon.addontype=='mediaplayer' && (addon.displayInfo.info || sendFromAddonIP) && !staleTimestamp(addon.ping.lastUpdate)" ng-repeat="addon in room_addons[0][room.roomId].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
 												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="startMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Start</a>
@@ -134,7 +134,7 @@
 									<br class="clear" />
 								</div>
 								<!-- need to update the visual for these addon areas -->
-								<div ng-if="addon.addontype=='mediaplayer' && addon.displayInfo.info">
+								<div ng-if="addon.addontype=='mediaplayer' && addon.displayInfo.info && !staleTimestamp(addon.ping.lastUpdate)">
 									<i ng-if="addon.displayInfo.type=='tv' || addon.displayInfo.type=='episode'" class="fa fa-2x fa-television infoType" aria-hidden="true"></i>
 									<i ng-if="addon.displayInfo.type=='movies' || addon.displayInfo.type=='movie'" class="fa fa-2x fa-film infoType" aria-hidden="true"></i>
 									<i ng-if="addon.displayInfo.type=='music'" class="fa fa-2x fa-headphones infoType" aria-hidden="true"></i>
