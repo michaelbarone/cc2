@@ -303,7 +303,7 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
 	$scope.staleTimestamp = function(timestamp,length='short'){
 		var unix = Math.round(+new Date()/1000);
 		var stale = false;
-		var time = 20;
+		var time = 45;
 		if(length=='long'){
 			time = 45;
 		}
@@ -317,6 +317,8 @@ $scope.colors = ['blue', 'gray', 'green', 'maroon', 'navy', 'olive', 'orange', '
 	};
 	
 /***/   
+
+
 
 
 /**
