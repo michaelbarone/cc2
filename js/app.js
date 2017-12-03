@@ -38,6 +38,8 @@ app.run(function($rootScope, $location, userService, Idle, cron){
 	/* routes that require login */
 	var routespermission=['/dashboard','/settings'];
 	$rootScope.$on('$routeChangeStart', function(){
+		/* clear any existing spinner info from previous route */
+		$rootScope.spinnerArray=[];
 		if( routespermission.indexOf($location.path()) !=-1)
 		{
 			var connected=userService.islogged();
@@ -46,7 +48,7 @@ app.run(function($rootScope, $location, userService, Idle, cron){
 			});
 		}
 		$rootScope.testrun = 0;
-		$rootScope.debug = 0;		
+		$rootScope.debug = 0;	
 		if($location.search()['command']){
 			switch($location.search()['command']){
 				case 'test':
