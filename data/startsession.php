@@ -58,7 +58,7 @@ if(!isset($configdb)) {
 		$configdb = new PDO('sqlite:' . $PRIVATE_DATA . '/db/config.db');
 		$configdb->exec("pragma synchronous = off;");
 		} catch (PDOException $e) {
-		$log->LogFatal("Fatal: User could not open DB: $e->getMessage().  from " . basename(__FILE__));
+		$log->LogFatal("Fatal: User could not open DB: ".$e->getMessage()."  from " . basename(__FILE__));
 	}
 }
 ?>
