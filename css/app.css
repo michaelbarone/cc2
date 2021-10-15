@@ -431,7 +431,7 @@ img.infoType, span.infoType { height:30px;line-height:35px; }
 }
 
 #link-menu .title {
-	## width:105px;
+	/* width:105px; */
 	line-height:150%;
 	padding-top:8px;
 } 
@@ -488,7 +488,12 @@ img.infoType, span.infoType { height:30px;line-height:35px; }
 #room-menu-ul {
 	position: absolute;
 	right: -30px;
-	top: 50px;
+	top: 56px;
+}
+
+.rooms .title {
+  top: 5px;
+  position: relative;
 }
 
 #room-menu-ul table {
@@ -1287,7 +1292,7 @@ input[type="submit"].btn.btn-mini {
   overflow: hidden;
 }
 .modal {
-  ## display: none;
+  /* display: none; */
   overflow: hidden;
   position: fixed;
   top: 0;
@@ -1492,7 +1497,7 @@ input[type="submit"].btn.btn-mini {
 .imageslider {
 	width: 95%;
 	right: 0;
-	## height: 400px;
+	/* height: 400px; */
 	overflow-x: auto;
 	position: absolute;
 	overflow-y: hidden;
