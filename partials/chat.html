@@ -1,50 +1,55 @@
+<!DOCTYPE html>
 <script src="./js/controllers/chatCtrl.js"></script>
 <div id="chatWrapper" ng-controller="chatCtrl">
-	<button class="closeChatBox btn btn-warning" ng-click="closeChat()">Close Chat</button>
-	<div id="chatContactListContainer">
-		<!-- >
+  <button class="closeChatBox btn btn-warning" ng-click="closeChat()">Close Chat</button>
+  <div id="chatContactListContainer">
+    <!-- >
 		admin announcements
 		all warns/errors in logs
 		
 		<hr />		
 		</!-->
-		<br />
-		<h5>System Announcements</h5>
-		<li ng-class="{'selected': chattingWith==room_addons[0][userdata.currentRoom][0].roomName}"><a ng-click="chatWithRoom(userdata.currentRoom,userdata.lastRoomChange)">{{room_addons[0][userdata.currentRoom][0].roomName}}</a></li>
+    <br />
+    <h5>System Announcements</h5>
+    <li ng-class="{'selected': chattingWith==room_addons[0][userdata.currentRoom][0].roomName}">
+      <a ng-click="chatWithRoom(userdata.currentRoom,userdata.lastRoomChange)">{{room_addons[0][userdata.currentRoom][0].roomName}}</a>
+    </li>
 
-		<hr />	
-		<br />
-		<h5>Room Chat</h5>
-		<li ng-class="{'selected': chattingWith==room_addons[0][userdata.currentRoom][0].roomName}"><a ng-click="chatWithRoom(userdata.currentRoom,userdata.lastRoomChange)">{{room_addons[0][userdata.currentRoom][0].roomName}}</a></li>
+    <hr />
+    <br />
+    <h5>Room Chat</h5>
+    <li ng-class="{'selected': chattingWith==room_addons[0][userdata.currentRoom][0].roomName}">
+      <a ng-click="chatWithRoom(userdata.currentRoom,userdata.lastRoomChange)">{{room_addons[0][userdata.currentRoom][0].roomName}}</a>
+    </li>
 
-		<hr />
-		<br />
-		<h5>Users</h5>
-		<ul>
-			<li ng-repeat="user in users" ng-if="user.lastaccess!=null && user.lastaccess > (currenttime - 900)" ng-class="{'selected': chattingWith==user.username}">
-				<img ng-if="(currenttime - 15) > user.lastaccess" class="status ng-scope" src="img/led-orange.png">
-				<img ng-if="user.lastaccess > (currenttime - 15)" class="status ng-scope" src="img/led-green.png">
-				<a ng-click="chatWithUser(user.userid)">{{user.username}}</a>
-			</li>
-		</ul>
-		<ul>
-			<li ng-repeat="user in users" ng-if="user.lastaccess==null || user.lastaccess < (currenttime - 900)" ng-class="{'selected': chattingWith==user.username}">
-				<img class="status ng-scope" src="img/led-red.png">
-				<a ng-click="chatWithUser(user.userid)">{{user.username}}</a>
-			</li>
-		</ul>		
-		<!--  offline users list -->
+    <hr />
+    <br />
+    <h5>Users</h5>
+    <ul>
+      <li ng-repeat="user in users" ng-if="user.lastaccess!=null && user.lastaccess > (currenttime - 900)" ng-class="{'selected': chattingWith==user.username}">
+        <img ng-if="(currenttime - 15) > user.lastaccess" class="status ng-scope" src="img/led-orange.png" />
+        <img ng-if="user.lastaccess > (currenttime - 15)" class="status ng-scope" src="img/led-green.png" />
+        <a ng-click="chatWithUser(user.userid)">{{user.username}}</a>
+      </li>
+    </ul>
+    <ul>
+      <li ng-repeat="user in users" ng-if="user.lastaccess==null || user.lastaccess < (currenttime - 900)" ng-class="{'selected': chattingWith==user.username}">
+        <img class="status ng-scope" src="img/led-red.png" />
+        <a ng-click="chatWithUser(user.userid)">{{user.username}}</a>
+      </li>
+    </ul>
+    <!--  offline users list -->
 
-		<p ng-click="chatWithRoom(userdata.currentRoom)">{{userdata.lastRoomChange}}</p>
-	</div>
+    <p ng-click="chatWithRoom(userdata.currentRoom)">{{userdata.lastRoomChange}}</p>
+  </div>
 
-	<div id="chatBox" class="transformable-horizontal" ng-class="{'open' : chatBoxOpen===true}">
-		<button class="closeChatBox btn btn-warning" ng-click="closeChatBox()">Close Conversation ></button>
-		
-		<span class="message-form">
-			<textarea ng-model="newMessage" placeholder="Send message to {{chattingWith}}" ng-class="{'big' : tallerMessageArea}" class="transformable-vertical" autofocus />
-			<button ng-click="sendNewMessage(newMessage)" class="btn btn-primary">Send</button>
-			<button ng-click="tallerMessageArea = !tallerMessageArea" class="btn btn-info">More</button>
-		</span>
-	</div>
+  <div id="chatBox" class="transformable-horizontal" ng-class="{'open' : chatBoxOpen===true}">
+    <button class="closeChatBox btn btn-warning" ng-click="closeChatBox()">Close Conversation ></button>
+
+    <span class="message-form">
+      <textarea ng-model="newMessage" placeholder="Send message to {{chattingWith}}" ng-class="{'big' : tallerMessageArea}" class="transformable-vertical" autofocus />
+      <button ng-click="sendNewMessage(newMessage)" class="btn btn-primary">Send</button>
+      <button ng-click="tallerMessageArea = !tallerMessageArea" class="btn btn-info">More</button>
+    </span>
+  </div>
 </div>

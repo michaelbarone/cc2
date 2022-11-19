@@ -1,0 +1,56 @@
+# when updating this file, check other ignore files for needed items
+
+# any local project ignores should go here
+
+# allow these folders -- these can be ignored (over-ridden) below, try not to do that.
+
+!/pages/**/*
+!/components/**/*
+!/src/**/*
+
+# remove *.md from .markdownlintignore and add .*
+
+*.md
+.*
+
+# file exclusions -- these will over-ride any above allowed directories
+
+*.txt
+*.yml
+env.*
+tsconfig.json
+tsconfig.*.json
+*.lock
+*lock.json
+*.keep
+CHANGELOG.md
+*.config.js
+
+# folder exclusions
+
+**/eyerate/lib/**
+**/eyerate/types/docs/**
+**/.vscode/**
+**/.husky/**
+**/.git/**
+**/.github/**
+.build/**
+/build/**
+/node_modules/**
+/storybook-static/**
+/coverage/**
+/docs/**
+/jsdoc/**
+/templates/**
+/tests/**
+/logs/**
+/lib/**
+/tmp/**
+/private/**
+/tools/**
+/public/**
+/assets/**
+**/test/**
+**/**tests**/**
+**/**test**/**
+.next

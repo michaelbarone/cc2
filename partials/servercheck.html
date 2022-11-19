@@ -1,11 +1,11 @@
+<!DOCTYPE html>
 <script src="./js/controllers/serverCheckCtrl.js"></script>
 <div ng-controller="serverCheckCtrl">
-	<div id="header">
-	</div>
-	<div id="dashboardWrapper" class="settings">
-        <div id="mainView">
-            <div ng-include src="'partials/tpl/serverCheck.tpl.html'"></div>
-        </div>
-	</div>
-	<div id="chatContainer" ng-class="{'open' : chatOpen == true}" class="transformable-horizontal" chat></div>
+  <div id="header"></div>
+  <div id="dashboardWrapper" class="settings">
+    <div id="mainView">
+      <div ng-include src="'partials/tpl/serverCheck.tpl.html'"></div>
+    </div>
+  </div>
+  <div id="chatContainer" ng-class="{'open' : chatOpen == true}" class="transformable-horizontal" chat></div>
 </div>

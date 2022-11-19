@@ -1,46 +1,54 @@
+<!DOCTYPE html>
 <div class="modal fade in">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="header">
-				<ul><li>
-					<span class="right">
-						<button type="button" ng-click="saveRoom($parent.Rooms[initdata]);closeModal('close');" class="btn btn-success btn-sm" ng-class="roomsChanged > 0 ? 'greenPulse' : ''" ng-disabled="roomsChanged < 1">Save Room</button>
-						<button type="button" ng-click="cancelChanges(currentTab);closeModal('close');" class="btn btn-warning btn-sm">Cancel Changes</button>
-						<span class="margin:0 15px;">&nbsp;</span>
-						<button type="button" ng-click="confirmDelete = !confirmDelete;" class="btn btn-danger btn-sm">DELETE ROOM</button>
-						<span class="margin:0 15px;">&nbsp;</span>
-						<button type="button" class="btn btn-danger close" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
-					</span>
-					<a class="title main panel">Room Settings</a>
-				</li></ul>
-			</div>
-			<div ng-show="confirmDelete" class="transformable-vertical" style="top: 50px;position: relative;margin: 0 auto;width: 350px;">
-				<span class="center">
-				<h1>This action is final</h1>
-				<button type="button" ng-click="deleteRoom($parent.Rooms[initdata]);closeModal('close');" class="btn btn-danger btn-sm left">Confirm Delete</button>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="header">
+        <ul>
+          <li>
+            <span class="right">
+              <button
+                type="button"
+                ng-click="saveRoom($parent.Rooms[initdata]);closeModal('close');"
+                class="btn btn-success btn-sm"
+                ng-class="roomsChanged > 0 ? 'greenPulse' : ''"
+                ng-disabled="roomsChanged < 1"
+              >
+                Save Room
+              </button>
+              <button type="button" ng-click="cancelChanges(currentTab);closeModal('close');" class="btn btn-warning btn-sm">Cancel Changes</button>
+              <span class="margin:0 15px;">&nbsp;</span>
+              <button type="button" ng-click="confirmDelete = !confirmDelete;" class="btn btn-danger btn-sm">DELETE ROOM</button>
+              <span class="margin:0 15px;">&nbsp;</span>
+              <button type="button" class="btn btn-danger close" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </span>
+            <a class="title main panel">Room Settings</a>
+          </li>
+        </ul>
+      </div>
+      <div ng-show="confirmDelete" class="transformable-vertical" style="top: 50px; position: relative; margin: 0 auto; width: 350px">
+        <span class="center">
+          <h1>This action is final</h1>
+          <button type="button" ng-click="deleteRoom($parent.Rooms[initdata]);closeModal('close');" class="btn btn-danger btn-sm left">Confirm Delete</button>
 
-				<button type="button" ng-click="confirmDelete = false;" class="btn btn-warning btn-sm right">Cancel Room Delete</button>
-				</span>
-				<br class="clear" />
-			</div>		  
-			<div class="modal-body">
-				<div>
-					
-					Room Name: 
-					<input type="text" required='required' ng-model="$parent.Rooms[initdata].roomName" ng-change="roomsChangedAdd()"/>
-					<br><br>
+          <button type="button" ng-click="confirmDelete = false;" class="btn btn-warning btn-sm right">Cancel Room Delete</button>
+        </span>
+        <br class="clear" />
+      </div>
+      <div class="modal-body">
+        <div>
+          Room Name:
+          <input type="text" required="required" ng-model="$parent.Rooms[initdata].roomName" ng-change="roomsChangedAdd()" />
+          <br /><br />
 
-					
-					Global Disable: 
-					<select ng-model="$parent.Rooms[initdata].globalDisable" ng-change="roomsChangedAdd()">
-						<option value="1" ng-selected="$parent.Rooms[initdata].globalDisable==1">Yes</option>
-						<option value="0" ng-selected="$parent.Rooms[initdata].globalDisable!=1">No</option>
-					</select>
-					<br><br>
-					
-				</div>
-			</div>
-		</div>
-	</div>
-	<div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
+          Global Disable:
+          <select ng-model="$parent.Rooms[initdata].globalDisable" ng-change="roomsChangedAdd()">
+            <option value="1" ng-selected="$parent.Rooms[initdata].globalDisable==1">Yes</option>
+            <option value="0" ng-selected="$parent.Rooms[initdata].globalDisable!=1">No</option>
+          </select>
+          <br /><br />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
 </div>

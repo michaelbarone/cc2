@@ -1,0 +1,143 @@
+{
+  "root": true,
+  "env": {
+    "es2021": true,
+    "node": true,
+    "browser": true,
+    "es6": true,
+    "jest": true
+  },
+  "globals": {
+    "NodeJS": true
+  },
+  "extends": [
+    "airbnb-base",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jsdoc/recommended",
+    "plugin:import/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:typescript-sort-keys/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint", "jsdoc", "jsx-a11y", "typescript-sort-keys", "deprecation", "prettier"],
+  "overrides": [
+    {
+      "files": ["*.html"],
+      "parser": "@html-eslint/parser",
+      "plugins": ["@html-eslint"],
+      "extends": ["plugin:@html-eslint/recommended"],
+      "rules": {
+        "@html-eslint/indent": "off",
+        "@html-eslint/require-closing-tags": "off",
+        "@html-eslint/no-extra-spacing-attrs": "off",
+        "@html-eslint/element-newline": "off",
+        "spaced-comment": "off",
+        "@html-eslint/require-img-alt": "warn",
+        "@html-eslint/no-multiple-h1": "warn",
+        "prettier/prettier": ["warn", { "endOfLine": "auto" }],
+        "@html-eslint/require-li-container":"warn",
+        "@html-eslint/no-duplicate-id":"warn",
+        "@html-eslint/no-duplicate-attrs":"warn"
+      }
+    },
+    {
+      "files": ["*.mdx"],
+      "extends": ["plugin:mdx/recommended"]
+    }
+  ],
+  "ignorePatterns": ["*.json"],
+  "rules": {
+    "guard-for-in":"warn",
+    "no-unreachable-loop":"warn",
+    "vars-on-top":"off",
+    "template-curly-spacing" : "off",
+    "spaced-comment": "off",
+    "no-shadow": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/no-shadow": ["warn", { "ignoreTypeValueShadow": true }],
+    "@typescript-eslint/no-unused-vars": ["warn"],
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "types": {
+          "String": false,
+          "Boolean": false,
+          "Number": false,
+          "Symbol": false,
+          "{}": false,
+          "Object": false,
+          "object": false,
+          "Function": false
+        },
+        "extendDefaults": true
+      }
+    ],
+    "deprecation/deprecation": "warn",
+    "import/no-unresolved": "off",
+    "import/no-cycle": "warn",
+    "import/extensions": "off",
+    "import/prefer-default-export": "off",
+    "import/no-extraneous-dependencies": "warn",
+    "import/no-useless-path-segments":"warn",
+    "jsdoc/require-jsdoc": "off",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
+    "no-console": "warn",
+    "no-dupe-keys": "error",
+    "no-inline-comments": "warn",
+    "no-underscore-dangle": ["off"],
+    "no-param-reassign": "off",
+    "no-await-in-loop": "off",
+    "no-plusplus": "off",
+    "no-continue": "off",
+    "no-labels": "warn",
+    "no-restricted-syntax": "off",
+    "no-restricted-globals": "warn",
+    "no-use-before-define": "warn",
+    "no-unused-expressions": "warn",
+    "no-debugger": "warn",
+    "no-undef": "warn",
+    "no-return-await": "warn",
+    "no-nested-ternary": "warn",
+    "no-return-assign": "warn",
+    "no-lone-blocks": "warn",
+    "prefer-arrow-callback": "off",
+    "prefer-destructuring": "off",
+    "prefer-const": "warn",
+    "prefer-rest-params": "off",
+    "array-callback-return": "warn",
+    "arrow-body-style": "off",
+    "camelcase": "off",
+    "class-methods-use-this": "off",
+    "consistent-return": "warn",
+    "default-param-last": "off",
+    "eqeqeq": "warn",
+    "radix": "off",
+    "jsx-a11y/label-has-associated-control": "warn",
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "jsx-a11y/no-static-element-interactions": "warn",
+    "jsx-a11y/no-noninteractive-element-interactions": "warn",
+    "jsx-a11y/iframe-has-title": "warn",
+    "jsx-a11y/alt-text": "warn",
+    "jsx-a11y/anchor-is-valid": "warn"
+  },
+  "settings": {
+    "jsdoc": {
+      "tagNamePreference": {
+        "exports": "export",
+        "export": "exports"
+      }
+    }
+  }
+}

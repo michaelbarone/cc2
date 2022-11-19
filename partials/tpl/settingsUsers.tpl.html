@@ -1,59 +1,60 @@
+<!DOCTYPE html>
 <div id="Users">
-	<div class="dashboardPage">
-		<div class="content">
-			<span class="col-12">
-				<div class="addonTitle widget">
-					<button type="button" ng-click="question(Users)" class="btn btn-primary btn-sm"><i class="fa fa-question" aria-hidden="true"></i></button>
-					<button type="button" ng-click="addUser()" class="btn btn-success btn-sm"><i class="fa fa-user-plus" aria-hidden="true"></i> New User</button>
-					<button type="button" ng-click="getAllUsers()" class="btn btn-primary btn-sm right"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh Users</button>
-				</div>
-			</span>		
-			<span class="col-3" ng-repeat="user in Users">
-				<div class="widget settings" ng-class="{disabled: user.disabled==1}">
-					<div>
-						<img ng-if="systemInfo[0]['lastcrontime'] && user.lastaccess<(systemInfo[0]['lastcrontime']-360)" title="User Offline" class="status left" src="img/led-red.png"/>
-						<img ng-if="systemInfo[0]['lastcrontime'] && user.lastaccess<(systemInfo[0]['lastcrontime']-60) && user.lastaccess>(systemInfo[0]['lastcrontime']-361)" title="User Away" class="status left" src="img/led-orange.png"/>
-						<img ng-if="systemInfo[0]['lastcrontime'] && user.lastaccess>(systemInfo[0]['lastcrontime']-61)" title="User Online" class="status left" src="img/led-green.png"/>						
-						<button class="btn btn-primary right" ng-click="editUser(user.userid)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
-						<h2 class="center">{{user.username}}</h2>
-					</div>
-					<br class="clear" />
-					
-					<p ng-if="user.settingsAccess!=1"><i class="fa fa-square-o"></i> Settings Access</p>
-					<p ng-if="user.settingsAccess==1"><i class="fa fa-check-square-o"></i> Settings Access</p>
-					
-					
-					<p ng-if="user.homeRoom!=0 && user.homeRoom!='' && user.homeRoom!=null">{{Rooms[user.homeRoom].roomName}}: Home Room</p>
-					<p ng-if="user.homeRoom==0 || user.homeRoom=='' || user.homeRoom==null">None: Home Room</p>
-					
-					
-					<p ng-if="user.roomAccess!=0 && user.roomAccess!=null">{{user.roomAccess.length}}: Rooms with Access</p>
-					<p ng-if="user.roomAccess==0 || user.roomAccess==null">0: Rooms with Access</p>
-					
-					
-					<p ng-if="user.navgroupaccess.length>0">{{user.navgroupaccess.length}}: NavGroup Access</p>
-					<p ng-if="!user.navgroupaccess">0: NavGroup Access</p>
-					
-					
-					<p ng-if="user.lastaccess>0">Last Online: {{user.lastaccess*1000 | date : "medium"}}</p>
-					<p ng-if="user.lastaccess==0 || user.lastaccess==null">Last Online: Never</p>					
-					
-					
-					<button ng-if="user.passwordv>0" class="btn btn-success" ng-click="setPasswordModal(user.userid)"><i class="fa fa-lock" aria-hidden="true"></i> Change Password</button>
-					<button ng-if="user.passwordv==0" class="btn btn-warning" ng-click="setPasswordModal(user.userid)"><i class="fa fa-unlock" aria-hidden="true"></i> Set Password</button>
-					<br class="clear" /><br />
-				</div>
-			</span>
-		</div>
-	</div>
-	
-	
-	<br /><br /><br /><br /><br />
+  <div class="dashboardPage">
+    <div class="content">
+      <span class="col-12">
+        <div class="addonTitle widget">
+          <button type="button" ng-click="question(Users)" class="btn btn-primary btn-sm"><i class="fa fa-question" aria-hidden="true"></i></button>
+          <button type="button" ng-click="addUser()" class="btn btn-success btn-sm"><i class="fa fa-user-plus" aria-hidden="true"></i> New User</button>
+          <button type="button" ng-click="getAllUsers()" class="btn btn-primary btn-sm right"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh Users</button>
+        </div>
+      </span>
+      <span class="col-3" ng-repeat="user in Users">
+        <div class="widget settings" ng-class="{disabled: user.disabled==1}">
+          <div>
+            <img ng-if="systemInfo[0]['lastcrontime'] && user.lastaccess<(systemInfo[0]['lastcrontime']-360)" title="User Offline" class="status left" src="img/led-red.png" />
+            <img
+              ng-if="systemInfo[0]['lastcrontime'] && user.lastaccess<(systemInfo[0]['lastcrontime']-60) && user.lastaccess>(systemInfo[0]['lastcrontime']-361)"
+              title="User Away"
+              class="status left"
+              src="img/led-orange.png"
+            />
+            <img ng-if="systemInfo[0]['lastcrontime'] && user.lastaccess>(systemInfo[0]['lastcrontime']-61)" title="User Online" class="status left" src="img/led-green.png" />
+            <button class="btn btn-primary right" ng-click="editUser(user.userid)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
+            <h2 class="center">{{user.username}}</h2>
+          </div>
+          <br class="clear" />
 
-	
-	
-	
-<!--
+          <p ng-if="user.settingsAccess!=1"><i class="fa fa-square-o"></i> Settings Access</p>
+          <p ng-if="user.settingsAccess==1"><i class="fa fa-check-square-o"></i> Settings Access</p>
+
+          <p ng-if="user.homeRoom!=0 && user.homeRoom!='' && user.homeRoom!=null">{{Rooms[user.homeRoom].roomName}}: Home Room</p>
+          <p ng-if="user.homeRoom==0 || user.homeRoom=='' || user.homeRoom==null">None: Home Room</p>
+
+          <p ng-if="user.roomAccess!=0 && user.roomAccess!=null">{{user.roomAccess.length}}: Rooms with Access</p>
+          <p ng-if="user.roomAccess==0 || user.roomAccess==null">0: Rooms with Access</p>
+
+          <p ng-if="user.navgroupaccess.length>0">{{user.navgroupaccess.length}}: NavGroup Access</p>
+          <p ng-if="!user.navgroupaccess">0: NavGroup Access</p>
+
+          <p ng-if="user.lastaccess>0">Last Online: {{user.lastaccess*1000 | date : "medium"}}</p>
+          <p ng-if="user.lastaccess==0 || user.lastaccess==null">Last Online: Never</p>
+
+          <button ng-if="user.passwordv>0" class="btn btn-success" ng-click="setPasswordModal(user.userid)">
+            <i class="fa fa-lock" aria-hidden="true"></i> Change Password
+          </button>
+          <button ng-if="user.passwordv==0" class="btn btn-warning" ng-click="setPasswordModal(user.userid)">
+            <i class="fa fa-unlock" aria-hidden="true"></i> Set Password
+          </button>
+          <br class="clear" /><br />
+        </div>
+      </span>
+    </div>
+  </div>
+
+  <br /><br /><br /><br /><br />
+
+  <!--
   <div class="panel panel-default">
 	<br><br>
 	  <div class="panel-heading"><span class="lead">List of Users </span></div>
@@ -124,8 +125,4 @@
 	  </div>
 	</div>
 	-->
-
-
-
-
 </div>

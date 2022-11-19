@@ -1,31 +1,27 @@
-'use strict';
+app.factory("addonFunctions", function ($http, spinnerService) {
+  return {
+    powerOnAddon(addonid) {
+      $http.post(`data/power.php?type=addon&option=on&addonid=${addonid}`);
+    },
+    powerOffAddon(addonid) {
+      $http.post(`data/power.php?type=addon&option=off&addonid=${addonid}`);
+    },
+    powerOnRoom(room) {
+      $http.post(`data/power.php?type=room&option=on&room=${room}`);
+    },
+    powerOffRoom(room) {
+      $http.post(`data/power.php?type=room&option=off&room=${room}`);
+    },
 
-app.factory('addonFunctions', function($http,spinnerService){
-	return{
-		powerOnAddon:function(addonid){
-			$http.post('data/power.php?type=addon&option=on&addonid='+addonid);
-		}
-		,powerOffAddon:function(addonid){
-			$http.post('data/power.php?type=addon&option=off&addonid='+addonid);
-		}
-		,powerOnRoom:function(room){
-			$http.post('data/power.php?type=room&option=on&room='+room);
-		}
-		,powerOffRoom:function(room){
-			$http.post('data/power.php?type=room&option=off&room='+room);
-		}
-		
-		
-		
-		/* mediaplayer addons  */
-		,sendMedia:function(sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
-			$http.post('data/mediaSend.php?fromip='+sendFromAddonIP+'&fromaddon='+sendFromAddonID+'&toip='+sendToAddonIP+'&toaddon='+sendToAddonID);
-		}
-		,cloneMedia:function(sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
-			$http.post('data/mediaSend.php?fromip='+sendFromAddonIP+'&fromaddon='+sendFromAddonID+'&toip='+sendToAddonIP+'&toaddon='+sendToAddonID+'&type=clone');
-		}
-		,startMedia:function(sendFromAddonIP,sendFromAddonID,sendToAddonIP,sendToAddonID){
-			$http.post('data/mediaSend.php?fromip='+sendFromAddonIP+'&fromaddon='+sendFromAddonID+'&toip='+sendToAddonIP+'&toaddon='+sendToAddonID+'&type=start');
-		}
-	}
+    /* mediaplayer addons  */
+    sendMedia(sendFromAddonIP, sendFromAddonID, sendToAddonIP, sendToAddonID) {
+      $http.post(`data/mediaSend.php?fromip=${sendFromAddonIP}&fromaddon=${sendFromAddonID}&toip=${sendToAddonIP}&toaddon=${sendToAddonID}`);
+    },
+    cloneMedia(sendFromAddonIP, sendFromAddonID, sendToAddonIP, sendToAddonID) {
+      $http.post(`data/mediaSend.php?fromip=${sendFromAddonIP}&fromaddon=${sendFromAddonID}&toip=${sendToAddonIP}&toaddon=${sendToAddonID}&type=clone`);
+    },
+    startMedia(sendFromAddonIP, sendFromAddonID, sendToAddonIP, sendToAddonID) {
+      $http.post(`data/mediaSend.php?fromip=${sendFromAddonIP}&fromaddon=${sendFromAddonID}&toip=${sendToAddonIP}&toaddon=${sendToAddonID}&type=start`);
+    }
+  };
 });

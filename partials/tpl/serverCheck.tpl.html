@@ -1,51 +1,39 @@
+<!DOCTYPE html>
 <div id="loginTiles">
-	<br />
-	<div>
-		<h2 class="w50 left txtright">Control Center</h2>
-		<h2 class="w50 right txtleft">Server Check</h2>
-		<br /><br /><br />
-		<table class="center">
-			<thead>
-			
-			</thead>
-			<tr ng-repeat="check in serverCheck[0]">
-				<td>
-					<img src="img/led-green.png" ng-if="check.status=='pass'" class="status" />
-					<img src="img/led-red.png" ng-if="check.status=='fail'" class="status" />
-				</td>
-				<td>{{check.name}}</td>
-				<td>{{check.info}}</td>
-			</tr>
-		
-		
-		</table>
-	</div>
-	<br><br><br><br>
-	
-	
-	<div ng-if="serverCheck[0]['failed']>0">
-		<h3>There is a server configuration issue.  Please fix the above problem and reload this page.</h3>
-		<button onclick="window.location.reload();" class="btn btn-large btn-danger">Reload Page</button>
-		
-	</div>
-	
-	
-	<div ng-if="serverCheck[0]['failed']===0 && Users.length===0">
-		<h2 class="w50 left txtright">Create First</h2>
-		<h2 class="w50 right txtleft">User Account</h2>
-		<br /><br /><br />
-		
-		
-		
-		
-		<form name="myForm" ng-submit="submitNU();">
-			<p>Username: <input name="username" type="text" ng-model="username" required /></p>
-			<p>Password: <input name="password" type="password" ng-model="password" required /></p>
-			<br><br>
-			<input type="submit" id="submit" value="Create First User" ng-disabled="myForm.$invalid" class="btn btn-large btn-success">
-		</form>	
-		
-		
-		
-	</div>
+  <br />
+  <div>
+    <h2 class="w50 left txtright">Control Center</h2>
+    <h2 class="w50 right txtleft">Server Check</h2>
+    <br /><br /><br />
+    <table class="center">
+      <thead></thead>
+      <tr ng-repeat="check in serverCheck[0]">
+        <td>
+          <img src="img/led-green.png" ng-if="check.status=='pass'" class="status" />
+          <img src="img/led-red.png" ng-if="check.status=='fail'" class="status" />
+        </td>
+        <td>{{check.name}}</td>
+        <td>{{check.info}}</td>
+      </tr>
+    </table>
+  </div>
+  <br /><br /><br /><br />
+
+  <div ng-if="serverCheck[0]['failed']>0">
+    <h3>There is a server configuration issue. Please fix the above problem and reload this page.</h3>
+    <button onclick="window.location.reload();" class="btn btn-large btn-danger">Reload Page</button>
+  </div>
+
+  <div ng-if="serverCheck[0]['failed']===0 && Users.length===0">
+    <h2 class="w50 left txtright">Create First</h2>
+    <h2 class="w50 right txtleft">User Account</h2>
+    <br /><br /><br />
+
+    <form name="myForm" ng-submit="submitNU();">
+      <p>Username: <input name="username" type="text" ng-model="username" required /></p>
+      <p>Password: <input name="password" type="password" ng-model="password" required /></p>
+      <br /><br />
+      <input type="submit" id="submit" value="Create First User" ng-disabled="myForm.$invalid" class="btn btn-large btn-success" />
+    </form>
+  </div>
 </div>

@@ -1,28 +1,25 @@
+<!DOCTYPE html>
 <div class="modal fade in">
-	<div class="modal-dialog">
-		<div class="modal-content">
-		  <div class="header">
-			<ul><li>
-				<button type="button" class="btn btn-danger close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<a class="title main panel">User Preferences</a>
-			</li></ul>
-		  </div>
-		  <div class="modal-body">
-			<h1 class="left">{{$parent.userdata.username}}</h1>
-			<img ng-if="$parent.userdata.avatar==='0'" ng-src="img/Users/user-default.jpg" class="right" />
-			<img ng-if="$parent.userdata.avatar==='1'" ng-src="img/Users/user{{$parent.userdata.userid}}.jpg" class="right" />			
-			
-		
-		
-			<br /><br />
-		
-			<div ng-include src="'partials/setPassword.html'"></div>
-			
-			
-			
-			
-		  </div>
-		</div>
-	</div>
-	<div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="header">
+        <ul>
+          <li>
+            <button type="button" class="btn btn-danger close right" ng-click="closeModal('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <a class="title main panel">User Preferences</a>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-body">
+        <h1 class="left">{{$parent.userdata.username}}</h1>
+        <img ng-if="$parent.userdata.avatar==='0'" ng-src="img/Users/user-default.jpg" class="right" />
+        <img ng-if="$parent.userdata.avatar==='1'" ng-src="img/Users/user{{$parent.userdata.userid}}.jpg" class="right" />
+
+        <br /><br />
+
+        <div ng-include src="'partials/setPassword.html'"></div>
+      </div>
+    </div>
+  </div>
+  <div ng-click="closeModal('close')" class="modal-backdrop fade in"></div>
 </div>

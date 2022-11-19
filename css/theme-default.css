@@ -1,93 +1,122 @@
 /* Theme-Default css stylesheet */
 
 body {
-    font-family: "Helvetica Neue","HelveticaNeue",Helvetica,Arial,sans-serif;
-    color: #eee;
+  font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+  color: #eee;
 }
 
-h1,h2,h3,h4,h5,td,p { color:#ccc; }
+h1,
+h2,
+h3,
+h4,
+h5,
+td,
+p {
+  color: #ccc;
+}
 
-a:link { color:#eee; }
+a:link {
+  color: #eee;
+}
 
-a:not(.btn):hover,#header table td:first-of-type:hover { color:#0099ff !important;cursor:pointer; }
+a:not(.btn):hover,
+#header table td:first-of-type:hover {
+  color: #0099ff !important;
+  cursor: pointer;
+}
 
-a:visited { color:#eee; }
+a:visited {
+  color: #eee;
+}
 
-.spinner{
-	border-top-color: #1DD300;
-	##border-top-color: #0099ff;
-	border-bottom-color: #0099ff;
-	border-left-color: #FF9522;
-	##border-right-color: #FF9522;
-	## border-left-color: rgb(204,204,204);
-	 border-right-color: rgb(204,204,204);
-	box-shadow: 0 0 7px 5px #000000, inset 0 0 7px 5px #000000;
+.spinner {
+  border-top-color: #1dd300;
+  border-bottom-color: #0099ff;
+  border-left-color: #ff9522;
+  border-right-color: rgb(204, 204, 204);
+  box-shadow: 0 0 7px 5px #000000, inset 0 0 7px 5px #000000;
 }
 
 .windowContainer {
-	background: #222528 url("../img/background.png") repeat scroll 0% 0%;
+  background: #222528 url("../img/background.png") repeat scroll 0% 0%;
 }
 
-#header, .header {
-	background: #222528 url("../img/background.png") repeat scroll 0% 0%;
-	moz-box-shadow: inset 0 -10px 10px -10px #000000;
-    -webkit-box-shadow: inset 0 -10px 10px -10px #000000;
-    box-shadow: inset 0 -10px 10px -10px #000000;
+#header,
+.header {
+  background: #222528 url("../img/background.png") repeat scroll 0% 0%;
+  moz-box-shadow: inset 0 -10px 10px -10px #000000;
+  -webkit-box-shadow: inset 0 -10px 10px -10px #000000;
+  box-shadow: inset 0 -10px 10px -10px #000000;
 }
 
-#header a, .header a {
-	text-shadow: rgba(0,0,0,.5) 0px 1px 0px;
+#header a,
+.header a {
+  text-shadow: rgba(0, 0, 0, 0.5) 0px 1px 0px;
 }
 
-#header a:hover, .header a:hover {
-	color: #0099ff;
-	text-shadow: rgba(255,255,255,.5) 0px 1px 10px;
+#header a:hover,
+.header a:hover {
+  color: #0099ff;
+  text-shadow: rgba(255, 255, 255, 0.5) 0px 1px 10px;
 }
 
-#header .title:hover, .header .title:hover {  color:rgb(204,204,204) !important; }
-
-#link-menu,#user-menu,#room-menu,#room-menu-ul,#user-menu-ul {
-	background: #222528 url("../img/background.png") repeat scroll 0% 0%;
+#header .title:hover,
+.header .title:hover {
+  color: rgb(204, 204, 204) !important;
 }
 
-#link-menu li a.selected, .room-menu-items a.selected {
-	border-bottom:2px solid #0099ff !important;
-	##box-shadow: 0 3px 0px #0099ff;
+#link-menu,
+#user-menu,
+#room-menu,
+#room-menu-ul,
+#user-menu-ul {
+  background: #222528 url("../img/background.png") repeat scroll 0% 0%;
 }
 
-#link-menu li.selected img {  
-	border-right:3px solid #0099ff !important; 
-	## box-shadow: 3px 0px 0px #0099ff;
+#link-menu li a.selected,
+.room-menu-items a.selected {
+  border-bottom: 2px solid #0099ff !important;
 }
 
-#room-menu tr.selected td:first-of-type {  
-	border-left:3px solid #0099ff !important;
-	## box-shadow: -3px 0px 0px #0099ff;
+#link-menu li.selected img {
+  border-right: 3px solid #0099ff !important;
 }
 
-#room-menu tr.selected td:first-of-type { color:#0099ff !important; }
+#room-menu tr.selected td:first-of-type {
+  border-left: 3px solid #0099ff !important;
+}
 
-#chatContactListContainer li.selected { color:#0099ff !important;border-left:3px solid #0099ff !important; }
+#room-menu tr.selected td:first-of-type {
+  color: #0099ff !important;
+}
 
-#link-menu, #user-menu, #room-menu {
-	-moz-box-shadow: inset 0 -10px 10px -10px #000000;
-    -webkit-box-shadow: inset 0 -10px 10px -10px #000000;
-    box-shadow: inset 0 -10px 10px -10px #000000;
+#chatContactListContainer li.selected {
+  color: #0099ff !important;
+  border-left: 3px solid #0099ff !important;
+}
+
+#link-menu,
+#user-menu,
+#room-menu {
+  -moz-box-shadow: inset 0 -10px 10px -10px #000000;
+  -webkit-box-shadow: inset 0 -10px 10px -10px #000000;
+  box-shadow: inset 0 -10px 10px -10px #000000;
 }
 
 #link-menu .sortable:not(:first-child) {
-    -moz-box-shadow: inset -10px 0px 10px -10px #000000;
-    -webkit-box-shadow: inset -10px 0px 10px -10px #000000;
-    box-shadow: inset -10px 0px 10px -10px #000000;
+  -moz-box-shadow: inset -10px 0px 10px -10px #000000;
+  -webkit-box-shadow: inset -10px 0px 10px -10px #000000;
+  box-shadow: inset -10px 0px 10px -10px #000000;
 }
 
 #link-menu .mobile li {
-    -moz-box-shadow: inset -10px 0px 10px -10px #000000;
-    -webkit-box-shadow: inset -10px 0px 10px -10px #000000;
-    box-shadow: inset -10px 0px 10px -10px #000000;
+  -moz-box-shadow: inset -10px 0px 10px -10px #000000;
+  -webkit-box-shadow: inset -10px 0px 10px -10px #000000;
+  box-shadow: inset -10px 0px 10px -10px #000000;
 }
-#room-menu-ul,#user-menu-ul {
-    -moz-box-shadow: inset 10px 0px 10px -10px #000000, inset 0 -10px 10px -10px #000000;
-    -webkit-box-shadow: inset 10px 0px 10px -10px #000000, inset 0 -10px 10px -10px #000000;
-    box-shadow: inset 10px 0px 10px -10px #000000, inset 0 -10px 10px -10px #000000;
+#room-menu-ul,
+#user-menu-ul {
+  -moz-box-shadow: inset 10px 0px 10px -10px #000000, inset 0 -10px 10px -10px #000000;
+  -webkit-box-shadow: inset 10px 0px 10px -10px #000000, inset 0 -10px 10px -10px #000000;
+  box-shadow: inset 10px 0px 10px -10px #000000, inset 0 -10px 10px -10px #000000;
 }

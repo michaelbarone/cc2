@@ -1,37 +1,36 @@
+<!DOCTYPE html>
 <div id="Addons">
-	<div class="dashboardPage">
-		<div class="content">
-			<span class="col-12">
-				<div class="addonTitle widget">
-					<button type="button" ng-click="question(Addons)" class="btn btn-primary btn-sm"><i class="fa fa-question" aria-hidden="true"></i></button>
-					<button type="button" ng-click="scanAddons()" class="btn btn-success btn-sm"><i class="fa fa-folder-open" aria-hidden="true"></i> Scan Addon Dir</button>
-					<button type="button" ng-click="uploadAddons()" class="btn btn-success btn-sm"><i class="fa fa-upload" aria-hidden="true"></i> Upload Addon Zip</button>
-					<button type="button" ng-click="getAddons()" class="btn btn-primary btn-sm right"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh Addons</button>
-				</div>
-			</span>		
-			<span class="col-3" ng-repeat="addon in Addons">
-				<div class="widget settings addons" ng-class="{globalDisable: addon.globalDisable==1}">
-					<div>
-						<button class="btn btn-primary right" ng-click="editAddon(addon.addonid)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
-						<a class="btn btn-info right" href="addons/packages/{{addon.addonid}}.zip"><i class="fa fa-download" aria-hidden="true"></i> Download</a>
-						<img ng-src="addons/{{addon.addonid}}/icon.png"  height="50px" width="50px" class="left" />
-						<h2 class="center clear">{{addon.addonid}}</h2>
-					</div>
-					<br class="clear" />
-					
-					<p>{{addon.info}}</p>					
-					
-					<p>
-						<i ng-if="addon.controlWindow!=1" class="fa fa-square-o"></i>
-						<i ng-if="addon.controlWindow==1" class="fa fa-check-square-o"></i>
-						Control Window
-					</p>
+  <div class="dashboardPage">
+    <div class="content">
+      <span class="col-12">
+        <div class="addonTitle widget">
+          <button type="button" ng-click="question(Addons)" class="btn btn-primary btn-sm"><i class="fa fa-question" aria-hidden="true"></i></button>
+          <button type="button" ng-click="scanAddons()" class="btn btn-success btn-sm"><i class="fa fa-folder-open" aria-hidden="true"></i> Scan Addon Dir</button>
+          <button type="button" ng-click="uploadAddons()" class="btn btn-success btn-sm"><i class="fa fa-upload" aria-hidden="true"></i> Upload Addon Zip</button>
+          <button type="button" ng-click="getAddons()" class="btn btn-primary btn-sm right"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh Addons</button>
+        </div>
+      </span>
+      <span class="col-3" ng-repeat="addon in Addons">
+        <div class="widget settings addons" ng-class="{globalDisable: addon.globalDisable==1}">
+          <div>
+            <button class="btn btn-primary right" ng-click="editAddon(addon.addonid)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
+            <a class="btn btn-info right" href="addons/packages/{{addon.addonid}}.zip"><i class="fa fa-download" aria-hidden="true"></i> Download</a>
+            <img ng-src="addons/{{addon.addonid}}/icon.png" height="50px" width="50px" class="left" />
+            <h2 class="center clear">{{addon.addonid}}</h2>
+          </div>
+          <br class="clear" />
 
-				</div>
-			</span>
-		</div>
-	</div>
-	
-	
-	<br /><br /><br /><br /><br />
+          <p>{{addon.info}}</p>
+
+          <p>
+            <i ng-if="addon.controlWindow!=1" class="fa fa-square-o"></i>
+            <i ng-if="addon.controlWindow==1" class="fa fa-check-square-o"></i>
+            Control Window
+          </p>
+        </div>
+      </span>
+    </div>
+  </div>
+
+  <br /><br /><br /><br /><br />
 </div>

@@ -1,260 +1,373 @@
+<!DOCTYPE html>
 <script src="js/controllers/dashboardCtrl.js"></script>
 <div class="wrap dashboard" ng-controller="dashboardCtrl">
-	<div ng-cloak ng-show="spinnerArray.length>0" class="spinner"></div>
-	<div id="header">
-		<div id="user-menu" class="right">
-			<ul>
-				<li>
-					<span class="fa fa-bars fa-3x options" ></span>
-					<ul id="user-menu-ul" ng-include src="'partials/user-menu.html'"></ul>
-				</li>
-			</ul>
-		</div>
-		<div ng-cloak ng-if="room_addons[0].length!=0" id="room-menu">
-			<nav>
-				<ul class="room-menu-items">
-					<li ng-repeat="addon in room_addons[0][userdata.currentRoom] track by addon.rooms_addonsid" ng-if="$index > 0 && addon.controlWindow == '1'" class="topmenu">
-						<a id="{{addon.addon + $index + 'L'}}"  
-							class="main link persistent" 
-							on-long-press="loadLinkLongPress(addon.addon + $index);" 
-							ng-click="loadLink(addon.addon + $index);" 
-							ng-class="{'selected': userdata.linkSelected==addon.addon + $index}"
-							style="box-shadow: inset 0 0 10px {{colors[addon.id]}};"
-						>
-							<img ng-src="addons/{{addon.addontype + '.' + addon.addon + '.' + addon.addonversion}}/icon.png"  height="27px" width="27px" />
-						</a>
-					</li>
-					<li class="topmenu">
-						<a id="{{'room' + userdata.currentRoom + 'L'}}"
-						class="main link persistent loaded" 
-						on-long-press="loadLinkLongPress('room' + userdata.currentRoom);" 
-						ng-click="loadLink('room' + userdata.currentRoom);" 
-						ng-class="{'selected': userdata.linkSelected=='room' + userdata.currentRoom}"
-						>
-							<img src="img/control-panel.png"  height="27px" width="27px" />
-						</a>
-					</li>
-					<li class="rooms" style="padding:20px 0;">
-						<a ng-cloak class="ng-cloak title">{{room_addons[0][userdata.currentRoom][0]['roomName']}}</a>
-						<ul ng-if="userdata.roomcount > 1" id="room-menu-ul">
-							<li class="rooms">
-								<table ng-class="{showme: sendFromAddonLock>0}" style="max-width: 100vw; overflow-x: auto;">
-									<tr ng-if="room.roomId" ng-repeat="room in Rooms | orderObjectBy: 'roomOrder' track by $index" ng-class="{'selected': userdata.currentRoom==room.roomId}">
-										<td ng-if="userdata.mobile==='1'" ng-click="changeRoom(room.roomId)" class="addonTitle">{{room.roomName | abvTitle}}</td>
-										<td ng-if="userdata.mobile!='1'" ng-click="changeRoom(room.roomId)" class="addonTitle">{{room.roomName}}</td>
-										<td>
-											<img ng-if="room_addons[0][room.roomId][0].addonsAlive===0 && room_addons[0][room.roomId][0].allAddonsAlive==='0'" title="Room Offline" ng-click="powerOnRoom(room.roomId)" class="status pointer" src="img/led-red.png"/>
-											<img ng-if="room_addons[0][room.roomId][0].addonsAlive>0 && room_addons[0][room.roomId][0].allAddonsAlive==='0'" title="Some Addons Online" ng-click="powerOnRoom(room.roomId)" class="status pointer" src="img/led-orange.png"/>
-											<img ng-if="room_addons[0][room.roomId][0].addonsAlive===0 && room_addons[0][room.roomId][0].allAddonsAlive==='1'" title="No Addons Configured" class="status" src="img/led-cyan.png"/>
-											<img ng-if="room_addons[0][room.roomId][0].addonsAlive>0 && room_addons[0][room.roomId][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
-										</td>
-										<td>
-											<div ng-if="addon.device_alive=='3' && addon.addontype=='mediaplayer' && (addon.displayInfo.info || sendFromAddonIP) && !staleTimestamp(addon.ping.lastUpdate)" ng-repeat="addon in room_addons[0][room.roomId].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
-												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
-												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
-												<a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="startMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Start</a>
-												<a ng-if="addon.displayInfo.info && (sendFromAddonLock==0 || sendFromAddonIP!=addon.ip)" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><span class="fa fa-share-square-o infoType fa-2x"></span></a>
-												<a ng-if="addon.displayInfo.info && sendFromAddonLock==1 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><span style="color:#0099ff" class="fa fa-share-square-o infoType fa-2x"></span></a>
-												<a ng-if="addon.displayInfo.info && sendFromAddonLock==2 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"><span style="color:red" class="fa fa-share-square-o infoType fa-2x"></span></a>
+  <div ng-cloak ng-show="spinnerArray.length>0" class="spinner"></div>
+  <div id="header">
+    <div id="user-menu" class="right">
+      <ul>
+        <li>
+          <span class="fa fa-bars fa-3x options"></span>
+          <ul id="user-menu-ul" ng-include src="'partials/user-menu.html'"></ul>
+        </li>
+      </ul>
+    </div>
+    <div ng-cloak ng-if="room_addons[0].length!=0" id="room-menu">
+      <nav>
+        <ul class="room-menu-items">
+          <li ng-repeat="addon in room_addons[0][userdata.currentRoom] track by addon.rooms_addonsid" ng-if="$index > 0 && addon.controlWindow == '1'" class="topmenu">
+            <a
+              id="{{addon.addon + $index + 'L'}}"
+              class="main link persistent"
+              on-long-press="loadLinkLongPress(addon.addon + $index);"
+              ng-click="loadLink(addon.addon + $index);"
+              ng-class="{'selected': userdata.linkSelected==addon.addon + $index}"
+              ng-style="{ box-shadow: inset 0 0 10px colors[addon.id]; }"
+            >
+              <img ng-src="addons/{{addon.addontype + '.' + addon.addon + '.' + addon.addonversion}}/icon.png" height="27px" width="27px" />
+            </a>
+          </li>
+          <li class="topmenu">
+            <a
+              id="{{'room' + userdata.currentRoom + 'L'}}"
+              class="main link persistent loaded"
+              on-long-press="loadLinkLongPress('room' + userdata.currentRoom);"
+              ng-click="loadLink('room' + userdata.currentRoom);"
+              ng-class="{'selected': userdata.linkSelected=='room' + userdata.currentRoom}"
+            >
+              <img src="img/control-panel.png" height="27px" width="27px" />
+            </a>
+          </li>
+          <li class="rooms" style="padding: 20px 0">
+            <a ng-cloak class="ng-cloak title">{{room_addons[0][userdata.currentRoom][0]['roomName']}}</a>
+            <ul ng-if="userdata.roomcount > 1" id="room-menu-ul">
+              <li class="rooms">
+                <table ng-class="{showme: sendFromAddonLock>0}" style="max-width: 100vw; overflow-x: auto">
+                  <tr ng-if="room.roomId" ng-repeat="room in Rooms | orderObjectBy: 'roomOrder' track by $index" ng-class="{'selected': userdata.currentRoom==room.roomId}">
+                    <td ng-if="userdata.mobile==='1'" ng-click="changeRoom(room.roomId)" class="addonTitle">{{room.roomName | abvTitle}}</td>
+                    <td ng-if="userdata.mobile!='1'" ng-click="changeRoom(room.roomId)" class="addonTitle">{{room.roomName}}</td>
+                    <td>
+                      <img
+                        ng-if="room_addons[0][room.roomId][0].addonsAlive===0 && room_addons[0][room.roomId][0].allAddonsAlive==='0'"
+                        title="Room Offline"
+                        ng-click="powerOnRoom(room.roomId)"
+                        class="status pointer"
+                        src="img/led-red.png"
+                      />
+                      <img
+                        ng-if="room_addons[0][room.roomId][0].addonsAlive>0 && room_addons[0][room.roomId][0].allAddonsAlive==='0'"
+                        title="Some Addons Online"
+                        ng-click="powerOnRoom(room.roomId)"
+                        class="status pointer"
+                        src="img/led-orange.png"
+                      />
+                      <img
+                        ng-if="room_addons[0][room.roomId][0].addonsAlive===0 && room_addons[0][room.roomId][0].allAddonsAlive==='1'"
+                        title="No Addons Configured"
+                        class="status"
+                        src="img/led-cyan.png"
+                      />
+                      <img
+                        ng-if="room_addons[0][room.roomId][0].addonsAlive>0 && room_addons[0][room.roomId][0].allAddonsAlive==='1'"
+                        title="Room Online"
+                        class="status"
+                        src="img/led-green.png"
+                      />
+                    </td>
+                    <td>
+                      <div
+                        ng-if="addon.device_alive=='3' && addon.addontype=='mediaplayer' && (addon.displayInfo.info || sendFromAddonIP) && !staleTimestamp(addon.ping.lastUpdate)"
+                        ng-repeat="addon in room_addons[0][room.roomId].slice().reverse() track by addon.rooms_addonsid"
+                        ng-style="{ box-shadow: inset 0 0 10px colors[addon.id]; }"
+                      >
+                        <a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
+                        <a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
+                        <a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="startMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Start</a>
+                        <a ng-if="addon.displayInfo.info && (sendFromAddonLock==0 || sendFromAddonIP!=addon.ip)" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"
+                          ><span class="fa fa-share-square-o infoType fa-2x"></span
+                        ></a>
+                        <a ng-if="addon.displayInfo.info && sendFromAddonLock==1 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"
+                          ><span style="color: #0099ff" class="fa fa-share-square-o infoType fa-2x"></span
+                        ></a>
+                        <a ng-if="addon.displayInfo.info && sendFromAddonLock==2 && sendFromAddonIP==addon.ip" ng-click="sendFromAddonSet(addon.ip,addon.addonid)"
+                          ><span style="color: red" class="fa fa-share-square-o infoType fa-2x"></span
+                        ></a>
 
-												<a ng-click="showModal(addon,'addon')" ng-if="addon.displayInfo.info" style="display:inline-block;">{{addon.displayInfo.info}}<span ng-if="addon.time.playerpercentage>0" class="timebar"><span class="elapsed" style="width:{{addon.time.playerpercentage}}%"></span></span></a>											
+                        <a ng-click="showModal(addon,'addon')" ng-if="addon.displayInfo.info" style="display: inline-block"
+                          >{{addon.displayInfo.info}}<span ng-if="addon.time.playerpercentage>0" class="timebar"
+                            ><span class="elapsed" ng-style="{ width: addon.time.playerpercentage% }"></span></span
+                        ></a>
 
-												<i ng-if="addon.displayInfo.type=='tv' || addon.displayInfo.type=='episode'" class="fa fa-television infoType" aria-hidden="true"></i>
-												<i ng-if="addon.displayInfo.type=='movies' || addon.displayInfo.type=='movie'" class="fa fa-film infoType" aria-hidden="true"></i>
-												<i ng-if="addon.displayInfo.type=='music'" class="fa fa-headphones infoType" aria-hidden="true"></i>
-												<i ng-if="addon.displayInfo.type=='unknown'" class="fa fa-file-video-o infoType" aria-hidden="true"></i>
-											</div>
-											<div ng-if="addon.device_alive=='3' && addon.displayInfo.info && addon.addontype!='mediaplayer'" ng-repeat="addon in room_addons[0][room.roomId].slice().reverse() track by addon.rooms_addonsid" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
-												<a ng-if="addon.displayInfo.info" style="display:inline-block;">{{addon.displayInfo.info}}</a>
-												<span class="infoType fa fa-gear fa-2x"></span>
-											</div>
-										</td>
-									</tr>
-								</table>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</nav>
-		</div>
-		<div ng-cloak ng-if="links[0].length!=0" id="link-menu">
-			<span ng-cloak ng-if="userdata.mobile==='1'" style="float: left; padding: 9px 15px 0; font-size: 2.5em;" class="fa fa-ellipsis-v"></span>
-			<nav ng-cloak ng-if="userdata.mobile==='1'" style="margin-top: 50px;">
-				<ul class="mobile">
-					<span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
-						<li id="{{thislink['navname']+'L'}}" class="main persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);" ng-class="{'selected': userdata.linkSelected==thislink.navname}" ng-repeat="thislink in linkgrouparray">
-							<img ng-src="img/Programs/{{thislink['navname']}}.png" class="link" height="35px">
-						</li>
-					</span>
-				</ul>
-			</nav>		
-			<nav ng-cloak ng-if="userdata.mobile==='0'">
-				<ul class="sortable">
-					<li id="{{linkgroup}}-group" class="sortable clear" ng-repeat="(linkgroup, linkgrouparray) in links[0]" ng-click="userdata.linkGroupSelected=linkgroup;linkReOrder(linkgroup,$index)">
-						<a ng-cloak class="main panel persistent title" ng-hide="$last && $index=='0'">{{linkgroup}}</a>
-						<a id="{{thislink['navname']+'L'}}" class="main link persistent" on-long-press="loadLinkLongPress(thislink['navname']);" ng-click="loadLink(thislink['navname']);" ng-class="{'selected': userdata.linkSelected==thislink.navname}" ng-repeat="thislink in linkgrouparray">
-							<img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px">
-						</a>
-					</li>	
-				</ul>
-			</nav>
-		</div>
-	</div>
-	<div id="dashboardWrapper" scrolling="auto">
-		<div id="dashboardMask">
-			<span ng-cloak ng-if="room_addons.length!=0" ng-repeat="room in room_addons[0]" ng-class="{'selected': userdata.linkSelected==='room{{room[0].roomId}}'}" class="dash">
-				<div id="room{{room[0].roomId}}" class="dashboardPage RoomPage">
-					<div class="content">
-						<span class="col-12">
-							<div class="addonTitle widget addon">
-								<img ng-if="room_addons[0][room[0].roomId][0].addonsAlive===0 && room_addons[0][room[0].roomId][0].allAddonsAlive==='0'" title="Room Offline" ng-click="powerOnRoom(room[0].roomId)" class="status pointer" src="img/led-red.png"/>
-								<img ng-if="room_addons[0][room[0].roomId][0].addonsAlive>0 && room_addons[0][room[0].roomId][0].allAddonsAlive==='0'" title="Some Addons Online" ng-click="powerOnRoom(room[0].roomId)" class="status pointer" src="img/led-orange.png"/>
-								<img ng-if="room_addons[0][room[0].roomId][0].addonsAlive===0 && room_addons[0][room[0].roomId][0].allAddonsAlive==='1'" title="No Addons Configured" class="status" src="img/led-cyan.png"/>
-								<img ng-if="room_addons[0][room[0].roomId][0].addonsAlive>0 && room_addons[0][room[0].roomId][0].allAddonsAlive==='1'" title="Room Online" class="status" src="img/led-green.png"/>
-								{{room_addons[0][room[0].roomId][0].roomName}}
-								<div ng-if="room_addons[0][room[0].roomId][0].allPowerOptions > 0" class="right" style="margin:-5px;">
-									<button class="btn btn-danger right" ng-click="powerOffRoom(room[0].roomId)">All Off</button>
-									<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnRoom(room[0].roomId)">All On</button>
-								</div>
-							</div>
-						</span>
-						<span ng-if="$index > 0" class="col-4" ng-repeat="addon in room_addons[0][room[0].roomId] track by addon.rooms_addonsid">
-							<div class="widget addon" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
-								<div>
-									<p class="center">{{addon.addontype}}</p>
-									<div ng-if="addon.PowerOptions > 0" class="right" style="margin:-5px;">
-										<button class="btn btn-danger right" ng-click="powerOffAddon(addon.rooms_addonsid)">Off</button>
-										<button class="btn btn-success right" style="margin:0 5px 0 0;" ng-click="powerOnAddon(addon.rooms_addonsid,$index,room[0].roomId)">On</button>
-									</div>
-									<img ng-if="addon.device_alive==='0'" ng-click="powerOnAddon(addon.rooms_addonsid,$index,room[0].roomId)" class="status pointer left" src="img/led-red.png"/>
-									<img ng-if="addon.device_alive==='2' || addon.device_alive==='1'" class="status left" src="img/led-orange.png"/>
-									<img ng-if="addon.device_alive==='3'" class="status left" src="img/led-green.png"/>
-									<p ng-if="addon.addonTitle !='' || addon.addonTitle !=null" class="left">{{addon.addonTitle}}</p>
-									<p ng-if="addon.addonTitle =='' || addon.addonTitle ==null" class="left">{{addon.addon}}</p>
-									<br class="clear" />
-								</div>
-								<!-- need to update the visual for these addon areas -->
-								<div ng-if="addon.addontype=='mediaplayer' && addon.displayInfo.info && !staleTimestamp(addon.ping.lastUpdate)">
-									<i ng-if="addon.displayInfo.type=='tv' || addon.displayInfo.type=='episode'" class="fa fa-2x fa-television infoType" aria-hidden="true"></i>
-									<i ng-if="addon.displayInfo.type=='movies' || addon.displayInfo.type=='movie'" class="fa fa-2x fa-film infoType" aria-hidden="true"></i>
-									<i ng-if="addon.displayInfo.type=='music'" class="fa fa-2x fa-headphones infoType" aria-hidden="true"></i>
-									<i ng-if="addon.displayInfo.type=='unknown'" class="fa fa-2x fa-file-video-o infoType" aria-hidden="true"></i>									
-									<a ng-click="sendFromAddonSet(addon.ip,addon.addonid)" class="right"><span class="fa fa-share-square-o infoType fa-2x"></span></a>
-									<a ng-click="showModal(addon,'addon')">{{addon.displayInfo.info}}</a>
-									<br ng-if="!addon.displayInfo.thumbnail && !addon.displayInfo.fanart" />
-									<br ng-if="!addon.displayInfo.thumbnail && !addon.displayInfo.fanart" />
-									<img ng-if="addon.displayInfo.thumbnail!='' && addon.displayInfo.type!='movie'" class="fanart" ng-src="{{addon.displayInfo.thumbnail}}" />
-									<img ng-if="addon.displayInfo.fanart!='' && addon.displayInfo.type=='movie'" class="fanart" ng-src="{{addon.displayInfo.fanart}}" />
-									<div ng-if="addon.time.playerpercentage>0" class="timebar"><div class="elapsed" style="width:{{addon.time.playerpercentage}}%"></div></div>
-									<span ng-if="addon.time.timenow" class="left">Now: {{addon.time.timenow}}</span><span ng-if="addon.time.endtime" class="right">Ending: {{addon.time.endtime}}</span>
-								</div>
-								<div ng-if="addon.addontype!='mediaplayer' && addon.displayInfo.info">
-									<a style="display:inline-block;">{{addon.displayInfo.info}}</a>
-								</div>
-								
-								
-								<toggle-switch
-									ng-show="addon.addontype=='security' && addon.addon=='camera'"
-									class="right"
-									ng-model="showiFrame[addon.rooms_addonsid]"
-									class="switch-success"
-									html="true"
-									knob-label="<i class='fa fa-window-maximize'></i>"
-									on-label="Hide"
-									off-label="Show"
-									>
-								</toggle-switch>
-								<Br class="clear" />								
-								<div ng-if="addon.addontype=='security' && addon.addon=='camera' && userdata.linkSelected=='room'+room[0].roomId && modalOpen==0 && showiFrame[addon.rooms_addonsid]">
-									<div class="iframeContainer">
-										<iframe ng-src="{{addon.ip | trustUrl }}"
-												scrolling="false" 
-												height="100%" 
-												width="100%"
-												frameborder="0" marginwidth="0" marginheight="0"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
-										<div ng-click="showModal(addon,'addon')" class="iframeCover"></div>
-									</div>
-								</div>								
-								<Br class="clear" />
+                        <i ng-if="addon.displayInfo.type=='tv' || addon.displayInfo.type=='episode'" class="fa fa-television infoType" aria-hidden="true"></i>
+                        <i ng-if="addon.displayInfo.type=='movies' || addon.displayInfo.type=='movie'" class="fa fa-film infoType" aria-hidden="true"></i>
+                        <i ng-if="addon.displayInfo.type=='music'" class="fa fa-headphones infoType" aria-hidden="true"></i>
+                        <i ng-if="addon.displayInfo.type=='unknown'" class="fa fa-file-video-o infoType" aria-hidden="true"></i>
+                      </div>
+                      <div
+                        ng-if="addon.device_alive=='3' && addon.displayInfo.info && addon.addontype!='mediaplayer'"
+                        ng-repeat="addon in room_addons[0][room.roomId].slice().reverse() track by addon.rooms_addonsid"
+                        ng-style="{ box-shadow: inset 0 0 10px colors[addon.id]; }"
+                      >
+                        <a ng-if="addon.displayInfo.info" style="display: inline-block">{{addon.displayInfo.info}}</a>
+                        <span class="infoType fa fa-gear fa-2x"></span>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div ng-cloak ng-if="links[0].length!=0" id="link-menu">
+      <span ng-cloak ng-if="userdata.mobile==='1'" style="float: left; padding: 9px 15px 0; font-size: 2.5em" class="fa fa-ellipsis-v"></span>
+      <nav ng-cloak ng-if="userdata.mobile==='1'" style="margin-top: 50px">
+        <ul class="mobile">
+          <span ng-repeat="(linkgroup, linkgrouparray) in links[0]">
+            <li
+              id="{{thislink['navname']+'L'}}"
+              class="main persistent"
+              on-long-press="loadLinkLongPress(thislink['navname']);"
+              ng-click="loadLink(thislink['navname']);"
+              ng-class="{'selected': userdata.linkSelected==thislink.navname}"
+              ng-repeat="thislink in linkgrouparray"
+            >
+              <img ng-src="img/Programs/{{thislink['navname']}}.png" class="link" height="35px" />
+            </li>
+          </span>
+        </ul>
+      </nav>
+      <nav ng-cloak ng-if="userdata.mobile==='0'">
+        <ul class="sortable">
+          <li
+            id="{{linkgroup}}-group"
+            class="sortable clear"
+            ng-repeat="(linkgroup, linkgrouparray) in links[0]"
+            ng-click="userdata.linkGroupSelected=linkgroup;linkReOrder(linkgroup,$index)"
+          >
+            <a ng-cloak class="main panel persistent title" ng-hide="$last && $index=='0'">{{linkgroup}}</a>
+            <a
+              id="{{thislink['navname']+'L'}}"
+              class="main link persistent"
+              on-long-press="loadLinkLongPress(thislink['navname']);"
+              ng-click="loadLink(thislink['navname']);"
+              ng-class="{'selected': userdata.linkSelected==thislink.navname}"
+              ng-repeat="thislink in linkgrouparray"
+            >
+              <img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px" />
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div id="dashboardWrapper" scrolling="auto">
+    <div id="dashboardMask">
+      <span ng-cloak ng-if="room_addons.length!=0" ng-repeat="room in room_addons[0]" ng-class="{'selected': userdata.linkSelected==='room{{room[0].roomId}}'}" class="dash">
+        <div id="room{{room[0].roomId}}" class="dashboardPage RoomPage">
+          <div class="content">
+            <span class="col-12">
+              <div class="addonTitle widget addon">
+                <img
+                  ng-if="room_addons[0][room[0].roomId][0].addonsAlive===0 && room_addons[0][room[0].roomId][0].allAddonsAlive==='0'"
+                  title="Room Offline"
+                  ng-click="powerOnRoom(room[0].roomId)"
+                  class="status pointer"
+                  src="img/led-red.png"
+                />
+                <img
+                  ng-if="room_addons[0][room[0].roomId][0].addonsAlive>0 && room_addons[0][room[0].roomId][0].allAddonsAlive==='0'"
+                  title="Some Addons Online"
+                  ng-click="powerOnRoom(room[0].roomId)"
+                  class="status pointer"
+                  src="img/led-orange.png"
+                />
+                <img
+                  ng-if="room_addons[0][room[0].roomId][0].addonsAlive===0 && room_addons[0][room[0].roomId][0].allAddonsAlive==='1'"
+                  title="No Addons Configured"
+                  class="status"
+                  src="img/led-cyan.png"
+                />
+                <img
+                  ng-if="room_addons[0][room[0].roomId][0].addonsAlive>0 && room_addons[0][room[0].roomId][0].allAddonsAlive==='1'"
+                  title="Room Online"
+                  class="status"
+                  src="img/led-green.png"
+                />
+                {{room_addons[0][room[0].roomId][0].roomName}}
+                <div ng-if="room_addons[0][room[0].roomId][0].allPowerOptions > 0" class="right" style="margin: -5px">
+                  <button class="btn btn-danger right" ng-click="powerOffRoom(room[0].roomId)">All Off</button>
+                  <button class="btn btn-success right" style="margin: 0 5px 0 0" ng-click="powerOnRoom(room[0].roomId)">All On</button>
+                </div>
+              </div>
+            </span>
+            <span ng-if="$index > 0" class="col-4" ng-repeat="addon in room_addons[0][room[0].roomId] track by addon.rooms_addonsid">
+              <div class="widget addon" ng-style="{ box-shadow: inset 0 0 10px colors[addon.id]; }">
+                <div>
+                  <p class="center">{{addon.addontype}}</p>
+                  <div ng-if="addon.PowerOptions > 0" class="right" style="margin: -5px">
+                    <button class="btn btn-danger right" ng-click="powerOffAddon(addon.rooms_addonsid)">Off</button>
+                    <button class="btn btn-success right" style="margin: 0 5px 0 0" ng-click="powerOnAddon(addon.rooms_addonsid,$index,room[0].roomId)">On</button>
+                  </div>
+                  <img
+                    ng-if="addon.device_alive==='0'"
+                    ng-click="powerOnAddon(addon.rooms_addonsid,$index,room[0].roomId)"
+                    class="status pointer left"
+                    src="img/led-red.png"
+                  />
+                  <img ng-if="addon.device_alive==='2' || addon.device_alive==='1'" class="status left" src="img/led-orange.png" />
+                  <img ng-if="addon.device_alive==='3'" class="status left" src="img/led-green.png" />
+                  <p ng-if="addon.addonTitle !='' || addon.addonTitle !=null" class="left">{{addon.addonTitle}}</p>
+                  <p ng-if="addon.addonTitle =='' || addon.addonTitle ==null" class="left">{{addon.addon}}</p>
+                  <br class="clear" />
+                </div>
+                <!-- need to update the visual for these addon areas -->
+                <div ng-if="addon.addontype=='mediaplayer' && addon.displayInfo.info && !staleTimestamp(addon.ping.lastUpdate)">
+                  <i ng-if="addon.displayInfo.type=='tv' || addon.displayInfo.type=='episode'" class="fa fa-2x fa-television infoType" aria-hidden="true"></i>
+                  <i ng-if="addon.displayInfo.type=='movies' || addon.displayInfo.type=='movie'" class="fa fa-2x fa-film infoType" aria-hidden="true"></i>
+                  <i ng-if="addon.displayInfo.type=='music'" class="fa fa-2x fa-headphones infoType" aria-hidden="true"></i>
+                  <i ng-if="addon.displayInfo.type=='unknown'" class="fa fa-2x fa-file-video-o infoType" aria-hidden="true"></i>
+                  <a ng-click="sendFromAddonSet(addon.ip,addon.addonid)" class="right"><span class="fa fa-share-square-o infoType fa-2x"></span></a>
+                  <a ng-click="showModal(addon,'addon')">{{addon.displayInfo.info}}</a>
+                  <br ng-if="!addon.displayInfo.thumbnail && !addon.displayInfo.fanart" />
+                  <br ng-if="!addon.displayInfo.thumbnail && !addon.displayInfo.fanart" />
+                  <img ng-if="addon.displayInfo.thumbnail!='' && addon.displayInfo.type!='movie'" class="fanart" ng-src="{{addon.displayInfo.thumbnail}}" />
+                  <img ng-if="addon.displayInfo.fanart!='' && addon.displayInfo.type=='movie'" class="fanart" ng-src="{{addon.displayInfo.fanart}}" />
+                  <div ng-if="addon.time.playerpercentage>0" class="timebar"><div class="elapsed" ng-style="{ width: addon.time.playerpercentage% }"></div></div>
+                  <span ng-if="addon.time.timenow" class="left">Now: {{addon.time.timenow}}</span>
+                  <span ng-if="addon.time.endtime" class="right">Ending: {{addon.time.endtime}}</span>
+                </div>
+                <div ng-if="addon.addontype!='mediaplayer' && addon.displayInfo.info">
+                  <a style="display: inline-block">{{addon.displayInfo.info}}</a>
+                </div>
 
-								<toggle-switch
-									class="right"
-									ng-model="showPing[addon.rooms_addonsid]"
-									class="switch-success"
-									html="true"
-									knob-label="<i class='fa fa-bar-chart'></i>"
-									on-label="Hide"
-									off-label="Show"
-									>
-								</toggle-switch>
-								<span ng-if="$parent.addon.addon=='ping'" ng-init="$parent.showPing[addon.rooms_addonsid] = true"></span>
-								<Br class="clear" />
-								<canvas ng-if="userdata.linkSelected=='room'+room[0].roomId && showPing[addon.rooms_addonsid]"
-									id="{{addon.rooms_addonsid}}"
-									class="clear chart chart-bar"
-									chart-data="room_addons_ping[0][addon.rooms_addonsid]"
-									chart-series="['Packets Sent', 'Packets Lost', 'Highest Time', 'Average Time']"
-									chart-labels="['', '', '', '', '', '', '', '', '', '']"
-									chart-options="chart.ping.options"
-									chart-dataset-override="chart.ping.datasetOverride"
-									chart-colors="[ '#FFFFFF', '#FF0000', '#0000FF',  '#99CCFF']"
-								></canvas>
-								<br />
-							</div>
-						</span>
-					</div>
-				</div>
-			</span>
-			<span ng-cloak ng-if="links[0].length!=0 && userdata.mobile==='0'" ng-repeat="(linkgroup, linkgrouparray) in links[0]" ng-class="{'selected': userdata.linkGroupSelected===linkgroup}">
-				<div class="dashboardPage hidden dash" ng-repeat="thislink in linkgrouparray" ng-class="{'showme': userdata.linkSelected==='{{thislink['navname']}}'}">
-					<div class="content">
-						<iframe id="{{thislink['navname']}}" src="" data="{{thislink['navip'] | trustUrl }}" scrolling="auto" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
-					</div>
-				</div>
-			</span>
-			<span ng-cloak ng-if="links[0].length!=0 && userdata.mobile==='1'" ng-repeat="(linkgroup, linkgrouparray) in links[0]">
-				<div class="dashboardPage hidden dash" ng-repeat="thislink in linkgrouparray" ng-class="{'showme': userdata.linkSelected==='{{thislink['navname']}}'}">
-					<div class="content">
-						<iframe id="{{thislink['navname']}}" src="" data="{{thislink['navip'] | trustUrl }}" scrolling="auto" height="100%" width="100%"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
-					</div>
-				</div>
-			</span>			
-			<span ng-if="$index > 0 && room_addons[0][userdata.currentRoom][$index]['controlWindow'] == '1'" ng-repeat="addon in room_addons[0][userdata.currentRoom] track by addon.rooms_addonsid" ng-class="{'selected': userdata.linkSelected==='{{addon.addon+$index}}'}" class="dash">
-				<div class="dashboardPage">
-					<div class="content">
-						<iframe id="{{addon.addon+$index}}" 
-								src="" 
-								data="{{room_addons[0][userdata.currentRoom][$index]['ip'] | trustUrl}}" 
-								scrolling="no" 
-								height="100%" 
-								width="100%"
-								style="z-index:1;"> Sorry your browser does not support frames or is currently not set to accept them.</iframe>
-						<div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] == '3'" ng-init="refreshLink(addon.addon+$index)">
-						</div>
-						<div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] != '3'"
-							 class="content"
-							 style="z-index: 10;position: absolute;height: 100%;width: 100%;background: black;">
-							<span class="col-3" style="min-height:10px;">
-							</span>
-							<span class="col-6">
-								<br /><br />
-								<h1 class="center">Power On</h1>
-								<br /><h1 class="center">{{room_addons[0][userdata.currentRoom][$index].addontype}} : {{room_addons[0][userdata.currentRoom][$index].addonTitle}}</h1>
-								<br /><h1 class="center">in the {{room_addons[0][userdata.currentRoom][0]['roomName']}}</h1>
-								<img class="col-12 pointer" src="img/powerbutton.png" ng-click="powerOnAddon(room_addons[0][userdata.currentRoom][$index].rooms_addonsid,$index,userdata.currentRoom);" />
-							</span>
-						</div>
-					</div>
-				</div>
-			</span>	
-			<span ng-if="loaded==1" class="dash">
-				<div ng-cloak class="dashboardPage">
-					<div class="content">
-						<div id="dashboard-welcome" ng-cloak ng-include src="'partials/dashboard-welcome.html'"></div>
-					</div>
-				</div>
-			</span>			
-		</div>
-	</div>
-	<div ng-if="loaded==1 && chatOpen == true" id="chatContainer" ng-class="{'open' : chatOpen == true}" class="transformable-horizontal" chat></div>
+                <toggle-switch
+                  ng-show="addon.addontype=='security' && addon.addon=='camera'"
+                  class="right"
+                  ng-model="showiFrame[addon.rooms_addonsid]"
+                  class="switch-success"
+                  html="true"
+                  knob-label="<i class='fa fa-window-maximize'></i>"
+                  on-label="Hide"
+                  off-label="Show"
+                >
+                </toggle-switch>
+                <br class="clear" />
+                <div
+                  ng-if="addon.addontype=='security' && addon.addon=='camera' && userdata.linkSelected=='room'+room[0].roomId && modalOpen==0 && showiFrame[addon.rooms_addonsid]"
+                >
+                  <div class="iframeContainer">
+                    <iframe ng-src="{{addon.ip | trustUrl }}" scrolling="false" height="100%" width="100%" frameborder="0" marginwidth="0" marginheight="0">
+                      Sorry your browser does not support frames or is currently not set to accept them.</iframe
+                    >
+                    <div ng-click="showModal(addon,'addon')" class="iframeCover"></div>
+                  </div>
+                </div>
+                <br class="clear" />
+
+                <toggle-switch
+                  class="right"
+                  ng-model="showPing[addon.rooms_addonsid]"
+                  class="switch-success"
+                  html="true"
+                  knob-label="<i class='fa fa-bar-chart'></i>"
+                  on-label="Hide"
+                  off-label="Show"
+                >
+                </toggle-switch>
+                <span ng-if="$parent.addon.addon=='ping'" ng-init="$parent.showPing[addon.rooms_addonsid] = true"></span>
+                <br class="clear" />
+                <canvas
+                  ng-if="userdata.linkSelected=='room'+room[0].roomId && showPing[addon.rooms_addonsid]"
+                  id="{{addon.rooms_addonsid}}"
+                  class="clear chart chart-bar"
+                  chart-data="room_addons_ping[0][addon.rooms_addonsid]"
+                  chart-series="['Packets Sent', 'Packets Lost', 'Highest Time', 'Average Time']"
+                  chart-labels="['', '', '', '', '', '', '', '', '', '']"
+                  chart-options="chart.ping.options"
+                  chart-dataset-override="chart.ping.datasetOverride"
+                  chart-colors="[ '#FFFFFF', '#FF0000', '#0000FF',  '#99CCFF']"
+                ></canvas>
+                <br />
+              </div>
+            </span>
+          </div>
+        </div>
+      </span>
+      <span
+        ng-cloak
+        ng-if="links[0].length!=0 && userdata.mobile==='0'"
+        ng-repeat="(linkgroup, linkgrouparray) in links[0]"
+        ng-class="{'selected': userdata.linkGroupSelected===linkgroup}"
+      >
+        <div class="dashboardPage hidden dash" ng-repeat="thislink in linkgrouparray" ng-class="{'showme': userdata.linkSelected==='{{thislink['navname']}}'}">
+          <div class="content">
+            <iframe id="{{thislink['navname']}}" src="" data="{{thislink['navip'] | trustUrl }}" scrolling="auto" height="100%" width="100%">
+              Sorry your browser does not support frames or is currently not set to accept them.</iframe
+            >
+          </div>
+        </div>
+      </span>
+      <span ng-cloak ng-if="links[0].length!=0 && userdata.mobile==='1'" ng-repeat="(linkgroup, linkgrouparray) in links[0]">
+        <div class="dashboardPage hidden dash" ng-repeat="thislink in linkgrouparray" ng-class="{'showme': userdata.linkSelected==='{{thislink['navname']}}'}">
+          <div class="content">
+            <iframe id="{{thislink['navname']}}" src="" data="{{thislink['navip'] | trustUrl }}" scrolling="auto" height="100%" width="100%">
+              Sorry your browser does not support frames or is currently not set to accept them.</iframe
+            >
+          </div>
+        </div>
+      </span>
+      <span
+        ng-if="$index > 0 && room_addons[0][userdata.currentRoom][$index]['controlWindow'] == '1'"
+        ng-repeat="addon in room_addons[0][userdata.currentRoom] track by addon.rooms_addonsid"
+        ng-class="{'selected': userdata.linkSelected==='{{addon.addon+$index}}'}"
+        class="dash"
+      >
+        <div class="dashboardPage">
+          <div class="content">
+            <iframe
+              id="{{addon.addon+$index}}"
+              src=""
+              data="{{room_addons[0][userdata.currentRoom][$index]['ip'] | trustUrl}}"
+              scrolling="no"
+              height="100%"
+              width="100%"
+              style="z-index: 1"
+            >
+              Sorry your browser does not support frames or is currently not set to accept them.</iframe
+            >
+            <div ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] == '3'" ng-init="refreshLink(addon.addon+$index)"></div>
+            <div
+              ng-if="room_addons[0][userdata.currentRoom][$index]['device_alive'] != '3'"
+              class="content"
+              style="z-index: 10; position: absolute; height: 100%; width: 100%; background: black"
+            >
+              <span class="col-3" style="min-height: 10px"> </span>
+              <span class="col-6">
+                <br /><br />
+                <h1 class="center">Power On</h1>
+                <br />
+                <h1 class="center">{{room_addons[0][userdata.currentRoom][$index].addontype}} : {{room_addons[0][userdata.currentRoom][$index].addonTitle}}</h1>
+                <br />
+                <h1 class="center">in the {{room_addons[0][userdata.currentRoom][0]['roomName']}}</h1>
+                <img
+                  class="col-12 pointer"
+                  src="img/powerbutton.png"
+                  ng-click="powerOnAddon(room_addons[0][userdata.currentRoom][$index].rooms_addonsid,$index,userdata.currentRoom);"
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+      </span>
+      <span ng-if="loaded==1" class="dash">
+        <div ng-cloak class="dashboardPage">
+          <div class="content">
+            <div id="dashboard-welcome" ng-cloak ng-include src="'partials/dashboard-welcome.html'"></div>
+          </div>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div ng-if="loaded==1 && chatOpen == true" id="chatContainer" ng-class="{'open' : chatOpen == true}" class="transformable-horizontal" chat></div>
 </div>
