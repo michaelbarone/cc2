@@ -1,7 +1,7 @@
 {
   "name": "cc2",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "scripts": {
     "up": "npm i && npx husky install",
     "up:lint": "npm run up:libs && npm i",
