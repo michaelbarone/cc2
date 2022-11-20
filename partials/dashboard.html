@@ -21,7 +21,7 @@
               on-long-press="loadLinkLongPress(addon.addon + $index);"
               ng-click="loadLink(addon.addon + $index);"
               ng-class="{'selected': userdata.linkSelected==addon.addon + $index}"
-              ng-style="{ box-shadow: inset 0 0 10px colors[addon.id]; }"
+              style="box-shadow: inset 0 0 10px {{colors[addon.id]}};"
             >
               <img ng-src="addons/{{addon.addontype + '.' + addon.addon + '.' + addon.addonversion}}/icon.png" height="27px" width="27px" />
             </a>
@@ -37,9 +37,9 @@
               <img src="img/control-panel.png" height="27px" width="27px" />
             </a>
           </li>
-          <li class="rooms" style="padding: 20px 0">
+          <li class="rooms" style="padding: 30px 0">
             <a ng-cloak class="ng-cloak title">{{room_addons[0][userdata.currentRoom][0]['roomName']}}</a>
-            <ul ng-if="userdata.roomcount > 1" id="room-menu-ul">
+            <ul ng-if="userdata.roomcount > 1" id="room-menu-ul" style="margin-top: 10px">
               <li class="rooms">
                 <table ng-class="{showme: sendFromAddonLock>0}" style="max-width: 100vw; overflow-x: auto">
                   <tr ng-if="room.roomId" ng-repeat="room in Rooms | orderObjectBy: 'roomOrder' track by $index" ng-class="{'selected': userdata.currentRoom==room.roomId}">
@@ -77,7 +77,7 @@
                       <div
                         ng-if="addon.device_alive=='3' && addon.addontype=='mediaplayer' && (addon.displayInfo.info || sendFromAddonIP) && !staleTimestamp(addon.ping.lastUpdate)"
                         ng-repeat="addon in room_addons[0][room.roomId].slice().reverse() track by addon.rooms_addonsid"
-                        ng-style="{ box-shadow: inset 0 0 10px colors[addon.id]; }"
+                        style="box-shadow: inset 0 0 10px {{colors[addon.id]}};"
                       >
                         <a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="sendMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Send</a>
                         <a ng-if="sendFromAddonIP && sendFromAddonIP!=addon.ip" ng-click="cloneMedia(sendFromAddonIP,sendFromAddonID,addon.ip,addon.addonid)">Clone</a>
@@ -94,7 +94,7 @@
 
                         <a ng-click="showModal(addon,'addon')" ng-if="addon.displayInfo.info" style="display: inline-block"
                           >{{addon.displayInfo.info}}<span ng-if="addon.time.playerpercentage>0" class="timebar"
-                            ><span class="elapsed" ng-style="{ width: addon.time.playerpercentage% }"></span></span
+                            ><span class="elapsed" style="width: {{addon.time.playerpercentage}}%"></span></span
                         ></a>
 
                         <i ng-if="addon.displayInfo.type=='tv' || addon.displayInfo.type=='episode'" class="fa fa-television infoType" aria-hidden="true"></i>
@@ -105,7 +105,7 @@
                       <div
                         ng-if="addon.device_alive=='3' && addon.displayInfo.info && addon.addontype!='mediaplayer'"
                         ng-repeat="addon in room_addons[0][room.roomId].slice().reverse() track by addon.rooms_addonsid"
-                        ng-style="{ box-shadow: inset 0 0 10px colors[addon.id]; }"
+                        style="box-shadow: inset 0 0 10px {{colors[addon.id]}};"
                       >
                         <a ng-if="addon.displayInfo.info" style="display: inline-block">{{addon.displayInfo.info}}</a>
                         <span class="infoType fa fa-gear fa-2x"></span>
@@ -202,7 +202,7 @@
               </div>
             </span>
             <span ng-if="$index > 0" class="col-4" ng-repeat="addon in room_addons[0][room[0].roomId] track by addon.rooms_addonsid">
-              <div class="widget addon" ng-style="{ box-shadow: inset 0 0 10px colors[addon.id]; }">
+              <div class="widget addon" style="box-shadow: inset 0 0 10px {{colors[addon.id]}};">
                 <div>
                   <p class="center">{{addon.addontype}}</p>
                   <div ng-if="addon.PowerOptions > 0" class="right" style="margin: -5px">
@@ -233,7 +233,7 @@
                   <br ng-if="!addon.displayInfo.thumbnail && !addon.displayInfo.fanart" />
                   <img ng-if="addon.displayInfo.thumbnail!='' && addon.displayInfo.type!='movie'" class="fanart" ng-src="{{addon.displayInfo.thumbnail}}" />
                   <img ng-if="addon.displayInfo.fanart!='' && addon.displayInfo.type=='movie'" class="fanart" ng-src="{{addon.displayInfo.fanart}}" />
-                  <div ng-if="addon.time.playerpercentage>0" class="timebar"><div class="elapsed" ng-style="{ width: addon.time.playerpercentage% }"></div></div>
+                  <div ng-if="addon.time.playerpercentage>0" class="timebar"><div class="elapsed" style="width: {{addon.time.playerpercentage}}%"></div></div>
                   <span ng-if="addon.time.timenow" class="left">Now: {{addon.time.timenow}}</span>
                   <span ng-if="addon.time.endtime" class="right">Ending: {{addon.time.endtime}}</span>
                 </div>

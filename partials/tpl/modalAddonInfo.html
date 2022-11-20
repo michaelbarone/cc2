@@ -45,7 +45,7 @@
               </h2>
               <br />
               <div ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['time']['playerpercentage']>0" class="timebar left">
-                <div class="elapsed" ng-style="{ width: $parent.room_addons[0][initdata.roomid][initdata.id]['time']['playerpercentage']% }"></div>
+                <div class="elapsed" style="width: {{$parent.room_addons[0][initdata.roomid][initdata.id]['time']['playerpercentage']}}%"></div>
               </div>
               <span ng-if="$parent.room_addons[0][initdata.roomid][initdata.id]['time']['timenow']" class="left"
                 >Now: {{$parent.room_addons[0][initdata.roomid][initdata.id]['time']['timenow']}}</span

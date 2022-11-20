@@ -18,5 +18,6 @@
   "todo-tree.regex.regex": "(//|#|<!--|\\*|;|/\\*|^|^[ \\t]*(-|\\d+.))\\s*($TAGS)",
   "docthis.returnsTag": true,
   "docthis.includeDescriptionTag": true,
-  "docthis.inferTypesFromNames": true
+  "docthis.inferTypesFromNames": true,
+  "css.validate": false,
 }
