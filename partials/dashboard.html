@@ -132,7 +132,7 @@
               ng-class="{'selected': userdata.linkSelected==thislink.navname}"
               ng-repeat="thislink in linkgrouparray"
             >
-              <img ng-src="img/Programs/{{thislink['navname']}}.png" class="link" height="35px" />
+              <img ng-src="img/Programs/{{thislink['navname']}}.png" title="{{thislink['navname']}}" class="link" height="35px" />
             </li>
           </span>
         </ul>
@@ -154,7 +154,7 @@
               ng-class="{'selected': userdata.linkSelected==thislink.navname}"
               ng-repeat="thislink in linkgrouparray"
             >
-              <img ng-src="img/Programs/{{thislink['navname']}}.png" height="35px" />
+              <img ng-src="img/Programs/{{thislink['navname']}}.png" title="{{thislink['navname']}}" height="35px" />
             </a>
           </li>
         </ul>
