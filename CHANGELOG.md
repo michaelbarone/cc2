@@ -1,3 +1,10 @@
+## [2.1.0](https://github.com/michaelbarone/cc2/compare/v2.0.2...v2.1.0) (2023-03-04)
+
+
+### Features
+
+* more program images and added title to program links ([2d2b6ba](https://github.com/michaelbarone/cc2/commit/2d2b6bab14f728e1bf578392632a3efd5ecef44a))
+
 ### [2.0.2](https://github.com/michaelbarone/cc2/compare/v2.0.1...v2.0.2) (2022-11-20)
 
 
