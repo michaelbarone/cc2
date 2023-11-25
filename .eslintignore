@@ -26,6 +26,7 @@ CHANGELOG.md
 *.config.js
 
 # folder exclusions
+**/http/lib/**
 **/eyerate/lib/**
 **/eyerate/types/docs/**
 **/.vscode/**

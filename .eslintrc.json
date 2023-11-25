@@ -20,15 +20,15 @@
     "plugin:typescript-sort-keys/recommended",
     "plugin:prettier/recommended"
   ],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": 2020,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "project": "./tsconfig.json"
-  },
+  // "parser": "@typescript-eslint/parser",
+  // "parserOptions": {
+  //   "ecmaVersion": 2020,
+  //   "sourceType": "module",
+  //   "ecmaFeatures": {
+  //     "jsx": true
+  //   },
+  //   "project": "./tsconfig.json"
+  // },
   "plugins": ["@typescript-eslint", "jsdoc", "jsx-a11y", "typescript-sort-keys", "deprecation", "prettier"],
   "overrides": [
     {
@@ -84,7 +84,7 @@
         "extendDefaults": true
       }
     ],
-    "deprecation/deprecation": "warn",
+    // "deprecation/deprecation": "warn",
     "import/no-unresolved": "off",
     "import/no-cycle": "warn",
     "import/extensions": "off",

@@ -13,7 +13,7 @@ houseTemperature*.json
 # or use the trigger on yarn.lock
 # either way, these should get checked into the repository
 # https://jshakespeare.com/use-git-hooks-and-husky-to-tell-your-teammates-when-to-run-npm-install/
-package-lock.json
+# package-lock.json
 yarn.lock
 
 *.DS_Store

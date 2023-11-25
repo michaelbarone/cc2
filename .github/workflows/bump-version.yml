@@ -15,16 +15,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
         persist-credentials: false
+
     - name: Set up node
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
-        node-version: '14.x'
-    - name: install conventional-changelog dependency
-      run: npm install -D conventional-changelog
+        node-version: '18.x'
+
+    - name: Cache node modules
+      id: cache-npm
+      uses: actions/cache@v3
+      env:
+        cache-name: version-bump-deps-v1
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+    - if: ${{ steps.cache-npm.outputs.cache-hit == 'true' }}
+      name: dependency cache found
+      run: echo "loading deps from cache"
+
+    - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+      name: install conventional-changelog dependency
+      run: npm install --no-package-lock --no-save conventional-changelog@"^3.1.25" --legacy-peer-deps
+
     - name: Bump version and push tag
       uses: eyerate-actions/conventional-changelog-action@v3
       with:
