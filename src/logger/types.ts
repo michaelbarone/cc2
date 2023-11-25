@@ -13,7 +13,10 @@ export interface AppLogger extends winston.Logger {
   error: winston.LeveledLogMethod;
   http: winston.LeveledLogMethod;
   info: winston.LeveledLogMethod;
+
+  /** @deprecated notice log level is deprecated. Please use verbose instead. */
   notice: winston.LeveledLogMethod;
+
   verbose: winston.LeveledLogMethod;
   warn: winston.LeveledLogMethod;
 }
